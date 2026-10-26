@@ -1,0 +1,200 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+<title>08 피타고라스 음계 · 부산의 활동수학</title>
+<link rel="stylesheet" href="../../common.css">
+<link rel="stylesheet" href="../book.css">
+<style>
+  .setup{display:flex;gap:10px;flex-wrap:wrap;align-items:center;background:#fff;border-radius:14px;padding:10px 14px;margin:8px 0}
+  .result{font-family:var(--f-head);font-size:1.2rem;color:var(--bk-red);min-height:1.5em;margin:6px 0}
+  .pipes{display:flex;gap:14px;align-items:flex-end;justify-content:center;min-height:240px;background:#fff;border-radius:16px;border:2px solid var(--bk-line);padding:14px}
+  .pipe{display:flex;flex-direction:column;align-items:center;gap:6px;cursor:pointer}
+  .pipe .tube{width:34px;background:linear-gradient(90deg,#cfe9f6,#eaf6fc 40%,#b9dcee);border:2px solid #7aaec9;border-radius:6px 6px 3px 3px;transition:height .3s}
+  .pipe.on .tube{box-shadow:0 0 0 4px var(--bk-yellow)}
+  .pipe b{font-family:var(--f-head);font-weight:400}
+  .pipe small{color:var(--bk-ink-soft)}
+  .keys{display:flex;gap:6px;flex-wrap:wrap;justify-content:center}
+  .key{min-width:60px;padding:10px 8px;border-radius:12px;border:2px solid var(--bk-sky);background:#fff;font-family:var(--f-head);font-size:1.05rem;cursor:pointer;text-align:center;-webkit-tap-highlight-color:transparent}
+  .key small{display:block;font-family:var(--f-mono,monospace);font-size:.75rem;color:var(--bk-ink-soft)}
+  .key.on{background:var(--bk-sky);color:#fff}.key.on small{color:#fff}
+  .key.done{border-color:var(--bk-green);background:#EDF9F4}
+  .steps{display:flex;flex-direction:column;gap:6px;margin:8px 0}
+  .step{display:flex;align-items:center;gap:10px;flex-wrap:wrap;background:#fff;border:2px solid var(--bk-line);border-radius:12px;padding:8px 12px}
+  .step.done{border-color:var(--bk-green)}
+  .frac{display:inline-flex;flex-direction:column;align-items:center;font-family:var(--f-mono,monospace);line-height:1.1;vertical-align:middle;margin:0 2px}
+  .frac span:first-child{border-bottom:1.5px solid currentColor;padding:0 3px}
+  .cmp{display:grid;grid-template-columns:repeat(8,1fr);gap:4px;max-width:640px}
+  .cmp div{background:#fff;border:2px solid var(--bk-line);border-radius:10px;padding:6px 2px;text-align:center;font-size:.8rem;cursor:pointer}
+  .cmp div b{display:block;font-family:var(--f-head);font-weight:400;font-size:1rem}
+  .cmp div.on{border-color:var(--bk-orange);background:var(--bk-yellow)}
+  .strings{display:flex;flex-direction:column;gap:6px;background:#fff;border-radius:14px;padding:12px;border:2px solid var(--bk-line)}
+  .string{display:flex;align-items:center;gap:10px}
+  .string .lab{width:60px;font-family:var(--f-head)}
+  .string .bar{height:6px;background:linear-gradient(90deg,#c9a24d,#8B5A2B);border-radius:3px;transition:width .3s;cursor:pointer}
+  .string small{color:var(--bk-ink-soft);font-family:var(--f-mono,monospace)}
+</style>
+</head>
+<body class="bk">
+<script src="../../common.js" data-num="08" data-name="피타고라스 음계" data-sub="2단원 수학 역사 활동" data-home="../../"></script>
+<div class="bk-wrap">
+  <section class="ch-intro">
+    <div class="ch-intro__text">
+      <div class="bk-ribbon">08</div>
+      <h1 class="bk-h-unit">피타고라스 음계</h1>
+      <p class="ch-lead">부산콘서트홀의 파이프오르간은 길이 5cm부터 10m까지 4,423개의 파이프로 소리를 내요. 웅장한 울림 속에 숨은 수학적 원리를 찾아보세요. 🔊 소리를 켜 두세요!</p>
+      <p class="ch-goal">★ 이 단원에서는 — 피타고라스 음계의 원리를 이해하고 계산하여 악기를 만들 수 있다.</p>
+    </div>
+    <div class="ch-intro__pic"><img src="../../img/ch08.jpg" alt="부산콘서트홀"><span class="ch-place">📍 부산콘서트홀</span></div>
+  </section>
+
+  <nav class="tabs" id="tabs">
+    <button class="tab on" data-t="t1"><span class="tab__n">1</span>관의 진동수</button>
+    <button class="tab" data-t="t2"><span class="tab__n">2</span>피타고라스 음계</button>
+    <button class="tab" data-t="t3"><span class="tab__n">3</span>음계의 변화 (순정률)</button>
+    <button class="tab" data-t="t4"><span class="tab__n">4</span>팬플루트 만들기</button>
+  </nav>
+
+  <!-- ===== 1 관 ===== -->
+  <section class="act-page" id="t1">
+    <div class="bk-panel">
+      <div class="bk-act"><span class="bk-act__n">1</span><span class="bk-act__t">관의 진동수 측정하기</span><span class="bk-tag">연결</span><span class="bk-tag">정보 처리</span></div>
+      <p class="bk-muted">한쪽이 막힌 관을 불면 길이에 따라 다른 높이의 소리가 나요. 관을 눌러 소리를 듣고 진동수를 기록해 보세요. (시뮬레이션: 진동수 ≈ 343 m/s ÷ (4 × 길이))</p>
+      <div class="pipes" id="pp-pipes"></div>
+      <div class="setup"><label>관 길이 추가: <input type="range" id="pp-len" min="5" max="50" value="20" style="width:160px"> <b id="pp-lenv">20</b> cm</label><button class="bk-btn bk-btn--sky bk-btn--sm" id="pp-add">관 만들기</button><button class="bk-btn bk-btn--ghost bk-btn--sm" id="pp-reset">기본 4개</button></div>
+      <table class="tbl" style="margin-left:0"><thead><tr><th>관의 길이(cm)</th><th>진동수(Hz)</th><th>음 높이</th></tr></thead><tbody id="pp-tbl"></tbody></table>
+    </div>
+    <div class="bk-panel bk-panel--pink secret">
+      <h3>🔍 정리하기</h3>
+      <div class="q"><b>2</b> 관의 길이가 길수록 진동수는? <b>3</b> 진동수가 많을수록 음의 높이는?</div>
+      <div class="q"><b>4</b> 길이의 비가 1:2인 두 관의 진동수의 비는 대략 얼마일까? (12.5cm와 25cm를 비교)</div>
+      <details class="reveal"><summary>힌트 보기</summary><p>길이가 길수록 진동수는 작아지고(반비례), 진동수가 클수록 음은 높아요. 길이 1:2 → 진동수 2:1, 즉 한 옥타브(8도) 차이!</p></details>
+    </div>
+  </section>
+
+  <!-- ===== 2 피타고라스 음계 ===== -->
+  <section class="act-page" id="t2" hidden>
+    <div class="bk-panel">
+      <div class="bk-act"><span class="bk-act__n">2</span><span class="bk-act__t">피타고라스 음계</span><span class="bk-tag">연결</span><span class="bk-tag">문제 해결</span></div>
+      <div class="bk-rule"><ol><li>현의 길이를 <b>1/2배</b> 하면 8도 높은 음을 낸다.</li><li>현의 길이를 <b>2/3배</b> 하면 5도 높은 음을 낸다.</li></ol></div>
+      <p class="bk-muted" style="margin:10px 0 4px">'도'의 현 길이를 1이라 하고 두 규칙만으로 모든 음을 만들어 보세요. 각 단계에서 어떤 규칙을 쓸지 고르세요.</p>
+      <div class="steps" id="py-steps"></div>
+      <div class="strings" id="py-strings"></div>
+      <div class="result" id="py-res"></div>
+      <div class="setup"><button class="bk-btn bk-btn--ghost bk-btn--sm" id="py-reset">처음부터</button><button class="bk-btn bk-btn--mint bk-btn--sm" id="py-play">🎵 음계 연주</button></div>
+    </div>
+    <div class="bk-panel bk-panel--pink secret">
+      <h3>🔍 표 완성하기</h3>
+      <table class="tbl" style="margin-left:0"><thead><tr><th>음계</th><th>도</th><th>레</th><th>미</th><th>파</th><th>솔</th><th>라</th><th>시</th><th>높은 도</th></tr></thead><tbody><tr><td>현의 길이</td><td>1</td><td id="pyt-re">?</td><td id="pyt-mi">?</td><td id="pyt-fa">?</td><td id="pyt-sol">?</td><td id="pyt-la">?</td><td id="pyt-si">?</td><td>1/2</td></tr></tbody></table>
+      <details class="reveal"><summary>답 보기</summary><p>도 1, 레 8/9, 미 64/81, 파 3/4, 솔 2/3, 라 16/27, 시 128/243, 높은 도 1/2. '파'는 높은 도(1/2)에서 5도 내려가(÷2/3 = ×3/2) 3/4예요.</p></details>
+    </div>
+  </section>
+
+  <!-- ===== 3 순정률 ===== -->
+  <section class="act-page" id="t3" hidden>
+    <div class="bk-panel">
+      <div class="bk-act"><span class="bk-act__n">3</span><span class="bk-act__t">피타고라스 음계의 변화</span><span class="bk-tag">연결</span><span class="bk-tag">문제 해결</span></div>
+      <p class="bk-muted">피타고라스 음계는 완전 5도는 아름답지만 3화음(도·미·솔)은 조금 거슬려요. 3화음의 진동수 비가 <b>4:5:6</b>이 되도록 새로 조율한 것이 순정률이에요. 두 음계의 '미'를 비교해 들어 보세요.</p>
+      <div class="setup"><div class="seg"><button class="bk-btn bk-btn--sm on" id="js-mode-p">피타고라스</button><button class="bk-btn bk-btn--sm bk-btn--ghost" id="js-mode-j">순정률 (4:5:6)</button></div><button class="bk-btn bk-btn--primary bk-btn--sm" id="js-chord">🎵 도·미·솔 화음 듣기</button><button class="bk-btn bk-btn--sky bk-btn--sm" id="js-cmp">두 음계의 '미' 비교</button></div>
+      <div class="cmp" id="js-keys"></div>
+      <table class="tbl" style="margin-left:0;margin-top:10px"><thead><tr><th></th><th>도</th><th>레</th><th>미</th><th>파</th><th>솔</th><th>라</th><th>시</th><th>높은 도</th></tr></thead>
+        <tbody><tr><td>진동수(도=1)</td><td>1</td><td>9/8</td><td>5/4</td><td>4/3</td><td>3/2</td><td>5/3</td><td>15/8</td><td>2</td></tr><tr><td>현의 길이(반비례)</td><td>1</td><td>8/9</td><td>4/5</td><td>3/4</td><td>2/3</td><td>3/5</td><td>8/15</td><td>1/2</td></tr></tbody></table>
+      <div class="result" id="js-res"></div>
+    </div>
+    <div class="bk-panel bk-panel--pink secret">
+      <h3>🔍 생각해 보기</h3>
+      <div class="q"><b>1</b> 도:미:솔 = 4:5:6이면 미의 진동수는 5/4, 솔은 6/4=3/2. 파:라:도 = 4:5:6에서 라는? 솔:시:높은 레에서 시는?</div>
+      <details class="reveal"><summary>힌트 보기</summary><p>파=4/3이므로 라 = 4/3 × 5/4 = 5/3. 솔=3/2이므로 시 = 3/2 × 5/4 = 15/8. 피타고라스 미(81/64 ≈ 1.266)와 순정률 미(5/4 = 1.25)는 미세하게 달라요 — 화음으로 들으면 차이가 느껴져요.</p></details>
+    </div>
+  </section>
+
+  <!-- ===== 4 팬플루트 ===== -->
+  <section class="act-page" id="t4" hidden>
+    <div class="bk-panel">
+      <div class="bk-act"><span class="bk-act__n">4</span><span class="bk-act__t">팬플루트 만들기</span><span class="bk-tag">연결</span><span class="bk-tag">정보 처리</span></div>
+      <p class="bk-muted">'도' 관의 길이를 정하면 순정률 비(현의 길이 비)로 나머지 관의 길이가 나와요. 관을 눌러 연주해 보고, 실제 투명 관을 그 길이로 잘라 팬플루트를 만들어 보세요.</p>
+      <div class="setup"><label>'도' 관 길이 <input type="range" id="pf-base" min="15" max="40" value="25" style="width:160px"> <b id="pf-basev">25</b> cm</label><button class="bk-btn bk-btn--mint bk-btn--sm" id="pf-song">🎵 '비행기' 자동 연주</button></div>
+      <div class="pipes" id="pf-pipes"></div>
+      <table class="tbl" style="margin-left:0"><thead><tr><th>음</th><th>도</th><th>레</th><th>미</th><th>파</th><th>솔</th><th>라</th><th>시</th><th>높은 도</th></tr></thead><tbody><tr><td>현의 길이 비</td><td>1</td><td>8/9</td><td>4/5</td><td>3/4</td><td>2/3</td><td>3/5</td><td>8/15</td><td>1/2</td></tr><tr id="pf-row"><td>관 길이(cm)</td></tr></tbody></table>
+      <details class="reveal" style="margin-left:0"><summary>만드는 순서</summary><ol style="margin:6px 0 0;padding-left:1.2em"><li>표를 참고해 투명 관 위에 길이를 표시한다.</li><li>표시한 곳을 자르고 한쪽 끝을 마개로 막는다.</li><li>마개의 막힌 부분을 잘라 다른 쪽 끝에 끼운다.</li><li>긴 것부터 짧은 것까지 나란히 배열한다.</li><li>테이프로 끝부분과 중간을 감는다.</li><li>음계 스티커를 붙이고 동요를 연주해 본다.</li></ol></details>
+    </div>
+  </section>
+</div>
+
+<script>
+const $ = s => document.querySelector(s);
+document.querySelectorAll('#tabs .tab').forEach(b => b.onclick = () => { document.querySelectorAll('#tabs .tab').forEach(x => x.classList.toggle('on', x === b)); document.querySelectorAll('.act-page').forEach(p => { p.hidden = p.id !== b.dataset.t; p.style.display = p.hidden ? 'none' : ''; }); window.scrollTo({ top: $('#tabs').offsetTop - 70, behavior: 'smooth' }); });
+(function(){ const h=location.hash.slice(1); const b=h&&document.querySelector(`#tabs .tab[data-t="${h}"]`); if(b) b.click(); })();
+
+/* ---- 소리 ---- */
+let AC = null; function ac() { if (!AC) AC = new (window.AudioContext || window.webkitAudioContext)(); if (AC.state === 'suspended') AC.resume(); return AC; }
+function tone(freq, dur = .6, when = 0, type = 'triangle', gain = .25) { const c = ac(); const o = c.createOscillator(), g = c.createGain(); o.type = type; o.frequency.value = freq; const t = c.currentTime + when; g.gain.setValueAtTime(0, t); g.gain.linearRampToValueAtTime(gain, t + .02); g.gain.exponentialRampToValueAtTime(.001, t + dur); o.connect(g); g.connect(c.destination); o.start(t); o.stop(t + dur + .05); }
+const NAMES = ['도','레','미','파','솔','라','시','높은 도'];
+const PYTH = [1, 9/8, 81/64, 4/3, 3/2, 27/16, 243/128, 2];      // 진동수 비
+const JUST = [1, 9/8, 5/4, 4/3, 3/2, 5/3, 15/8, 2];
+const BASE = 261.63;
+const noteName = f => { const n = Math.round(12 * Math.log2(f / 261.63)); const names = ['도','도#','레','레#','미','파','파#','솔','솔#','라','라#','시']; const oct = Math.floor(n / 12); return names[((n % 12) + 12) % 12] + (oct > 0 ? ' (+' + oct + '옥타브)' : oct < 0 ? ' (−' + (-oct) + '옥타브)' : ''); };
+
+/* ===== 1 관 ===== */
+(function () {
+  let lens = [12.5, 25, 37.5, 50];
+  const f = L => Math.round(343 / (4 * L / 100));
+  function render() { $('#pp-pipes').innerHTML = lens.map((L, i) => `<div class="pipe" data-i="${i}"><b>${f(L)} Hz</b><div class="tube" style="height:${L * 4}px"></div><small>${L} cm</small></div>`).join('');
+    $('#pp-pipes').querySelectorAll('.pipe').forEach(p => p.onclick = () => { const L = lens[+p.dataset.i]; tone(f(L), .8, 0, 'sawtooth', .12); p.classList.add('on'); setTimeout(() => p.classList.remove('on'), 600); });
+    $('#pp-tbl').innerHTML = lens.map(L => `<tr><td>${L}</td><td>${f(L)}</td><td>${noteName(f(L))}</td></tr>`).join(''); }
+  $('#pp-len').oninput = () => $('#pp-lenv').textContent = $('#pp-len').value;
+  $('#pp-add').onclick = () => { if (lens.length >= 7) lens.shift(); lens.push(+$('#pp-len').value); lens.sort((a, b) => a - b); render(); };
+  $('#pp-reset').onclick = () => { lens = [12.5, 25, 37.5, 50]; render(); }; render();
+})();
+
+/* ===== 2 피타고라스 ===== */
+(function () {
+  // 길이 분수 [분자, 분모]
+  const PLAN = [
+    { from: '도', to: '솔', rule: '5도 ↑ (×2/3)', op: [2, 3] }, { from: '도', to: '높은 도', rule: '8도 ↑ (×1/2)', op: [1, 2] },
+    { from: '솔', to: '높은 레', rule: '5도 ↑ (×2/3)', op: [2, 3] }, { from: '높은 레', to: '레', rule: '8도 ↓ (×2)', op: [2, 1] },
+    { from: '레', to: '라', rule: '5도 ↑ (×2/3)', op: [2, 3] }, { from: '라', to: '높은 미', rule: '5도 ↑ (×2/3)', op: [2, 3] }, { from: '높은 미', to: '미', rule: '8도 ↓ (×2)', op: [2, 1] },
+    { from: '미', to: '시', rule: '5도 ↑ (×2/3)', op: [2, 3] }, { from: '높은 도', to: '파', rule: '5도 ↓ (×3/2)', op: [3, 2] }];
+  const gcd = (a, b) => b ? gcd(b, a % b) : a; const fr = ([n, d]) => { const g = gcd(n, d); return [n / g, d / g]; }; const fs = ([n, d]) => d === 1 ? `${n}` : `<span class="frac"><span>${n}</span><span>${d}</span></span>`;
+  let len = { '도': [1, 1] }, step = 0;
+  function render() {
+    $('#py-steps').innerHTML = PLAN.map((p, i) => `<div class="step ${i < step ? 'done' : ''}">${i + 1}. '${p.from}'에서 '${p.to}'로: ${i < step ? `${fs(len[p.from])} × ${fs(p.op)} = <b>${fs(len[p.to])}</b> <span class="bk-muted">(${p.rule})</span>` : i === step ? `<button class="bk-btn bk-btn--sky bk-btn--sm" data-op="12">×1/2 (8도↑)</button><button class="bk-btn bk-btn--sky bk-btn--sm" data-op="23">×2/3 (5도↑)</button><button class="bk-btn bk-btn--ghost bk-btn--sm" data-op="21">×2 (8도↓)</button><button class="bk-btn bk-btn--ghost bk-btn--sm" data-op="32">×3/2 (5도↓)</button>` : '<span class="bk-muted">…</span>'}</div>`).join('');
+    $('#py-steps').querySelectorAll('button').forEach(b => b.onclick = () => { const p = PLAN[step]; const want = p.op.join(''); if (b.dataset.op !== want) { $('#py-res').textContent = `음… '${p.from}'→'${p.to}'는 ${p.rule}이에요. 다시 골라 보세요.`; return; } $('#py-res').textContent = ''; len[p.to] = fr([len[p.from][0] * p.op[0], len[p.from][1] * p.op[1]]); step++; tone(BASE * len['도'][0] / len['도'][1] * (len[p.to][1] / len[p.to][0]), .5); render(); });
+    const order = ['도','레','미','파','솔','라','시','높은 도','높은 레','높은 미'];
+    $('#py-strings').innerHTML = order.filter(k => len[k]).map(k => { const [n, d] = len[k]; const w = n / d * 90; return `<div class="string"><span class="lab">${k}</span><div class="bar" style="width:${w}%" data-k="${k}"></div><small>${n}/${d}</small></div>`; }).join('');
+    $('#py-strings').querySelectorAll('.bar').forEach(b => b.onclick = () => { const [n, d] = len[b.dataset.k]; tone(BASE * d / n, .6); });
+    ({ '레': 'pyt-re', '미': 'pyt-mi', '파': 'pyt-fa', '솔': 'pyt-sol', '라': 'pyt-la', '시': 'pyt-si' }); Object.entries({ '레': 'pyt-re', '미': 'pyt-mi', '파': 'pyt-fa', '솔': 'pyt-sol', '라': 'pyt-la', '시': 'pyt-si' }).forEach(([k, id]) => $('#' + id).innerHTML = len[k] ? fs(len[k]) : '?');
+    if (step === PLAN.length) $('#py-res').textContent = '🎉 피타고라스 음계 완성! 현을 눌러 소리를 들어 보세요.'; }
+  $('#py-reset').onclick = () => { len = { '도': [1, 1] }; step = 0; $('#py-res').textContent = ''; render(); };
+  $('#py-play').onclick = () => NAMES.forEach((k, i) => { if (len[k]) tone(BASE * len[k][1] / len[k][0], .45, i * .4); });
+  render();
+})();
+
+/* ===== 3 순정률 ===== */
+(function () {
+  let mode = 'p'; const ratio = () => mode === 'p' ? PYTH : JUST;
+  function render() { $('#js-keys').innerHTML = NAMES.map((n, i) => { const r = ratio()[i]; return `<div data-i="${i}">${n}<b>${(BASE * r).toFixed(1)}</b>Hz</div>`; }).join(''); $('#js-keys').querySelectorAll('div').forEach(d => d.onclick = () => { tone(BASE * ratio()[+d.dataset.i], .6); d.classList.add('on'); setTimeout(() => d.classList.remove('on'), 400); }); }
+  $('#js-mode-p').onclick = () => { mode = 'p'; $('#js-mode-p').classList.remove('bk-btn--ghost'); $('#js-mode-j').classList.add('bk-btn--ghost'); render(); };
+  $('#js-mode-j').onclick = () => { mode = 'j'; $('#js-mode-j').classList.remove('bk-btn--ghost'); $('#js-mode-p').classList.add('bk-btn--ghost'); render(); };
+  $('#js-chord').onclick = () => { const r = ratio(); [0, 2, 4].forEach(i => tone(BASE * r[i], 1.6, 0, 'triangle', .18)); $('#js-res').textContent = mode === 'p' ? `피타고라스 도:미:솔 = 1 : 1.2656 : 1.5 (미 = 81/64)` : `순정률 도:미:솔 = 1 : 1.25 : 1.5 = 4 : 5 : 6`; };
+  $('#js-cmp').onclick = () => { tone(BASE * PYTH[2], .7, 0); tone(BASE * JUST[2], .7, .9); tone(BASE * PYTH[2], 1.2, 1.9, 'triangle', .15); tone(BASE * JUST[2], 1.2, 1.9, 'triangle', .15); $('#js-res').textContent = `피타고라스 미 ${(BASE * PYTH[2]).toFixed(1)}Hz → 순정률 미 ${(BASE * JUST[2]).toFixed(1)}Hz → 둘을 동시에 (맥놀이가 들려요)`; };
+  render();
+})();
+
+/* ===== 4 팬플루트 ===== */
+(function () {
+  const RATIO = [1, 8/9, 4/5, 3/4, 2/3, 3/5, 8/15, 1/2];
+  function render() { const b = +$('#pf-base').value; $('#pf-basev').textContent = b; const L = RATIO.map(r => Math.round(b * r * 10) / 10);
+    $('#pf-pipes').innerHTML = NAMES.map((n, i) => `<div class="pipe" data-i="${i}"><b>${n}</b><div class="tube" style="height:${L[i] * 5}px"></div><small>${L[i]} cm</small></div>`).join('');
+    $('#pf-pipes').querySelectorAll('.pipe').forEach(p => p.onclick = () => play(+p.dataset.i));
+    $('#pf-row').innerHTML = '<td>관 길이(cm)</td>' + L.map(x => `<td>${x}</td>`).join(''); }
+  function play(i, when = 0, dur = .5) { tone(BASE / RATIO[i], dur, when, 'sine', .3); const p = $('#pf-pipes').children[i]; setTimeout(() => { p.classList.add('on'); setTimeout(() => p.classList.remove('on'), 300); }, when * 1000); }
+  $('#pf-base').oninput = render;
+  $('#pf-song').onclick = () => { // 비행기: 미레도레 미미미 레레레 미미미 …
+    const s = [2,1,0,1,2,2,2,1,1,1,2,2,2,2,1,0,1,2,2,2,1,1,2,1,0]; const d = [.4,.4,.4,.4,.4,.4,.8,.4,.4,.8,.4,.4,.8,.4,.4,.4,.4,.4,.4,.4,.4,.4,.4,.4,1]; let t = 0; s.forEach((n, i) => { play(n, t, d[i]); t += d[i]; }); };
+  render();
+})();
+</script>
+</body>
+</html>

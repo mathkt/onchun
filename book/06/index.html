@@ -1,0 +1,263 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+<title>06 선조들의 셈법 · 부산의 활동수학</title>
+<link rel="stylesheet" href="../../common.css">
+<link rel="stylesheet" href="../book.css">
+<style>
+  .setup{display:flex;gap:10px;flex-wrap:wrap;align-items:center;background:#fff;border-radius:14px;padding:10px 14px;margin:8px 0}
+  .result{font-family:var(--f-head);font-size:1.25rem;color:var(--bk-red);min-height:1.5em;margin:6px 0}
+  svg.board{width:100%;max-width:560px;height:auto;display:block;margin:6px auto;background:#fff;border-radius:16px;border:2px solid var(--bk-line);touch-action:manipulation;user-select:none}
+  .finger{cursor:pointer}
+  .seg{display:inline-flex;border:2px solid var(--bk-sky);border-radius:999px;overflow:hidden}
+  .seg button{font:inherit;font-family:var(--f-head);padding:8px 14px;border:0;background:#fff;cursor:pointer}
+  .seg button.on{background:var(--bk-sky);color:#fff}
+  .eq{font-family:var(--f-head);font-size:1.5rem;text-align:center;margin:8px 0}
+  .eq small{font-size:.9rem;color:var(--bk-ink-soft);font-family:var(--f-body)}
+  /* 이집트 */
+  .egy{border-collapse:collapse;margin:8px auto;font-family:var(--f-mono,monospace);font-size:1.1rem}
+  .egy td{border:1px solid var(--bk-line);padding:6px 16px;text-align:right;background:#fff}
+  .egy tr.on td{background:var(--bk-yellow)}
+  .egy td.chk{cursor:pointer;text-align:center;width:40px}
+  /* 네이피어 */
+  .nap{display:flex;gap:4px;justify-content:center;margin:8px 0;flex-wrap:wrap}
+  .rod{display:flex;flex-direction:column;border:2px solid var(--bk-ink);border-radius:6px;overflow:hidden;background:#fff}
+  .rod .hd{height:34px;display:grid;place-items:center;font-family:var(--f-head);font-size:1.2rem;background:var(--bk-cream)}
+  .rod .cell{width:44px;height:44px;position:relative;border-top:1px solid var(--bk-line)}
+  .rod .cell::before{content:"";position:absolute;inset:0;background:linear-gradient(to top right,transparent calc(50% - .5px),#c9c3b0 calc(50% - .5px),#c9c3b0 calc(50% + .5px),transparent calc(50% + .5px))}
+  .rod .cell .t{position:absolute;top:3px;left:7px;font-size:.85rem}.rod .cell .u{position:absolute;bottom:3px;right:7px;font-size:.85rem}
+  .rod.idx .cell{display:grid;place-items:center;font-family:var(--f-head);font-size:1.1rem;cursor:pointer;background:var(--bk-cream)}
+  .rod.idx .cell::before{display:none}
+  .rod .cell.hl{background:#FFE8BF}
+  .rod.idx .cell.hl{background:var(--bk-orange);color:#fff}
+  .pool{display:flex;gap:6px;flex-wrap:wrap;justify-content:center}
+  .pool button{width:44px;height:44px;border-radius:8px;border:2px solid var(--bk-sky);background:#fff;font-family:var(--f-head);font-size:1.2rem;cursor:pointer}
+  .pool button.used{opacity:.3}
+  .diag{display:flex;gap:6px;justify-content:center;flex-wrap:wrap;margin:8px 0}
+  .diag div{background:#fff;border:2px solid var(--bk-line);border-radius:10px;padding:6px 10px;text-align:center;font-size:.9rem;min-width:70px}
+  .diag b{display:block;font-family:var(--f-head);font-size:1.3rem;font-weight:400}
+  /* 제나이유 */
+  .gen{display:flex;gap:6px;justify-content:center;align-items:flex-start;flex-wrap:wrap}
+  .gcol{display:flex;flex-direction:column;align-items:center;gap:2px;background:#fff;border:2px solid var(--bk-ink);border-radius:6px;padding:4px;min-width:40px}
+  .gcol .hd{font-family:var(--f-head);background:var(--bk-cream);width:100%;text-align:center;border-radius:4px}
+  .gcol span{width:28px;height:22px;display:grid;place-items:center;font-size:.85rem;border-radius:4px}
+  .gcol span.path{background:var(--bk-orange);color:#fff}
+  .gcol span.arrow{color:var(--bk-ink-soft);font-size:.7rem;height:14px}
+  /* 산가지 */
+  .rodnum{display:inline-flex;gap:10px;align-items:flex-end;vertical-align:middle}
+  .rodnum svg{width:30px;height:34px}
+  .sanstep{background:#fff;border:2px solid var(--bk-line);border-radius:12px;padding:10px 14px;margin:6px 0}
+  .sanstep .row{display:flex;align-items:center;gap:14px;margin:4px 0;flex-wrap:wrap}
+  .sanstep .lbl{width:110px;font-size:.85rem;color:var(--bk-ink-soft)}
+</style>
+</head>
+<body class="bk">
+<script src="../../common.js" data-num="06" data-name="선조들의 셈법" data-sub="2단원 수학 역사 활동" data-home="../../"></script>
+<div class="bk-wrap">
+  <section class="ch-intro">
+    <div class="ch-intro__text">
+      <div class="bk-ribbon">06</div>
+      <h1 class="bk-h-unit">선조들의 셈법</h1>
+      <p class="ch-lead">백제의 '구구단 목간'은 9단부터 거꾸로 적혀 있어요. 손가락, 막대, 산가지로 계산하던 선조들의 지혜를 직접 따라 해 보세요.</p>
+      <p class="ch-goal">★ 이 단원에서는 — 손가락 곱셈과 선조들의 셈법을 이해하고 설명할 수 있다.</p>
+    </div>
+    <div class="ch-intro__pic"><img src="../../img/ch06.jpg" alt="동래향교"><span class="ch-place">📍 동래향교</span></div>
+  </section>
+
+  <nav class="tabs" id="tabs">
+    <button class="tab on" data-t="t1"><span class="tab__n">1</span>손가락 곱셈구구</button>
+    <button class="tab" data-t="t2"><span class="tab__n">2</span>이집트 곱셈</button>
+    <button class="tab" data-t="t3"><span class="tab__n">3</span>네이피어 막대</button>
+    <button class="tab" data-t="t4"><span class="tab__n">4</span>제나이유-뤼카 막대</button>
+    <button class="tab tab--pink" data-t="t5"><span class="tab__n">★</span>산가지 곱셈</button>
+  </nav>
+
+  <!-- ===== 1 손가락 ===== -->
+  <section class="act-page" id="t1">
+    <div class="bk-panel">
+      <div class="bk-act"><span class="bk-act__n">1</span><span class="bk-act__t">손가락을 이용한 곱셈구구</span><span class="bk-tag">추론</span><span class="bk-tag">의사소통</span></div>
+      <div class="setup"><div class="seg" id="fg-mode"><button class="on" data-m="9">9단</button><button data-m="69">6~9 곱셈</button></div><span class="bk-muted" id="fg-help">손가락을 눌러 접으세요. 9단: 곱할 수에 해당하는 손가락 하나를 접어요.</span></div>
+      <svg class="board" id="fg-svg" viewBox="0 0 560 300"></svg>
+      <div class="eq" id="fg-eq"></div>
+    </div>
+    <div class="bk-panel bk-panel--pink secret">
+      <h3>🔍 원리 설명하기</h3>
+      <div class="q"><b>1</b> 손가락으로 9단을 하는 원리를 설명해 보자.</div>
+      <details class="reveal"><summary>힌트 보기</summary><p>n번째 손가락을 접으면 왼쪽에 n−1개, 오른쪽에 10−n개. 9n = 10n − n = 10(n−1) + (10−n). 그래서 십의 자리 n−1, 일의 자리 10−n이에요.</p></details>
+      <div class="q"><b>2</b> 6~9 곱셈이 성립하는 이유와, 접지 않은 손가락 곱이 10 이상일 때(예: 6×6=24? 접은 1+1=2, 안 접은 4×4=16 → 20+16=36) 어떻게 하는지 알아보자.</div>
+      <details class="reveal"><summary>힌트 보기</summary><p>왼손 a=6+p개 접음(p = a−5), 오른손 b=5+q. (접은 합)×10 + (안 접은 곱) = 10(a−5+b−5) + (10−a)(10−b) = 100 − 10a − 10b + ab + 10a + 10b − 100 = <b>ab</b>. 곱이 10을 넘으면 그냥 십의 자리로 올려 더하면 돼요.</p></details>
+    </div>
+  </section>
+
+  <!-- ===== 2 이집트 ===== -->
+  <section class="act-page" id="t2" hidden>
+    <div class="bk-panel">
+      <div class="bk-act"><span class="bk-act__n">2</span><span class="bk-act__t">이집트 곱셈</span><span class="bk-tag">문제 해결</span><span class="bk-tag">추론</span><span class="bk-tag">의사소통</span></div>
+      <div class="bk-rule"><ol><li>왼쪽 맨 위 칸에 1, 오른쪽 맨 위 칸에 곱해지는 수를 쓴다.</li><li>왼쪽을 2배, 4배, 8배… 할 때 오른쪽도 2배, 4배, 8배… 한다.</li><li>곱하는 수를 왼쪽 수들의 합으로 나타낸다. (19 = 1 + 2 + 16)</li><li>그 왼쪽 수에 대응하는 오른쪽 수를 모두 더하면 답이다.</li></ol></div>
+      <div class="setup"><input class="num" id="eg-a" value="43" style="width:100px;letter-spacing:0"> × <input class="num" id="eg-b" value="19" style="width:100px;letter-spacing:0"><button class="bk-btn bk-btn--primary bk-btn--sm" id="eg-go">표 만들기</button><span class="bk-muted">왼쪽 수를 골라(✓) 곱하는 수를 만들어 보세요.</span></div>
+      <table class="egy" id="eg-tbl"></table>
+      <div class="eq" id="eg-eq"></div>
+    </div>
+    <div class="bk-panel bk-panel--pink secret">
+      <h3>🔍 생각해 보기</h3>
+      <div class="q"><b>1</b> 이 방법으로 43×19를 구할 수 있는 이유를 설명해 보자.</div>
+      <details class="reveal"><summary>힌트 보기</summary><p>43×19 = 43×(1+2+16) = 43×1 + 43×2 + 43×16. 모든 자연수는 1, 2, 4, 8, …의 합으로 나타낼 수 있어요(이진법!). 그래서 2배 하기와 더하기만으로 모든 곱셈이 돼요.</p></details>
+      <div class="q"><b>2</b> 71×59도 위에서 구해 보자.</div>
+    </div>
+  </section>
+
+  <!-- ===== 3 네이피어 ===== -->
+  <section class="act-page" id="t3" hidden>
+    <div class="bk-panel">
+      <div class="bk-act"><span class="bk-act__n">3</span><span class="bk-act__t">신기한 막대를 이용한 곱셈 1 — 네이피어 막대</span><span class="bk-tag">연결</span><span class="bk-tag">정보 처리</span></div>
+      <div class="bk-rule"><ol><li>곱해지는 수의 각 자리 곱셈 막대를 기준 막대 오른쪽에 가지런히 맞춘다.</li><li>기준 막대에서 곱하는 수가 적힌 줄의 수를 대각선 방향으로 더한다.</li><li>더한 값이 10 이상이면 윗자리로 올려 더한다.</li><li>맨 왼쪽부터 결과를 읽는다.</li></ol></div>
+      <div class="setup"><span>곱해지는 수의 막대 고르기:</span><div class="pool" id="np-pool"></div><button class="bk-btn bk-btn--ghost bk-btn--sm" id="np-clear">막대 치우기</button></div>
+      <p class="bk-muted" style="margin:0">기준 막대(맨 왼쪽)에서 곱하는 수(한 자리)를 누르세요.</p>
+      <div class="nap" id="np-rods"></div>
+      <div class="diag" id="np-diag"></div>
+      <div class="eq" id="np-eq"></div>
+    </div>
+    <div class="bk-panel bk-panel--pink secret">
+      <h3>🔍 생각해 보기</h3>
+      <div class="q"><b>1</b> 539×7을 구해 보자. (5, 3, 9 막대를 놓고 7을 누르기)</div>
+      <div class="q"><b>2</b> 네이피어는 0단 막대도 만들었다. 어떤 상황에서 유용할까?</div>
+      <details class="reveal"><summary>힌트 보기</summary><p>305×7처럼 가운데 0이 있는 수를 곱할 때 자리를 맞추려면 0 막대가 필요해요.</p></details>
+      <div class="q"><b>3</b> 네이피어는 사각기둥의 네 옆면에 막대를 만들어 같은 막대가 여러 번 나오게 했다. 어떤 계산에 유용할까?</div>
+      <details class="reveal"><summary>힌트 보기</summary><p>777×6처럼 같은 숫자가 여러 번 나오는 수를 곱할 때 막대가 여러 개 필요해요.</p></details>
+    </div>
+  </section>
+
+  <!-- ===== 4 제나이유-뤼카 ===== -->
+  <section class="act-page" id="t4" hidden>
+    <div class="bk-panel">
+      <div class="bk-act"><span class="bk-act__n">4</span><span class="bk-act__t">신기한 막대를 이용한 곱셈 2 — 제나이유-뤼카 막대</span><span class="bk-tag">연결</span><span class="bk-tag">정보 처리</span></div>
+      <div class="bk-rule"><ol><li>곱해지는 수의 각 자리 막대를 기준 막대 오른쪽에 순서대로 놓는다.</li><li>곱하는 수가 적힌 줄에서 가장 오른쪽 막대의 <b>맨 위 칸</b> 수를 찾는다.</li><li>그 수가 포함된 삼각형의 뾰족한 꼭짓점이 가리키는 왼쪽 막대의 수를 찾는다. 반복한다.</li><li>찾은 수를 왼쪽부터 순서대로 읽는다. 덧셈과 받아올림이 필요 없다!</li></ol></div>
+      <div class="setup"><input class="num" id="gn-a" value="673" style="width:120px;letter-spacing:0"> × <input class="num" id="gn-b" value="8" maxlength="1" style="width:70px;letter-spacing:0"><button class="bk-btn bk-btn--primary bk-btn--sm" id="gn-go">막대 놓고 계산</button></div>
+      <p class="bk-muted" style="margin:0">각 막대의 칸: 위에서부터 (자리 곱 + 받아올림 0, 1, 2, …)의 일의 자리. 주황색이 삼각형 꼭짓점을 따라간 길이에요.</p>
+      <div class="gen" id="gn-rods"></div>
+      <div class="eq" id="gn-eq"></div>
+    </div>
+    <div class="bk-panel bk-panel--pink secret">
+      <h3>🔍 생각해 보기</h3>
+      <div class="q"><b>1</b> 7단 막대의 7×4 부분처럼, 막대의 한 칸을 만드는 방법을 정리해 보자.</div>
+      <details class="reveal"><summary>힌트 보기</summary><p>7×4=28 → 맨 위 칸에 일의 자리 8을 쓰고 아래로 9, 0, 1, …(받아올림 0, 1, 2…를 더한 일의 자리). 8·9는 십의 자리 2를 가리키는 삼각형, 0·1부터는 3을 가리키는 삼각형. 즉 삼각형의 꼭짓점 = 다음 자리로 넘길 받아올림!</p></details>
+      <div class="q"><b>2</b> 왜 덧셈과 받아올림을 할 필요가 없어질까? 725×4도 구해 보자.</div>
+    </div>
+  </section>
+
+  <!-- ===== ★ 산가지 ===== -->
+  <section class="act-page" id="t5" hidden>
+    <div class="bk-panel bk-panel--pink">
+      <div class="bk-act"><span class="bk-act__n" style="background:var(--bk-red)">★</span><span class="bk-act__t">나도 수학자 — 산가지를 이용한 곱셈</span><span class="bk-tag">의사소통</span><span class="bk-tag">연결</span></div>
+      <p class="bk-muted">선조들은 산가지로 수를 나타냈어요. 일·백·만의 자리는 세로 막대, 십·천의 자리는 가로 막대로 자릿값을 구분했습니다. (6 이상은 막대 하나를 위에 가로로 놓아 5를 나타내요)</p>
+      <div class="setup"><label>수 보기: <input class="num" id="sg-n" value="2026" style="width:120px;letter-spacing:0"></label><span class="rodnum" id="sg-show"></span></div>
+      <div class="setup"><input class="num" id="sg-a" value="23" maxlength="2" style="width:80px;letter-spacing:0"> × <input class="num" id="sg-b" value="42" maxlength="2" style="width:80px;letter-spacing:0"><button class="bk-btn bk-btn--primary bk-btn--sm" id="sg-go">산가지로 곱하기</button></div>
+      <div id="sg-steps"></div>
+    </div>
+    <div class="bk-panel secret">
+      <h3>🔍 생각해 보기</h3>
+      <div class="q"><b>1</b> 산가지 방법이 오늘날의 세로 곱셈과 어떤 차이가 있는지 생각해 보자.</div>
+      <div class="q"><b>2</b> 산가지로 곱셈을 할 때 불편한 점은? 78×56도 구해 보자.</div>
+      <details class="reveal"><summary>읽을거리 — 구귀제법</summary><p>선조들은 나눗셈을 위해 '구귀가'라는 노래도 외웠어요. 예를 들어 사귀(四歸): 사일이십이(10÷4=2…2), 사이첨작오(20÷4=5), 사삼칠십이(30÷4=7…2), 봉사진성십(40÷4=10). 이 구절대로 산가지를 옮기면 232÷4=58이 나와요.</p></details>
+    </div>
+  </section>
+</div>
+
+<script>
+const $ = s => document.querySelector(s);
+document.querySelectorAll('#tabs .tab').forEach(b => b.onclick = () => { document.querySelectorAll('#tabs .tab').forEach(x => x.classList.toggle('on', x === b)); document.querySelectorAll('.act-page').forEach(p => { p.hidden = p.id !== b.dataset.t; p.style.display = p.hidden ? 'none' : ''; }); window.scrollTo({ top: $('#tabs').offsetTop - 70, behavior: 'smooth' }); });
+(function(){ const h=location.hash.slice(1); const b=h&&document.querySelector(`#tabs .tab[data-t="${h}"]`); if(b) b.click(); })();
+
+/* ===== 1 손가락 ===== */
+(function () {
+  let mode = '9', folded = new Set();
+  const svg = $('#fg-svg');
+  const X = i => 40 + i * 54 + (i >= 5 ? 24 : 0);
+  function draw() {
+    let h = `<rect x="20" y="150" width="252" height="120" rx="40" fill="#FBE0C8"/><rect x="288" y="150" width="252" height="120" rx="40" fill="#FBE0C8"/><text x="146" y="290" text-anchor="middle" font-family="Jua" fill="#5F5B55">왼손</text><text x="414" y="290" text-anchor="middle" font-family="Jua" fill="#5F5B55">오른손</text>`;
+    for (let i = 0; i < 10; i++) { const f = folded.has(i); const x = X(i); const lab = mode === '9' ? i + 1 : (i < 5 ? [9,8,7,6,'·'][i] : ['·',6,7,8,9][i - 5]);
+      h += `<g class="finger" data-i="${i}"><rect x="${x - 16}" y="${f ? 120 : 40}" width="32" height="${f ? 50 : 130}" rx="16" fill="${f ? '#E8891B' : '#FBD58E'}" stroke="#2C2A26" stroke-width="2"/><text x="${x}" y="${f ? 150 : 70}" text-anchor="middle" font-family="Jua" font-size="16" fill="${f ? '#fff' : '#2C2A26'}">${lab}</text></g>`; }
+    svg.innerHTML = h; svg.querySelectorAll('.finger').forEach(g => g.onclick = () => click(+g.dataset.i));
+    const eq = $('#fg-eq');
+    if (mode === '9') { if (folded.size !== 1) { eq.innerHTML = '<small>손가락 하나를 접어 보세요.</small>'; return; } const n = [...folded][0] + 1; eq.innerHTML = `9 × ${n} = <b style="color:var(--bk-sky)">${n - 1}</b><b style="color:var(--bk-red)">${10 - n}</b> <small>(왼쪽 ${n - 1}개 · 오른쪽 ${10 - n}개)</small>`; }
+    else { const L = [...folded].filter(i => i < 5).length, R = [...folded].filter(i => i >= 5).length; if (!L || !R) { eq.innerHTML = '<small>왼손에서 6~9 중 하나, 오른손에서 6~9 중 하나를 나타내 보세요 (6은 1개, 7은 2개 접기).</small>'; return; }
+      const a = 5 + L, b = 5 + R, tens = L + R, ones = (5 - L) * (5 - R); eq.innerHTML = `${a} × ${b} = (${L}+${R})×10 + ${5 - L}×${5 - R} = ${tens * 10} + ${ones} = <b>${tens * 10 + ones}</b>`; }
+  }
+  function click(i) { if (mode === '9') { folded = folded.has(i) ? new Set() : new Set([i]); } else { // 손마다 접은 개수로 6~9 표시: 왼손은 오른쪽부터, 오른손은 왼쪽부터 접힘
+      const hand = i < 5 ? 0 : 1; const idx = hand ? i - 5 : 4 - i; const cnt = [...folded].filter(k => (k < 5 ? 0 : 1) === hand).length; const next = (idx + 1 === cnt) ? idx : idx + 1; for (let k = 0; k < 5; k++) { const key = hand ? 5 + k : 4 - k; if (k < next) folded.add(key); else folded.delete(key); } }
+    draw(); }
+  document.querySelectorAll('#fg-mode button').forEach(b => b.onclick = () => { mode = b.dataset.m; document.querySelectorAll('#fg-mode button').forEach(x => x.classList.toggle('on', x === b)); folded = new Set(); $('#fg-help').textContent = mode === '9' ? '손가락을 눌러 접으세요. 9단: 곱할 수에 해당하는 손가락 하나를 접어요.' : '6=1개, 7=2개, 8=3개, 9=4개 접기. 각 손의 손가락을 누르면 그만큼 접혀요.'; draw(); });
+  draw();
+})();
+
+/* ===== 2 이집트 ===== */
+(function () {
+  let rows = [], b = 19, a = 43, chosen = new Set();
+  function build() { a = +$('#eg-a').value || 43; b = +$('#eg-b').value || 19; rows = []; chosen = new Set(); for (let p = 1; p <= b; p *= 2) rows.push([p, a * p]); render(); }
+  function render() { const t = $('#eg-tbl'); t.innerHTML = rows.map(([l, r], i) => `<tr class="${chosen.has(i) ? 'on' : ''}"><td class="chk" data-i="${i}">${chosen.has(i) ? '✓' : ''}</td><td>${l}</td><td>${r}</td></tr>`).join('');
+    t.querySelectorAll('.chk').forEach(c => c.onclick = () => { const i = +c.dataset.i; chosen.has(i) ? chosen.delete(i) : chosen.add(i); render(); });
+    const L = [...chosen].map(i => rows[i][0]), R = [...chosen].map(i => rows[i][1]); const sl = L.reduce((x, y) => x + y, 0), sr = R.reduce((x, y) => x + y, 0);
+    $('#eg-eq').innerHTML = chosen.size ? `${L.join(' + ')} = ${sl} ${sl === b ? '= ' + b + ' ✅' : '(' + b + '이 되어야 해요)'}<br>${R.join(' + ')} = <b>${sr}</b>${sl === b ? ` → ${a} × ${b} = ${sr} 🎉` : ''}` : `<small>${b}을 왼쪽 수들의 합으로 만들어 보세요.</small>`; }
+  $('#eg-go').onclick = build; build();
+})();
+
+/* ===== 3 네이피어 ===== */
+(function () {
+  let rods = [], m = null;
+  const pool = $('#np-pool'); for (let d = 0; d <= 9; d++) { const b = document.createElement('button'); b.textContent = d; b.onclick = () => { if (rods.length >= 5) return; rods.push(d); m = null; render(); }; pool.appendChild(b); }
+  function render() {
+    let h = '<div class="rod idx"><div class="hd">×</div>' + [1,2,3,4,5,6,7,8,9].map(k => `<div class="cell ${m === k ? 'hl' : ''}" data-k="${k}">${k}</div>`).join('') + '</div>';
+    rods.forEach(d => { h += `<div class="rod"><div class="hd">${d}</div>` + [1,2,3,4,5,6,7,8,9].map(k => { const p = d * k; return `<div class="cell ${m === k ? 'hl' : ''}"><span class="t">${Math.floor(p / 10)}</span><span class="u">${p % 10}</span></div>`; }).join('') + '</div>'; });
+    $('#np-rods').innerHTML = h; $('#np-rods').querySelectorAll('.idx .cell').forEach(c => c.onclick = () => { m = +c.dataset.k; render(); });
+    const diag = $('#np-diag'), eq = $('#np-eq');
+    if (!rods.length || !m) { diag.innerHTML = ''; eq.innerHTML = rods.length ? '<small>기준 막대에서 곱하는 수를 누르세요.</small>' : '<small>막대를 골라 곱해지는 수를 만드세요.</small>'; return; }
+    // 대각선 합: 자리 k (오른쪽부터) = units of rod k + tens of rod k+1(오른쪽)
+    const n = rods.length; const sums = []; for (let pos = 0; pos <= n; pos++) { // pos 0 = 맨 오른쪽 (마지막 막대의 일의 자리)
+      const u = pos < n ? (rods[n - 1 - pos] * m) % 10 : 0; const t = pos >= 1 ? Math.floor(rods[n - pos] * m / 10) : 0; sums.push({ u, t, s: u + t }); }
+    let carry = 0, digits = []; const cells = sums.map(({ u, t, s }, i) => { const tot = s + carry; const dg = tot % 10; const c2 = Math.floor(tot / 10); const txt = `${t ? t + '+' : ''}${u}${carry ? '+' + carry + '(올림)' : ''} = ${tot}`; digits.unshift(dg); carry = c2; return `<div>${txt}<b>${dg}</b></div>`; });
+    if (carry) { digits.unshift(carry); cells.push(`<div>올림<b>${carry}</b></div>`); }
+    diag.innerHTML = cells.reverse().join(''); const val = +rods.join('') * m; eq.innerHTML = `${rods.join('')} × ${m} = <b>${digits.join('').replace(/^0+(?=\d)/, '')}</b> <small>(확인: ${val})</small>`;
+  }
+  $('#np-clear').onclick = () => { rods = []; m = null; render(); }; render();
+})();
+
+/* ===== 4 제나이유-뤼카 ===== */
+(function () {
+  function run() {
+    const a = ($('#gn-a').value.match(/\d+/) || ['673'])[0], m = +($('#gn-b').value || 8); const ds = [...a].map(Number); const n = ds.length;
+    // 오른쪽 막대부터: 받아올림 c로 시작, 칸 index = c, 값 = (d*m + c) % 10, 다음 받아올림 = floor((d*m+c)/10)
+    let c = 0; const path = []; for (let i = n - 1; i >= 0; i--) { const v = ds[i] * m + c; path[i] = { idx: c, digit: v % 10, next: Math.floor(v / 10) }; c = Math.floor(v / 10); }
+    let h = `<div class="gcol"><div class="hd">×${m}</div><span class="path">${c || '·'}</span><span class="arrow">맨 왼쪽</span></div>`;
+    ds.forEach((d, i) => { const base = d * m; const rowsN = Math.floor((base + 9) / 10) + 1; let col = `<div class="gcol"><div class="hd">${d}</div>`; for (let k = 0; k <= 9; k++) { const v = (base + k) % 10; const tri = Math.floor((base + k) / 10); col += `<span class="${path[i].idx === k ? 'path' : ''}" title="받아올림 ${k}: ${base}+${k}=${base + k}">${v}</span>`; if (k < 9 && Math.floor((base + k + 1) / 10) !== tri) col += `<span class="arrow">▲${tri + 1}</span>`; } col += `<span class="arrow">▲${Math.floor((base + 9) / 10)}</span></div>`; h += col; });
+    $('#gn-rods').innerHTML = h;
+    const read = (c ? c : '') + ds.map((_, i) => path[i].digit).join('');
+    $('#gn-eq').innerHTML = `${a} × ${m} = <b>${read}</b> <small>(확인: ${+a * m}) — 오른쪽 막대 맨 위(받아올림 0)에서 시작해 ▲가 가리키는 받아올림만큼 왼쪽 막대에서 아래로 내려가요.</small>`;
+  }
+  $('#gn-go').onclick = run; run();
+})();
+
+/* ===== ★ 산가지 ===== */
+(function () {
+  // 산가지 숫자 SVG: vertical(세로형: 일·백·만) / horizontal(가로형: 십·천)
+  function rodSVG(d, vertical) { if (d === 0) return `<svg viewBox="0 0 30 34"><circle cx="15" cy="17" r="4" fill="none" stroke="#9c8a55" stroke-width="2"/></svg>`;
+    let h = ''; const five = d >= 5, u = d % 5; const col = '#8B5A2B';
+    if (vertical) { if (five) h += `<line x1="4" y1="6" x2="26" y2="6" stroke="${col}" stroke-width="3"/>`; for (let i = 0; i < u; i++) h += `<line x1="${15 - (u - 1) * 3 + i * 6}" y1="${five ? 12 : 6}" x2="${15 - (u - 1) * 3 + i * 6}" y2="30" stroke="${col}" stroke-width="3"/>`; }
+    else { if (five) h += `<line x1="15" y1="4" x2="15" y2="14" stroke="${col}" stroke-width="3"/>`; for (let i = 0; i < u; i++) h += `<line x1="4" y1="${(five ? 18 : 10) + i * 5}" x2="26" y2="${(five ? 18 : 10) + i * 5}" stroke="${col}" stroke-width="3"/>`; }
+    return `<svg viewBox="0 0 30 34">${h}</svg>`; }
+  function numSVG(n, width, shift = 0) { const s = (String(n) + ' '.repeat(shift)).padStart(width || 1, ' '); return `<span class="rodnum">${[...s].map((ch, i) => { const pos = s.length - 1 - i; return ch === ' ' ? `<svg viewBox="0 0 30 34"></svg>` : rodSVG(+ch, pos % 2 === 0); }).join('')}</span>`; }
+  const show = () => $('#sg-show').innerHTML = numSVG(+$('#sg-n').value || 0) + `<span class="bk-muted" style="font-size:.8rem">= ${+$('#sg-n').value || 0}</span>`;
+  $('#sg-n').oninput = show; show();
+  function go() { const a = +$('#sg-a').value || 23, b = +$('#sg-b').value || 42; const [b1, b0] = [Math.floor(b / 10), b % 10]; const [a1, a0] = [Math.floor(a / 10), a % 10];
+    const p1 = a * b1, p2 = a * b0, tot = a * b; const W = String(tot).length + 1;
+    $('#sg-steps').innerHTML = `
+      <div class="sanstep"><b>➊ ${a}과 ${b}의 산가지 배열</b><div class="row"><span class="lbl">상위 ${b}</span>${numSVG(b, 3, 1)}</div><div class="row"><span class="lbl">하위 ${a}</span>${numSVG(a, 3, 1)}</div><p class="bk-muted" style="margin:4px 0 0;font-size:.85rem">곱하는 수 ${b}를 상위에, 곱해지는 수 ${a}를 하위에. ${b}의 ${b1}과 ${a}의 ${a0}이 같은 세로줄에 오도록.</p></div>
+      <div class="sanstep"><b>➋ ${b}의 ${b1}과 ${a}의 계산</b><div class="row"><span class="lbl">${a1}×${b1}=${a1 * b1}, ${a0}×${b1}=${a0 * b1}</span>${numSVG(p1, W, 1)}</div><div class="row"><span class="lbl">하위 ${a} (한 칸 옮김)</span>${numSVG(a, W)}</div><p class="bk-muted" style="margin:4px 0 0;font-size:.85rem">${a}×${b1}=${p1}을 자리에 맞춰 놓고, ${b1}은 치운 뒤 ${a}를 오른쪽으로 한 칸 옮긴다.</p></div>
+      <div class="sanstep"><b>➌ ${b}의 ${b0}과 ${a}의 계산</b><div class="row"><span class="lbl">${a1}×${b0}=${a1 * b0}, ${a0}×${b0}=${a0 * b0}</span>${numSVG(p2, W)}</div></div>
+      <div class="sanstep"><b>➍ 자리에 맞추어 더하기</b><div class="row"><span class="lbl">${p1 * 10 > 0 ? p1 + '0' : ''} + ${p2}</span>${numSVG(tot, W)}</div><div class="eq">${a} × ${b} = ${tot}</div></div>`; }
+  $('#sg-go').onclick = go; go();
+})();
+</script>
+</body>
+</html>
