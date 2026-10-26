@@ -11,3 +11,9 @@
 - `img/` — 책 단원 도입 이미지
 
 배포: GitHub Pages → https://mathkt.github.io/onchun/
+
+## 운영 메모
+- `qr.html` — 부스 대기 화면(홈 QR). 크롬북에서 F11 전체 화면으로 띄워 두면 됨.
+- 오프라인 대비: `sw.js`(서비스 워커)가 사이트 전체를 캐시. 파일을 고친 뒤에는 `python3 tools/build-sw.py`로 sw.js를 다시 만들고 커밋.
+- 온라인 대전: 팝잇 Firebase(popit-88756) 재사용, 방은 `rooms/S1234`(돌)·`N1234`(노탁토)·`P1234`(팝잇).
+- 이름·전적·"규칙 다시 안 보기"는 기기(localStorage)에 저장.
