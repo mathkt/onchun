@@ -182,6 +182,7 @@
 
 <script>
 const $ = s => document.querySelector(s); const ri = n => Math.floor(Math.random() * n);
+const shuffle = a => { for (let i = a.length - 1; i > 0; i--) { const j = ri(i + 1); [a[i], a[j]] = [a[j], a[i]]; } return a; };
 document.querySelectorAll('#tabs .tab').forEach(b => b.onclick = () => { document.querySelectorAll('#tabs .tab').forEach(x => x.classList.toggle('on', x === b)); document.querySelectorAll('.act-page').forEach(p => p.hidden = p.id !== b.dataset.t); window.scrollTo({ top: $('#tabs').offsetTop - 70, behavior: 'smooth' }); });
 (function(){ const h=location.hash.slice(1); const b=h&&document.querySelector(`#tabs .tab[data-t="${h}"]`); if(b) b.click(); })();
 function bars(el, vals, labels) { const m = Math.max(...vals, 1); el.innerHTML = vals.map((v, i) => `<div style="height:${v / m * 100}%"><b>${v}</b><span>${labels[i]}</span></div>`).join(''); }
@@ -193,7 +194,7 @@ function bars(el, vals, labels) { const m = Math.max(...vals, 1); el.innerHTML =
   function init() { bite = ri(9); turn = 1; over = false; mouth.className = 'mouth'; mouth.innerHTML = ''; for (let i = 0; i < 9; i++) { const b = document.createElement('button'); b.className = 'tooth'; b.textContent = i + 1; b.onclick = () => press(i, b); mouth.appendChild(b); } $('#sh-turn').textContent = '1번째 친구 차례 — 이빨을 누르세요'; }
   function press(i, b) { if (over || b.classList.contains('pressed')) return; if (i === bite) { b.classList.add('bite'); mouth.classList.add('closed'); over = true; $('#sh-turn').textContent = `🦈 덥석! ${turn}번째 친구 당첨 — 계단을 걸어가세요!`; tally[turn - 1]++; save(); } else { b.classList.add('pressed'); turn++; $('#sh-turn').textContent = `${turn}번째 친구 차례`; } }
   function save() { localStorage.setItem('shark', JSON.stringify(tally)); for (let i = 0; i < 9; i++) $('#sh' + (i + 1)).textContent = tally[i]; bars($('#sh-bar'), tally, [1,2,3,4,5,6,7,8,9]); $('#sh-total').textContent = `총 ${tally.reduce((a, b) => a + b, 0)}게임`; }
-  $('#sh-new').onclick = init; $('#sh-auto').onclick = () => { for (let k = 0; k < 100; k++) { const b2 = ri(9); const order = [...Array(9).keys()].sort(() => Math.random() - .5); tally[order.indexOf(b2)]++; } save(); };
+  $('#sh-new').onclick = init; $('#sh-auto').onclick = () => { for (let k = 0; k < 100; k++) { const b2 = ri(9); const order = shuffle([...Array(9).keys()]); tally[order.indexOf(b2)]++; } save(); };
   $('#sh-clear').onclick = () => { tally = [0,0,0,0,0,0,0,0,0]; save(); };
   init(); save();
 })();
@@ -238,7 +239,7 @@ function bars(el, vals, labels) { const m = Math.max(...vals, 1); el.innerHTML =
   $('#om-roll').onclick = () => { if (over || dice) return; dice = 1 + ri(6); secondRoll = card === '사이' ? 1 + ri(6) : null; $('#om-dice').textContent = '⚀⚁⚂⚃⚄⚅'[dice - 1] + (secondRoll ? '⚀⚁⚂⚃⚄⚅'[secondRoll - 1] : '');
     if (card === '상대방 돌 빼기') { $('#om-msg').textContent = '뺄 상대 돌을 고르세요'; render(true); return; }
     render(true); const any = board.querySelector('.can'); $('#om-msg').textContent = any ? (card ? `찬스 '${card}' 적용 — 놓을 곳을 고르세요` : '놓을 곳을 고르세요') : '놓을 곳이 없어요 → 차례 넘김'; if (!any) setTimeout(() => endTurn('놓을 곳이 없어 넘겼어요.'), 900); };
-  $('#om-reset').onclick = () => { st = B.map(r => r.map(() => '')); turn = 'b'; dice = null; card = null; over = false; const deck = [...CARDS].sort(() => Math.random() - .5); cards = { b: deck.slice(0, 2), w: deck.slice(2, 4) }; $('#om-res').textContent = ''; $('#om-msg').textContent = ''; $('#om-dice').textContent = ''; render(false); };
+  $('#om-reset').onclick = () => { st = B.map(r => r.map(() => '')); turn = 'b'; dice = null; card = null; over = false; const deck = shuffle([...CARDS]); cards = { b: deck.slice(0, 2), w: deck.slice(2, 4) }; $('#om-res').textContent = ''; $('#om-msg').textContent = ''; $('#om-dice').textContent = ''; render(false); };
   $('#om-reset').click();
 })();
 
@@ -251,7 +252,7 @@ function bars(el, vals, labels) { const m = Math.max(...vals, 1); el.innerHTML =
     [[0,1],[2,3],[4,5]].forEach(p => add('t' + p[0], 't' + p[1])); bottom.forEach(p => add('b' + p[0], 'b' + p[1])); for (let i = 0; i < 6; i++) add('t' + i, 'b' + i);
     const seen = new Set(); let n = 0; for (const k in adj) { if (seen.has(k)) continue; n++; const stack = [k]; while (stack.length) { const x = stack.pop(); if (seen.has(x)) continue; seen.add(x); adj[x].forEach(y => stack.push(y)); } } return n;
   }
-  function randPairs() { const a = [0,1,2,3,4,5].sort(() => Math.random() - .5); return [[a[0],a[1]],[a[2],a[3]],[a[4],a[5]]]; }
+  function randPairs() { const a = shuffle([0,1,2,3,4,5]); return [[a[0],a[1]],[a[2],a[3]],[a[4],a[5]]]; }
   function draw(bottom) {
     const X = i => 60 + i * 60; let h = '';
     for (let i = 0; i < 6; i++) h += `<line x1="${X(i)}" y1="40" x2="${X(i)}" y2="180" stroke="#C9A24D" stroke-width="6" stroke-linecap="round"/><text x="${X(i)}" y="205" text-anchor="middle" font-size="13" fill="#5F5B55">${'abcdef'[i]}</text>`;
