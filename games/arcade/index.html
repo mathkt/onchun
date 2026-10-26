@@ -1683,6 +1683,43 @@
   }
   @media (max-height:760px) and (min-width:641px) { .qn-boardWrap { width:min(100%, 380px); } .qn-frame { min-height:200px; } }
 
+  /* ================= 팝잇 분석 모드 ================= */
+  #pp-analysis-screen { display:none; flex-direction:column; align-items:center; width:100%; max-width:1060px; }
+  .pp-a-setup { display:flex; flex-wrap:wrap; gap:8px; align-items:center; justify-content:center; margin-bottom:12px; }
+  .pp-a-setup label { display:flex; align-items:center; gap:6px; font-weight:700; color:var(--text-sub); }
+  .pp-a-setup input { width:120px; font-size:1rem; padding:7px 10px; border:2px solid #D9CFAE; border-radius:10px; font-family:'Jua',sans-serif; }
+  .pp-a-setup button { padding:8px 12px; font-size:.92rem; }
+  #pp-analysis-layout { display:flex; width:100%; gap:16px; background:var(--bg-panel); border:1px solid #E7DFC9; padding:18px; border-radius:20px; box-shadow:0 15px 40px rgba(90,70,20,.14); align-items:stretch; }
+  #pp-analysis-left { flex:0 0 170px; width:170px; display:flex; flex-direction:column; gap:12px; }
+  #pp-analysis-left .a-player-frame { flex:0 0 auto; padding:12px 6px; }
+  #pp-analysis-left .a-player-frame span { color:var(--neon-orange); font-size:2.2rem; }
+  #pp-a-verdict { flex:1; border-radius:14px; padding:12px; font-size:.92rem; line-height:1.5; background:#FFF4DF; border:1.5px solid #F5A623; }
+  #pp-a-verdict.lose { background:#FDE8EE; border-color:#E9533F; }
+  #pp-a-verdict.win { background:#DFF5EE; border-color:#3A9E82; }
+  #pp-analysis-center { flex:2; min-width:0; display:flex; flex-direction:column; gap:12px; }
+  #pp-a-board { display:flex; flex-direction:column; gap:6px; background:#FFF9E8; border:2px solid #F5A623; border-radius:16px; padding:10px; box-shadow:inset 0 0 0 5px #fff; }
+  #pp-a-board .bubble { width:26px; height:26px; cursor:default; }
+  #pp-a-board .pp-row { padding:5px 8px; }
+  #pp-a-board .bubble.hl { outline:3px solid #E9533F; outline-offset:1px; }
+  .pp-a-calc { background:#fff; border:1.5px solid #E7DFC9; border-radius:14px; padding:10px 12px; overflow-x:auto; }
+  .pp-a-calc h4 { margin:0 0 6px; font-family:'Jua',sans-serif; font-weight:400; color:var(--neon-orange); font-size:1rem; }
+  .pp-a-calc table { border-collapse:collapse; font-family:'IBM Plex Mono',monospace; font-size:.95rem; }
+  .pp-a-calc th, .pp-a-calc td { padding:4px 8px; text-align:center; border-bottom:1px dashed #EDE3C8; }
+  .pp-a-calc th { font-family:'Noto Sans KR',sans-serif; color:var(--text-sub); font-weight:700; font-size:.8rem; }
+  .pp-a-calc td.one { background:#FFF1D6; font-weight:700; }
+  .pp-a-calc td.zero { color:#c9c3b0; }
+  .pp-a-calc tr.sum td { border-top:2px solid #F5A623; border-bottom:0; font-weight:800; }
+  .pp-a-calc tr.sum td.odd { background:#FDE8EE; color:#C9436B; }
+  .pp-a-calc tr.sum td.even { background:#DFF5EE; color:#1f6b55; }
+  .pp-a-calc .note { font-size:.82rem; color:var(--text-sub); margin-top:6px; font-family:'Noto Sans KR',sans-serif; }
+  #pp-analysis-right { flex:1.2; min-width:0; display:flex; flex-direction:column; gap:8px; max-height:520px; }
+  #pp-a-history-box { background:#FFF9E8; border:1px solid #E7DFC9; border-radius:10px; padding:8px 10px; font-family:'IBM Plex Mono',monospace; font-size:.88rem; overflow-y:auto; height:64px; min-height:64px; color:var(--neon-orange); }
+  #pp-a-moves-box { flex:1; display:flex; flex-direction:column; gap:6px; overflow-y:auto; padding-right:4px; min-height:200px; }
+  #pp-a-moves-box .analysis-move-btn { padding:9px 12px; font-size:.9rem; }
+  #pp-a-moves-box .analysis-move-btn.quiz-right { background:#DFF5EE !important; border-color:#3A9E82 !important; }
+  #pp-a-moves-box .analysis-move-btn.quiz-wrong { background:#FDE8EE !important; border-color:#E9533F !important; }
+  @media (max-width:860px) { #pp-analysis-layout { flex-direction:column; } #pp-analysis-left { width:100%; flex:auto; flex-direction:row; flex-wrap:wrap; } #pp-analysis-left .a-player-frame { flex:1; } #pp-a-verdict { flex-basis:100%; } #pp-analysis-right { max-height:none; } }
+
   /* ================= 팝잇 섹션 ================= */
   :root { --neon-orange: #E8891B; }
   .game-card.orange-theme { border-top:3px solid transparent; }
@@ -2155,6 +2192,10 @@
           <button class="help-btn" onmouseenter="playSfx('hover')" onclick="olHelp()" title="도움말">?</button>
         </div>
         <div class="menu-row">
+          <button class="menu-btn analysis-btn" onmouseenter="playSfx('hover_btn')" onclick="playSfx('click'); ppStartAnalysis()">📊 분석 모드 (이진법 계산기)</button>
+          <button class="help-btn" onmouseenter="playSfx('hover')" onclick="ppShowHelp('analysis')" title="도움말">?</button>
+        </div>
+        <div class="menu-row">
           <button class="menu-btn records-btn" onmouseenter="playSfx('hover_btn')" onclick="playSfx('click'); openRecords('popit')">📜 전적 보기</button>
         </div>
       </div>
@@ -2193,6 +2234,41 @@
       <div class="action-buttons">
         <button class="restart-btn" id="pp-restart-btn" onmouseenter="playSfx('hover')" onclick="playSfx('click'); ppRestartGame()" style="display:none;">다시하기</button>
         <button class="restart-btn" id="pp-restart-set-btn" onmouseenter="playSfx('hover')" onclick="playSfx('click'); openPpSettingsAndRestart()" style="display:none;">⚙️ 설정 바꿔 다시하기</button>
+        <button class="resume-analysis-btn" id="pp-resume-analysis-btn" onmouseenter="playSfx('hover')" onclick="playSfx('click'); ppResumeAnalysis()" style="display:none;">분석 모드로 복귀</button>
+        <button class="back-btn" onmouseenter="playSfx('hover')" onclick="playSfx('click'); ppGoBack()">메뉴로 돌아가기</button>
+      </div>
+    </div>
+
+    <!-- 팝잇 분석 화면 -->
+    <div id="pp-analysis-screen">
+      <h2 style="margin:0 0 10px 0;">📊 분석 모드 <span id="pp-a-sub" style="font-size:.9rem; color:var(--text-sub); font-family:'Noto Sans KR',sans-serif;"></span></h2>
+      <div class="pp-a-setup">
+        <label>줄 설정 <input id="pp-a-rows" type="text" inputmode="numeric" placeholder="예: 3 4 3"></label>
+        <button class="undo-btn" onclick="playSfx('click'); ppASetRows()">판 만들기</button>
+        <button class="undo-btn" onclick="playSfx('click'); ppARandom()">🎲 랜덤 판</button>
+        <button class="help-close-btn" id="pp-a-quiz-btn" onclick="playSfx('click'); ppAQuiz()">🎯 퀴즈: 이기는 수 찾기</button>
+      </div>
+      <div id="pp-analysis-layout">
+        <div id="pp-analysis-left">
+          <div class="a-player-frame" id="pp-a-frame-p1">P1 누른 버블<span id="pp-a-p1-score">0</span></div>
+          <div class="a-player-frame" id="pp-a-frame-p2">P2 누른 버블<span id="pp-a-p2-score">0</span></div>
+          <div id="pp-a-verdict"></div>
+        </div>
+        <div id="pp-analysis-center">
+          <div id="pp-a-board"></div>
+          <div class="pp-a-calc" id="pp-a-calc"></div>
+        </div>
+        <div id="pp-analysis-right">
+          <div><strong>진행 수순</strong></div>
+          <div id="pp-a-history-box"></div>
+          <div><strong id="pp-a-moves-title">합법 수 분석</strong></div>
+          <div id="pp-a-moves-box"></div>
+        </div>
+      </div>
+      <div class="action-buttons">
+        <button class="restart-btn" onmouseenter="playSfx('hover')" onclick="playSfx('click'); ppABranch()">이 포지션에서 AI와 두기</button>
+        <button class="restart-btn" onmouseenter="playSfx('hover')" onclick="playSfx('click'); ppStartAnalysis(true)">처음부터</button>
+        <button class="undo-btn" id="pp-analysis-undo-btn" onmouseenter="playSfx('hover')" onclick="ppAUndo()">무르기</button>
         <button class="back-btn" onmouseenter="playSfx('hover')" onclick="playSfx('click'); ppGoBack()">메뉴로 돌아가기</button>
       </div>
     </div>
@@ -3038,7 +3114,7 @@
     const bbBox = document.getElementById('bb-modal-box');
     if (gameType === 'stone') bbBox.classList.add('pink-modal');
     else bbBox.classList.remove('pink-modal');
-    document.getElementById('branch-player-role').value = (gameType === 'notakto' ? ntATurn : stATurn).toString();
+    document.getElementById('branch-player-role').value = (gameType === 'notakto' ? ntATurn : gameType === 'popit' ? ppATurn : stATurn).toString();
     openModal('branch-bot-modal', 'bb-modal-box');
   }
   function startBranchBotGame() {
@@ -3046,6 +3122,7 @@
     botDifficulty = document.getElementById('branch-bot-diff').value;
     closeModal('branch-bot-modal', 'bb-modal-box');
     if (branchGameType === 'notakto') ntStartBranchPlay();
+    else if (branchGameType === 'popit') ppStartBranchPlay();
     else stStartBranchPlay();
   }
 
@@ -3417,8 +3494,8 @@
   function ppShowHelp(topic) {
     playBtnSound('help');
     const rule = "<b>[팝잇 규칙]</b><br>1. 자기 차례에 <b>한 줄</b>을 골라 그 줄의 버블을 <b>1개 이상</b> 누릅니다(드래그로 여러 개 선택 가능).<br>2. 서로 다른 줄을 동시에 누를 수는 없습니다.<br>3. <b>마지막 버블을 누르는 사람이 승리</b>합니다.";
-    const title = topic === 'bot' ? '🤖 AI 플레이' : '👥 2인 플레이';
-    const lead = topic === 'bot' ? 'AI를 상대로 번갈아 진행합니다. 난이도 최상은 항상 최선의 수(이진법 XOR)를 둡니다.<br><br>' : '하나의 기기에서 두 명이 번갈아 진행합니다.<br><br>';
+    const title = topic === 'bot' ? '🤖 AI 플레이' : topic === 'analysis' ? '📊 분석 모드' : '👥 2인 플레이';
+    const lead = topic === 'bot' ? 'AI를 상대로 번갈아 진행합니다. 난이도 최상은 항상 최선의 수(이진법 XOR)를 둡니다.<br><br>' : topic === 'analysis' ? '모든 합법 수를 <span style="color:#3A9E82;font-weight:bold">[필승 수]</span>/<span style="color:#C9436B;font-weight:bold">[나쁜 수]</span>로 색칠하고, <b>이진법 계산기</b>가 각 줄 개수를 2진수로 펼쳐 "모든 자리가 짝수면 지는 판"을 보여 줍니다. 한 번에 최대 n개 규칙이면 먼저 (n+1)로 나눈 나머지를 쓰고, 🎯 퀴즈로 이기는 수 찾기 연습도 할 수 있어요.<br><br>' : '하나의 기기에서 두 명이 번갈아 진행합니다.<br><br>';
     document.getElementById('help-modal-box').classList.remove('pink-modal');
     document.getElementById('help-title').innerText = title;
     document.getElementById('help-content').innerHTML = lead + rule;
@@ -3428,7 +3505,7 @@
   function ppStartTimer() {
     ppStopTimer();
     if (ppTimeSetting === 'unlimited' || ppOver) return;
-    if (ppMode === 'bot' && ppCur === 2) return;
+    if (ppMode === 'bot' && ppCur === ppBotNum()) return;
     if (ppMode === 'online' && ppCur !== Online.myNum) return;
     ppTimeLeft = parseInt(ppTimeSetting);
     const el = document.getElementById('pp-timer-display');
@@ -3459,7 +3536,8 @@
     ppRender(); ppUpdateUI();
     if (ppCur === 2 && mode === 'bot') ppScheduleBot();
   }
-  function ppLocked() { return ppOver || (ppMode === 'bot' && ppCur === 2) || (ppMode === 'online' && ppCur !== Online.myNum); }
+  function ppBotNum() { return isBranchPlay ? 3 - branchHumanPlayer : 2; }
+  function ppLocked() { return ppOver || (ppMode === 'bot' && ppCur === ppBotNum()) || (ppMode === 'online' && ppCur !== Online.myNum); }
   function ppRender() {
     const board = document.getElementById('popit-board'); board.innerHTML = '';
     const lock = ppLocked();
@@ -3486,7 +3564,7 @@
   function ppBtns() {
     document.getElementById('pp-confirm').disabled = !ppSel.length || ppLocked();
     document.getElementById('pp-cancel').disabled = !ppSel.length;
-    document.getElementById('pp-undo').disabled = ppMode === 'online' || ppOver || !ppHist.length || (ppMode === 'bot' && ppCur === 2);
+    document.getElementById('pp-undo').disabled = ppMode === 'online' || ppOver || !ppHist.length || (ppMode === 'bot' && ppCur === ppBotNum());
     document.getElementById('pp-hint').innerText = ppOver ? '' : ppLocked() ? (ppMode === 'bot' ? 'AI가 생각 중…' : '상대 차례예요') : (ppSel.length ? `${ppSelRow + 1}번줄 ${ppSel.length}개 선택 → [선택 완료]` : (ppMaxTake ? `한 줄에서 1~${ppMaxTake}개 누른 뒤 [선택 완료]` : '한 줄에서 원하는 만큼 누른 뒤 [선택 완료]'));
   }
   function ppToggle(ri, i) {
@@ -3508,7 +3586,7 @@
   }
   function ppUndo() {
     if (ppMode === 'online' || ppOver || !ppHist.length) return;
-    if (ppMode === 'bot') { while (ppHist.length && ppHist[ppHist.length - 1].player === 2) ppHist.pop(); if (ppHist.length) ppHist.pop(); ppCur = 1; }
+    if (ppMode === 'bot') { const bn = ppBotNum(); while (ppHist.length && ppHist[ppHist.length - 1].player === bn) ppHist.pop(); if (ppHist.length) ppHist.pop(); ppCur = 3 - bn; }
     else { const last = ppHist.pop(); ppCur = last.player; }
     ppRows = [...ppInit]; ppHist.forEach(h => ppRows[h.row] -= h.count);
     ppSelRow = null; ppSel = []; ppRender(); ppUpdateUI();
@@ -3531,24 +3609,26 @@
       ppOver = true;
       const wNum = ppWinRule === 'misere' ? (3 - ppCur) : ppCur; // 마지막을 누른 사람(ppCur)이 이기는지
       let winner = '', loserSubject = '', isLoss = false, winnerP1Num = wNum;
-      const who = n => ppMode === 'bot' ? (n === 1 ? '플레이어' : 'AI') : `플레이어 ${n}`;
-      const subj = n => ppMode === 'bot' ? (n === 1 ? '플레이어가' : 'AI가') : (n === 1 ? '플레이어 1이' : '플레이어 2가');
-      winner = who(wNum); loserSubject = subj(ppCur); isLoss = ppMode === 'bot' && wNum === 2;
+      const hn = isBranchPlay ? branchHumanPlayer : 1;
+      const who = n => ppMode === 'bot' ? (n === hn ? '플레이어' : 'AI') : `플레이어 ${n}`;
+      const subj = n => ppMode === 'bot' ? (n === hn ? '플레이어가' : 'AI가') : (n === 1 ? '플레이어 1이' : '플레이어 2가');
+      winner = who(wNum); loserSubject = subj(ppCur); isLoss = ppMode === 'bot' && wNum !== hn;
       if (wNum === 1) ppScore.p1Wins++; else ppScore.p2Wins++;
       ppRender(); updateScoreDisplay(); highlightWinner(winnerP1Num);
       document.getElementById('pp-restart-btn').style.display = 'inline-block';
-      if (ppMode !== 'online' || Online.myNum === 1) document.getElementById('pp-restart-set-btn').style.display = 'inline-block';
+      if (isBranchPlay) document.getElementById('pp-resume-analysis-btn').style.display = 'inline-block';
+      else if (ppMode !== 'online' || Online.myNum === 1) document.getElementById('pp-restart-set-btn').style.display = 'inline-block';
       document.getElementById('pp-turn-indicator').innerText = isLoss ? 'AI 승리!' : `🎉 ${winner} 승리! 🎉`;
       showVictoryModal(winner, `${loserSubject} 마지막 버블을 눌렀습니다.${ppWinRule === 'misere' ? ' (거꾸로 규칙)' : ''}`, isLoss);
     } else {
       ppCur = ppCur === 1 ? 2 : 1;
       ppRender(); ppUpdateUI();
-      if (ppMode === 'bot' && ppCur === 2) ppScheduleBot();
+      if (ppMode === 'bot' && ppCur === ppBotNum()) ppScheduleBot();
     }
   }
   function ppScheduleBot() { if (ppBotTimeout) clearTimeout(ppBotTimeout); ppBotTimeout = setTimeout(ppBotTurn, 900); }
   function ppBotTurn() {
-    ppBotTimeout = null; if (ppOver || ppCur !== 2) return;
+    ppBotTimeout = null; if (ppOver || ppCur !== ppBotNum()) return;
     const rows = ppRows, avail = rows.map((c, i) => ({ c, i })).filter(r => r.c > 0);
     const M = ppMaxTake || 0, cap = c => M ? Math.min(M, c) : c;
     // 부분 제한(한 번에 최대 M개)이면 각 줄을 (M+1)로 나눈 나머지로 계산 — 책의 '마지막 카드' 전략 + 팝잇 XOR
@@ -3577,13 +3657,14 @@
     if (!mv || mv.count < 1 || mv.count > cap(rows[mv.row])) mv = randomMove();
     ppExecuteMove(mv);
   }
-  function ppRestartGame() { closeVictoryModal(); ppStopTimer(); ppStartGame(ppMode); }
+  function ppRestartGame() { closeVictoryModal(); ppStopTimer(); if (isBranchPlay) ppStartBranchPlay(); else ppStartGame(ppMode); }
   function ppGoBack() {
     closeVictoryModal(); ppStopTimer();
     if (ppBotTimeout) { clearTimeout(ppBotTimeout); ppBotTimeout = null; }
-    ppGameScreen.style.display = 'none';
+    ppGameScreen.style.display = 'none'; ppAnalysisScreen.style.display = 'none'; isBranchPlay = false;
     document.getElementById('pp-restart-btn').style.display = 'none';
     document.getElementById('pp-restart-set-btn').style.display = 'none';
+    document.getElementById('pp-resume-analysis-btn').style.display = 'none';
     ppScore = { p1Wins: 0, p2Wins: 0 }; highlightWinner(0); updateScoreDisplay(); ppUpdateSubtitle(false);
     switchScreen(ppMenuScreen, 'flex');
   }
@@ -3634,6 +3715,177 @@
     window.addEventListener('pointercancel', end); window.addEventListener('blur', () => end());
   })();
   ppUpdateSubtitle(false);
+
+
+  /* ---------- 팝잇 분석 모드 ---------- */
+  const ppAnalysisScreen = document.getElementById('pp-analysis-screen');
+  let ppARows = [], ppAInit = [], ppATurn = 1, ppAHist = [], ppAQuizOn = false, ppAQuizAnswered = false;
+  const ppRed = c => ppMaxTake ? c % (ppMaxTake + 1) : c;
+  const ppCap = c => ppMaxTake ? Math.min(ppMaxTake, c) : c;
+  // 지금 둘 사람이 지는 판(P-position)인가?
+  const ppMemo = new Map();
+  function ppIsLosing(rows) {
+    const r = rows.filter(c => c > 0);
+    if (!r.length) return ppWinRule !== 'misere'; // 버블이 없으면: 보통 규칙에선 직전 사람이 이김 → 지금 둘 사람 패배
+    if (ppWinRule !== 'misere') return r.reduce((a, c) => a ^ ppRed(c), 0) === 0;
+    if (!ppMaxTake) { // 거꾸로 님: 2 이상 줄이 있으면 XOR 0, 모두 1이면 1의 개수가 홀수
+      return r.some(c => c >= 2) ? r.reduce((a, c) => a ^ c, 0) === 0 : (r.length % 2 === 1);
+    }
+    // 제한 + 거꾸로: 작은 판은 정확히 탐색
+    const key = r.slice().sort((a, b) => a - b).join(',');
+    if (ppMemo.has(key)) return ppMemo.get(key);
+    if (ppMemo.size > 200000) return r.some(c => c > ppMaxTake) ? r.reduce((a, c) => a ^ ppRed(c), 0) === 0 : (r.length % 2 === 1);
+    let losing = true; // 어떤 수를 둬도 상대가 이기면(=상대가 지는 판으로 못 보내면) 지는 판
+    outer: for (let i = 0; i < r.length; i++) for (let k = 1; k <= ppCap(r[i]); k++) {
+      const nr = r.slice(); nr[i] -= k;
+      if (ppIsLosing(nr)) { losing = false; break outer; }
+    }
+    ppMemo.set(key, losing); return losing;
+  }
+  function ppAMoves() { const m = []; ppARows.forEach((c, i) => { for (let k = 1; k <= ppCap(c); k++) m.push({ row: i, count: k }); }); return m; }
+  function ppStartAnalysis(reset) {
+    ppMenuScreen.style.display = 'none'; ppGameScreen.style.display = 'none';
+    switchScreen(ppAnalysisScreen, 'flex');
+    if (!reset || !ppAInit.length) { ppApplyRules(); ppAInit = ppInit.slice(); }
+    ppARows = ppAInit.slice(); ppATurn = 1; ppAHist = []; ppAQuizOn = false; ppMemo.clear();
+    document.getElementById('pp-a-rows').value = ppAInit.join(' ');
+    ppAUpdate();
+  }
+  function ppASetRows() { const r = ppParseRows(document.getElementById('pp-a-rows').value); if (!r.length) return; ppAInit = r; ppStartAnalysis(true); }
+  function ppARandom() { ppAInit = ppRandomRows(); ppStartAnalysis(true); }
+  function ppAQuiz() {
+    // 이기는 수가 있는(=지는 판이 아닌) 랜덤 판 만들기
+    for (let t = 0; t < 50; t++) { const r = ppRandomRows(); if (!ppIsLosing(r)) { ppAInit = r; break; } }
+    ppStartAnalysis(true); ppAQuizOn = true; ppAQuizAnswered = false; ppAUpdate();
+  }
+  function ppAApply(mv, fromQuiz) {
+    ppAHist.push({ turn: ppATurn, row: mv.row, count: mv.count, rows: ppARows.slice() });
+    ppARows[mv.row] -= mv.count; ppATurn = 3 - ppATurn;
+    if (fromQuiz) { ppAQuizOn = false; }
+    ppAUpdate();
+  }
+  function ppAUndo() { const h = ppAHist.pop(); if (!h) return; ppARows = h.rows; ppATurn = h.turn; ppAQuizOn = false; ppAUpdate(); }
+  function ppABranch() {
+    if (!ppARows.some(c => c > 0)) return;
+    ppAnalysisScreen.style.display = 'none';
+    ppBranch = { rows: ppARows.slice(), turn: ppATurn };
+    botPendingGame = 'popit';
+    openBranchBotModal('popit');
+  }
+  function ppResumeAnalysis() { closeVictoryModal(); ppStopTimer(); ppGameScreen.style.display = 'none'; switchScreen(ppAnalysisScreen, 'flex'); ppAUpdate(); }
+  function ppAUpdate() {
+    document.getElementById('pp-analysis-undo-btn').disabled = !ppAHist.length;
+    document.getElementById('pp-a-sub').innerText = `줄 ${ppAInit.join('·')}${ppMaxTake ? ' · 한 번에 최대 ' + ppMaxTake + '개' : ''} · 마지막 버블 누르면 ${ppWinRule === 'misere' ? '패배' : '승리'}`;
+    const taken = p => ppAHist.filter(h => h.turn === p).reduce((a, h) => a + h.count, 0);
+    document.getElementById('pp-a-p1-score').innerText = taken(1); document.getElementById('pp-a-p2-score').innerText = taken(2);
+    ['pp-a-frame-p1', 'pp-a-frame-p2'].forEach((id, i) => document.getElementById(id).classList.toggle('active-turn', ppATurn === i + 1));
+    // 판
+    const board = document.getElementById('pp-a-board'); board.innerHTML = '';
+    ppARows.forEach((count, ri) => {
+      const row = document.createElement('div'); row.className = 'pp-row';
+      const lab = document.createElement('div'); lab.className = 'pp-row__label'; lab.style.color = PP_COLORS[ri % 7]; lab.innerText = `${ri + 1}번줄`;
+      const bb = document.createElement('div'); bb.className = 'pp-row__bubbles';
+      for (let i = 0; i < ppAInit[ri]; i++) { const b = document.createElement('span'); b.className = 'bubble' + (i >= count ? ' popped' : ''); b.style.background = PP_COLORS[ri % 7]; b.dataset.row = ri; b.dataset.idx = i; bb.appendChild(b); }
+      const cnt = document.createElement('div'); cnt.className = 'pp-row__cnt'; cnt.innerText = `${count}개`;
+      row.append(lab, bb, cnt); board.appendChild(row);
+    });
+    // 진행 수순
+    document.getElementById('pp-a-history-box').innerHTML = ppAHist.length ? ppAHist.map((h, i) => `${i + 1}. P${h.turn}: ${h.row + 1}번줄 −${h.count}`).join('<br>') : '아직 둔 수가 없습니다.';
+    // 이진법 계산기
+    ppARenderCalc();
+    // 합법 수 분석
+    const box = document.getElementById('pp-a-moves-box'); box.innerHTML = '';
+    const total = ppARows.reduce((a, b) => a + b, 0);
+    const losingNow = ppIsLosing(ppARows);
+    const verdict = document.getElementById('pp-a-verdict');
+    if (total === 0) {
+      const winner = ppWinRule === 'misere' ? ppATurn : 3 - ppATurn;
+      box.innerHTML = `<div style="color:#3A9E82; font-size:1.1rem; font-weight:800; padding:10px;">게임 종료 (P${winner} 승리!)</div>`;
+      verdict.className = ''; verdict.innerHTML = `마지막 버블을 P${3 - ppATurn}가 눌렀어요.`;
+      document.getElementById('pp-a-moves-title').innerText = '합법 수 분석';
+      return;
+    }
+    document.getElementById('pp-a-moves-title').innerText = ppAQuizOn ? '🎯 이기는 수를 골라 보세요' : '합법 수 분석';
+    const moves = ppAMoves();
+    const evals = moves.map(mv => { const nr = ppARows.slice(); nr[mv.row] -= mv.count; return { mv, win: ppIsLosing(nr) }; });
+    const winMoves = evals.filter(e => e.win);
+    verdict.className = losingNow ? 'lose' : 'win';
+    verdict.innerHTML = losingNow
+      ? `<b>P${ppATurn}가 둘 차례 — 지는 판</b><br>어떻게 둬도 상대가 바르게 두면 집니다. (상대 실수를 기다릴 것!)`
+      : `<b>P${ppATurn}가 둘 차례 — 이기는 판</b><br>이기는 수 ${winMoves.length}개: ${winMoves.slice(0, 4).map(e => `${e.mv.row + 1}번줄 −${e.mv.count}`).join(', ')}${winMoves.length > 4 ? ' …' : ''}`;
+    evals.forEach(e => {
+      const nr = ppARows.slice(); nr[e.mv.row] -= e.mv.count;
+      const btn = document.createElement('button');
+      let cls = 'analysis-move-btn', tag = '';
+      if (!ppAQuizOn) { if (e.win) { cls += ' win-move'; tag = ' [필승 수]'; } else { cls += ' bad-move'; tag = ' [나쁜 수]'; } }
+      btn.className = cls;
+      btn.innerText = `${e.mv.row + 1}번줄 −${e.mv.count}개 → (${nr.join(', ')})${tag}`;
+      btn.onmouseenter = () => { playSfx('hover'); ppAHighlight(e.mv); };
+      btn.onmouseleave = () => ppAHighlight(null);
+      btn.onclick = () => {
+        playSfx('click');
+        if (ppAQuizOn && !ppAQuizAnswered) {
+          ppAQuizAnswered = true;
+          btn.classList.add(e.win ? 'quiz-right' : 'quiz-wrong');
+          box.querySelectorAll('.analysis-move-btn').forEach(b => { if (b !== btn && b._win) b.classList.add('quiz-right'); });
+          verdict.className = e.win ? 'win' : 'lose';
+          verdict.innerHTML = e.win ? `<b>정답! 🎉</b><br>${e.mv.row + 1}번줄에서 ${e.mv.count}개를 누르면 모든 자리가 짝수가 돼요. 아래 표를 확인해 보세요.` : `<b>아쉬워요 😢</b><br>초록으로 표시된 수가 이기는 수예요. 이진법 표에서 홀수 자리를 짝수로 만드는 수를 찾아보세요.`;
+          setTimeout(() => ppAApply(e.mv, true), 1500);
+          return;
+        }
+        ppAApply(e.mv);
+      };
+      btn._win = e.win;
+      box.appendChild(btn);
+    });
+  }
+  function ppAHighlight(mv) {
+    document.querySelectorAll('#pp-a-board .bubble').forEach(b => {
+      const r = +b.dataset.row, i = +b.dataset.idx;
+      b.classList.toggle('hl', !!mv && r === mv.row && i < ppARows[r] && i >= ppARows[r] - mv.count);
+    });
+  }
+  function ppARenderCalc() {
+    const el = document.getElementById('pp-a-calc');
+    const vals = ppARows.map(ppRed);
+    const maxv = Math.max(1, ...vals), bits = Math.max(1, Math.floor(Math.log2(maxv)) + 1);
+    const M = ppMaxTake;
+    let h = `<h4>🔢 이진법 계산기${M ? ` — 먼저 각 줄을 (${M}+1)=${M + 1}로 나눈 나머지로!` : ''}</h4><table><tr><th>줄</th><th>개수</th>${M ? '<th>나머지</th>' : ''}`;
+    for (let b = bits - 1; b >= 0; b--) h += `<th>${1 << b}</th>`;
+    h += '</tr>';
+    ppARows.forEach((c, i) => {
+      h += `<tr><td style="color:${PP_COLORS[i % 7]}; font-weight:800;">${i + 1}</td><td>${c}</td>${M ? `<td>${vals[i]}</td>` : ''}`;
+      for (let b = bits - 1; b >= 0; b--) { const on = (vals[i] >> b) & 1; h += `<td class="${on ? 'one' : 'zero'}">${on}</td>`; }
+      h += '</tr>';
+    });
+    h += `<tr class="sum"><td colspan="${M ? 3 : 2}">1의 개수</td>`;
+    let allEven = true;
+    for (let b = bits - 1; b >= 0; b--) { const n = vals.reduce((a, v) => a + ((v >> b) & 1), 0); const odd = n % 2 === 1; if (odd) allEven = false; h += `<td class="${odd ? 'odd' : 'even'}">${n}${odd ? '홀' : '짝'}</td>`; }
+    h += '</tr></table>';
+    const total = ppARows.reduce((a, b) => a + b, 0);
+    if (total) {
+      if (ppWinRule === 'misere' && ppARows.filter(c => c > 0).every(c => c <= 1)) h += `<div class="note">거꾸로 규칙 끝내기: 모두 1개 이하 → <b>1개짜리 줄이 홀수 개</b>면 지금 둘 사람이 집니다.</div>`;
+      else h += `<div class="note">${allEven ? '모든 자리가 <b>짝수</b> → 지금 둘 사람이 <b>지는 판</b>. 상대는 어떤 수에도 다시 짝수로 맞출 수 있어요.' : '<b>홀수</b> 자리가 있음 → 모든 자리를 짝수로 만드는 수가 <b>이기는 수</b>. (XOR = ' + vals.reduce((a, v) => a ^ v, 0) + ')'}${ppWinRule === 'misere' ? ' <i>(거꾸로 규칙은 마지막 1개짜리 줄만 남을 때 뒤집혀요)</i>' : ''}</div>`;
+    }
+    el.innerHTML = h;
+  }
+  // 분석 포지션에서 AI와 두기
+  let ppBranch = null;
+  const _ppStartRaw = ppStartGame;
+  function ppStartBranchPlay() {
+    ppMode = 'bot'; isBranchPlay = true;
+    ppInit = ppBranch.rows.slice();
+    document.getElementById('pp-p1-name').innerText = branchHumanPlayer === 1 ? '플레이어 (P1)' : 'AI';
+    document.getElementById('pp-p2-name').innerText = branchHumanPlayer === 2 ? '플레이어 (P2)' : 'AI';
+    document.getElementById('pp-restart-btn').style.display = 'none'; document.getElementById('pp-restart-set-btn').style.display = 'none';
+    document.getElementById('pp-resume-analysis-btn').style.display = 'none';
+    ppMenuScreen.style.display = 'none'; ppAnalysisScreen.style.display = 'none';
+    switchScreen(ppGameScreen, 'flex');
+    highlightWinner(0); updateScoreDisplay();
+    ppRows = ppInit.slice(); ppCur = ppBranch.turn; ppOver = false; ppHist = []; ppSelRow = null; ppSel = [];
+    ppUpdateSubtitle(true); ppRender(); ppUpdateUI();
+    if (ppCur !== branchHumanPlayer) ppScheduleBot();
+  }
 
   /* ================= 1. 노탁토 게임 & 분석 스크립트 ================= */
   let ntBoardSize = 3, ntWinLines = [], ntWinMasks = [], ntSymMaps = [];
