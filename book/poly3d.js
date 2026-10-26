@@ -56,10 +56,13 @@ const Poly3D = (() => {
         h += `<polygon points="${pts}" fill="${front ? fill : '#fff'}" fill-opacity="${front ? .96 : .08}" stroke="${front ? '#2C2A26' : '#bbb'}" stroke-width="${front ? 1.6 : .8}" stroke-dasharray="${front ? '' : '4 3'}" stroke-linejoin="round"/>`; });
       if (extra) h += extra(RV, proj); svg.innerHTML = h; }
     svg.setAttribute('viewBox', `0 0 ${size} ${size}`);
-    svg.addEventListener('pointerdown', e => { drag = [e.clientX, e.clientY]; svg.setPointerCapture(e.pointerId); });
-    svg.addEventListener('pointermove', e => { if (!drag) return; ry += (e.clientX - drag[0]) * .01; rx += (e.clientY - drag[1]) * .01; drag = [e.clientX, e.clientY]; draw(); });
-    svg.addEventListener('pointerup', () => drag = null); svg.addEventListener('pointercancel', () => drag = null);
-    let spin = null;
+    let down = null, moved = false, spin = null;
+    svg.style.touchAction = 'none';
+    svg.addEventListener('pointerdown', e => { drag = [e.clientX, e.clientY]; down = [e.clientX, e.clientY]; moved = false; svg.setPointerCapture(e.pointerId); });
+    svg.addEventListener('pointermove', e => { if (!drag) return; if (!moved && Math.hypot(e.clientX - down[0], e.clientY - down[1]) < 6) return; if (!moved && spin) { clearInterval(spin); spin = null; } moved = true; ry += (e.clientX - drag[0]) * .01; rx += (e.clientY - drag[1]) * .01; drag = [e.clientX, e.clientY]; draw(); });
+    // 탭(드래그 없이 떼기) → 그 자리의 요소를 'poly-pick' 이벤트로 알려 줌 (extra()로 그린 .edge 등 선택용)
+    svg.addEventListener('pointerup', e => { const wasTap = drag && !moved; drag = null; if (wasTap) { const el = document.elementFromPoint(e.clientX, e.clientY); svg.dispatchEvent(new CustomEvent('poly-pick', { detail: { target: el, x: e.clientX, y: e.clientY } })); } });
+    svg.addEventListener('pointercancel', () => drag = null);
     return { set(p, ex) { poly = p; extra = ex || null; draw(); }, redraw: draw, get poly() { return poly; }, spin(on) { clearInterval(spin); if (on) spin = setInterval(() => { ry += .012; draw(); }, 40); }, setAngles(a, b) { rx = a; ry = b; draw(); } };
   }
   const stats = p => ({ V: p.V.length, E: edgesOf(p.F).length, F: p.F.length, faces: p.F.reduce((m, f) => { m[f.length] = (m[f.length] || 0) + 1; return m; }, {}) });

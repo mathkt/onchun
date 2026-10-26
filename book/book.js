@@ -1,3 +1,5 @@
+/* 조사 붙이기: josa(5,'을/를') → '5를', josa('책','이/가') → '책이' */
+window.josa = function (w, pair) { const s = String(w); const ch = s[s.length - 1]; const code = ch.charCodeAt(0); let bat; if (code >= 0xAC00 && code <= 0xD7A3) bat = (code - 0xAC00) % 28 !== 0; else if (/[0-9]/.test(ch)) bat = '013678'.includes(ch); else bat = /[^aeiouAEIOU\s]/.test(ch) && /[a-zA-Z]/.test(ch) ? true : false; const [a, b] = pair.split('/'); return s + (bat ? a : b); };
 /* 책 활동 페이지 공통: 장 소개(한 화면) ↔ 활동 모드(탭 상단 고정) 전환 */
 (function () {
   function init() {

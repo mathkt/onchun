@@ -102,7 +102,7 @@
 <script src="../poly3d.js"></script>
 <script>
 const $ = s => document.querySelector(s);
-document.querySelectorAll('#tabs .tab').forEach(b => b.onclick = () => { document.querySelectorAll('#tabs .tab').forEach(x => x.classList.toggle('on', x === b)); document.querySelectorAll('.act-page').forEach(p => { p.hidden = p.id !== b.dataset.t; p.style.display = p.hidden ? 'none' : ''; }); window.scrollTo({ top: $('#tabs').offsetTop - (window.BK_TOP_H?.()||56) - 6, behavior: 'smooth' }); });
+document.querySelectorAll('#tabs .tab').forEach(b => b.onclick = () => { document.querySelectorAll('#tabs .tab').forEach(x => x.classList.toggle('on', x === b)); document.querySelectorAll('.act-page').forEach(p => { p.hidden = p.id !== b.dataset.t; p.style.display = p.hidden ? 'none' : ''; }); });
 (function(){ const h=location.hash.slice(1); const b=h&&document.querySelector(`#tabs .tab[data-t="${h}"]`); if(b) b.click(); })();
 const S3 = Math.sqrt(3);
 
@@ -110,8 +110,9 @@ const S3 = Math.sqrt(3);
 (function () {
   const v = Poly3D.viewer($('#td-svg'), { size: 300, color: () => [.36, .72, .91] }); const T = Poly3D.P.tetra; const E = Poly3D.edgesOf(T.F); let cut = new Set();
   const names = ['A', 'B', 'C', 'D'];
-  function extra(RV, proj) { let h = ''; E.forEach(([a, b], i) => { const p = proj(RV[a]), q = proj(RV[b]); h += `<line class="edge ${cut.has(i) ? 'cut' : ''}" data-i="${i}" x1="${p[0]}" y1="${p[1]}" x2="${q[0]}" y2="${q[1]}" stroke-opacity="${(RV[a][2] + RV[b][2]) / 2 > -.1 ? 1 : .35}"/>`; }); RV.forEach((p, i) => { const q = proj(p); h += `<text x="${q[0] + 8}" y="${q[1] - 8}" font-family="Jua" font-size="16" fill="#E9533F">${names[i]}</text>`; }); return h; }
-  function show() { v.set(T, extra); $('#td-svg').querySelectorAll('.edge').forEach(e => e.onclick = ev => { ev.stopPropagation(); const i = +e.dataset.i; if (cut.has(i)) cut.delete(i); else if (cut.size < 3) cut.add(i); show(); }); net(); }
+  function extra(RV, proj) { let h = ''; E.forEach(([a, b], i) => { const p = proj(RV[a]), q = proj(RV[b]); h += `<line class="edge ${cut.has(i) ? 'cut' : ''}" data-i="${i}" x1="${p[0]}" y1="${p[1]}" x2="${q[0]}" y2="${q[1]}" stroke-opacity="${(RV[a][2] + RV[b][2]) / 2 > -.1 ? 1 : .35}"/><line class="edge-hit" data-i="${i}" x1="${p[0]}" y1="${p[1]}" x2="${q[0]}" y2="${q[1]}" stroke="transparent" stroke-width="26"/>`; }); RV.forEach((p, i) => { const q = proj(p); h += `<text x="${q[0] + 8}" y="${q[1] - 8}" font-family="Jua" font-size="16" fill="#E9533F">${names[i]}</text>`; }); return h; }
+  function show() { v.set(T, extra); net(); }
+  $('#td-svg').addEventListener('poly-pick', ev => { const el = ev.detail.target && ev.detail.target.closest && ev.detail.target.closest('.edge, .edge-hit'); if (!el) return; v.spin(false); const i = +el.dataset.i; if (cut.has(i)) cut.delete(i); else if (cut.size < 3) cut.add(i); show(); });
   // pointerdown on edge shouldn't start drag much — fine
   function net() { const ns = $('#td-net'); const c = [...cut].map(i => E[i]); const cap = $('#td-cap'), res = $('#td-res');
     if (c.length < 3) { ns.innerHTML = ''; cap.textContent = `모서리 ${c.length}/3 선택`; res.textContent = ''; return; }
