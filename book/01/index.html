@@ -20,7 +20,7 @@
   /* 활동1: 모자이크 예언 상자 */
   #s1-box{position:relative;width:190px;box-sizing:border-box}
   #s1-box .box__note{position:relative;height:64px;display:grid;place-items:center;margin-top:6px}
-  .pred-txt{font-family:var(--f-head);font-size:2.3rem;line-height:1;color:var(--bk-red);letter-spacing:.04em;font-variant-numeric:tabular-nums}
+  .pred-txt{font-family:var(--f-head);font-size:2.8rem;line-height:1;color:var(--bk-red);letter-spacing:.04em;font-variant-numeric:tabular-nums}
   .mosaic{position:absolute;inset:0;width:100%;height:100%;border-radius:10px;background:repeating-linear-gradient(45deg,#FFF4DF 0 6px,#FFEBC4 6px 12px)}
   .pred-meter{margin-top:6px;font-size:.8rem;color:var(--bk-ink-soft)}
   .pred-meter i{display:block;height:6px;border-radius:99px;background:var(--bk-line);margin-top:3px;overflow:hidden}
@@ -37,7 +37,7 @@
   @media(max-width:640px){
     #s1-box{width:100%}
     #s1-box .box__note{height:84px}
-    .pred-txt{font-size:3.2rem}
+    .pred-txt{font-size:3.4rem}
     #s1-box.open{transform:rotate(-1deg)}
     #s1-box.revealed{animation-name:boxPopM}
   }
@@ -109,7 +109,7 @@
           <div class="magician__face">🎩</div>
           <div class="bubble" id="s1-say">1에서 8까지의 숫자 중 4개를 이용하여 <b>네 자리 수</b>를 적어 주세요.</div>
         </div>
-        <div class="box" id="s1-box"><div class="box__lid">📦 예언 상자</div><div class="box__note" id="s1-pred" aria-live="polite"><span class="pred-txt" id="s1-pred-txt">?</span><canvas class="mosaic" id="s1-mosaic" hidden aria-hidden="true"></canvas></div><div class="pred-meter" id="s1-meter" hidden><span id="s1-meter-t"></span><i><b id="s1-meter-b"></b></i></div></div>
+        <div class="box" id="s1-box"><div class="box__lid">📦 예언 상자</div><div class="box__note" id="s1-pred" aria-live="polite"><span class="pred-txt" id="s1-pred-txt">?</span><canvas class="mosaic" id="s1-mosaic" hidden aria-hidden="true"></canvas></div></div>
       </div>
 
       <div class="sheet" id="s1-sheet">
@@ -326,8 +326,8 @@ const ri = n => Math.floor(Math.random() * n);
   /* ---- 모자이크: 실제 예언 수를 저해상도로 그린 뒤 확대(픽셀 블록) + 흐림 ---- */
   const off = document.createElement('canvas');
   let mz = { q: 0, shown: 0, raf: 0, v: '' };
-  const blockOf = q => 2.5 + 24 * Math.pow(1 - q, 1.2);   // CSS px 블록 크기
-  const blurOf = q => 6 * Math.pow(1 - q, 1.3);
+  const blockOf = q => 2 + 20 * Math.pow(1 - q, 1.6);   // CSS px 블록 크기
+  const blurOf = q => 4 * Math.pow(1 - q, 1.8);
   function paint(q) {
     const W = cv.clientWidth, H = cv.clientHeight; if (!W || !H) return;
     const dpr = Math.min(2, window.devicePixelRatio || 1);
@@ -346,7 +346,6 @@ const ri = n => Math.floor(Math.random() * n);
   }
   function toLevel(q) { // q: 0(완전 모자이크) → 1(선명)
     mz.q = q; cancelAnimationFrame(mz.raf);
-    const pct = Math.round(q * 100); $('#s1-meter-b').style.width = pct + '%'; $('#s1-meter-t').textContent = q < 1 ? `🔮 예언이 드러나는 중… ${pct}%` : '';
     if (RM.matches) { mz.shown = q; paint(q); return; }
     const from = mz.shown, t0 = performance.now(), D = 800;
     const step = t => { const k = Math.min(1, (t - t0) / D), e = 1 - Math.pow(1 - k, 3); mz.shown = from + (q - from) * e; paint(mz.shown); if (k < 1) mz.raf = requestAnimationFrame(step); };
@@ -354,13 +353,14 @@ const ri = n => Math.floor(Math.random() * n);
   }
   function seal(v) {
     mz.v = String(v); mz.shown = 0; txt.textContent = mz.v; txt.style.visibility = 'hidden';
-    cv.hidden = false; $('#s1-meter').hidden = false; box.classList.add('sealed');
+    cv.hidden = false; box.classList.add('sealed');
     paint(0); toLevel(0);
     document.fonts?.ready.then(() => { if (!cv.hidden) paint(mz.shown); });
   }
-  const progress = () => (nums.length - 1) / (2 * pairs) * 0.65; // 숫자를 적을 때마다 조금씩 선명해짐
+  // 처음엔 거의 안 보이고, 관객이 두 번째 수를 적으면 얼핏 보이기 시작 → 적을수록 선명
+  const progress = () => nums.length <= 1 ? 0.08 : Math.min(0.86, 0.38 + 0.1 * (nums.length - 2));
   function reveal() {
-    cancelAnimationFrame(mz.raf); cv.hidden = true; $('#s1-meter').hidden = true; txt.style.visibility = '';
+    cancelAnimationFrame(mz.raf); cv.hidden = true; txt.style.visibility = '';
     box.classList.remove('revealed'); void box.offsetWidth; box.classList.add('open', 'revealed');
     const top = box.getBoundingClientRect().top - (window.BK_TOP_H?.() || 56) - ($('#tabs')?.offsetHeight || 0) - 24;
     if (top < 0 || top > innerHeight - 200) window.scrollBy({ top, behavior: RM.matches ? 'auto' : 'smooth' });
@@ -392,7 +392,7 @@ const ri = n => Math.floor(Math.random() * n);
       const audienceCount = nums.filter((_, i) => i === 0 || i % 2 === 1).length; // a1, a2, a3 …
       if (nums.length === 1) {
         $('#s1-pred').dataset.v = nums[0] + 9999 * pairs; seal($('#s1-pred').dataset.v);
-        say('저도 수를 하나 적어 <b>상자에 넣어</b> 두겠습니다. 🔮 아직은 흐릿하지만, 수를 적을수록 예언이 점점 드러나요. 이제 또 한 번 네 자리 수를 적어 주세요.');
+        say('저도 수를 하나 적어 <b>상자에 넣어</b> 두겠습니다. 🔮 아직은 안 보이지만, 수를 적을수록 상자 속 숫자가 점점 드러나요. 이제 또 한 번 네 자리 수를 적어 주세요.');
         addRow('관객'); return;
       }
       toLevel(progress());
@@ -405,7 +405,7 @@ const ri = n => Math.floor(Math.random() * n);
     if (stage === 1) {
       const sum = nums.reduce((a, b) => a + b, 0);
       addRow('합', sum).querySelector('.num').classList.add('num--sum');
-      toLevel(0.85);
+      toLevel(0.93);
       say('아까 제가 적어서 상자에 넣어둔 종이를 보여드리겠습니다.'); $('#s1-next').textContent = '상자 열기 📦'; stage = 2; return;
     }
     if (stage === 2) {
