@@ -1,0 +1,284 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+<title>02 필승 전략 · 부산의 활동수학</title>
+<link rel="stylesheet" href="../../common.css">
+<link rel="stylesheet" href="../book.css">
+<style>
+  .chips{display:flex;flex-wrap:wrap;gap:8px;margin:10px 0}
+  .chip{min-width:52px;height:52px;border-radius:14px;background:#fff;border:3px solid var(--bk-sky);font-family:var(--f-head);font-size:1.4rem;display:grid;place-items:center;cursor:pointer;box-shadow:0 4px 0 #3a95c4;-webkit-tap-highlight-color:transparent;color:var(--bk-ink);padding:0 8px}
+  .chip.sel{background:var(--bk-sky);color:#fff;transform:translateY(2px);box-shadow:0 2px 0 #3a95c4}
+  .chip.gone{opacity:.25;text-decoration:line-through;pointer-events:none;box-shadow:none}
+  .chip.new{border-color:var(--bk-orange);box-shadow:0 4px 0 #c9731a}
+  .chip.last{background:var(--bk-yellow);border-color:var(--bk-orange)}
+  .chip--card{width:46px;height:64px;border-radius:8px;border-width:2px}
+  .chip--ghost{border-color:var(--bk-purple);box-shadow:0 4px 0 #6a3fb0}
+  .ops{display:flex;gap:10px;margin:6px 0}
+  .turn{font-family:var(--f-head);font-size:1.25rem;display:flex;align-items:center;gap:10px;margin:8px 0}
+  .turn .dot{width:14px;height:14px;border-radius:50%;background:var(--bk-sky)}
+  .turn.p2 .dot{background:var(--bk-red)}
+  .log{font-size:.9rem;color:var(--bk-ink-soft);max-height:8em;overflow:auto;margin:6px 0;padding-left:1.2em}
+  .setup{display:flex;gap:10px;flex-wrap:wrap;align-items:center;background:#fff;border-radius:14px;padding:10px 14px;margin-bottom:8px}
+  .score{display:flex;gap:12px;flex-wrap:wrap;margin:8px 0}
+  .score div{flex:1;min-width:140px;background:#fff;border-radius:14px;padding:10px 14px;border:2px solid var(--bk-line)}
+  .score div.on{border-color:var(--bk-orange)}
+  .score b{font-family:var(--f-head);font-size:1.5rem;font-weight:400;display:block}
+  .score .hand{display:flex;flex-wrap:wrap;gap:4px;margin-top:4px}
+  .score .hand span{font-size:.8rem;background:var(--bk-cream);padding:2px 6px;border-radius:6px}
+  .result{font-family:var(--f-head);font-size:1.4rem;color:var(--bk-red);margin:8px 0}
+  .exp-tbl td input{width:60px;text-align:center}
+  .cards-row{display:flex;flex-wrap:wrap;gap:6px;margin:10px 0}
+  .card{width:48px;height:66px;border-radius:8px;background:#fff;border:2px solid var(--bk-ink);display:grid;place-items:center;font-family:var(--f-head);font-size:1.3rem;transition:.25s;position:relative}
+  .card.taken-p1{background:var(--bk-sky);color:#fff;border-color:var(--bk-sky);transform:translateY(-6px)}
+  .card.taken-p2{background:var(--bk-red);color:#fff;border-color:var(--bk-red);transform:translateY(-6px)}
+  .card.next{border-color:var(--bk-orange);box-shadow:0 0 0 3px var(--bk-yellow)}
+  .card.key::after{content:"★";position:absolute;top:-10px;right:-6px;color:var(--bk-orange)}
+  .bk-panel--pink .chip{border-color:var(--bk-red);box-shadow:0 4px 0 #b53a2a}.bk-panel--pink .chip.sel{background:var(--bk-red)}
+</style>
+</head>
+<body class="bk">
+<script src="../../common.js" data-num="02" data-name="필승 전략" data-sub="1단원 수학 놀이 활동" data-home="../../"></script>
+<div class="bk-wrap">
+
+  <section class="ch-intro">
+    <div class="ch-intro__text">
+      <div class="bk-ribbon">02</div>
+      <h1 class="bk-h-unit">필승 전략</h1>
+      <p class="ch-lead">어떤 게임은 전략을 알기만 하면 상대를 반드시 이길 수 있어 마술처럼 보여요. 이렇게 반드시 이길 수 있는 전략을 <b>필승 전략</b>이라고 해요.</p>
+      <p class="ch-goal">★ 이 단원에서는 — 게임의 규칙을 이해하고 필승 전략을 찾을 수 있다.</p>
+    </div>
+    <div class="ch-intro__pic"><img src="../../img/ch02.jpg" alt="남산중학교 운동장 줄다리기"><span class="ch-place">📍 남산중학교 운동장</span></div>
+  </section>
+
+  <nav class="tabs" id="tabs">
+    <button class="tab on" data-t="t1"><span class="tab__n">1</span>덧셈·뺄셈 게임</button>
+    <button class="tab" data-t="t2"><span class="tab__n">2</span>약수 게임</button>
+    <button class="tab" data-t="t3"><span class="tab__n">3</span>마지막 카드를 가져라</button>
+    <button class="tab tab--pink" data-t="t4"><span class="tab__n">★</span>팝잇 게임</button>
+  </nav>
+
+  <!-- ================= 1 덧셈·뺄셈 게임 ================= -->
+  <section class="act-page" id="t1">
+    <div class="bk-panel">
+      <div class="bk-act"><span class="bk-act__n">1</span><span class="bk-act__t">덧셈·뺄셈 게임</span><span class="bk-tag">추론</span><span class="bk-tag">의사소통</span></div>
+      <div class="bk-rule"><ol>
+        <li>1부터 n까지 수를 적는다.</li>
+        <li>가위바위보를 하여 이긴 사람이 먼저 할지, 나중에 할지를 결정한다.</li>
+        <li>자신의 차례가 되면 남아 있는 두 수를 지우고, 지운 두 수의 합 또는 차를 적는다.</li>
+        <li>마지막에 적힌 수가 0 또는 짝수이면 <b>먼저 한 사람</b>이, 홀수이면 <b>나중에 한 사람</b>이 이긴다.</li>
+      </ol></div>
+      <div class="setup">
+        <label>n = <select id="as-n" class="sel"><option>5</option><option selected>6</option><option>7</option><option>8</option><option>9</option><option>10</option><option>11</option><option>12</option></select></label>
+        <label>상대: <select id="as-mode" class="sel"><option value="pvp">친구와 번갈아</option><option value="bot">봇 (나중에 함)</option><option value="botfirst">봇 (먼저 함)</option></select></label>
+        <button class="bk-btn bk-btn--primary bk-btn--sm" id="as-start">새 게임</button>
+      </div>
+      <div class="turn" id="as-turn"><span class="dot"></span><span>푸리(먼저)의 차례 — 두 수를 고르세요</span></div>
+      <div class="chips" id="as-chips"></div>
+      <div class="ops" id="as-ops" hidden>
+        <button class="bk-btn bk-btn--sky" id="as-plus">합 (+) 적기</button>
+        <button class="bk-btn bk-btn--sky" id="as-minus">차 (−) 적기</button>
+        <button class="bk-btn bk-btn--ghost bk-btn--sm" id="as-cancel">선택 취소</button>
+      </div>
+      <div class="result" id="as-result"></div>
+      <ol class="log" id="as-log"></ol>
+    </div>
+    <div class="bk-panel bk-panel--pink secret">
+      <h3>🔍 필승 전략 찾기</h3>
+      <div class="q"><b>1</b> n=6인 경우로 게임을 해 보자. 이 게임에서 이기기 위한 전략은 무엇인지 생각해 보자.</div>
+      <div class="q"><b>2</b> n의 값을 바꾸어 가며 게임을 진행한 후 다음 표를 완성해 보자.</div>
+      <table class="tbl exp-tbl"><thead><tr><th>n</th><th>7</th><th>8</th><th>9</th><th>10</th><th>11</th></tr></thead>
+        <tbody><tr><td>마지막에 적힌 수</td><td><input class="num num--1" style="width:64px" data-n="7"></td><td><input class="num num--1" style="width:64px" data-n="8"></td><td><input class="num num--1" style="width:64px" data-n="9"></td><td><input class="num num--1" style="width:64px" data-n="10"></td><td><input class="num num--1" style="width:64px" data-n="11"></td></tr>
+        <tr><td>홀/짝</td><td id="pe7"></td><td id="pe8"></td><td id="pe9"></td><td id="pe10"></td><td id="pe11"></td></tr></tbody></table>
+      <div class="q"><b>3</b> 마지막에 적힐 수가 홀수인지 짝수인지 예상해 보고, 덧셈·뺄셈 게임의 필승 전략을 생각해 보자.</div>
+      <details class="reveal"><summary>힌트 보기</summary><p>두 수를 지우고 합을 적든 차를 적든, 적힌 수 전체의 합의 <b>홀짝은 변하지 않아요</b>(a+b와 a−b는 홀짝이 같아요). 그러니 마지막 수의 홀짝 = 1+2+…+n = n(n+1)/2의 홀짝. n=6이면 21(홀수) → 어떻게 두어도 나중에 한 사람이 이겨요. 필승 전략은 "수를 어떻게 지우느냐"가 아니라 <b>먼저 할지 나중에 할지</b>를 고르는 거예요!</p></details>
+    </div>
+  </section>
+
+  <!-- ================= 2 약수 게임 ================= -->
+  <section class="act-page" id="t2" hidden>
+    <div class="bk-panel">
+      <div class="bk-act"><span class="bk-act__n">2</span><span class="bk-act__t">약수 게임</span><span class="bk-tag">문제 해결</span><span class="bk-tag">추론</span><span class="bk-tag">의사소통</span></div>
+      <div class="bk-rule"><ol>
+        <li>1부터 n까지 수가 적힌 카드를 책상 위에 놓는다.</li>
+        <li>가위바위보를 하여 이긴 사람은 <b>공격수</b>, 진 사람은 <b>수학 귀신</b>이 된다.</li>
+        <li>공격수는 카드를 한 장 가져가고, 수학 귀신은 남은 카드 중 공격수가 가져간 카드의 <b>약수를 모두</b> 가져간다.</li>
+        <li>수학 귀신이 가져갈 카드가 없는 카드는 공격수가 가져갈 수 없다.</li>
+        <li>더 이상 공격수가 가져갈 카드가 없으면 남은 카드는 모두 수학 귀신이 가져간다. 카드 수의 합이 큰 쪽이 이긴다.</li>
+      </ol></div>
+      <div class="setup">
+        <label>n = <select id="dv-n" class="sel"><option>6</option><option selected>8</option><option>10</option><option>12</option><option>15</option><option>20</option></select></label>
+        <button class="bk-btn bk-btn--primary bk-btn--sm" id="dv-start">새 게임</button>
+        <span class="bk-muted">당신이 공격수, 수학 귀신은 규칙대로 자동으로 가져가요.</span>
+      </div>
+      <div class="score">
+        <div class="on" id="dv-s1"><span>⚔️ 공격수(나)</span><b id="dv-p1">0</b><div class="hand" id="dv-h1"></div></div>
+        <div id="dv-s2"><span>👻 수학 귀신</span><b id="dv-p2">0</b><div class="hand" id="dv-h2"></div></div>
+      </div>
+      <div class="chips" id="dv-chips"></div>
+      <div class="result" id="dv-result"></div>
+      <p class="hint" id="dv-hint"></p>
+    </div>
+    <div class="bk-panel bk-panel--pink secret">
+      <h3>🔍 필승 전략 찾기</h3>
+      <div class="q"><b>1</b> 1부터 6까지 카드 6장으로 게임을 해 보자.</div>
+      <div class="q"><b>2</b> 1부터 8까지 카드로 게임을 해 보고, 공격수가 가장 큰 점수 차로 이기기 위한 전략을 생각해 보자.</div>
+      <div class="q"><b>3</b> 1부터 15까지 카드로 게임을 해 보고, 전략을 생각해 보자.</div>
+      <details class="reveal"><summary>힌트 보기</summary><p>첫 수는 반드시 1을 귀신에게 주게 돼요. 1 다음엔 <b>가장 큰 소수</b>부터! 소수를 가져가면 귀신은 아무것도(1은 이미 없으니) 못 가져가요. 그다음엔 "남은 약수가 딱 하나뿐인 수"를 찾아 가져가면 손해가 가장 적어요. 가져갈 수 없는 카드가 없도록 순서를 잘 짜는 게 핵심이에요.</p></details>
+    </div>
+  </section>
+
+  <!-- ================= 3 마지막 카드 ================= -->
+  <section class="act-page" id="t3" hidden>
+    <div class="bk-panel">
+      <div class="bk-act"><span class="bk-act__n">3</span><span class="bk-act__t">마지막 카드를 가져라</span><span class="bk-tag">문제 해결</span><span class="bk-tag">추론</span><span class="bk-tag">의사소통</span></div>
+      <div class="bk-rule"><ol>
+        <li>1부터 n까지의 수가 적힌 카드를 순서대로 늘어놓는다.</li>
+        <li>가위바위보를 하여 이긴 사람이 먼저 할지, 나중에 할지를 결정한다.</li>
+        <li>자신의 차례가 되면 1부터 순서대로 카드를 가져가되, <b>한 장 또는 두 장</b>을 가져갈 수 있다.</li>
+        <li><b>마지막 카드를 가져가는 사람이 이긴다.</b></li>
+      </ol></div>
+      <div class="setup">
+        <label>카드 n = <select id="lc-n" class="sel"><option>11</option><option>13</option><option>15</option><option>20</option></select></label>
+        <label>한 번에 최대 <select id="lc-k" class="sel"><option value="2">2장</option><option value="3">3장</option></select></label>
+        <label>상대: <select id="lc-mode" class="sel"><option value="pvp">친구와 번갈아</option><option value="bot">봇 (나중에 함)</option><option value="botfirst">봇 (먼저 함)</option></select></label>
+        <label>봇 실력: <select id="lc-diff" class="sel"><option value="0.5">쉬움</option><option value="0.85" selected>보통</option><option value="1">완벽</option></select></label>
+        <button class="bk-btn bk-btn--primary bk-btn--sm" id="lc-start">새 게임</button>
+      </div>
+      <div class="turn" id="lc-turn"><span class="dot"></span><span>플레이어 1의 차례</span></div>
+      <div class="cards-row" id="lc-cards"></div>
+      <div class="ops" id="lc-ops">
+        <button class="bk-btn bk-btn--sky" id="lc-take1">1장 가져가기</button>
+        <button class="bk-btn bk-btn--sky" id="lc-take2">2장 가져가기</button>
+        <button class="bk-btn bk-btn--sky" id="lc-take3" hidden>3장 가져가기</button>
+        <label class="bk-muted" style="display:inline-flex;align-items:center;gap:6px"><input type="checkbox" id="lc-key"> 핵심 카드(★) 표시</label>
+      </div>
+      <div class="result" id="lc-result"></div>
+      <ol class="log" id="lc-log"></ol>
+      <div class="bk-row" style="margin-top:10px">
+        <a class="bk-btn bk-btn--red" href="../../games/arcade/index.html?game=stone">🔥 심화: 돌 가져가기 (폭탄·보석 모드, 분석 모드) ▶</a>
+      </div>
+    </div>
+    <div class="bk-panel bk-panel--pink secret">
+      <h3>🔍 필승 전략 찾기</h3>
+      <div class="q"><b>1</b> 11장으로 게임을 하고, 11을 내가 가져가기 위해 바로 전 내 차례에 가져가야 할 카드를 생각해 보자.</div>
+      <details class="reveal"><summary>힌트 보기</summary><p>11을 가져가려면 바로 전에 <b>8</b>을 가져가야 해요. 내가 8을 가져가면 상대는 9 또는 9·10뿐이니까요. 같은 방법으로 8 전에는 5, 5 전에는 2. 가져가야 할 카드 2, 5, 8, 11은 모두 <b>3으로 나눈 나머지가 2</b>예요. 즉 먼저 2를 가져간 뒤, 상대와 내가 가져가는 카드가 합해서 <b>3장</b>이 되도록 하면 이겨요.</p></details>
+      <div class="q"><b>2</b> 13장, 15장으로도 해 보고 공통점을 찾아보자. 세 장까지 가져갈 수 있을 때는?</div>
+      <details class="reveal"><summary>힌트 보기</summary><p>최대 k장이면 (k+1)로 나눈 나머지가 n과 같은 카드가 핵심 카드예요. 15장, 최대 2장: 15÷3 나머지 0 → 3, 6, 9, 12, 15가 핵심 → 먼저 하는 사람이 불리! 위의 "핵심 카드 표시"를 켜고 확인해 보세요.</p></details>
+    </div>
+  </section>
+
+  <!-- ================= ★ 팝잇 ================= -->
+  <section class="act-page" id="t4" hidden>
+    <div class="bk-panel bk-panel--pink">
+      <div class="bk-act"><span class="bk-act__n" style="background:var(--bk-red)">★</span><span class="bk-act__t">나도 수학자 — 팝잇 게임</span><span class="bk-tag">추론</span><span class="bk-tag">의사소통</span></div>
+      <div class="bk-rule"><ol>
+        <li>가위바위보를 하여 이긴 사람이 먼저 할지, 나중에 할지를 결정한다.</li>
+        <li>자신의 차례가 되면 팝잇의 한 줄을 선택하여 그 줄에 있는 버블을 1개 이상 누를 수 있다. 다른 줄의 버블은 누를 수 없다.</li>
+        <li>마지막 버블을 누르는 사람이 이긴다.</li>
+      </ol></div>
+      <p class="bk-muted" style="margin:12px 0">세 줄 이상 팝잇 게임의 필승 전략은 <b>이진법</b>과 관련이 있어요. 각 줄의 버블을 2³, 2², 2, 1 단위로 묶은 뒤, 자기 차례에 같은 자릿값의 묶음이 짝수 개가 되도록 만들면 이깁니다.</p>
+      <div class="bk-row">
+        <a class="bk-btn bk-btn--primary" href="../../games/popit/index.html">🎮 팝잇 게임 하러 가기 (AI · 2인 · 온라인 대전) ▶</a>
+      </div>
+      <h4 class="sub">이진법 계산기 — 지금 판이 이기는 판일까?</h4>
+      <div class="bk-row"><input class="num" style="letter-spacing:.2em;width:200px" id="pp-rows" placeholder="예: 3 4 5" value="3 4 5"><button class="bk-btn bk-btn--mint bk-btn--sm" id="pp-go">계산</button></div>
+      <div id="pp-out" style="margin-top:10px"></div>
+    </div>
+  </section>
+</div>
+
+<script>
+const $ = s => document.querySelector(s); const ri = n => Math.floor(Math.random() * n);
+document.querySelectorAll('#tabs .tab').forEach(b => b.onclick = () => {
+  document.querySelectorAll('#tabs .tab').forEach(x => x.classList.toggle('on', x === b));
+  document.querySelectorAll('.act-page').forEach(p => p.hidden = p.id !== b.dataset.t);
+  window.scrollTo({ top: $('#tabs').offsetTop - 70, behavior: 'smooth' });
+});
+(function(){ const h=location.hash.slice(1); const b=h&&document.querySelector(`#tabs .tab[data-t="${h}"]`); if(b) b.click(); })();
+
+/* ================= 1 덧셈·뺄셈 ================= */
+(function () {
+  let nums = [], sel = [], turn = 0, mode = 'pvp', over = false, names = ['푸리(먼저)', '매매(나중)'];
+  const chips = $('#as-chips'), log = $('#as-log');
+  function render() {
+    chips.innerHTML = ''; nums.forEach((v, i) => { const c = document.createElement('button'); c.className = 'chip' + (sel.includes(i) ? ' sel' : '') + (v.fresh ? ' new' : ''); c.textContent = v.v; c.onclick = () => pick(i); chips.appendChild(c); });
+    $('#as-ops').hidden = sel.length !== 2;
+    const t = $('#as-turn'); t.className = 'turn' + (turn ? ' p2' : ''); t.lastElementChild.textContent = over ? '게임 끝' : `${names[turn]}의 차례 — 두 수를 고르세요`;
+  }
+  function pick(i) { if (over || isBot()) return; if (sel.includes(i)) sel = sel.filter(x => x !== i); else if (sel.length < 2) sel.push(i); render(); }
+  function isBot() { return (mode === 'bot' && turn === 1) || (mode === 'botfirst' && turn === 0); }
+  function apply(op) {
+    const [a, b] = sel.map(i => nums[i].v); const r = op === '+' ? a + b : Math.abs(a - b);
+    nums = nums.filter((_, i) => !sel.includes(i)).map(x => ({ v: x.v })); nums.push({ v: r, fresh: true });
+    log.innerHTML += `<li>${names[turn]}: ${a}와 ${b}를 지우고 ${op === '+' ? '합' : '차'}인 <b>${r}</b>을 적었다.</li>`; sel = [];
+    if (nums.length === 1) { over = true; const even = r % 2 === 0; $('#as-result').textContent = `마지막 수 ${r} → ${even ? '짝수' : '홀수'} → ${even ? names[0] : names[1]}가 이겼다!`; chips.classList.add('done'); render(); setTimeout(() => chips.lastElementChild?.classList.add('last'), 0); return; }
+    turn = 1 - turn; render(); if (isBot()) setTimeout(botMove, 600);
+  }
+  function botMove() { // 결과는 홀짝으로 정해져 있으므로 아무 수나 (재미로 큰 수 피함)
+    const i = ri(nums.length); let j = ri(nums.length); while (j === i) j = ri(nums.length); sel = [i, j]; render(); setTimeout(() => apply(Math.random() < .5 ? '+' : '-'), 500);
+  }
+  $('#as-plus').onclick = () => apply('+'); $('#as-minus').onclick = () => apply('-'); $('#as-cancel').onclick = () => { sel = []; render(); };
+  $('#as-start').onclick = () => { const n = +$('#as-n').value; mode = $('#as-mode').value; names = mode === 'pvp' ? ['푸리(먼저)', '매매(나중)'] : mode === 'bot' ? ['나(먼저)', '봇(나중)'] : ['봇(먼저)', '나(나중)']; nums = Array.from({ length: n }, (_, i) => ({ v: i + 1 })); sel = []; turn = 0; over = false; log.innerHTML = ''; $('#as-result').textContent = ''; render(); if (isBot()) setTimeout(botMove, 600); };
+  $('#as-start').click();
+  document.querySelectorAll('.exp-tbl input').forEach(i => i.oninput = () => { const v = +i.value; const el = $('#pe' + i.dataset.n); el.textContent = i.value === '' ? '' : (v % 2 === 0 ? '짝수' : '홀수'); const truth = (i.dataset.n * (i.dataset.n / 1 + 1) / 2) % 2 === 0; el.style.color = ((v % 2 === 0) === truth) ? 'var(--bk-green)' : 'var(--bk-red)'; });
+})();
+
+/* ================= 2 약수 게임 ================= */
+(function () {
+  let n = 8, cards = [], p1 = [], p2 = [], over = false;
+  const chips = $('#dv-chips');
+  const divisorsLeft = v => cards.filter(c => c !== v && v % c === 0);
+  function render() {
+    chips.innerHTML = '';
+    for (let v = 1; v <= n; v++) { const c = document.createElement('button'); const inPlay = cards.includes(v); c.className = 'chip chip--card' + (inPlay ? '' : ' gone') + (inPlay && divisorsLeft(v).length === 0 ? ' chip--ghost' : ''); c.textContent = v; c.title = inPlay ? `약수: ${divisorsLeft(v).join(',') || '없음'}` : ''; c.onclick = () => take(v); chips.appendChild(c); }
+    $('#dv-p1').textContent = p1.reduce((a, b) => a + b, 0); $('#dv-p2').textContent = p2.reduce((a, b) => a + b, 0);
+    $('#dv-h1').innerHTML = p1.map(v => `<span>${v}</span>`).join(''); $('#dv-h2').innerHTML = p2.map(v => `<span>${v}</span>`).join('');
+    const canMove = cards.some(v => divisorsLeft(v).length > 0);
+    $('#dv-hint').textContent = over ? '' : '보라색 테두리 카드는 귀신이 가져갈 약수가 없어서 지금은 가져갈 수 없어요.';
+    if (!over && !canMove) { over = true; p2.push(...cards); cards = []; render(); const a = p1.reduce((x, y) => x + y, 0), b = p2.reduce((x, y) => x + y, 0); $('#dv-result').textContent = `더 가져갈 카드가 없어요. 공격수 ${a} : 귀신 ${b} → ${a > b ? '공격수 승리! 🎉' : a < b ? '수학 귀신 승리 👻' : '무승부'}`; }
+  }
+  function take(v) { if (over || !cards.includes(v)) return; const d = divisorsLeft(v); if (!d.length) { $('#dv-hint').textContent = `${v}은(는) 귀신이 가져갈 약수가 없어서 가져갈 수 없어요.`; return; } p1.push(v); p2.push(...d); cards = cards.filter(c => c !== v && !d.includes(c)); render(); }
+  $('#dv-start').onclick = () => { n = +$('#dv-n').value; cards = Array.from({ length: n }, (_, i) => i + 1); p1 = []; p2 = []; over = false; $('#dv-result').textContent = ''; render(); };
+  $('#dv-start').click();
+})();
+
+/* ================= 3 마지막 카드 ================= */
+(function () {
+  let n = 11, k = 2, taken = 0, turn = 0, mode = 'pvp', diff = .85, over = false, names = ['플레이어 1', '플레이어 2'];
+  const row = $('#lc-cards'), log = $('#lc-log');
+  function isBot() { return (mode === 'bot' && turn === 1) || (mode === 'botfirst' && turn === 0); }
+  function render() {
+    row.innerHTML = '';
+    for (let v = 1; v <= n; v++) { const c = document.createElement('div'); c.className = 'card' + (v <= taken ? ' taken-' + owner[v] : '') + (v === taken + 1 && !over ? ' next' : '') + ($('#lc-key').checked && v % (k + 1) === n % (k + 1) ? ' key' : ''); c.textContent = v; row.appendChild(c); }
+    const t = $('#lc-turn'); t.className = 'turn' + (turn ? ' p2' : ''); t.lastElementChild.textContent = over ? '게임 끝' : `${names[turn]}의 차례`;
+    for (let i = 1; i <= 3; i++) { const b = $('#lc-take' + i); b.hidden = i > k; b.disabled = over || isBot() || taken + i > n; }
+  }
+  const owner = {};
+  function take(c) { if (over) return; for (let i = 1; i <= c; i++) owner[taken + i] = 'p' + (turn + 1); const from = taken + 1; taken += c; log.innerHTML += `<li>${names[turn]}: ${c === 1 ? from : from + '·' + (taken)} 가져감</li>`;
+    if (taken === n) { over = true; $('#lc-result').textContent = `${names[turn]}가 마지막 카드 ${n}을 가져가 이겼다! 🎉`; render(); return; }
+    turn = 1 - turn; render(); if (isBot()) setTimeout(botMove, 650); }
+  function botMove() { const rem = n - taken; const want = rem % (k + 1); let c; if (want > 0 && Math.random() < diff) c = want; else { c = 1 + ri(Math.min(k, rem)); if (want > 0 && c === want && Math.min(k, rem) > 1) c = (c % Math.min(k, rem)) + 1; } take(c); }
+  $('#lc-take1').onclick = () => take(1); $('#lc-take2').onclick = () => take(2); $('#lc-take3').onclick = () => take(3);
+  $('#lc-key').onchange = render;
+  $('#lc-start').onclick = () => { n = +$('#lc-n').value; k = +$('#lc-k').value; mode = $('#lc-mode').value; diff = +$('#lc-diff').value; names = mode === 'pvp' ? ['플레이어 1', '플레이어 2'] : mode === 'bot' ? ['나', '봇'] : ['봇', '나']; taken = 0; turn = 0; over = false; for (const q in owner) delete owner[q]; log.innerHTML = ''; $('#lc-result').textContent = ''; render(); if (isBot()) setTimeout(botMove, 650); };
+  $('#lc-start').click();
+})();
+
+/* ================= ★ 팝잇 이진법 계산기 ================= */
+$('#pp-go').onclick = () => {
+  const rows = $('#pp-rows').value.trim().split(/\s+/).map(Number).filter(x => x > 0);
+  if (rows.length < 2) { $('#pp-out').textContent = '줄별 버블 수를 띄어쓰기로 넣어 주세요.'; return; }
+  const x = rows.reduce((a, b) => a ^ b, 0);
+  let h = '<table class="tbl" style="margin-left:0"><thead><tr><th>줄</th><th>버블</th><th>8</th><th>4</th><th>2</th><th>1</th></tr></thead><tbody>';
+  rows.forEach((r, i) => { h += `<tr><td>${i + 1}</td><td>${r}</td>${[8, 4, 2, 1].map(b => `<td>${r & b ? '●' : ''}</td>`).join('')}</tr>`; });
+  h += `<tr><th>묶음 개수</th><th></th>${[8, 4, 2, 1].map(b => { const c = rows.filter(r => r & b).length; return `<th style="color:${c % 2 ? 'var(--bk-red)' : 'var(--bk-green)'}">${c}</th>`; }).join('')}</tr></tbody></table>`;
+  if (x === 0) h += '<p>모든 묶음이 짝수 개 → 지금 차례인 사람이 <b>불리</b>해요 (상대가 따라 하면 짐).</p>';
+  else { let best = null; rows.forEach((r, i) => { const t = r ^ x; if (t < r && best === null) best = { i, from: r, to: t }; }); h += `<p>묶음이 홀수 개인 자리가 있어요 → 지금 차례인 사람이 <b>이길 수 있어요</b>. 예: ${best.i + 1}번 줄을 ${best.from}개에서 <b>${best.to}개</b>로 (${best.from - best.to}개 누르기).</p>`; }
+  $('#pp-out').innerHTML = h;
+};
+$('#pp-go').click();
+</script>
+</body>
+</html>

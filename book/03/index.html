@@ -1,0 +1,269 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+<title>03 수학 퍼즐 · 부산의 활동수학</title>
+<link rel="stylesheet" href="../../common.css">
+<link rel="stylesheet" href="../book.css">
+<style>
+  .setup{display:flex;gap:10px;flex-wrap:wrap;align-items:center;background:#fff;border-radius:14px;padding:10px 14px;margin:8px 0}
+  .counter{display:flex;gap:12px;flex-wrap:wrap;margin:8px 0}
+  .counter div{background:#fff;border:2px solid var(--bk-line);border-radius:12px;padding:6px 14px;font-size:.9rem}
+  .counter b{font-family:var(--f-head);font-size:1.3rem;font-weight:400;margin-left:6px}
+  .counter .ok{border-color:var(--bk-green);background:#EDF9F4}
+  svg.board{width:100%;max-width:520px;height:auto;display:block;margin:6px auto;background:#fff;border-radius:16px;border:2px solid var(--bk-line);touch-action:manipulation}
+  .stone{cursor:pointer}
+  .stone.sel{stroke:var(--bk-orange);stroke-width:4}
+  .spot{fill:#F3D98B;opacity:.5;cursor:pointer}
+  .spot:hover{opacity:1}
+  .result{font-family:var(--f-head);font-size:1.3rem;color:var(--bk-red);min-height:1.5em;margin:6px 0}
+  /* 1차원 바둑돌 */
+  .line{display:flex;gap:6px;justify-content:center;flex-wrap:wrap;margin:10px 0}
+  .cell1{width:52px;height:52px;border-radius:10px;border:2px solid var(--bk-line);background:#FFF9E8;display:grid;place-items:center;cursor:pointer;-webkit-tap-highlight-color:transparent}
+  .cell1 .st{width:38px;height:38px;border-radius:50%;box-shadow:inset -4px -4px 6px rgba(0,0,0,.25),0 3px 4px rgba(0,0,0,.2)}
+  .st.w{background:#f8f8f8}.st.b{background:#222}
+  .cell1.can{border-color:var(--bk-orange);background:var(--bk-yellow)}
+  .cell1.sel{border-color:var(--bk-sky);background:var(--bk-sky-soft)}
+  .seq{font-family:var(--f-mono,monospace);font-size:1.1rem;letter-spacing:.15em;background:#fff;border-radius:10px;padding:6px 12px;display:inline-block;min-height:1.6em}
+  /* 정사각형 */
+  .grid5{display:grid;grid-template-columns:repeat(5,1fr);gap:4px;max-width:340px;margin:8px auto;background:#E7C77A;padding:6px;border-radius:12px}
+  .g5{aspect-ratio:1;background:#F3D98B;border-radius:6px;display:grid;place-items:center;cursor:pointer;-webkit-tap-highlight-color:transparent}
+  .g5 .st{width:70%;height:70%;border-radius:50%;box-shadow:inset -4px -4px 6px rgba(0,0,0,.25),0 3px 4px rgba(0,0,0,.2)}
+  .g5.can{outline:3px solid var(--bk-orange)}
+  .g5.sel{outline:3px solid var(--bk-sky)}
+  .mini5{display:inline-grid;grid-template-columns:repeat(5,16px);gap:2px;background:#E7C77A;padding:3px;border-radius:4px;vertical-align:middle;margin:0 6px}
+  .mini5 i{width:16px;height:16px;border-radius:50%}
+  .mini5 i.b{background:#222}.mini5 i.w{background:#f8f8f8}.mini5 i.e{background:#F3D98B;border-radius:2px}
+  /* 우물고누 */
+  .gonu-turn{font-family:var(--f-head);font-size:1.2rem;text-align:center;margin:6px 0}
+</style>
+</head>
+<body class="bk">
+<script src="../../common.js" data-num="03" data-name="수학 퍼즐" data-sub="1단원 수학 놀이 활동" data-home="../../"></script>
+<div class="bk-wrap">
+  <section class="ch-intro">
+    <div class="ch-intro__text">
+      <div class="bk-ribbon">03</div>
+      <h1 class="bk-h-unit">수학 퍼즐</h1>
+      <p class="ch-lead">"왜 이럴까?", "어떻게 하면 될까?" 궁금증을 재미있게 풀어낸 것이 퍼즐이에요. 생각의 힘으로 답을 찾아가는 수학 퍼즐에 도전해 보세요.</p>
+      <p class="ch-goal">★ 이 단원에서는 — 자리 이동 퍼즐에서 규칙을 찾고, 이를 식으로 나타낼 수 있다.</p>
+    </div>
+    <div class="ch-intro__pic"><img src="../../img/ch03.jpg" alt="연제만화도서관"><span class="ch-place">📍 연제만화도서관</span></div>
+  </section>
+
+  <nav class="tabs" id="tabs">
+    <button class="tab on" data-t="t1"><span class="tab__n">1</span>바둑돌 삼각형 뒤집기</button>
+    <button class="tab" data-t="t2"><span class="tab__n">2</span>최소 이동 (대칭)</button>
+    <button class="tab" data-t="t3"><span class="tab__n">3</span>최소 이동 (비대칭)</button>
+    <button class="tab tab--pink" data-t="t4"><span class="tab__n">★</span>정사각형 퍼즐</button>
+    <button class="tab tab--pink" data-t="t5"><span class="tab__n">★</span>우물고누</button>
+  </nav>
+
+  <!-- ===== 1 삼각형 뒤집기 ===== -->
+  <section class="act-page" id="t1">
+    <div class="bk-panel">
+      <div class="bk-act"><span class="bk-act__n">1</span><span class="bk-act__t">정삼각형 모양의 바둑돌 뒤집기</span><span class="bk-tag">문제 해결</span><span class="bk-tag">추론</span></div>
+      <p class="bk-muted">바둑돌을 옮겨 삼각형을 <b>위아래로 뒤집은 모양</b>으로 만들어 보세요. 돌을 누른 뒤 빈 자리(노란 점)를 누르면 옮겨져요. 최소 몇 번에 될까요?</p>
+      <div class="setup"><label>단계: <select id="tr-n" class="sel"><option>2</option><option selected>3</option><option>4</option><option>5</option><option>6</option><option>7</option></select></label><button class="bk-btn bk-btn--primary bk-btn--sm" id="tr-reset">다시 놓기</button><button class="bk-btn bk-btn--ghost bk-btn--sm" id="tr-undo">무르기</button></div>
+      <div class="counter"><div>돌 개수 <b id="tr-cnt">6</b></div><div>옮긴 횟수 <b id="tr-mv">0</b></div><div id="tr-best">최소 횟수 <b>?</b></div></div>
+      <svg class="board" id="tr-svg" viewBox="0 0 520 360"></svg>
+      <div class="result" id="tr-res"></div>
+    </div>
+    <div class="bk-panel bk-panel--pink secret">
+      <h3>🔍 규칙 찾기</h3>
+      <div class="q"><b>1</b> 4단계와 5단계에서 필요한 바둑돌의 개수를 각각 구해 보자.</div>
+      <div class="q"><b>2</b> 2단계에서 7단계까지 뒤집는 데 움직여야 하는 최소 바둑돌 수를 표로 정리해 보자.</div>
+      <table class="tbl" id="tr-tbl"><thead><tr><th>단계</th><th>2</th><th>3</th><th>4</th><th>5</th><th>6</th><th>7</th><th>10</th></tr></thead><tbody><tr><td>돌 개수</td><td>3</td><td>6</td><td>10</td><td>15</td><td>21</td><td>28</td><td>55</td></tr><tr><td>최소 이동</td><td id="tb2">?</td><td id="tb3">?</td><td id="tb4">?</td><td id="tb5">?</td><td id="tb6">?</td><td id="tb7">?</td><td id="tb10">?</td></tr></tbody></table>
+      <button class="bk-btn bk-btn--mint bk-btn--sm" id="tr-show">표 채우기</button>
+      <details class="reveal"><summary>힌트 보기</summary><p>삼각형의 세 꼭짓점 쪽 돌만 옮기고 가운데 큰 덩어리는 그대로 두면 돼요. 최소 이동 횟수는 <b>돌 개수 ÷ 3의 몫</b>, 즉 n단계일 때 ⌊n(n+1)/6⌋이에요. 10단계는 55 ÷ 3 → 18번.</p></details>
+    </div>
+  </section>
+
+  <!-- ===== 2 최소 이동 (대칭) ===== -->
+  <section class="act-page" id="t2" hidden>
+    <div class="bk-panel">
+      <div class="bk-act"><span class="bk-act__n">2</span><span class="bk-act__t">최소 이동 횟수 (대칭인 경우)</span><span class="bk-tag">추론</span><span class="bk-tag">정보 처리</span></div>
+      <div class="bk-rule"><ol><li>한 칸에 한 개의 바둑돌을 놓을 수 있다.</li><li>옆 칸이 비어 있을 때는 빈칸으로 옮길 수 있다. (슬라이드 <b>S</b>)</li><li>옆 칸에 다른 색의 바둑돌이 1개 있고, 그다음 칸이 비어 있을 때는 그 빈칸으로 옮길 수 있다. (점프 <b>J</b>)</li></ol></div>
+      <div class="setup"><label>흰 돌 = 검은 돌 = <select id="sl-n" class="sel"><option>1</option><option selected>2</option><option>3</option><option>4</option><option>5</option></select>개</label><button class="bk-btn bk-btn--primary bk-btn--sm" id="sl-reset">다시 놓기</button><button class="bk-btn bk-btn--ghost bk-btn--sm" id="sl-undo">무르기</button></div>
+      <div class="line" id="sl-line"></div>
+      <div class="counter"><div>슬라이드 S <b id="sl-s">0</b></div><div>점프 J <b id="sl-j">0</b></div><div>총 이동 <b id="sl-t">0</b></div><div id="sl-best">최소 <b>?</b></div></div>
+      <div>이동 과정: <span class="seq" id="sl-seq"></span></div>
+      <div class="result" id="sl-res"></div>
+    </div>
+    <div class="bk-panel bk-panel--pink secret">
+      <h3>🔍 규칙 찾기</h3>
+      <div class="q"><b>1</b> n=1, 2, 3일 때 슬라이드(S)와 점프(J)로 과정을 나타내고 표를 완성해 보자.</div>
+      <table class="tbl"><thead><tr><th>개수</th><th>이동 과정</th><th>S</th><th>J</th><th>최소 이동</th></tr></thead><tbody id="sl-tbl"><tr><td>n=1</td><td>S J S</td><td>2</td><td>1</td><td>3</td></tr></tbody></table>
+      <p class="bk-muted" style="margin-left:36px">위에서 최소 횟수로 성공하면 표에 자동으로 기록돼요.</p>
+      <details class="reveal"><summary>힌트 보기</summary><p>점프는 n×n = n²번, 슬라이드는 2n번이 필요해요. 최소 이동 횟수 = <b>n² + 2n = n(n+2)</b>. n=2 → 8, n=3 → 15, n=k → k(k+2).</p></details>
+    </div>
+  </section>
+
+  <!-- ===== 3 최소 이동 (비대칭) ===== -->
+  <section class="act-page" id="t3" hidden>
+    <div class="bk-panel">
+      <div class="bk-act"><span class="bk-act__n">3</span><span class="bk-act__t">최소 이동 횟수 (대칭이 아닌 경우)</span><span class="bk-tag">추론</span><span class="bk-tag">정보 처리</span></div>
+      <p class="bk-muted">양쪽에 놓인 바둑돌의 개수가 다른 경우는 어떻게 될지 탐구해 보세요. 규칙은 활동 2와 같아요.</p>
+      <div class="setup"><label>흰 돌 <select id="as-m" class="sel"><option selected>1</option><option>2</option><option>3</option><option>4</option></select></label><label>검은 돌 <select id="as-n" class="sel"><option>2</option><option>3</option><option>4</option><option>5</option><option selected>6</option></select></label><button class="bk-btn bk-btn--primary bk-btn--sm" id="as-reset">다시 놓기</button><button class="bk-btn bk-btn--ghost bk-btn--sm" id="as-undo">무르기</button></div>
+      <div class="line" id="as-line"></div>
+      <div class="counter"><div>슬라이드 S <b id="as-s">0</b></div><div>점프 J <b id="as-j">0</b></div><div>총 이동 <b id="as-t">0</b></div><div id="as-best">최소 <b>?</b></div></div>
+      <div>이동 과정: <span class="seq" id="as-seq"></span></div>
+      <div class="result" id="as-res"></div>
+    </div>
+    <div class="bk-panel bk-panel--pink secret">
+      <h3>🔍 규칙 찾기</h3>
+      <div class="q"><b>1</b> (1, 6), (2, 5), (3, 4)인 경우 최소 이동 횟수를 구하고 표를 채워 보자.</div>
+      <table class="tbl"><thead><tr><th>(m, n)</th><th>흰 돌 이동 칸 수</th><th>검은 돌 이동 칸 수</th><th>점프로 줄인 횟수</th><th>최소 이동</th></tr></thead>
+        <tbody><tr><td>(1, 6)</td><td>1×7=7</td><td>6×2=12</td><td>6</td><td>7+12−6=13</td></tr><tr><td>(2, 5)</td><td id="as25a"></td><td id="as25b"></td><td id="as25c"></td><td id="as25d"></td></tr><tr><td>(3, 4)</td><td id="as34a"></td><td id="as34b"></td><td id="as34c"></td><td id="as34d"></td></tr></tbody></table>
+      <button class="bk-btn bk-btn--mint bk-btn--sm" id="as-show">표 채우기</button>
+      <div class="q"><b>2</b> 흰 돌 m개, 검은 돌 n개일 때의 규칙을 생각해 보자.</div>
+      <details class="reveal"><summary>힌트 보기</summary><p>흰 돌은 각각 (n+1)칸, 검은 돌은 각각 (m+1)칸 움직여야 하고, 점프 한 번은 2칸을 한 번에 가니 점프 횟수 mn만큼 줄어요. 최소 이동 = m(n+1) + n(m+1) − mn = <b>mn + m + n</b>. (슬라이드 m+n번, 점프 mn번)</p></details>
+    </div>
+  </section>
+
+  <!-- ===== ★ 정사각형 퍼즐 ===== -->
+  <section class="act-page" id="t4" hidden>
+    <div class="bk-panel bk-panel--pink">
+      <div class="bk-act"><span class="bk-act__n" style="background:var(--bk-red)">★</span><span class="bk-act__t">나도 수학자 — 정사각형 퍼즐</span><span class="bk-tag">추론</span><span class="bk-tag">정보 처리</span></div>
+      <div class="bk-rule"><ol><li>한 칸에 한 개의 바둑돌을 놓을 수 있다.</li><li>상하좌우의 칸이 비어 있을 때는 빈칸으로 바둑돌을 옮길 수 있다.</li><li>상하좌우에 다른 색의 바둑돌이 1개 있고, 다음 칸이 비어 있을 때는 그 빈칸으로 옮길 수 있다. (대각선으로는 옮길 수 없다.)</li></ol></div>
+      <p class="bk-muted" style="margin:10px 0">[그림 1]의 돌을 [그림 2]처럼 흑백이 바뀐 모양으로 옮겨 보세요. <span class="mini5" id="mini-from"></span>→<span class="mini5" id="mini-to"></span></p>
+      <div class="setup"><button class="bk-btn bk-btn--primary bk-btn--sm" id="sq-reset">다시 놓기</button><button class="bk-btn bk-btn--ghost bk-btn--sm" id="sq-undo">무르기</button><span class="counter" style="margin:0"><div>이동 <b id="sq-mv">0</b></div></span></div>
+      <div class="grid5" id="sq-grid"></div>
+      <div class="result" id="sq-res"></div>
+      <details class="reveal" style="margin-left:0"><summary>힌트 보기</summary><p>가운데 빈칸이 있는 가로줄과 세로줄을 먼저 1차원 퍼즐처럼 풀어 보세요. 한 줄을 바꿔 놓으면 빈칸이 다른 줄로 옮겨 가요. 줄 하나씩 차례로 바꾸는 것이 기본 전략이에요.</p></details>
+    </div>
+  </section>
+
+  <!-- ===== ★ 우물고누 ===== -->
+  <section class="act-page" id="t5" hidden>
+    <div class="bk-panel bk-panel--pink">
+      <div class="bk-act"><span class="bk-act__n" style="background:var(--bk-red)">★</span><span class="bk-act__t">나도 수학자 — 우물고누</span><span class="bk-tag">추론</span><span class="bk-tag">의사소통</span></div>
+      <div class="bk-rule"><ol><li>양쪽의 말을 두 개씩 준비한 다음, 그림과 같은 위치에 각자 말을 놓는다.</li><li>가위바위보를 하여 순서를 정한다.</li><li>각각 선을 따라서 한 번에 한 칸씩 말을 움직일 수 있다.</li><li>처음 시작할 때는 1, 4 위치에 있는 말은 움직일 수 없다.</li><li>번갈아 가며 말을 두다가 상대방 말을 한쪽에 몰아놓고 길을 막아서 더 이상 움직이지 못하게 하면 이긴다.</li></ol></div>
+      <div class="setup"><label>상대: <select id="go-mode" class="sel"><option value="pvp">친구와 번갈아</option><option value="bot">봇 (검은 말)</option></select></label><label>먼저: <select id="go-first" class="sel"><option value="w">흰 말</option><option value="b">검은 말</option></select></label><button class="bk-btn bk-btn--primary bk-btn--sm" id="go-reset">새 게임</button></div>
+      <div class="gonu-turn" id="go-turn"></div>
+      <svg class="board" id="go-svg" viewBox="0 0 320 320"></svg>
+      <div class="result" id="go-res"></div>
+    </div>
+    <div class="bk-panel secret">
+      <h3>🔍 생각해 보기</h3>
+      <div class="q"><b>1</b> 규칙 ④에서 처음 시작할 때 1, 4 위치에 있는 말은 움직일 수 없다고 한 이유를 생각해 보자.</div>
+      <details class="reveal"><summary>힌트 보기</summary><p>1(또는 4)의 말이 첫 수에 가운데로 들어가면 상대의 두 말은 갈 곳이 하나도 없어서 바로 끝나 버려요. 4와 1 사이에는 길(우물)이 없거든요.</p></details>
+      <div class="q"><b>2</b> 어떤 상황에서 승패가 나는지 생각해 보자.</div>
+      <p class="bk-muted" style="margin-left:36px">고누놀이에는 우물고누, 호박고누, 넉줄고누, 참고누 등이 있어요.</p>
+    </div>
+  </section>
+</div>
+
+<script>
+const $ = s => document.querySelector(s); const ri = n => Math.floor(Math.random() * n);
+document.querySelectorAll('#tabs .tab').forEach(b => b.onclick = () => { document.querySelectorAll('#tabs .tab').forEach(x => x.classList.toggle('on', x === b)); document.querySelectorAll('.act-page').forEach(p => p.hidden = p.id !== b.dataset.t); window.scrollTo({ top: $('#tabs').offsetTop - 70, behavior: 'smooth' }); });
+(function(){ const h=location.hash.slice(1); const b=h&&document.querySelector(`#tabs .tab[data-t="${h}"]`); if(b) b.click(); })();
+
+/* ===== 1 삼각형 뒤집기 (격자: X=2x 정수, y) ===== */
+(function () {
+  let n = 3, stones = new Set(), sel = null, moves = 0, hist = [];
+  const svg = $('#tr-svg'), key = (X, y) => X + ',' + y;
+  function init() { n = +$('#tr-n').value; stones = new Set(); for (let r = 0; r < n; r++) for (let c = 0; c <= r; c++) stones.add(key(2 * c - r, r)); sel = null; moves = 0; hist = []; $('#tr-cnt').textContent = n * (n + 1) / 2; $('#tr-best').innerHTML = `최소 횟수 <b>${Math.floor(n * (n + 1) / 6)}</b>`; $('#tr-res').textContent = ''; draw(); }
+  function isDown() { // 어떤 꼭짓점(X0,y0)에 대해 아래로 뾰족한 삼각형인지
+    for (const k of stones) { const [X0, y0] = k.split(',').map(Number); let ok = true; for (let j = 0; j < n && ok; j++) for (let c = 0; c <= j; c++) if (!stones.has(key(X0 - j + 2 * c, y0 - j))) { ok = false; break; } if (ok) return true; } return false;
+  }
+  function draw() {
+    const pts = [...stones].map(k => k.split(',').map(Number)); const sp = 46, cx = 260, cy = 60;
+    const P = (X, y) => [cx + X * sp / 2, cy + y * sp * 0.88];
+    // 후보 빈 자리: 돌 주변 6방향
+    const spots = new Set(); pts.forEach(([X, y]) => [[2, 0], [-2, 0], [1, 1], [-1, 1], [1, -1], [-1, -1]].forEach(([dx, dy]) => { const k = key(X + dx, y + dy); if (!stones.has(k)) spots.add(k); }));
+    let h = '';
+    if (sel) spots.forEach(k => { const [X, y] = k.split(',').map(Number); const [px, py] = P(X, y); h += `<circle class="spot" cx="${px}" cy="${py}" r="14" data-k="${k}"/>`; });
+    pts.forEach(([X, y]) => { const [px, py] = P(X, y); const k = key(X, y); h += `<circle class="stone ${sel === k ? 'sel' : ''}" cx="${px}" cy="${py}" r="18" fill="#2a2a2a" stroke="#000" data-k="${k}"/>`; });
+    svg.innerHTML = h; $('#tr-mv').textContent = moves;
+    svg.querySelectorAll('.stone').forEach(e => e.onclick = () => { sel = sel === e.dataset.k ? null : e.dataset.k; draw(); });
+    svg.querySelectorAll('.spot').forEach(e => e.onclick = () => { hist.push([sel, e.dataset.k]); stones.delete(sel); stones.add(e.dataset.k); sel = null; moves++; draw(); if (isDown()) { const best = Math.floor(n * (n + 1) / 6); $('#tr-res').textContent = moves <= best ? `🎉 ${moves}번! 최소 횟수로 뒤집었어요.` : `뒤집었어요! (${moves}번) 최소는 ${best}번 — 더 줄여 볼까요?`; } });
+  }
+  $('#tr-reset').onclick = init; $('#tr-n').onchange = init; $('#tr-undo').onclick = () => { const m = hist.pop(); if (!m) return; stones.delete(m[1]); stones.add(m[0]); moves--; sel = null; $('#tr-res').textContent = ''; draw(); };
+  $('#tr-show').onclick = () => [2,3,4,5,6,7,10].forEach(k => $('#tb' + k).textContent = Math.floor(k * (k + 1) / 6));
+  init();
+})();
+
+/* ===== 1차원 바둑돌 퍼즐 (활동 2·3 공용) ===== */
+function linePuzzle(pre, getMN, onSolve) {
+  let cells = [], sel = null, S = 0, J = 0, seq = [], hist = [], m, n;
+  const line = $('#' + pre + '-line');
+  function init() { [m, n] = getMN(); cells = [...Array(m).fill('w'), '', ...Array(n).fill('b')]; sel = null; S = J = 0; seq = []; hist = []; $('#' + pre + '-best').innerHTML = `최소 <b>${m * n + m + n}</b>`; $('#' + pre + '-res').textContent = ''; draw(); }
+  function moveable(i) { const e = cells.indexOf(''); if (!cells[i]) return null; const d = cells[i] === 'w' ? 1 : -1; if (e === i + d) return 'S'; if (e === i + 2 * d && cells[i + d] && cells[i + d] !== cells[i]) return 'J'; return null; }
+  function draw() {
+    line.innerHTML = ''; cells.forEach((c, i) => { const d = document.createElement('div'); d.className = 'cell1' + (sel === i ? ' sel' : '') + (moveable(i) ? ' can' : ''); if (c) d.innerHTML = `<div class="st ${c}"></div>`; d.onclick = () => click(i); line.appendChild(d); });
+    $('#' + pre + '-s').textContent = S; $('#' + pre + '-j').textContent = J; $('#' + pre + '-t').textContent = S + J; $('#' + pre + '-seq').textContent = seq.join(' ');
+  }
+  function click(i) { const t = moveable(i); if (!t) return; const e = cells.indexOf(''); hist.push([i, e]); cells[e] = cells[i]; cells[i] = ''; if (t === 'S') S++; else J++; seq.push(t); draw();
+    const goal = [...Array(n).fill('b'), '', ...Array(m).fill('w')].join(); if (cells.join() === goal) { const best = m * n + m + n; $('#' + pre + '-res').textContent = (S + J) === best ? `🎉 최소 ${best}번으로 성공!` : `성공! ${S + J}번 (최소 ${best}번)`; if (onSolve) onSolve(m, n, S, J, seq); }
+    else if (!cells.some((_, k) => moveable(k))) $('#' + pre + '-res').textContent = '움직일 수 없어요. 무르기로 되돌려 보세요.'; }
+  $('#' + pre + '-reset').onclick = init; $('#' + pre + '-undo').onclick = () => { const h = hist.pop(); if (!h) return; const t = seq.pop(); cells[h[0]] = cells[h[1]]; cells[h[1]] = ''; if (t === 'S') S--; else J--; $('#' + pre + '-res').textContent = ''; draw(); };
+  init(); return init;
+}
+const slInit = linePuzzle('sl', () => { const k = +$('#sl-n').value; return [k, k]; }, (m, n, S, J, seq) => { if (S + J === m * n + m + n && m > 1) { const id = 'slrow' + m; let tr = document.getElementById(id); if (!tr) { tr = document.createElement('tr'); tr.id = id; $('#sl-tbl').appendChild(tr); } tr.innerHTML = `<td>n=${m}</td><td>${seq.join(' ')}</td><td>${S}</td><td>${J}</td><td>${S + J}</td>`; } });
+$('#sl-n').onchange = slInit;
+const asInit = linePuzzle('as', () => [+$('#as-m').value, +$('#as-n').value]);
+$('#as-m').onchange = asInit; $('#as-n').onchange = asInit;
+$('#as-show').onclick = () => { [[2,5],[3,4]].forEach(([m,n]) => { const id = 'as' + m + n; $('#'+id+'a').textContent = `${m}×${n+1}=${m*(n+1)}`; $('#'+id+'b').textContent = `${n}×${m+1}=${n*(m+1)}`; $('#'+id+'c').textContent = m*n; $('#'+id+'d').textContent = `${m*(n+1)}+${n*(m+1)}−${m*n}=${m*n+m+n}`; }); };
+
+/* ===== ★ 정사각형 퍼즐 ===== */
+(function () {
+  const START = ['bbbww', 'bbbww', 'bb.ww', 'bbwww', 'bbwww'];
+  let g, sel = null, mv = 0, hist = [];
+  const grid = $('#sq-grid');
+  const goal = START.map(r => [...r].map(c => c === 'b' ? 'w' : c === 'w' ? 'b' : c).join(''));
+  function mini(el, rows) { el.innerHTML = rows.map(r => [...r].map(c => `<i class="${c === '.' ? 'e' : c}"></i>`).join('')).join(''); }
+  mini($('#mini-from'), START); mini($('#mini-to'), goal);
+  function init() { g = START.map(r => [...r]); sel = null; mv = 0; hist = []; $('#sq-res').textContent = ''; draw(); }
+  function target(r, c) { // 이동 가능한 목적지
+    const col = g[r][c]; if (col === '.') return null; const out = [];
+    for (const [dr, dc] of [[1,0],[-1,0],[0,1],[0,-1]]) { const r1 = r + dr, c1 = c + dc, r2 = r + 2*dr, c2 = c + 2*dc; if (g[r1]?.[c1] === '.') out.push([r1, c1]); else if (g[r1]?.[c1] && g[r1][c1] !== col && g[r2]?.[c2] === '.') out.push([r2, c2]); }
+    return out;
+  }
+  function draw() {
+    grid.innerHTML = ''; const can = sel ? target(...sel) : [];
+    g.forEach((row, r) => row.forEach((c, cc) => { const d = document.createElement('div'); d.className = 'g5' + (sel && sel[0] === r && sel[1] === cc ? ' sel' : '') + (can.some(([a, b]) => a === r && b === cc) ? ' can' : ''); if (c !== '.') d.innerHTML = `<div class="st ${c}"></div>`; d.onclick = () => click(r, cc); grid.appendChild(d); }));
+    $('#sq-mv').textContent = mv;
+  }
+  function click(r, c) { if (sel) { const can = target(...sel); if (can.some(([a, b]) => a === r && b === c)) { hist.push([sel, [r, c]]); g[r][c] = g[sel[0]][sel[1]]; g[sel[0]][sel[1]] = '.'; sel = null; mv++; draw(); if (g.map(x => x.join('')).join() === goal.join()) $('#sq-res').textContent = `🎉 ${mv}번 만에 성공!`; return; } }
+    sel = g[r][c] === '.' ? null : [r, c]; draw(); }
+  $('#sq-reset').onclick = init; $('#sq-undo').onclick = () => { const h = hist.pop(); if (!h) return; g[h[0][0]][h[0][1]] = g[h[1][0]][h[1][1]]; g[h[1][0]][h[1][1]] = '.'; mv--; sel = null; $('#sq-res').textContent = ''; draw(); };
+  init();
+})();
+
+/* ===== ★ 우물고누 ===== */
+(function () {
+  // 노드: 1(오른쪽) 2(위) 3(왼쪽) 4(아래) C(가운데). 4-1 사이에는 길(우물)이 없음
+  const POS = { 1: [270, 160], 2: [160, 50], 3: [50, 160], 4: [160, 270], C: [160, 160] };
+  const ADJ = { 1: ['C', '2'], 2: ['C', '1', '3'], 3: ['C', '2', '4'], 4: ['C', '3'], C: ['1', '2', '3', '4'] };
+  let pos, turn, sel, first = true, mode = 'pvp', over = false;
+  const svg = $('#go-svg');
+  function init() { pos = { 1: 'w', 2: 'w', 3: 'b', 4: 'b', C: '' }; turn = $('#go-first').value; mode = $('#go-mode').value; sel = null; first = true; over = false; $('#go-res').textContent = ''; draw(); if (isBot()) setTimeout(botMove, 600); }
+  const isBot = () => mode === 'bot' && turn === 'b';
+  function movesOf(col) { const out = []; for (const k in pos) if (pos[k] === col && !(first && (k === '1' || k === '4'))) ADJ[k].forEach(t => { if (!pos[t]) out.push([k, t]); }); return out; }
+  function draw() {
+    let h = `<circle cx="160" cy="160" r="110" fill="none" stroke="#2C2A26" stroke-width="3" stroke-dasharray="0" />`;
+    // 우물(4→1 호)을 지움: 원 전체 대신 호 3개 그리기
+    h = `<path d="M270 160 A110 110 0 0 0 160 50 A110 110 0 0 0 50 160 A110 110 0 0 0 160 270" fill="none" stroke="#2C2A26" stroke-width="3"/>
+         <line x1="50" y1="160" x2="270" y2="160" stroke="#2C2A26" stroke-width="3"/><line x1="160" y1="50" x2="160" y2="270" stroke="#2C2A26" stroke-width="3"/>
+         <text x="236" y="236" font-size="12" fill="#9c8a55" font-family="Jua">우물 (길 없음)</text>`;
+    const can = sel ? movesOf(turn).filter(m => m[0] === sel).map(m => m[1]) : [];
+    for (const k in POS) { const [x, y] = POS[k]; if (can.includes(k)) h += `<circle class="spot" cx="${x}" cy="${y}" r="20" data-k="${k}"/>`; if (pos[k]) h += `<circle class="stone ${sel === k ? 'sel' : ''}" cx="${x}" cy="${y}" r="18" fill="${pos[k] === 'w' ? '#f8f8f8' : '#222'}" stroke="#000" data-k="${k}"/>`; else if (!can.includes(k)) h += `<circle cx="${x}" cy="${y}" r="5" fill="#2C2A26"/>`; if (k !== 'C') h += `<text x="${x + (k==='1'?26:k==='3'?-34:-5)}" y="${y + (k==='2'?-26:k==='4'?36:5)}" font-size="14" font-family="Jua" fill="#5F5B55">${k}</text>`; }
+    svg.innerHTML = h; $('#go-turn').textContent = over ? '게임 끝' : `${turn === 'w' ? '⚪ 흰 말' : '⚫ 검은 말'}의 차례${first ? ' (첫 수: 1, 4의 말은 못 움직여요)' : ''}`;
+    svg.querySelectorAll('.stone').forEach(e => e.onclick = () => { if (over || isBot() || pos[e.dataset.k] !== turn) return; sel = sel === e.dataset.k ? null : e.dataset.k; draw(); });
+    svg.querySelectorAll('.spot').forEach(e => e.onclick = () => move(sel, e.dataset.k));
+  }
+  function move(a, b) { pos[b] = pos[a]; pos[a] = ''; sel = null; first = false; turn = turn === 'w' ? 'b' : 'w';
+    if (!movesOf(turn).length) { over = true; draw(); $('#go-res').textContent = `${turn === 'w' ? '흰 말' : '검은 말'}이 움직일 수 없어요 → ${turn === 'w' ? '⚫ 검은 말' : '⚪ 흰 말'} 승리! 🎉`; return; }
+    draw(); if (isBot()) setTimeout(botMove, 600); }
+  function botMove() { const ms = movesOf('b'); // 상대가 못 움직이게 하는 수 우선
+    const win = ms.find(([a, b]) => { const p = { ...pos }; p[b] = p[a]; p[a] = ''; return !Object.keys(p).some(k => p[k] === 'w' && ADJ[k].some(t => !p[t])); });
+    const safe = ms.filter(([a, b]) => { const p = { ...pos }; p[b] = p[a]; p[a] = ''; // 상대가 바로 이기는 수 피하기
+      return !Object.keys(p).some(k => p[k] === 'w' && ADJ[k].some(t => { if (p[t]) return false; const q = { ...p }; q[t] = 'w'; q[k] = ''; return !Object.keys(q).some(z => q[z] === 'b' && ADJ[z].some(u => !q[u])); })); });
+    const m = win || (safe.length ? safe[ri(safe.length)] : ms[ri(ms.length)]); move(m[0], m[1]); }
+  $('#go-reset').onclick = init; init();
+})();
+</script>
+</body>
+</html>

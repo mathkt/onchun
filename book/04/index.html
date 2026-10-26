@@ -1,0 +1,281 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+<title>04 확률 놀이 · 부산의 활동수학</title>
+<link rel="stylesheet" href="../../common.css">
+<link rel="stylesheet" href="../book.css">
+<style>
+  .setup{display:flex;gap:10px;flex-wrap:wrap;align-items:center;background:#fff;border-radius:14px;padding:10px 14px;margin:8px 0}
+  .result{font-family:var(--f-head);font-size:1.25rem;color:var(--bk-red);min-height:1.5em;margin:6px 0}
+  /* 상어 */
+  .shark{display:flex;flex-direction:column;align-items:center;gap:8px}
+  .mouth{display:grid;grid-template-columns:repeat(9,1fr);gap:8px;background:#E9533F;padding:16px 14px;border-radius:40px 40px 16px 16px;max-width:520px;width:100%}
+  .tooth{aspect-ratio:3/4;background:#fff;border-radius:6px 6px 50% 50%;border:0;font-family:var(--f-head);font-size:1.1rem;cursor:pointer;box-shadow:inset 0 -6px 0 #e4e4e4;-webkit-tap-highlight-color:transparent}
+  .tooth.pressed{background:#bbb;transform:translateY(6px);box-shadow:none;color:#777}
+  .tooth.bite{background:var(--bk-yellow);animation:shake .4s}
+  .mouth.closed{border-radius:16px;background:#b53a2a}
+  @keyframes shake{25%{transform:translateX(-4px)}75%{transform:translateX(4px)}}
+  .ptbl{overflow-x:auto}
+  .ptbl table{min-width:560px}
+  .bar{display:flex;align-items:flex-end;gap:6px;height:120px;margin:8px 0}
+  .bar div{flex:1;background:var(--bk-sky);border-radius:6px 6px 0 0;position:relative;min-height:2px}
+  .bar div span{position:absolute;bottom:-20px;left:0;right:0;text-align:center;font-size:.75rem}
+  .bar div b{position:absolute;top:-18px;left:0;right:0;text-align:center;font-size:.72rem;font-weight:400}
+  /* 강 건너기 */
+  .river{display:grid;grid-template-columns:repeat(12,1fr);gap:4px;max-width:620px}
+  .rcell{background:#fff;border:2px solid var(--bk-line);border-radius:8px;padding:4px 2px;text-align:center;font-size:.8rem}
+  .rcell b{display:block;font-family:var(--f-head);font-size:1.05rem;font-weight:400}
+  .rcell .ppl{display:flex;flex-wrap:wrap;justify-content:center;gap:1px;min-height:18px;font-size:.7rem}
+  .rcell button{width:100%;border:0;background:var(--bk-sky-soft);border-radius:4px;cursor:pointer;font-size:.8rem;min-height:22px}
+  .riverband{background:linear-gradient(90deg,#9ED9C6,#5BB8E8);border-radius:12px;padding:8px 14px;text-align:center;font-family:var(--f-head);margin:8px 0;color:#fff}
+  .dice{display:inline-flex;gap:8px;font-size:2rem}
+  /* 주사위 오목 */
+  .omok{display:grid;grid-template-columns:repeat(9,1fr);gap:3px;max-width:520px;background:#E7C77A;padding:5px;border-radius:12px;margin:8px auto}
+  .oc{aspect-ratio:1;background:#F3D98B;border-radius:5px;display:grid;place-items:center;font-size:.72rem;position:relative;cursor:default;-webkit-tap-highlight-color:transparent;font-weight:700;color:#6d5a24}
+  .oc.can{background:var(--bk-yellow);outline:2px solid var(--bk-orange);cursor:pointer}
+  .oc .st{position:absolute;inset:12%;border-radius:50%;box-shadow:inset -3px -3px 5px rgba(0,0,0,.3),0 2px 3px rgba(0,0,0,.25)}
+  .st.w{background:#f8f8f8}.st.b{background:#222}
+  .oc.win .st{outline:3px solid var(--bk-orange)}
+  .chance{display:flex;gap:6px;flex-wrap:wrap}
+  .chance button{font:inherit;font-size:.85rem;padding:6px 10px;border-radius:999px;border:2px solid var(--bk-purple);background:#fff;cursor:pointer}
+  .chance button.on{background:var(--bk-purple);color:#fff}
+  .chance button:disabled{opacity:.4}
+  .players{display:flex;gap:10px;flex-wrap:wrap}
+  .players div{flex:1;min-width:200px;background:#fff;border:2px solid var(--bk-line);border-radius:12px;padding:8px 12px}
+  .players div.on{border-color:var(--bk-orange)}
+  /* 고리 */
+  .strings{position:relative;height:220px;max-width:420px;margin:10px auto;background:#fff;border-radius:14px;border:2px solid var(--bk-line)}
+  .strings svg{width:100%;height:100%}
+  .tally{display:flex;gap:10px;flex-wrap:wrap;margin:6px 0}
+  .tally div{flex:1;min-width:120px;background:#fff;border:2px solid var(--bk-line);border-radius:12px;padding:8px 12px;text-align:center}
+  .tally b{font-family:var(--f-head);font-size:1.4rem;font-weight:400;display:block}
+  /* 달고나 */
+  .seqs{display:grid;grid-template-columns:repeat(4,1fr);gap:6px;max-width:520px}
+  .sq{background:#fff;border:2px solid var(--bk-line);border-radius:8px;padding:6px;text-align:center;font-family:var(--f-mono,monospace);letter-spacing:.1em}
+  .sq.a{border-color:var(--bk-sky);background:var(--bk-sky-soft)}.sq.b{border-color:var(--bk-red);background:#FDEEF2}
+  .dalgona{font-size:1.6rem;letter-spacing:2px}
+</style>
+</head>
+<body class="bk">
+<script src="../../common.js" data-num="04" data-name="확률 놀이" data-sub="1단원 수학 놀이 활동" data-home="../../"></script>
+<div class="bk-wrap">
+  <section class="ch-intro">
+    <div class="ch-intro__text">
+      <div class="bk-ribbon">04</div>
+      <h1 class="bk-h-unit">확률 놀이</h1>
+      <p class="ch-lead">168계단을 걸어 올라갈 사람을 어떻게 정해야 공평할까요? 수학의 힘을 빌려 함께 생각해 보세요.</p>
+      <p class="ch-goal">★ 이 단원에서는 — 실생활과 관련된 사건의 확률을 구하고, 의사결정을 위한 예측에 이용할 수 있다.</p>
+    </div>
+    <div class="ch-intro__pic"><img src="../../img/ch04.jpg" alt="초량이바구길 168계단"><span class="ch-place">📍 초량이바구길 168계단</span></div>
+  </section>
+
+  <nav class="tabs" id="tabs">
+    <button class="tab on" data-t="t1"><span class="tab__n">1</span>상어 룰렛 게임</button>
+    <button class="tab" data-t="t2"><span class="tab__n">2</span>강 건너기 주사위 게임</button>
+    <button class="tab" data-t="t3"><span class="tab__n">3</span>주사위 오목</button>
+    <button class="tab" data-t="t4"><span class="tab__n">4</span>행운의 고리</button>
+    <button class="tab tab--pink" data-t="t5"><span class="tab__n">★</span>공평하게 배분하기</button>
+  </nav>
+
+  <!-- ===== 1 상어 룰렛 ===== -->
+  <section class="act-page" id="t1">
+    <div class="bk-panel">
+      <div class="bk-act"><span class="bk-act__n">1</span><span class="bk-act__t">상어 룰렛 게임</span><span class="bk-tag">추론</span><span class="bk-tag">의사소통</span></div>
+      <div class="bk-rule"><ol><li>상어의 입을 연다.</li><li>자신의 차례에 상어의 입에 손을 넣어 이빨을 하나씩 누른다.</li><li>상어가 입을 닫으면 당첨! (당첨된 사람이 계단을 걸어 올라간다)</li></ol></div>
+      <p class="bk-muted" style="margin:10px 0 4px">9명의 친구가 순서대로 이빨을 하나씩 누릅니다. 몇 번째 친구가 당첨될까요?</p>
+      <div class="shark">
+        <div class="result" id="sh-turn">1번째 친구 차례 — 이빨을 누르세요</div>
+        <div class="mouth" id="sh-mouth"></div>
+        <div class="bk-row"><button class="bk-btn bk-btn--primary" id="sh-new">상어 입 열기 (새 게임)</button><button class="bk-btn bk-btn--sky" id="sh-auto">자동으로 100번 하기</button><button class="bk-btn bk-btn--ghost bk-btn--sm" id="sh-clear">기록 지우기</button></div>
+      </div>
+      <div class="ptbl"><table class="tbl" style="margin-left:0;max-width:none"><thead><tr><th>순서</th><th>1</th><th>2</th><th>3</th><th>4</th><th>5</th><th>6</th><th>7</th><th>8</th><th>9</th></tr></thead>
+        <tbody><tr><td>당첨 횟수</td><td id="sh1">0</td><td id="sh2">0</td><td id="sh3">0</td><td id="sh4">0</td><td id="sh5">0</td><td id="sh6">0</td><td id="sh7">0</td><td id="sh8">0</td><td id="sh9">0</td></tr></tbody></table></div>
+      <div class="bar" id="sh-bar"></div>
+      <p class="bk-muted" id="sh-total" style="margin-top:26px">총 0게임</p>
+    </div>
+    <div class="bk-panel bk-panel--pink secret">
+      <h3>🔍 확률 구하기</h3>
+      <div class="q"><b>1</b> 순서에 따라 당첨될 확률이 같을지 다를지 생각해 보자.</div>
+      <div class="q"><b>2</b> 순서에 따라 당첨될 확률을 구해 보자.</div>
+      <details class="reveal"><summary>힌트 보기</summary>
+        <p>첫 번째: 1/9. 두 번째: (첫 번째가 안 걸릴 확률) × (남은 8개 중 걸릴 확률) = 8/9 × 1/8 = <b>1/9</b>. 세 번째: 8/9 × 7/8 × 1/7 = 1/9 … 모든 순서가 <b>똑같이 1/9</b>예요! 위의 실험 막대그래프가 고르게 되는지 확인해 보세요.</p></details>
+    </div>
+  </section>
+
+  <!-- ===== 2 강 건너기 ===== -->
+  <section class="act-page" id="t2" hidden>
+    <div class="bk-panel">
+      <div class="bk-act"><span class="bk-act__n">2</span><span class="bk-act__t">확률 게임 만들기 — 강 건너기 주사위 게임</span><span class="bk-tag">추론</span><span class="bk-tag">의사소통</span></div>
+      <div class="bk-rule"><ol><li>강의 위쪽과 아래쪽을 선택하고, 20명의 사람을 1~12까지의 수에 배치한다. 같은 숫자에 여러 명을 배치해도 된다.</li><li>주사위 2개를 던져 나온 두 눈의 합에 해당하는 숫자에 배치된 사람 한 명이 강을 건넌다. (양쪽 모두)</li><li>먼저 모든 사람이 강을 건너면 이긴다.</li></ol></div>
+      <p class="bk-muted" style="margin:10px 0 4px"><b>위쪽(나)</b>: 숫자를 눌러 20명을 배치하세요. 아래쪽은 봇이 배치합니다.</p>
+      <div class="river" id="rv-top"></div>
+      <div class="riverband">🌊 강 🌊 &nbsp; <span class="dice" id="rv-dice">🎲🎲</span> <span id="rv-sum"></span></div>
+      <div class="river" id="rv-bot"></div>
+      <div class="setup"><span>남은 사람 — 나: <b id="rv-left1">20</b>, 봇: <b id="rv-left2">20</b></span><button class="bk-btn bk-btn--primary bk-btn--sm" id="rv-roll" disabled>주사위 던지기</button><button class="bk-btn bk-btn--sky bk-btn--sm" id="rv-auto" disabled>끝까지 자동</button><button class="bk-btn bk-btn--ghost bk-btn--sm" id="rv-reset">다시 배치</button></div>
+      <div class="result" id="rv-res"></div>
+    </div>
+    <div class="bk-panel bk-panel--pink secret">
+      <h3>🔍 생각해 보기</h3>
+      <div class="q"><b>1</b> 어떤 숫자에 사람을 많이 배치해야 유리할까? 두 주사위 눈의 합이 나올 경우의 수를 세어 보자.</div>
+      <div class="bar" id="rv-bar"></div>
+      <p class="bk-muted" style="margin-top:26px">합 2~12가 나오는 경우의 수(36가지 중). 1은 절대 나올 수 없어요!</p>
+      <div class="q"><b>2</b> 주사위를 이용한 재미있는 게임을 직접 만들어 보고, 규칙을 다듬어 보자.</div>
+    </div>
+  </section>
+
+  <!-- ===== 3 주사위 오목 ===== -->
+  <section class="act-page" id="t3" hidden>
+    <div class="bk-panel">
+      <div class="bk-act"><span class="bk-act__n">3</span><span class="bk-act__t">주사위 오목 게임</span><span class="bk-tag">추론</span><span class="bk-tag">의사소통</span></div>
+      <div class="bk-rule"><ol><li>주사위를 던져 결과에 해당하는 곳에 바둑돌을 놓는다. 6이 나오면 '6' 또는 '짝수', 5가 나오면 '5' 또는 '홀수' 또는 '소수' 중 한 곳.</li><li>먼저 바둑돌 5개를 한 줄로 놓으면 이긴다.</li><li>찬스 카드(2장)는 주사위를 던지기 전에 내고, 그 효과에 해당하는 곳에 놓는다. (찬스 카드를 쓰면 수가 적힌 곳에만 놓을 수 있다.)</li></ol></div>
+      <div class="players"><div class="on" id="om-p1">⚫ 검은 돌 (플레이어 1)<div class="chance" id="om-c1"></div></div><div id="om-p2">⚪ 흰 돌 (플레이어 2)<div class="chance" id="om-c2"></div></div></div>
+      <div class="setup"><button class="bk-btn bk-btn--primary" id="om-roll">🎲 주사위 던지기</button><span class="dice" id="om-dice"></span><span id="om-msg" class="bk-muted"></span><button class="bk-btn bk-btn--ghost bk-btn--sm" id="om-reset">새 게임</button></div>
+      <div class="omok" id="om-board"></div>
+      <div class="result" id="om-res"></div>
+    </div>
+    <div class="bk-panel bk-panel--pink secret">
+      <h3>🔍 생각해 보기</h3>
+      <div class="q"><b>1</b> 이길 확률을 높일 수 있는 위치는 어디인지 생각해 보자. (찬스 카드 무시)</div>
+      <details class="reveal"><summary>힌트 보기</summary><p>'짝수'·'홀수'는 3/6, '소수'(2,3,5)도 3/6, 숫자 한 개는 1/6. 짝수·홀수·소수 칸이 많이 지나는 줄이 완성되기 쉬워요.</p></details>
+      <div class="q"><b>2</b> '3' 또는 '홀수'에 놓으면 오목이 완성되는 상황. 찬스 카드 '초과'와 '사이'를 가지고 있다면 어떻게 하는 것이 좋을까?</div>
+    </div>
+  </section>
+
+  <!-- ===== 4 행운의 고리 ===== -->
+  <section class="act-page" id="t4" hidden>
+    <div class="bk-panel">
+      <div class="bk-act"><span class="bk-act__n">4</span><span class="bk-act__t">행운의 고리 만들기</span><span class="bk-tag">문제 해결</span><span class="bk-tag">추론</span><span class="bk-tag">연결</span></div>
+      <div class="bk-rule"><ol><li>20cm 끈 6개를 준비한다.</li><li>한 사람이 끈의 중간을 잡고, 다른 사람은 <b>위쪽</b> 끈을 2개씩 묶어 세 쌍의 매듭을 만든다. 그다음 <b>아래쪽</b>도 2개씩 묶는다.</li><li>눈을 감고 소원을 빈다. 하나의 큰 고리가 나오면 소원이 이루어진다!</li></ol></div>
+      <div class="strings" id="rg-box"><svg viewBox="0 0 420 220" id="rg-svg"></svg></div>
+      <div class="setup"><button class="bk-btn bk-btn--primary" id="rg-tie">아래쪽 무작위로 묶기</button><button class="bk-btn bk-btn--sky" id="rg-auto">1000번 해 보기</button><button class="bk-btn bk-btn--ghost bk-btn--sm" id="rg-clear">기록 지우기</button></div>
+      <div class="result" id="rg-res"></div>
+      <div class="tally"><div>하나의 큰 고리<b id="rg-1">0</b></div><div>두 개의 고리<b id="rg-2">0</b></div><div>세 개의 고리<b id="rg-3">0</b></div><div>시행 횟수<b id="rg-n">0</b></div></div>
+      <p class="bk-muted" id="rg-rate"></p>
+    </div>
+    <div class="bk-panel bk-panel--pink secret">
+      <h3>🔍 확률 구하기</h3>
+      <div class="q"><b>1</b> 세 가지 경우(고리 1개·2개·3개)의 비율을 실험으로 구해 보자.</div>
+      <div class="q"><b>2</b> 아래쪽 끈을 a~f라 할 때 하나의 큰 고리가 나올 확률을 계산해 보자.</div>
+      <details class="reveal"><summary>힌트 보기</summary><p>아래쪽 6개 끈을 묶는 모든 경우: 5 × 3 × 1 = <b>15</b>가지. 위쪽에서 (a,b), (c,d), (e,f)가 이미 이어져 있다면, a와 b는 묶으면 안 되니 a와 묶을 수 있는 끈은 4가지, 그다음 b와 묶을 수 있는 끈은 2가지, 나머지 1가지 → 4×2×1 = <b>8</b>. 확률은 8/15 ≈ 53%! 생각보다 높지요? (세 개: 1/15, 두 개: 6/15)</p></details>
+    </div>
+  </section>
+
+  <!-- ===== ★ 달고나 ===== -->
+  <section class="act-page" id="t5" hidden>
+    <div class="bk-panel bk-panel--pink">
+      <div class="bk-act"><span class="bk-act__n" style="background:var(--bk-red)">★</span><span class="bk-act__t">나도 수학자 — 공평하게 배분하기</span><span class="bk-tag">문제 해결</span><span class="bk-tag">추론</span><span class="bk-tag">연결</span></div>
+      <p class="bk-muted">푸리와 매매는 달고나를 8개씩 걸고 5번 먼저 이기는 사람이 모두 갖기로 했어요. 그런데 푸리 3승, 매매 2승에서 게임이 중단됐어요. 어떻게 나누는 것이 공평할까요?</p>
+      <div class="setup"><label>푸리 <select id="dg-a" class="sel"><option>0</option><option>1</option><option>2</option><option selected>3</option><option>4</option></select>승</label><label>매매 <select id="dg-b" class="sel"><option>0</option><option>1</option><option selected>2</option><option>3</option><option>4</option></select>승</label><span class="bk-muted">(5선승, 달고나 16개)</span></div>
+      <p id="dg-need"></p>
+      <div class="seqs" id="dg-seqs"></div>
+      <div class="result" id="dg-res"></div>
+      <div class="dalgona" id="dg-pic"></div>
+    </div>
+    <div class="bk-panel secret">
+      <h3>🔍 읽을거리 — 도박에서 시작된 확률의 탄생</h3>
+      <p class="bk-muted">17세기 프랑스의 드 메레는 중단된 주사위 게임의 상금을 어떻게 나눌지 파스칼에게 물었고, 파스칼과 페르마는 편지를 주고받으며 "앞으로 벌어질 모든 경우의 수"를 따져 각자가 최종 승리할 확률대로 나누는 것이 공정하다고 결론 내렸어요. 이것이 <b>득점 문제(Problem of Points)</b>이고, 확률론이 태어나는 계기가 되었어요.</p>
+    </div>
+  </section>
+</div>
+
+<script>
+const $ = s => document.querySelector(s); const ri = n => Math.floor(Math.random() * n);
+document.querySelectorAll('#tabs .tab').forEach(b => b.onclick = () => { document.querySelectorAll('#tabs .tab').forEach(x => x.classList.toggle('on', x === b)); document.querySelectorAll('.act-page').forEach(p => p.hidden = p.id !== b.dataset.t); window.scrollTo({ top: $('#tabs').offsetTop - 70, behavior: 'smooth' }); });
+(function(){ const h=location.hash.slice(1); const b=h&&document.querySelector(`#tabs .tab[data-t="${h}"]`); if(b) b.click(); })();
+function bars(el, vals, labels) { const m = Math.max(...vals, 1); el.innerHTML = vals.map((v, i) => `<div style="height:${v / m * 100}%"><b>${v}</b><span>${labels[i]}</span></div>`).join(''); }
+
+/* ===== 1 상어 ===== */
+(function () {
+  let bite, turn, over, tally = JSON.parse(localStorage.getItem('shark') || '[0,0,0,0,0,0,0,0,0]');
+  const mouth = $('#sh-mouth');
+  function init() { bite = ri(9); turn = 1; over = false; mouth.className = 'mouth'; mouth.innerHTML = ''; for (let i = 0; i < 9; i++) { const b = document.createElement('button'); b.className = 'tooth'; b.textContent = i + 1; b.onclick = () => press(i, b); mouth.appendChild(b); } $('#sh-turn').textContent = '1번째 친구 차례 — 이빨을 누르세요'; }
+  function press(i, b) { if (over || b.classList.contains('pressed')) return; if (i === bite) { b.classList.add('bite'); mouth.classList.add('closed'); over = true; $('#sh-turn').textContent = `🦈 덥석! ${turn}번째 친구 당첨 — 계단을 걸어가세요!`; tally[turn - 1]++; save(); } else { b.classList.add('pressed'); turn++; $('#sh-turn').textContent = `${turn}번째 친구 차례`; } }
+  function save() { localStorage.setItem('shark', JSON.stringify(tally)); for (let i = 0; i < 9; i++) $('#sh' + (i + 1)).textContent = tally[i]; bars($('#sh-bar'), tally, [1,2,3,4,5,6,7,8,9]); $('#sh-total').textContent = `총 ${tally.reduce((a, b) => a + b, 0)}게임`; }
+  $('#sh-new').onclick = init; $('#sh-auto').onclick = () => { for (let k = 0; k < 100; k++) { const b2 = ri(9); const order = [...Array(9).keys()].sort(() => Math.random() - .5); tally[order.indexOf(b2)]++; } save(); };
+  $('#sh-clear').onclick = () => { tally = [0,0,0,0,0,0,0,0,0]; save(); };
+  init(); save();
+})();
+
+/* ===== 2 강 건너기 ===== */
+(function () {
+  let top = Array(13).fill(0), bot = Array(13).fill(0), placed = 0, started = false, over = false, timer = null;
+  const W = [0,0,1,2,3,4,5,6,5,4,3,2,1];
+  function botPlace() { bot = Array(13).fill(0); let left = 20; W.forEach((w, i) => { const k = Math.round(w / 36 * 20); bot[i] = k; left -= k; }); let i = 7; while (left > 0) { bot[i]++; left--; i = i === 7 ? 6 : i === 6 ? 8 : 7; } while (left < 0) { bot[2 + ri(11)] > 0 ? (bot[2 + ri(11)]--, left++) : 0; } }
+  function render() {
+    const mk = (arr, el, mine) => { el.innerHTML = ''; for (let i = 1; i <= 12; i++) { const d = document.createElement('div'); d.className = 'rcell'; d.innerHTML = `<b>${i}</b><div class="ppl">${'🧍'.repeat(arr[i])}</div>` + (mine && !started ? `<button data-i="${i}">+</button>` : ''); el.appendChild(d); } el.querySelectorAll('button').forEach(b => b.onclick = () => { if (placed >= 20) return; top[+b.dataset.i]++; placed++; render(); }); };
+    mk(top, $('#rv-top'), true); mk(bot, $('#rv-bot'), false);
+    $('#rv-left1').textContent = top.reduce((a, b) => a + b, 0); $('#rv-left2').textContent = bot.reduce((a, b) => a + b, 0);
+    const ready = placed === 20; $('#rv-roll').disabled = !ready || over; $('#rv-auto').disabled = !ready || over;
+    if (!started) $('#rv-res').textContent = ready ? '배치 완료! 주사위를 던지세요.' : `20명 중 ${placed}명 배치함 — 숫자의 +를 누르세요`;
+  }
+  function roll() { if (over) return; started = true; const a = 1 + ri(6), b = 1 + ri(6), s = a + b; $('#rv-dice').textContent = '⚀⚁⚂⚃⚄⚅'[a - 1] + '⚀⚁⚂⚃⚄⚅'[b - 1]; $('#rv-sum').textContent = `합 = ${s}`; if (top[s] > 0) top[s]--; if (bot[s] > 0) bot[s]--; render();
+    const t = top.reduce((x, y) => x + y, 0), bb = bot.reduce((x, y) => x + y, 0); if (t === 0 || bb === 0) { over = true; clearInterval(timer); $('#rv-res').textContent = t === 0 && bb === 0 ? '동시에 모두 건넜어요! 무승부' : t === 0 ? '🎉 내 사람이 모두 건넜어요! 승리!' : '봇이 먼저 모두 건넜어요.'; render(); } }
+  $('#rv-roll').onclick = roll; $('#rv-auto').onclick = () => { clearInterval(timer); timer = setInterval(roll, 250); };
+  $('#rv-reset').onclick = () => { clearInterval(timer); top = Array(13).fill(0); placed = 0; started = false; over = false; botPlace(); $('#rv-dice').textContent = '🎲🎲'; $('#rv-sum').textContent = ''; render(); };
+  bars($('#rv-bar'), W.slice(2), [2,3,4,5,6,7,8,9,10,11,12]);
+  $('#rv-reset').click();
+})();
+
+/* ===== 3 주사위 오목 ===== */
+(function () {
+  const B = ['4 짝수 소수 4 2 6 6 5 소수','홀수 1 짝수 3 5 홀수 짝수 3 4','2 소수 5 6 홀수 1 6 2 짝수','짝수 3 4 1 소수 6 5 홀수 2','홀수 6 소수 짝수 3 홀수 4 3 1','1 4 2 6 홀수 짝수 3 2 홀수','2 5 6 소수 2 짝수 짝수 1 6','짝수 2 홀수 5 4 소수 짝수 3 5','소수 4 소수 6 2 3 1 짝수 6'].map(r => r.split(' '));
+  const CARDS = ['약수','배수','이상','이하','초과','미만','서로소','사이','상대방 돌 빼기'];
+  let st, turn, dice, card, over, cards, secondRoll;
+  const board = $('#om-board');
+  const gcd = (a, b) => b ? gcd(b, a % b) : a;
+  function ok(lbl, d) { const n = +lbl; if (card === '상대방 돌 빼기') return false;
+    if (card) { if (isNaN(n)) return false; if (card === '약수') return d % n === 0; if (card === '배수') return n % d === 0; if (card === '이상') return n >= d; if (card === '이하') return n <= d; if (card === '초과') return n > d; if (card === '미만') return n < d; if (card === '서로소') return gcd(n, d) === 1; if (card === '사이') { const [a, b] = [Math.min(d, secondRoll), Math.max(d, secondRoll)]; return n > a && n < b; } }
+    if (!isNaN(n)) return n === d; if (lbl === '짝수') return d % 2 === 0; if (lbl === '홀수') return d % 2 === 1; if (lbl === '소수') return [2,3,5].includes(d); return false; }
+  function render(highlight) {
+    board.innerHTML = ''; B.forEach((row, r) => row.forEach((lbl, c) => { const d = document.createElement('div'); const s = st[r][c]; const can = highlight && !s && dice && ok(lbl, dice); const rem = highlight && s && s !== turn && card === '상대방 돌 빼기'; d.className = 'oc' + (can || rem ? ' can' : ''); d.innerHTML = lbl + (s ? `<div class="st ${s}"></div>` : ''); if (can) d.onclick = () => place(r, c); if (rem) d.onclick = () => { st[r][c] = ''; endTurn(`상대 돌을 뺐어요.`); }; board.appendChild(d); }));
+    ['p1','p2'].forEach((p, i) => { $('#om-' + p).classList.toggle('on', (i ? 'w' : 'b') === turn); const box = $('#om-c' + (i + 1)); box.innerHTML = ''; cards[i ? 'w' : 'b'].forEach((cd, k) => { const b = document.createElement('button'); b.textContent = cd; b.disabled = (i ? 'w' : 'b') !== turn || !!dice || over; b.className = card === cd && (i ? 'w' : 'b') === turn ? 'on' : ''; b.onclick = () => { card = card === cd ? null : cd; render(false); }; box.appendChild(b); }); });
+  }
+  function place(r, c) { st[r][c] = turn; if (win(r, c)) { over = true; $('#om-res').textContent = `🎉 ${turn === 'b' ? '검은 돌' : '흰 돌'} 오목 완성! 승리!`; render(false); return; } endTurn(''); }
+  function endTurn(msg) { if (card) cards[turn] = cards[turn].filter(x => x !== card); card = null; dice = null; turn = turn === 'b' ? 'w' : 'b'; $('#om-msg').textContent = msg; $('#om-dice').textContent = ''; render(false); }
+  function win(r, c) { for (const [dr, dc] of [[0,1],[1,0],[1,1],[1,-1]]) { let n = 1; for (const s of [1, -1]) { let rr = r + dr * s, cc = c + dc * s; while (st[rr]?.[cc] === turn) { n++; rr += dr * s; cc += dc * s; } } if (n >= 5) return true; } return false; }
+  $('#om-roll').onclick = () => { if (over || dice) return; dice = 1 + ri(6); secondRoll = card === '사이' ? 1 + ri(6) : null; $('#om-dice').textContent = '⚀⚁⚂⚃⚄⚅'[dice - 1] + (secondRoll ? '⚀⚁⚂⚃⚄⚅'[secondRoll - 1] : '');
+    if (card === '상대방 돌 빼기') { $('#om-msg').textContent = '뺄 상대 돌을 고르세요'; render(true); return; }
+    render(true); const any = board.querySelector('.can'); $('#om-msg').textContent = any ? (card ? `찬스 '${card}' 적용 — 놓을 곳을 고르세요` : '놓을 곳을 고르세요') : '놓을 곳이 없어요 → 차례 넘김'; if (!any) setTimeout(() => endTurn('놓을 곳이 없어 넘겼어요.'), 900); };
+  $('#om-reset').onclick = () => { st = B.map(r => r.map(() => '')); turn = 'b'; dice = null; card = null; over = false; const deck = [...CARDS].sort(() => Math.random() - .5); cards = { b: deck.slice(0, 2), w: deck.slice(2, 4) }; $('#om-res').textContent = ''; $('#om-msg').textContent = ''; $('#om-dice').textContent = ''; render(false); };
+  $('#om-reset').click();
+})();
+
+/* ===== 4 행운의 고리 ===== */
+(function () {
+  let tally = JSON.parse(localStorage.getItem('rings') || '[0,0,0]');
+  const svg = $('#rg-svg');
+  function loops(bottom) { // 위쪽 고정: (0,1)(2,3)(4,5), bottom: 배열 pairs
+    const adj = {}; const add = (a, b) => { (adj[a] ||= []).push(b); (adj[b] ||= []).push(a); };
+    [[0,1],[2,3],[4,5]].forEach(p => add('t' + p[0], 't' + p[1])); bottom.forEach(p => add('b' + p[0], 'b' + p[1])); for (let i = 0; i < 6; i++) add('t' + i, 'b' + i);
+    const seen = new Set(); let n = 0; for (const k in adj) { if (seen.has(k)) continue; n++; const stack = [k]; while (stack.length) { const x = stack.pop(); if (seen.has(x)) continue; seen.add(x); adj[x].forEach(y => stack.push(y)); } } return n;
+  }
+  function randPairs() { const a = [0,1,2,3,4,5].sort(() => Math.random() - .5); return [[a[0],a[1]],[a[2],a[3]],[a[4],a[5]]]; }
+  function draw(bottom) {
+    const X = i => 60 + i * 60; let h = '';
+    for (let i = 0; i < 6; i++) h += `<line x1="${X(i)}" y1="40" x2="${X(i)}" y2="180" stroke="#C9A24D" stroke-width="6" stroke-linecap="round"/><text x="${X(i)}" y="205" text-anchor="middle" font-size="13" fill="#5F5B55">${'abcdef'[i]}</text>`;
+    [[0,1],[2,3],[4,5]].forEach(([a, b]) => h += `<path d="M${X(a)} 40 Q${(X(a)+X(b))/2} 5 ${X(b)} 40" fill="none" stroke="#E9533F" stroke-width="6" stroke-linecap="round"/>`);
+    if (bottom) bottom.forEach(([a, b]) => { const dy = 20 + Math.abs(a - b) * 12; h += `<path d="M${X(a)} 180 Q${(X(a)+X(b))/2} ${180 + dy} ${X(b)} 180" fill="none" stroke="#2F8FC9" stroke-width="6" stroke-linecap="round"/>`; });
+    svg.innerHTML = h;
+  }
+  function save() { localStorage.setItem('rings', JSON.stringify(tally)); for (let i = 0; i < 3; i++) $('#rg-' + (i + 1)).textContent = tally[i]; const n = tally.reduce((a, b) => a + b, 0); $('#rg-n').textContent = n; $('#rg-rate').textContent = n ? `하나의 큰 고리 비율: ${(tally[0] / n * 100).toFixed(1)}% (이론값 8/15 ≈ 53.3%)` : ''; }
+  $('#rg-tie').onclick = () => { const p = randPairs(); draw(p); const n = loops(p); tally[n - 1]++; save(); $('#rg-res').textContent = n === 1 ? '✨ 하나의 큰 고리! 소원이 이루어져요!' : `고리 ${n}개가 생겼어요.`; };
+  $('#rg-auto').onclick = () => { for (let k = 0; k < 1000; k++) tally[loops(randPairs()) - 1]++; save(); };
+  $('#rg-clear').onclick = () => { tally = [0,0,0]; save(); };
+  draw(null); save();
+})();
+
+/* ===== ★ 달고나 ===== */
+(function () {
+  function run() { const a = +$('#dg-a').value, b = +$('#dg-b').value; const na = 5 - a, nb = 5 - b, len = na + nb - 1; $('#dg-need').innerHTML = `푸리가 5번 먼저 이기려면 <b>${na}</b>번, 매매는 <b>${nb}</b>번 더 이겨야 해요. 최대 <b>${len}</b>번 더 하면 승부가 나요. 푸리가 이기는 경우를 A, 매매가 이기는 경우를 B로 나타내면:`;
+    let wa = 0, h = ''; const total = 2 ** len;
+    for (let m = 0; m < total; m++) { const s = [...Array(len)].map((_, i) => (m >> (len - 1 - i)) & 1 ? 'B' : 'A'); const ca = s.filter(x => x === 'A').length; const aw = ca >= na; if (aw) wa++; h += `<div class="sq ${aw ? 'a' : 'b'}">${s.join('')}</div>`; }
+    $('#dg-seqs').innerHTML = h; const pa = wa / total; const da = Math.round(16 * pa);
+    $('#dg-res').textContent = `푸리가 이길 확률 ${wa}/${total}, 매매 ${total - wa}/${total} → 달고나 16개는 푸리 ${da}개 : 매매 ${16 - da}개가 공평해요.`;
+    $('#dg-pic').innerHTML = `푸리 ${'🍬'.repeat(da)}<br>매매 ${'🍬'.repeat(16 - da)}`; }
+  $('#dg-a').onchange = run; $('#dg-b').onchange = run; run();
+})();
+</script>
+</body>
+</html>
