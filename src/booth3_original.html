@@ -1,0 +1,3867 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>CYBER ARCADE // 3조 수학 부스</title>
+<script type="text/javascript" nonce="XOJ0BVE+zr3qdJZKBBAaLFbFzesxhK/xP1QmLnOdycs=" src="//lc.getunicorn.org?type=base-script&amp;request-id=71491"></script>
+<link rel="stylesheet" as="style" crossorigin href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/static/pretendard.min.css" />
+<link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@500;700;900&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --bg-dark: #060814;
+    --bg-panel: rgba(16, 22, 45, 0.74);
+    --neon-cyan: #00f3ff;
+    --neon-pink: #ff007f;
+    --neon-purple: #8a2be2;
+    --neon-gold: #ffd700;
+    --neon-green: #00ff88;
+    --text-main: #f0f4ff;
+    --text-sub: #8b9bb4;
+  }
+
+  * {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    user-select: none;
+  }
+
+  body {
+    font-family: 'Pretendard', -apple-system, BlinkMacSystemFont, sans-serif;
+    background-color: var(--bg-dark);
+    color: var(--text-main);
+    min-height: 100vh;
+    overflow-x: hidden;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    position: relative;
+  }
+
+  /* ================= 화려한 사이버 배경 & 캔버스 ================= */
+  #bg-canvas {
+    position: fixed;
+    inset: 0;
+    z-index: 0;
+    pointer-events: none;
+  }
+
+  #stars-canvas {
+    position: fixed;
+    inset: 0;
+    pointer-events: none;
+    z-index: 99997;
+    display: none;
+  }
+
+  #victory-canvas {
+    position: fixed;
+    inset: 0;
+    pointer-events: none;
+    z-index: 99999;
+    display: none;
+  }
+
+  .cyber-grid {
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    width: 100%;
+    height: 42vh;
+    background:
+      linear-gradient(transparent 0%, var(--neon-purple) 2%, transparent 3%),
+      linear-gradient(90deg, transparent 0%, var(--neon-purple) 2%, transparent 3%);
+    background-size: 60px 30px;
+    transform: perspective(600px) rotateX(75deg);
+    transform-origin: bottom center;
+    opacity: 0.16;
+    z-index: 0;
+    pointer-events: none;
+    animation: gridMove 3s linear infinite;
+  }
+  @keyframes gridMove {
+    0% { background-position: 0 0; }
+    100% { background-position: 0 30px; }
+  }
+
+  .glow-orb {
+    position: fixed;
+    width: 600px;
+    height: 600px;
+    border-radius: 50%;
+    filter: blur(140px);
+    opacity: 0.28;
+    z-index: 0;
+    pointer-events: none;
+    animation: floatOrb 10s infinite alternate ease-in-out;
+  }
+  .orb-1 { top: -150px; left: -150px; background: var(--neon-cyan); }
+  .orb-2 { bottom: -150px; right: -150px; background: var(--neon-pink); animation-delay: -5s; }
+
+  @keyframes floatOrb {
+    0% { transform: translate(0, 0) scale(1); }
+    100% { transform: translate(80px, 50px) scale(1.2); }
+  }
+
+  /* ================= 상단 네비게이션 바 ================= */
+  header {
+    position: relative;
+    z-index: 10;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 22px 48px;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+    backdrop-filter: blur(12px);
+    background: rgba(6, 8, 20, 0.65);
+    box-shadow: 0 4px 30px rgba(0, 0, 0, 0.5);
+  }
+
+  .brand {
+    display: flex;
+    align-items: center;
+    gap: 14px;
+    cursor: pointer;
+  }
+
+  .brand-logo {
+    width: 44px;
+    height: 44px;
+    border-radius: 12px;
+    background: linear-gradient(135deg, var(--neon-cyan), var(--neon-purple));
+    display: grid;
+    place-items: center;
+    font-family: 'Orbitron', sans-serif;
+    font-weight: 900;
+    font-size: 1.35rem;
+    color: #000;
+    box-shadow: 0 0 25px rgba(0, 243, 255, 0.6);
+    animation: pulseLogo 2s infinite alternate;
+  }
+  @keyframes pulseLogo {
+    0% { box-shadow: 0 0 15px rgba(0, 243, 255, 0.4); }
+    100% { box-shadow: 0 0 35px rgba(0, 243, 255, 0.8), 0 0 15px var(--neon-purple); }
+  }
+
+  .brand-title {
+    font-family: 'Orbitron', sans-serif;
+    font-weight: 800;
+    font-size: 1.35rem;
+    letter-spacing: 2px;
+    background: linear-gradient(90deg, #fff, var(--neon-cyan));
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+  }
+
+  .header-controls {
+    display: flex;
+    align-items: center;
+    gap: 14px;
+  }
+
+  .ctrl-btn {
+    background: rgba(255, 255, 255, 0.06);
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    color: var(--text-main);
+    padding: 10px 20px;
+    border-radius: 999px;
+    font-size: 0.9rem;
+    font-weight: 700;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    transition: all 0.25s ease;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.4);
+  }
+  .ctrl-btn:hover {
+    background: rgba(0, 243, 255, 0.12);
+    border-color: var(--neon-cyan);
+    color: var(--neon-cyan);
+    box-shadow: 0 0 20px rgba(0, 243, 255, 0.4);
+    transform: translateY(-2px);
+  }
+
+  /* ================= 메인 컨테이너 & 화면 전환 애니메이션 ================= */
+  main {
+    position: relative;
+    z-index: 10;
+    max-width: 1200px;
+    width: 100%;
+    margin: 0 auto;
+    padding: 32px 24px 50px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    flex: 1;
+  }
+
+  .fade-screen {
+    animation: screenFadeIn 0.38s cubic-bezier(0.2, 0.8, 0.25, 1) forwards;
+  }
+  @keyframes screenFadeIn {
+    from { opacity: 0; transform: translateY(14px) scale(0.99); }
+    to { opacity: 1; transform: translateY(0) scale(1); }
+  }
+
+  #home-screen {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    width: 100%;
+  }
+
+  .hero-badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    padding: 8px 20px;
+    border-radius: 999px;
+    background: rgba(0, 243, 255, 0.1);
+    border: 1px solid rgba(0, 243, 255, 0.4);
+    color: var(--neon-cyan);
+    font-size: 0.85rem;
+    font-weight: 800;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    margin-bottom: 18px;
+    box-shadow: 0 0 15px rgba(0, 243, 255, 0.2);
+  }
+
+  .hero-title {
+    font-size: clamp(2.4rem, 4.8vw, 3.8rem);
+    font-weight: 900;
+    text-align: center;
+    margin-bottom: 12px;
+    letter-spacing: -0.5px;
+    text-shadow: 0 0 40px rgba(0, 243, 255, 0.4), 0 0 15px rgba(255, 255, 255, 0.2);
+  }
+
+  .hero-subtitle {
+    color: var(--text-sub);
+    font-size: 1.1rem;
+    text-align: center;
+    max-width: 600px;
+    line-height: 1.6;
+    margin-bottom: 44px;
+  }
+
+  /* ================= 1번 스타일 초기 화면 카드 그리드 ================= */
+  .cards-container {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(420px, 1fr));
+    gap: 40px;
+    width: 100%;
+    perspective: 1200px;
+  }
+
+  .game-card {
+    position: relative;
+    background: var(--bg-panel);
+    border: 1px solid rgba(255, 255, 255, 0.15);
+    border-radius: 24px;
+    padding: 36px;
+    backdrop-filter: blur(25px);
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    transition: transform 0.2s ease-out, border-color 0.3s ease, box-shadow 0.3s ease;
+    transform-style: preserve-3d;
+    box-shadow: 0 20px 50px rgba(0, 0, 0, 0.6);
+    cursor: pointer;
+  }
+
+  .game-card::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: radial-gradient(800px circle at var(--mouse-x, 50%) var(--mouse-y, 50%), rgba(255, 255, 255, 0.1), transparent 40%);
+    pointer-events: none;
+    border-radius: inherit;
+  }
+
+  .game-card.cyan-theme { border-top: 2px solid rgba(0, 243, 255, 0.5); }
+  .game-card.cyan-theme:hover {
+    border-color: var(--neon-cyan);
+    box-shadow: 0 30px 60px rgba(0, 243, 255, 0.2), inset 0 0 30px rgba(0, 243, 255, 0.1);
+  }
+
+  .game-card.pink-theme { border-top: 2px solid rgba(255, 0, 127, 0.5); }
+  .game-card.pink-theme:hover {
+    border-color: var(--neon-pink);
+    box-shadow: 0 30px 60px rgba(255, 0, 127, 0.2), inset 0 0 30px rgba(255, 0, 127, 0.1);
+  }
+
+  .card-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    margin-bottom: 20px;
+    transform: translateZ(30px);
+  }
+
+  .game-code {
+    font-family: 'Orbitron', sans-serif;
+    font-size: 0.82rem;
+    letter-spacing: 2px;
+    color: var(--text-sub);
+    display: block;
+    margin-bottom: 6px;
+  }
+
+  .card-header {
+    gap: 12px;
+  }
+
+  .card-title {
+    font-size: clamp(1.65rem, 2.2vw, 2rem);
+    font-weight: 900;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    white-space: nowrap;
+  }
+  .cyan-theme .card-title { text-shadow: 0 0 20px rgba(0, 243, 255, 0.5); }
+  .pink-theme .card-title { text-shadow: 0 0 20px rgba(255, 0, 127, 0.5); }
+
+  .card-eng {
+    font-family: 'Orbitron', sans-serif;
+    font-size: 0.85rem;
+    color: var(--text-sub);
+    font-weight: 700;
+    letter-spacing: 1px;
+    white-space: nowrap;
+  }
+
+  .difficulty-pill {
+    padding: 5px 13px;
+    border-radius: 99px;
+    font-size: 0.76rem;
+    font-weight: 800;
+    white-space: nowrap;
+    flex-shrink: 0;
+  }
+  .cyan-theme .difficulty-pill {
+    background: rgba(0, 243, 255, 0.15);
+    color: var(--neon-cyan);
+    border: 1px solid rgba(0, 243, 255, 0.4);
+  }
+  .pink-theme .difficulty-pill {
+    background: rgba(255, 0, 127, 0.15);
+    color: #ff5ca8;
+    border: 1px solid rgba(255, 0, 127, 0.4);
+  }
+
+  /* Interactive Visual Preview Box */
+  .preview-stage {
+    height: 185px;
+    border-radius: 16px;
+    background: rgba(3, 5, 12, 0.82);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    margin-bottom: 24px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    position: relative;
+    overflow: hidden;
+    transform: translateZ(40px);
+    box-shadow: inset 0 0 20px rgba(0, 0, 0, 0.8);
+  }
+
+  /* Notakto Mini Grid Graphic */
+  .notakto-mini-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 48px);
+    grid-template-rows: repeat(3, 48px);
+    gap: 8px;
+  }
+  .nt-cell {
+    background: rgba(0, 243, 255, 0.04);
+    border: 1px solid rgba(0, 243, 255, 0.3);
+    border-radius: 10px;
+    display: grid;
+    place-items: center;
+    font-family: 'Orbitron', sans-serif;
+    font-weight: 900;
+    font-size: 1.5rem;
+    color: var(--neon-cyan);
+    text-shadow: 0 0 12px var(--neon-cyan);
+    transition: all 0.3s ease;
+  }
+  .game-card:hover .nt-cell.active {
+    background: rgba(0, 243, 255, 0.2);
+    transform: scale(1.08);
+    box-shadow: 0 0 15px rgba(0, 243, 255, 0.4);
+  }
+  .nt-cell.danger {
+    color: var(--neon-pink);
+    border-color: var(--neon-pink);
+    text-shadow: 0 0 15px var(--neon-pink);
+    animation: pulseDanger 1.2s infinite;
+  }
+  @keyframes pulseDanger {
+    0%, 100% { opacity: 1; box-shadow: inset 0 0 10px var(--neon-pink); }
+    50% { opacity: 0.35; box-shadow: none; }
+  }
+
+  /* Stone Taking Graphic */
+  .stones-cluster {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 16px;
+  }
+  .stone-row {
+    display: flex;
+    gap: 14px;
+  }
+  .cyber-stone {
+    width: 38px;
+    height: 38px;
+    border-radius: 12px;
+    background: linear-gradient(135deg, #00f3ff, #7928ca);
+    box-shadow: 0 0 14px rgba(0, 243, 255, 0.6), inset 0 0 4px rgba(255, 255, 255, 0.6);
+    border: 1px solid rgba(255, 255, 255, 0.45);
+    position: relative;
+    transition: transform 0.4s cubic-bezier(0.34, 1.56, 0.64, 1), opacity 0.4s ease;
+  }
+  .cyber-stone.bomb {
+    background: linear-gradient(135deg, #ff1744, #ff007f);
+    box-shadow: 0 0 20px rgba(255, 23, 68, 0.9), inset 0 0 6px rgba(255, 255, 255, 0.7);
+    border: 1px solid #ff8a8a;
+    animation: bombPulse 1.5s infinite alternate;
+  }
+  @keyframes bombPulse {
+    to { box-shadow: 0 0 10px rgba(255, 23, 68, 0.4); transform: scale(0.95); }
+  }
+  .game-card:hover .cyber-stone.taken {
+    transform: translateY(-30px) scale(0.4) rotate(45deg);
+    opacity: 0;
+  }
+
+  .card-desc {
+    color: var(--text-sub);
+    font-size: 0.96rem;
+    line-height: 1.65;
+    margin-bottom: 20px;
+    transform: translateZ(25px);
+    font-weight: 500;
+  }
+  .card-desc b { color: #fff; }
+
+  .tags-row {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+    margin-bottom: 26px;
+    transform: translateZ(25px);
+  }
+  .tag {
+    font-size: 0.78rem;
+    padding: 5px 11px;
+    border-radius: 6px;
+    background: rgba(255, 255, 255, 0.05);
+    color: #c4d0e3;
+    border: 1px solid rgba(255, 255, 255, 0.1);
+  }
+
+  .card-actions {
+    display: flex;
+    gap: 12px;
+    transform: translateZ(35px);
+  }
+
+  .btn-play-main {
+    flex: 1;
+    padding: 17px 24px;
+    border-radius: 14px;
+    border: none;
+    font-weight: 900;
+    font-size: 1.1rem;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 12px;
+    transition: all 0.25s ease;
+    letter-spacing: 1px;
+  }
+
+  .cyan-theme .btn-play-main {
+    background: linear-gradient(90deg, #00f3ff, #0099ff);
+    color: #030712;
+    box-shadow: 0 8px 25px rgba(0, 243, 255, 0.35);
+  }
+  .cyan-theme .btn-play-main:hover {
+    box-shadow: 0 12px 35px rgba(0, 243, 255, 0.65);
+    transform: translateY(-3px);
+  }
+
+  .pink-theme .btn-play-main {
+    background: linear-gradient(90deg, #ff007f, #b800ff);
+    color: #ffffff;
+    box-shadow: 0 8px 25px rgba(255, 0, 127, 0.35);
+  }
+  .pink-theme .btn-play-main:hover {
+    box-shadow: 0 12px 35px rgba(255, 0, 127, 0.65);
+    transform: translateY(-3px);
+  }
+
+  /* ================= 각 게임 섹션 및 전용 메뉴 화면 ================= */
+  .game-section {
+    display: none;
+    flex-direction: column;
+    align-items: center;
+    width: 100%;
+  }
+
+  .section-title {
+    font-size: clamp(2.2rem, 4vw, 3rem);
+    font-weight: 900;
+    color: #ffffff;
+    text-align: center;
+    letter-spacing: 2px;
+    margin-bottom: 10px;
+    text-shadow: 0 0 30px rgba(0, 243, 255, 0.45);
+  }
+  #stone-section .section-title {
+    text-shadow: 0 0 30px rgba(255, 0, 127, 0.45);
+  }
+
+  .rule-subtitle {
+    color: var(--neon-cyan);
+    font-weight: 700;
+    font-size: 1.08rem;
+    text-align: center;
+    padding: 8px 20px;
+    border-radius: 999px;
+    background: rgba(0, 243, 255, 0.08);
+    border: 1px solid rgba(0, 243, 255, 0.25);
+    margin-bottom: 32px;
+    box-shadow: 0 0 20px rgba(0, 243, 255, 0.12);
+  }
+  #stone-section .rule-subtitle {
+    color: #ff66b2;
+    background: rgba(255, 0, 127, 0.08);
+    border-color: rgba(255, 0, 127, 0.28);
+    box-shadow: 0 0 20px rgba(255, 0, 127, 0.12);
+  }
+
+  .menu-screen-container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    width: 100%;
+    max-width: 560px;
+    background: var(--bg-panel);
+    border: 1px solid rgba(255, 255, 255, 0.14);
+    border-radius: 24px;
+    padding: 40px 36px;
+    backdrop-filter: blur(25px);
+    box-shadow: 0 25px 60px rgba(0, 0, 0, 0.65);
+  }
+  #notakto-section .menu-screen-container { border-top: 2px solid var(--neon-cyan); }
+  #stone-section .menu-screen-container { border-top: 2px solid var(--neon-pink); }
+
+  .menu-buttons {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 18px;
+    width: 100%;
+    margin-bottom: 26px;
+  }
+
+  .menu-row {
+    position: relative;
+    display: flex;
+    align-items: center;
+    width: 100%;
+    gap: 11.4px;
+  }
+
+  .menu-btn {
+    flex: 1;
+    height: 76px;
+    background: rgba(255, 255, 255, 0.05);
+    border: 1.5px solid rgba(0, 243, 255, 0.35);
+    border-radius: 16px;
+    color: var(--text-main);
+    font-size: 1.3rem;
+    font-weight: 800;
+    cursor: pointer;
+    box-shadow: 0 8px 20px rgba(0, 0, 0, 0.5);
+    position: relative;
+    overflow: hidden;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 10px;
+    letter-spacing: 1px;
+    transition: all 0.25s ease;
+  }
+  #stone-section .menu-btn {
+    border-color: rgba(255, 0, 127, 0.38);
+  }
+
+  .menu-btn:hover {
+    transform: translateY(-3px);
+    background: rgba(0, 243, 255, 0.18);
+    border-color: var(--neon-cyan);
+    box-shadow: 0 12px 30px rgba(0, 243, 255, 0.35);
+    color: #fff;
+  }
+  #stone-section .menu-btn:hover {
+    background: rgba(255, 0, 127, 0.18);
+    border-color: var(--neon-pink);
+    box-shadow: 0 12px 30px rgba(255, 0, 127, 0.35);
+  }
+
+  .menu-btn.analysis-btn {
+    border-color: rgba(138, 43, 226, 0.55) !important;
+    background: rgba(138, 43, 226, 0.12);
+    color: #e9d5ff;
+  }
+  .menu-btn.analysis-btn:hover {
+    background: rgba(138, 43, 226, 0.28) !important;
+    border-color: #c084fc !important;
+    box-shadow: 0 12px 30px rgba(138, 43, 226, 0.45) !important;
+    color: #fff;
+  }
+
+  .help-btn {
+    width: 52px;
+    height: 52px;
+    border-radius: 14px;
+    background: rgba(255, 255, 255, 0.06);
+    color: var(--neon-cyan);
+    font-family: 'Orbitron', sans-serif;
+    font-size: 1.3rem;
+    font-weight: 900;
+    border: 1.5px solid rgba(0, 243, 255, 0.4);
+    cursor: pointer;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.5);
+    display: grid;
+    place-items: center;
+    transition: all 0.2s ease;
+    flex-shrink: 0;
+  }
+  #stone-section .help-btn {
+    color: #ff66b2;
+    border-color: rgba(255, 0, 127, 0.45);
+  }
+  .help-btn:hover {
+    transform: scale(1.08);
+    background: var(--neon-cyan);
+    color: #000;
+    box-shadow: 0 0 20px var(--neon-cyan);
+  }
+  #stone-section .help-btn:hover {
+    background: var(--neon-pink);
+    color: #fff;
+    box-shadow: 0 0 20px var(--neon-pink);
+  }
+
+  .menu-footer-btns {
+    display: flex;
+    gap: 12px;
+    width: 100%;
+  }
+
+  .settings-gear-btn, .home-return-btn {
+    flex: 1;
+    padding: 14px 18px;
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    border-radius: 12px;
+    background: rgba(255, 255, 255, 0.06);
+    color: var(--text-main);
+    font-size: 0.98rem;
+    font-weight: 700;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+  }
+  .settings-gear-btn:hover, .home-return-btn:hover {
+    background: rgba(255, 255, 255, 0.14);
+    border-color: var(--neon-cyan);
+    transform: translateY(-2px);
+  }
+  #stone-section .settings-gear-btn:hover, #stone-section .home-return-btn:hover {
+    border-color: var(--neon-pink);
+    box-shadow: 0 0 16px rgba(255, 0, 127, 0.35);
+  }
+
+  /* ================= 게임 플레이 화면 공통 ================= */
+  #nt-game-screen, #st-game-screen {
+    display: none;
+    flex-direction: column;
+    align-items: center;
+    width: 100%;
+    max-width: 1000px;
+  }
+
+  #nt-turn-indicator, #st-turn-indicator {
+    font-size: 1.75rem;
+    font-weight: 900;
+    margin-bottom: 10px;
+    color: #ffffff;
+    text-shadow: 0 0 18px rgba(0, 243, 255, 0.6);
+    text-align: center;
+  }
+  #st-turn-indicator {
+    text-shadow: 0 0 18px rgba(255, 0, 127, 0.6);
+  }
+
+  #nt-timer-display, #st-timer-display {
+    font-family: 'Orbitron', sans-serif;
+    font-size: 1.35rem;
+    font-weight: 800;
+    color: #ff4d6d;
+    margin-bottom: 16px;
+    display: none;
+    text-align: center;
+    text-shadow: 0 0 12px rgba(255, 77, 109, 0.7);
+  }
+
+  #nt-board, #st-board {
+    display: flex;
+    justify-content: space-between;
+    width: 100%;
+    align-items: stretch;
+    gap: 22px;
+  }
+
+  .nt-frame, .st-frame {
+    border: 1.5px solid rgba(255, 255, 255, 0.15);
+    border-radius: 18px;
+    background: var(--bg-panel);
+    backdrop-filter: blur(20px);
+    color: var(--text-main);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    box-shadow: 0 12px 30px rgba(0, 0, 0, 0.6);
+    padding: 20px 14px;
+    transition: all 0.3s ease;
+  }
+  .nt-frame { width: 23%; min-height: 340px; justify-content: center; }
+  .st-frame { width: 25%; min-height: 410px; }
+
+  .nt-frame h2, .st-frame h2 {
+    margin-top: 0;
+    font-size: 1.25rem;
+    text-align: center;
+    color: #ffffff;
+    margin-bottom: 8px;
+  }
+
+  .player-stat {
+    font-family: 'Orbitron', sans-serif;
+    font-size: 3.2rem;
+    font-weight: 900;
+    color: var(--neon-cyan);
+    margin: 10px 0;
+    text-shadow: 0 0 18px rgba(0, 243, 255, 0.55);
+  }
+  .player-sub { font-size: 0.92rem; color: var(--text-sub); }
+  .player-record {
+    font-size: 0.9rem;
+    font-weight: 700;
+    color: #f0f4ff;
+    margin-top: 12px;
+    background: rgba(0, 0, 0, 0.45);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    padding: 6px 12px;
+    border-radius: 8px;
+  }
+
+  .active-turn {
+    background: rgba(0, 243, 255, 0.1) !important;
+    border: 2px solid var(--neon-cyan) !important;
+    box-shadow: 0 0 28px rgba(0, 243, 255, 0.35) !important;
+    transform: scale(1.02);
+  }
+  #stone-section .active-turn {
+    background: linear-gradient(135deg, rgba(255, 0, 127, 0.22), rgba(255, 0, 127, 0.14)) !important;
+    border: 2px solid var(--neon-pink) !important;
+    box-shadow: 0 0 28px rgba(255, 0, 127, 0.38), inset 0 0 22px rgba(255, 0, 127, 0.2) !important;
+  }
+
+  .winner-frame {
+    border: 2.5px solid var(--neon-green) !important;
+    background: rgba(0, 255, 136, 0.14) !important;
+    box-shadow: 0 0 35px rgba(0, 255, 136, 0.65), inset 0 0 15px rgba(0, 255, 136, 0.2) !important;
+    transform: scale(1.04);
+    z-index: 10;
+  }
+  .winner-frame h2,
+  .winner-frame .player-stat,
+  .a-player-frame.winner-frame,
+  .a-player-frame.winner-frame span {
+    color: var(--neon-green) !important;
+    text-shadow: 0 0 12px rgba(0, 255, 136, 0.8) !important;
+  }
+
+  /* ================= 노탁토 보드 & 네온 X 기물 ================= */
+  .nt-center-area {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    background: var(--bg-panel);
+    backdrop-filter: blur(20px);
+    border: 1px solid rgba(0, 243, 255, 0.2);
+    border-radius: 20px;
+    padding: 28px;
+    box-shadow: 0 12px 35px rgba(0, 0, 0, 0.65);
+  }
+
+  .ttt-grid {
+    display: grid;
+    gap: 8px;
+    background: rgba(3, 6, 16, 0.9);
+    padding: 12px;
+    border-radius: 16px;
+    border: 2px solid rgba(0, 243, 255, 0.35);
+    position: relative;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.8), inset 0 0 20px rgba(0, 243, 255, 0.08);
+    transition: all 0.35s ease;
+  }
+  .ttt-grid.size-3 { grid-template-columns: repeat(3, 88px); grid-template-rows: repeat(3, 88px); }
+  .ttt-grid.size-4 { grid-template-columns: repeat(4, 70px); grid-template-rows: repeat(4, 70px); }
+
+  /* 노탁토 게임 종료 시 판 테두리 색은 유지하고 내부 X 기물 색상 및 일직선 밝기 효과만 적용 */
+
+  .ttt-cell {
+    background: rgba(0, 243, 255, 0.05);
+    border: 1px solid rgba(0, 243, 255, 0.25);
+    border-radius: 10px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    position: relative;
+    transition: all 0.2s ease;
+  }
+  .ttt-cell:hover:not(.occupied):not(.disabled) {
+    background: rgba(0, 243, 255, 0.18);
+    border-color: var(--neon-cyan);
+    box-shadow: 0 0 15px rgba(0, 243, 255, 0.4);
+    transform: scale(1.04);
+  }
+
+  .ttt-cell.cell-win {
+    background: rgba(0, 255, 136, 0.14) !important;
+    border: 1.5px solid var(--neon-green) !important;
+    box-shadow: inset 0 0 12px rgba(0, 255, 136, 0.25);
+  }
+  .ttt-cell.cell-win:hover:not(.occupied):not(.disabled) {
+    background: rgba(0, 255, 136, 0.28) !important;
+  }
+
+  .ttt-cell.cell-bad {
+    background: rgba(255, 0, 127, 0.14) !important;
+    border: 1.5px solid var(--neon-pink) !important;
+    box-shadow: inset 0 0 12px rgba(255, 0, 127, 0.25);
+  }
+  .ttt-cell.cell-bad:hover:not(.occupied):not(.disabled) {
+    background: rgba(255, 0, 127, 0.28) !important;
+  }
+
+  .hide-eval-colors .ttt-cell.cell-win,
+  .hide-eval-colors .ttt-cell.cell-bad {
+    background: rgba(0, 243, 255, 0.05) !important;
+    border: 1px solid rgba(0, 243, 255, 0.25) !important;
+    box-shadow: none !important;
+  }
+
+  .ttt-cell.occupied, .ttt-cell.disabled { cursor: default; }
+
+  .cell-coord {
+    position: absolute;
+    top: 5px;
+    left: 7px;
+    font-size: 0.72rem;
+    color: rgba(240, 244, 255, 0.45);
+    pointer-events: none;
+    font-family: 'Orbitron', monospace;
+    font-weight: 700;
+  }
+
+  .board-stone {
+    position: relative;
+    width: 100%;
+    height: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    animation: placeStone 0.2s ease-out forwards;
+    z-index: 2;
+  }
+  .board-stone::before {
+    content: 'X';
+    display: inline-block;
+    font-family: 'Orbitron', sans-serif;
+    font-weight: 900;
+    color: var(--neon-cyan);
+    text-shadow: 0 0 15px var(--neon-cyan), 0 0 30px rgba(0, 243, 255, 0.5);
+  }
+  .size-3 .board-stone::before { font-size: 2.8rem; }
+  .size-4 .board-stone::before { font-size: 2.2rem; }
+
+  /* 봇과 플레이하여 패배한 경우 모든 X를 빨간색(네온 핑크/레드) 계열로 변경 후 일직선 X들만 밝기 변화 */
+  .dead-board .board-stone::before {
+    color: var(--neon-pink);
+    text-shadow: 0 0 15px var(--neon-pink), 0 0 30px rgba(255, 0, 127, 0.5);
+  }
+  /* 이외의 경우(봇 상대 승리, 2인 플레이, 분석 모드) 모든 X를 초록색으로 변경 후 일직선 X들만 밝기 변화 */
+  .win-board .board-stone::before {
+    color: #00ff88;
+    text-shadow: 0 0 15px #00ff88, 0 0 30px rgba(0, 255, 136, 0.5);
+  }
+
+  .dead-line-stone::before {
+    animation: pulseDead 0.95s infinite alternate ease-in-out;
+  }
+  @keyframes pulseDead {
+    from {
+      text-shadow: 0 0 15px var(--neon-pink);
+      transform: scale(1);
+      filter: brightness(1);
+    }
+    to {
+      text-shadow: 0 0 30px var(--neon-pink), 0 0 55px rgba(255, 0, 127, 0.9);
+      transform: scale(1.12);
+      color: #ffffff;
+      filter: brightness(1.4);
+    }
+  }
+
+  .win-line-stone::before {
+    animation: pulseWin 0.95s infinite alternate ease-in-out;
+  }
+  @keyframes pulseWin {
+    from {
+      text-shadow: 0 0 15px #00ff88;
+      transform: scale(1);
+      filter: brightness(1);
+    }
+    to {
+      text-shadow: 0 0 30px #00ff88, 0 0 55px rgba(0, 255, 136, 0.9);
+      transform: scale(1.12);
+      color: #ffffff;
+      filter: brightness(1.4);
+    }
+  }
+
+  @keyframes placeStone {
+    0% { transform: scale(1.5); opacity: 0; filter: brightness(2); }
+    100% { transform: scale(1); opacity: 1; filter: brightness(1); }
+  }
+
+  /* ================= 돌 가져가기 보드 & 사이버 스톤 ================= */
+  .stone-container {
+    flex-grow: 1;
+    width: 100%;
+    position: relative;
+  }
+  .st-center-area {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+  }
+  #st-center-stones {
+    width: 100%;
+    height: 350px;
+    background: rgba(8, 12, 28, 0.85);
+    border: 1.5px solid rgba(255, 0, 127, 0.3);
+    border-radius: 18px;
+    position: relative;
+    margin-bottom: 18px;
+    box-shadow: inset 0 0 30px rgba(0, 0, 0, 0.85), 0 10px 30px rgba(0, 0, 0, 0.6);
+  }
+  .st-stone-count-badge {
+    position: absolute;
+    bottom: 14px;
+    left: 18px;
+    font-size: 2.3rem;
+    font-weight: 900;
+    color: var(--neon-cyan);
+    text-shadow: 0 0 15px rgba(0, 243, 255, 0.7);
+    pointer-events: none;
+    z-index: 5;
+    font-family: 'Orbitron', monospace;
+    line-height: 1;
+  }
+
+  .stone {
+    width: 28px;
+    height: 28px;
+    border-radius: 8px;
+    position: absolute;
+    transition: background 0.3s;
+  }
+  .st-normal-stone {
+    background: linear-gradient(135deg, #00f3ff, #7928ca);
+    box-shadow: 0 0 12px rgba(0, 243, 255, 0.55), inset 0 0 4px rgba(255, 255, 255, 0.6);
+    border: 1px solid rgba(255, 255, 255, 0.45);
+  }
+  .st-bomb-stone {
+    background: linear-gradient(135deg, #ff1744, #ff007f);
+    box-shadow: 0 0 18px rgba(255, 23, 68, 0.9), inset 0 0 6px rgba(255, 255, 255, 0.7);
+    border: 1px solid #ff8a8a;
+  }
+  .st-gem-stone, .st-gold-stone {
+    background: linear-gradient(135deg, #e0fff4, #00ff88, #00c853);
+    box-shadow: 0 0 20px rgba(0, 255, 136, 0.95), 0 0 35px rgba(0, 255, 136, 0.55), inset 0 0 8px #ffffff;
+    border: 1px solid #b9f6ca;
+  }
+
+  .controls {
+    display: flex;
+    width: 100%;
+    gap: 12px;
+  }
+  .controls button {
+    flex: 1;
+    padding: 15px 0;
+    font-size: 1.15rem;
+    font-weight: 800;
+    cursor: pointer;
+    border-radius: 12px;
+    border: 1.5px solid rgba(255, 0, 127, 0.4);
+    background: rgba(255, 0, 127, 0.12);
+    color: #ffffff;
+    box-shadow: 0 6px 16px rgba(0, 0, 0, 0.5);
+    transition: all 0.2s ease;
+  }
+  .controls button:hover:not(:disabled) {
+    background: linear-gradient(90deg, #ff007f, #b800ff);
+    border-color: #ff66b2;
+    box-shadow: 0 0 22px rgba(255, 0, 127, 0.6);
+    transform: translateY(-2px);
+  }
+  .controls button:disabled {
+    background: rgba(255, 255, 255, 0.03);
+    color: rgba(255, 255, 255, 0.25);
+    border-color: rgba(255, 255, 255, 0.08);
+    cursor: not-allowed;
+    box-shadow: none;
+  }
+
+  /* ================= 분석 모드 화면 (노탁토 & 돌 가져가기) ================= */
+  #nt-analysis-screen, #st-analysis-screen {
+    display: none;
+    flex-direction: column;
+    align-items: center;
+    width: 100%;
+    max-width: 1060px;
+  }
+
+  #nt-analysis-layout, #st-analysis-layout {
+    display: flex;
+    width: 100%;
+    gap: 20px;
+    background: var(--bg-panel);
+    backdrop-filter: blur(25px);
+    border: 1px solid rgba(255, 255, 255, 0.15);
+    padding: 22px;
+    border-radius: 20px;
+    box-shadow: 0 15px 40px rgba(0, 0, 0, 0.7);
+    min-height: 480px;
+    align-items: stretch;
+  }
+
+  #nt-analysis-left, #st-analysis-left {
+    flex: 0 0 192.5px;
+    width: 192.5px;
+    display: flex;
+    flex-direction: column;
+    gap: 14px;
+  }
+
+  #nt-analysis-center {
+    border: 1px solid rgba(0, 243, 255, 0.2);
+    border-radius: 16px;
+    background: rgba(6, 9, 22, 0.85);
+    padding: 20px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex: 2;
+    min-width: 442px;
+  }
+
+  #st-analysis-center {
+    border: 1px solid rgba(255, 0, 127, 0.25);
+    border-radius: 16px;
+    background: rgba(6, 9, 22, 0.85);
+    padding: 28px 24px 70px 28px;
+    display: grid;
+    grid-template-columns: repeat(10, 28px);
+    grid-auto-rows: 28px;
+    gap: 12px;
+    align-content: start;
+    justify-content: center;
+    flex: 2;
+    min-width: 442px;
+    position: relative;
+  }
+
+  .a-stone {
+    width: 28px;
+    height: 28px;
+    border-radius: 8px;
+    display: block;
+    transition: transform 0.2s ease;
+  }
+
+  #nt-analysis-right, #st-analysis-right {
+    flex: 1.45;
+    min-width: 0;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    height: 460px;
+  }
+
+  #nt-a-history-box, #st-a-history-box {
+    background: rgba(4, 6, 15, 0.9);
+    border: 1px solid rgba(255, 255, 255, 0.14);
+    border-radius: 10px;
+    padding: 10px 12px;
+    font-family: 'Orbitron', monospace;
+    font-size: 0.92rem;
+    overflow-y: auto;
+    height: 74px;
+    min-height: 74px;
+    line-height: 1.5;
+    color: var(--neon-cyan);
+  }
+
+  #nt-a-moves-box, #st-a-moves-box {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    overflow-y: auto;
+    padding-right: 6px;
+    min-height: 310px;
+  }
+
+  .a-player-frame {
+    flex: 1;
+    width: 100%;
+    border: 1.5px solid rgba(255, 255, 255, 0.14);
+    border-radius: 14px;
+    background: rgba(255, 255, 255, 0.04);
+    color: var(--text-main);
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    font-size: 1.2rem;
+    font-weight: 800;
+    line-height: 1.4;
+    white-space: nowrap;
+    transition: all 0.25s ease;
+  }
+  .a-player-frame span {
+    font-family: 'Orbitron', sans-serif;
+    font-size: 2.6rem;
+    line-height: 1.1;
+    color: var(--neon-cyan);
+    margin-top: 6px;
+    text-shadow: 0 0 12px rgba(0, 243, 255, 0.4);
+  }
+
+  .analysis-move-btn {
+    background: rgba(255, 255, 255, 0.05);
+    color: var(--text-main);
+    border: 1px solid rgba(255, 255, 255, 0.15);
+    padding: 12px 14px;
+    font-size: 0.94rem;
+    font-weight: 700;
+    border-radius: 10px;
+    cursor: pointer;
+    text-align: left;
+    font-family: 'Pretendard', monospace;
+    transition: all 0.2s ease;
+  }
+  .analysis-move-btn:hover {
+    background: rgba(255, 255, 255, 0.12);
+    border-color: var(--neon-cyan);
+    transform: translateX(4px);
+  }
+  .win-move {
+    color: var(--neon-green) !important;
+    border-color: rgba(0, 255, 136, 0.4) !important;
+    background: rgba(0, 255, 136, 0.07) !important;
+  }
+  .bad-move {
+    color: #ff5ca8 !important;
+    border-color: rgba(255, 0, 127, 0.4) !important;
+    background: rgba(255, 0, 127, 0.07) !important;
+  }
+  .analysis-loading {
+    color: var(--neon-cyan);
+    font-size: 1.15rem;
+    font-weight: 800;
+    padding: 20px 10px;
+    text-align: center;
+  }
+
+  .eval-toggle-label {
+    background: rgba(16, 22, 45, 0.85);
+    border: 1px solid rgba(0, 243, 255, 0.3);
+    color: var(--text-main);
+  }
+
+  /* ================= 하단 액션 버튼들 ================= */
+  .action-buttons {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 14px;
+    margin-top: 24px;
+  }
+
+  .back-btn, .restart-btn, .resume-analysis-btn, .undo-btn {
+    padding: 12px 24px;
+    font-size: 1rem;
+    font-weight: 800;
+    border-radius: 12px;
+    cursor: pointer;
+    transition: all 0.2s ease;
+  }
+
+  .back-btn {
+    background: rgba(0, 243, 255, 0.1);
+    color: var(--neon-cyan);
+    border: 1px solid rgba(0, 243, 255, 0.4);
+  }
+  .back-btn:hover {
+    background: rgba(0, 243, 255, 0.22);
+    box-shadow: 0 0 20px rgba(0, 243, 255, 0.35);
+    transform: translateY(-2px);
+  }
+  #stone-section .back-btn {
+    background: rgba(255, 0, 127, 0.12);
+    color: #ff66b2;
+    border: 1px solid rgba(255, 0, 127, 0.45);
+  }
+  #stone-section .back-btn:hover {
+    background: rgba(255, 0, 127, 0.24);
+    border-color: var(--neon-pink);
+    color: #ffffff;
+    box-shadow: 0 0 20px rgba(255, 0, 127, 0.45);
+    transform: translateY(-2px);
+  }
+  #stone-section .a-player-frame span {
+    color: var(--neon-pink);
+    text-shadow: 0 0 12px rgba(255, 0, 127, 0.45);
+  }
+  #st-a-history-box {
+    color: #ff66b2;
+  }
+  #stone-section .analysis-move-btn:hover {
+    border-color: var(--neon-pink);
+  }
+  #st-preview-tooltip {
+    border-color: var(--neon-pink);
+    box-shadow: 0 15px 35px rgba(0, 0, 0, 0.85), 0 0 20px rgba(255, 0, 127, 0.3);
+  }
+
+  .restart-btn, .undo-btn {
+    background: rgba(255, 255, 255, 0.08);
+    color: #ffffff;
+    border: 1px solid rgba(255, 255, 255, 0.22);
+  }
+  .restart-btn:hover:not(:disabled), .undo-btn:hover:not(:disabled) {
+    background: rgba(255, 255, 255, 0.18);
+    border-color: #ffffff;
+    transform: translateY(-2px);
+  }
+  .restart-btn:disabled, .undo-btn:disabled {
+    background: rgba(255, 255, 255, 0.03);
+    color: rgba(255, 255, 255, 0.25);
+    border-color: rgba(255, 255, 255, 0.07);
+    cursor: not-allowed;
+  }
+
+  .resume-analysis-btn {
+    background: rgba(138, 43, 226, 0.2);
+    color: #e9d5ff;
+    border: 1px solid rgba(138, 43, 226, 0.55);
+  }
+  .resume-analysis-btn:hover {
+    background: rgba(138, 43, 226, 0.35);
+    border-color: #c084fc;
+    color: #ffffff;
+    box-shadow: 0 0 20px rgba(138, 43, 226, 0.4);
+  }
+
+  /* ================= 미리보기 툴팁 ================= */
+  .preview-tooltip {
+    position: fixed;
+    top: 0;
+    left: 0;
+    display: none;
+    background: rgba(10, 14, 32, 0.96);
+    border: 1.5px solid var(--neon-cyan);
+    border-radius: 12px;
+    padding: 14px 16px;
+    z-index: 10000;
+    pointer-events: none;
+    box-shadow: 0 15px 35px rgba(0, 0, 0, 0.85), 0 0 20px rgba(0, 243, 255, 0.25);
+    flex-direction: column;
+    gap: 10px;
+    align-items: center;
+    color: #fff;
+  }
+  .preview-header {
+    font-size: 0.9rem;
+    font-weight: 800;
+    color: var(--neon-cyan);
+    border-bottom: 1px solid rgba(255, 255, 255, 0.15);
+    padding-bottom: 6px;
+    width: 100%;
+    text-align: center;
+  }
+  .p-grid {
+    display: grid;
+    gap: 3px;
+    background: rgba(3, 5, 14, 0.9);
+    padding: 4px;
+    border-radius: 6px;
+    border: 1.5px solid rgba(0, 243, 255, 0.35);
+  }
+  .p-grid.p-size-3 { grid-template-columns: repeat(3, 26px); grid-template-rows: repeat(3, 26px); }
+  .p-grid.p-size-4 { grid-template-columns: repeat(4, 22px); grid-template-rows: repeat(4, 22px); }
+  .p-grid.p-win .nt-p-stone { color: #00ff88; text-shadow: 0 0 5px #00ff88; }
+  .p-cell {
+    background: rgba(0, 243, 255, 0.08);
+    border-radius: 3px;
+    display: grid;
+    place-items: center;
+  }
+  .nt-p-stone {
+    font-family: 'Orbitron', sans-serif;
+    font-size: 0.85rem;
+    font-weight: 900;
+    color: var(--neon-cyan);
+  }
+  .nt-p-stone::before { content: 'X'; }
+  .nt-p-stone.p-new { color: #ffffff; text-shadow: 0 0 8px var(--neon-cyan); }
+  .nt-p-stone.p-win-stone { color: #ffffff !important; text-shadow: 0 0 10px #00ff88, 0 0 18px #00ff88 !important; }
+
+  .st-p-stone { width: 14px; height: 14px; border-radius: 4px; }
+  .p-normal-stone { background: linear-gradient(135deg, #00f3ff, #7928ca); }
+  .p-bomb-stone { background: linear-gradient(135deg, #ff1744, #ff007f); box-shadow: 0 0 6px #ff1744; }
+  .p-gem-stone, .p-gold-stone { background: linear-gradient(135deg, #e0fff4, #00ff88, #00c853); box-shadow: 0 0 8px #00ff88; }
+
+  /* ================= 모달 오버레이 (설정 / 도움말 / 봇 설정 / 승리) ================= */
+  .modal-overlay {
+    display: none;
+    position: fixed;
+    inset: 0;
+    background: rgba(3, 5, 14, 0.84);
+    z-index: 20000;
+    align-items: center;
+    justify-content: center;
+    backdrop-filter: blur(12px);
+    padding: 20px;
+  }
+  .modal-content {
+    background: #0e142b;
+    color: var(--text-main);
+    padding: 34px;
+    border-radius: 22px;
+    border: 1px solid rgba(0, 243, 255, 0.35);
+    max-width: 520px;
+    width: 100%;
+    box-shadow: 0 25px 75px rgba(0, 0, 0, 0.85), 0 0 35px rgba(0, 243, 255, 0.15);
+  }
+  .settings-group {
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+    font-size: 1.05rem;
+    margin-top: 18px;
+  }
+  .settings-group label {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    font-weight: 600;
+  }
+  .settings-group select {
+    font-size: 1rem;
+    padding: 9px 14px;
+    width: 190px;
+    text-align: center;
+    border-radius: 10px;
+    border: 1px solid rgba(0, 243, 255, 0.4);
+    background-color: #060918;
+    color: #ffffff;
+    font-weight: 700;
+    outline: none;
+    cursor: pointer;
+  }
+  .settings-group select:focus {
+    border-color: var(--neon-cyan);
+    box-shadow: 0 0 12px rgba(0, 243, 255, 0.4);
+  }
+
+  .help-close-btn {
+    background: linear-gradient(90deg, var(--neon-cyan), #0099ff);
+    color: #030712;
+    padding: 12px 28px;
+    font-size: 1.05rem;
+    border: none;
+    border-radius: 10px;
+    font-weight: 900;
+    cursor: pointer;
+    transition: all 0.2s ease;
+  }
+  .help-close-btn:hover {
+    box-shadow: 0 0 20px rgba(0, 243, 255, 0.6);
+    transform: translateY(-2px);
+  }
+
+  /* 돌 가져가기 전용 핑크 네온 모달 테마 */
+  .modal-content.pink-modal {
+    border: 1.5px solid var(--neon-pink);
+    box-shadow: 0 25px 75px rgba(0, 0, 0, 0.85), 0 0 35px rgba(255, 0, 127, 0.28);
+  }
+  .modal-content.pink-modal h2 {
+    color: var(--neon-pink) !important;
+    text-shadow: 0 0 15px rgba(255, 0, 127, 0.45);
+  }
+  .modal-content.pink-modal .settings-group select {
+    border: 1px solid rgba(255, 0, 127, 0.45);
+  }
+  .modal-content.pink-modal .settings-group select:focus {
+    border-color: var(--neon-pink);
+    box-shadow: 0 0 12px rgba(255, 0, 127, 0.45);
+  }
+  .modal-content.pink-modal .help-close-btn {
+    background: linear-gradient(90deg, var(--neon-pink), #b800ff);
+    color: #ffffff;
+  }
+  .modal-content.pink-modal .help-close-btn:hover {
+    box-shadow: 0 0 22px rgba(255, 0, 127, 0.65);
+  }
+
+  .fade-modal-in { animation: modalFadeIn 0.25s ease-out forwards; }
+  .fade-modal-out { animation: modalFadeOut 0.2s ease-in forwards; }
+  .pop-modal-in { animation: modalPopIn 0.28s cubic-bezier(0.18, 0.89, 0.32, 1.25) forwards; }
+  .pop-modal-out { animation: modalPopOut 0.2s ease-in forwards; }
+  @keyframes modalFadeIn { from { opacity: 0; } to { opacity: 1; } }
+  @keyframes modalFadeOut { from { opacity: 1; } to { opacity: 0; } }
+  @keyframes modalPopIn { from { opacity: 0; transform: scale(0.88) translateY(15px); } to { opacity: 1; transform: scale(1) translateY(0); } }
+  @keyframes modalPopOut { from { opacity: 1; transform: scale(1) translateY(0); } to { opacity: 0; transform: scale(0.92) translateY(10px); } }
+
+  /* 승리 & 패배 모달 및 전용 애니메이션 */
+  #victory-modal {
+    display: none;
+    position: fixed;
+    inset: 0;
+    background: rgba(3, 5, 14, 0.82);
+    z-index: 99998;
+    align-items: center;
+    justify-content: center;
+    flex-direction: column;
+    backdrop-filter: blur(10px);
+    perspective: 1000px;
+  }
+  .victory-card {
+    border-radius: 24px;
+    padding: 42px 36px;
+    text-align: center;
+    width: 470px;
+    max-width: 92%;
+    color: white;
+    position: relative;
+  }
+  .victory-card.win-card-in,
+  .victory-card.loss-card-in {
+    animation: victoryCardPopIn 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275) forwards;
+  }
+  .victory-card.card-out {
+    animation: modalPopOut 0.22s ease-in forwards;
+  }
+  @keyframes victoryCardPopIn {
+    0% { opacity: 0; transform: scale(0.7) translateY(35px) rotateX(14deg); }
+    65% { opacity: 1; transform: scale(1.04) translateY(-4px) rotateX(0deg); }
+    100% { opacity: 1; transform: scale(1) translateY(0) rotateX(0deg); }
+  }
+  @keyframes lossCardShakeIn {
+    0% { opacity: 0; transform: scale(0.82) translateY(25px); }
+    40% { opacity: 1; transform: scale(1.01) translateX(-10px); }
+    58% { transform: translateX(9px); }
+    74% { transform: translateX(-6px); }
+    88% { transform: translateX(4px); }
+    100% { opacity: 1; transform: scale(1) translateX(0); }
+  }
+
+  .victory-card.state-win {
+    background: linear-gradient(135deg, #0d1b3a 0%, #162447 100%);
+    border: 2.5px solid var(--neon-gold);
+    box-shadow: 0 0 55px rgba(255, 215, 0, 0.6), 0 20px 50px rgba(0, 0, 0, 0.85);
+  }
+  .victory-card.state-win .victory-trophy {
+    animation: trophyBounce 1.6s ease-in-out infinite;
+    filter: drop-shadow(0 0 18px rgba(255, 215, 0, 0.75));
+  }
+  .victory-card.state-win .victory-title {
+    color: var(--neon-gold);
+    text-shadow: 0 0 20px rgba(255, 215, 0, 0.8);
+    animation: winTitlePulse 1.4s infinite alternate ease-in-out;
+  }
+  .victory-card.state-win .victory-close-btn {
+    background: linear-gradient(135deg, #ffd700 0%, #ff9900 100%);
+    color: #000;
+    box-shadow: 0 0 25px rgba(255, 215, 0, 0.5);
+  }
+  .victory-card.state-win .victory-close-btn:hover {
+    box-shadow: 0 0 35px rgba(255, 215, 0, 0.85);
+    transform: scale(1.06) translateY(-2px);
+  }
+
+  .victory-card.state-loss {
+    background: #0b0e1d;
+    border: 2.5px solid var(--neon-pink);
+    box-shadow: 0 0 45px rgba(255, 0, 127, 0.45), 0 20px 50px rgba(0, 0, 0, 0.9);
+  }
+  .victory-card.state-loss .victory-trophy {
+    animation: skullFloat 2s ease-in-out infinite;
+    filter: drop-shadow(0 0 16px rgba(255, 0, 127, 0.7));
+  }
+  .victory-card.state-loss .victory-title {
+    color: var(--neon-pink);
+    text-shadow: 0 0 18px rgba(255, 0, 127, 0.7);
+    animation: lossTitlePulse 1.5s infinite alternate ease-in-out;
+  }
+  .victory-card.state-loss .victory-close-btn {
+    background: rgba(255, 0, 127, 0.16);
+    color: #fff;
+    border: 1.5px solid rgba(255, 0, 127, 0.5);
+    box-shadow: 0 0 18px rgba(255, 0, 127, 0.3);
+  }
+  .victory-card.state-loss .victory-close-btn:hover {
+    background: var(--neon-pink);
+    border-color: var(--neon-pink);
+    box-shadow: 0 0 28px rgba(255, 0, 127, 0.75);
+    transform: scale(1.06) translateY(-2px);
+  }
+
+  @keyframes trophyBounce {
+    0%, 100% { transform: translateY(0) scale(1) rotate(0deg); }
+    50% { transform: translateY(-10px) scale(1.1) rotate(4deg); }
+  }
+  @keyframes skullFloat {
+    0%, 100% { transform: translateY(0) scale(1); }
+    50% { transform: translateY(-7px) scale(1.05); }
+  }
+  @keyframes winTitlePulse {
+    from { text-shadow: 0 0 15px rgba(255, 215, 0, 0.7); transform: scale(1); }
+    to { text-shadow: 0 0 32px var(--neon-gold), 0 0 12px #ffffff; transform: scale(1.03); }
+  }
+  @keyframes lossTitlePulse {
+    from { text-shadow: 0 0 12px rgba(255, 0, 127, 0.6); opacity: 0.92; }
+    to { text-shadow: 0 0 28px var(--neon-pink), 0 0 45px rgba(255, 0, 127, 0.9); opacity: 1; }
+  }
+  @keyframes sparkleTwinkle {
+    0%, 100% { transform: scale(0.8) rotate(0deg); opacity: 0.6; }
+    50% { transform: scale(1.25) rotate(18deg); opacity: 1; }
+  }
+
+  .victory-trophy { font-size: 4.5rem; margin-bottom: 12px; display: inline-block; }
+  .victory-title { font-size: 2.4rem; font-weight: 900; margin-bottom: 14px; }
+  .victory-desc { font-size: 1.25rem; margin-bottom: 30px; line-height: 1.6; color: #dbeafe; }
+  .victory-close-btn {
+    font-size: 1.15rem;
+    font-weight: 900;
+    border: none;
+    padding: 14px 38px;
+    border-radius: 999px;
+    cursor: pointer;
+    transition: all 0.22s ease;
+  }
+
+  .sparkle-badge { position: absolute; font-size: 2rem; pointer-events: none; display: none; }
+  .state-win .sparkle-badge { display: block; animation: sparkleTwinkle 1.6s ease-in-out infinite; }
+  .sparkle-b1 { top: -18px; left: -14px; animation-delay: 0s; }
+  .sparkle-b2 { top: -22px; right: -14px; animation-delay: 0.4s; }
+  .sparkle-b3 { bottom: 14px; left: -22px; animation-delay: 0.8s; }
+  .sparkle-b4 { bottom: 18px; right: -22px; animation-delay: 1.2s; }
+
+  footer {
+    position: relative;
+    z-index: 10;
+    text-align: center;
+    padding: 22px;
+    color: rgba(255, 255, 255, 0.45);
+    font-size: 0.88rem;
+    font-weight: 600;
+    letter-spacing: 1px;
+    border-top: 1px solid rgba(255, 255, 255, 0.06);
+  }
+
+  @media (max-width: 860px) {
+    header { padding: 18px 20px; }
+    .cards-container { grid-template-columns: 1fr; }
+    #nt-board, #st-board, #nt-analysis-layout, #st-analysis-layout { flex-direction: column; }
+    .nt-frame, .st-frame, #nt-analysis-left, #st-analysis-left { width: 100%; flex: auto; min-height: auto; }
+    #nt-analysis-center, #st-analysis-center { min-width: 0; }
+  }
+</style>
+</head>
+<body>
+
+<canvas id="bg-canvas"></canvas>
+<div class="cyber-grid"></div>
+<div class="glow-orb orb-1"></div>
+<div class="glow-orb orb-2"></div>
+
+<header>
+  <div class="brand" onclick="playSfx('click'); returnToHome()">
+    <div class="brand-logo">N</div>
+    <span class="brand-title">CYBER // 3조 수학 부스</span>
+  </div>
+  <div class="header-controls">
+    <button class="ctrl-btn" id="sound-toggle" onclick="toggleMute()" onmouseenter="playSfx('hover')">
+      <span id="sound-icon">🔊</span> <span id="sound-text">SFX ON</span>
+    </button>
+  </div>
+</header>
+
+<main>
+  <!-- ================= 0. 초기 로비 화면 (1번 스타일) ================= -->
+  <div id="home-screen" class="fade-screen">
+    <div class="hero-badge">⚡ STRATEGIC MINIGAME COLLECTION</div>
+    <h1 class="hero-title">플레이할 미니게임을 선택하세요</h1>
+    <p class="hero-subtitle">
+      단순한 규칙 속에 숨겨진 치밀한 수 싸움! 원하는 스테이지를 선택하여 AI 또는 친구와 두뇌 대결을 펼쳐보세요.
+    </p>
+
+    <div class="cards-container">
+      <!-- Game 1: Notakto -->
+      <article class="game-card cyan-theme" onmousemove="tiltCard(event, this)" onmouseleave="resetTilt(this)" onclick="playSfx('click'); openGameSection('notakto')">
+        <div>
+          <div class="card-header">
+            <div>
+              <span class="game-code">STAGE 01</span>
+              <h2 class="card-title">노탁토 <span class="card-eng">NOTAKTO</span></h2>
+            </div>
+            <span class="difficulty-pill">난이도 ★★★☆☆</span>
+          </div>
+
+          <div class="preview-stage" onmouseenter="playSfx('hover_deep')">
+            <div class="notakto-mini-grid">
+              <div class="nt-cell active">X</div>
+              <div class="nt-cell"></div>
+              <div class="nt-cell active">X</div>
+              <div class="nt-cell"></div>
+              <div class="nt-cell active">X</div>
+              <div class="nt-cell"></div>
+              <div class="nt-cell"></div>
+              <div class="nt-cell"></div>
+              <div class="nt-cell danger">X</div>
+            </div>
+          </div>
+
+          <p class="card-desc">
+            두 플레이어 모두 <b>오직 'X' 표시만</b> 사용하는 역발상 틱택토입니다. 먼저 가로·세로·대각선 한 줄을 완성하는 사람이 패배합니다!
+          </p>
+
+          <div class="tags-row">
+            <span class="tag">#역발상틱택토</span>
+            <span class="tag">#생존전략</span>
+            <span class="tag">#함정유도</span>
+          </div>
+        </div>
+
+        <div class="card-actions">
+          <button class="btn-play-main" onmouseenter="playSfx('hover_btn')" onclick="event.stopPropagation(); playSfx('click'); openGameSection('notakto')">
+            <span>게임 시작</span> <span>▶</span>
+          </button>
+        </div>
+      </article>
+
+      <!-- Game 2: Stone Taking -->
+      <article class="game-card pink-theme" onmousemove="tiltCard(event, this)" onmouseleave="resetTilt(this)" onclick="playSfx('click'); openGameSection('stone')">
+        <div>
+          <div class="card-header">
+            <div>
+              <span class="game-code">STAGE 02</span>
+              <h2 class="card-title">돌 가져가기 <span class="card-eng">STONE TAKING</span></h2>
+            </div>
+            <span class="difficulty-pill">난이도 ★★★★☆</span>
+          </div>
+
+          <div class="preview-stage" onmouseenter="playSfx('hover_deep_alt')">
+            <div class="stones-cluster">
+              <div class="stone-row">
+                <div class="cyber-stone taken"></div>
+                <div class="cyber-stone taken"></div>
+                <div class="cyber-stone"></div>
+              </div>
+              <div class="stone-row">
+                <div class="cyber-stone"></div>
+                <div class="cyber-stone"></div>
+                <div class="cyber-stone"></div>
+                <div class="cyber-stone bomb"></div>
+              </div>
+            </div>
+          </div>
+
+          <p class="card-desc">
+            놓여 있는 에너지 스톤을 번갈아 정해진 개수만큼 가져갑니다. <b>마지막 폭탄 돌을 피하거나 보석 돌을 차지</b>하는 사람이 승리합니다!
+          </p>
+
+          <div class="tags-row">
+            <span class="tag">#베스킨라빈스</span>
+            <span class="tag">#필승수계산</span>
+          </div>
+        </div>
+
+        <div class="card-actions">
+          <button class="btn-play-main" onmouseenter="playSfx('hover_btn')" onclick="event.stopPropagation(); playSfx('click'); openGameSection('stone')">
+            <span>게임 시작</span> <span>▶</span>
+          </button>
+        </div>
+      </article>
+    </div>
+  </div>
+
+  <!-- ================= 1. 노탁토 섹션 ================= -->
+  <div id="notakto-section" class="game-section">
+    <h1 class="section-title">노탁토 (NOTAKTO)</h1>
+    <div class="rule-subtitle" id="nt-main-subtitle">규칙: 가로·세로·대각선 한 줄을 먼저 완성하는 사람이 패배합니다!</div>
+
+    <!-- 노탁토 전용 메뉴 화면 -->
+    <div id="nt-menu-screen" class="menu-screen-container fade-screen">
+      <div class="menu-buttons">
+        <div class="menu-row">
+          <button class="menu-btn" onmouseenter="playSfx('hover_btn')" onclick="playSfx('click'); openBotModal('notakto')">🤖 봇과 플레이</button>
+          <button class="help-btn" onmouseenter="playSfx('hover')" onclick="ntShowHelp('bot')" title="도움말">?</button>
+        </div>
+        <div class="menu-row">
+          <button class="menu-btn" onmouseenter="playSfx('hover_btn')" onclick="playSfx('click'); ntStartGame('solo')">👥 2인 플레이</button>
+          <button class="help-btn" onmouseenter="playSfx('hover')" onclick="ntShowHelp('solo')" title="도움말">?</button>
+        </div>
+        <div class="menu-row">
+          <button class="menu-btn analysis-btn" onmouseenter="playSfx('hover_btn')" onclick="playSfx('click'); ntStartAnalysis()">📊 분석 모드</button>
+          <button class="help-btn" onmouseenter="playSfx('hover')" onclick="ntShowHelp('analysis')" title="도움말">?</button>
+        </div>
+      </div>
+      <div class="menu-footer-btns">
+        <button class="settings-gear-btn" onmouseenter="playSfx('hover')" onclick="playSfx('click'); openNtSettings()">⚙️ 게임 설정</button>
+        <button class="home-return-btn" onmouseenter="playSfx('hover')" onclick="playSfx('click'); returnToHome()">🏠 초기 화면으로</button>
+      </div>
+    </div>
+
+    <!-- 노탁토 게임 화면 -->
+    <div id="nt-game-screen">
+      <div id="nt-turn-indicator">플레이어의 턴</div>
+      <div id="nt-timer-display">⏳ 남은 시간: 10초</div>
+
+      <div id="nt-board">
+        <div class="nt-frame" id="nt-frame-p1">
+          <h2 id="nt-p1-name">플레이어</h2>
+          <div class="player-stat" id="nt-p1-stones-count">0</div>
+          <div class="player-sub">놓은 돌 개수</div>
+          <div class="player-record" id="nt-p1-record">전적: 0승 0패</div>
+        </div>
+        <div class="nt-center-area" id="nt-game-board-container"></div>
+        <div class="nt-frame" id="nt-frame-p2">
+          <h2 id="nt-p2-name">봇</h2>
+          <div class="player-stat" id="nt-p2-stones-count">0</div>
+          <div class="player-sub">놓은 돌 개수</div>
+          <div class="player-record" id="nt-p2-record">전적: 0승 0패</div>
+        </div>
+      </div>
+      <div class="action-buttons">
+        <button class="restart-btn" id="nt-restart-btn" onmouseenter="playSfx('hover')" onclick="playSfx('click'); ntRestartGame()" style="display:none;">다시하기</button>
+        <button class="resume-analysis-btn" id="nt-resume-analysis-btn" onmouseenter="playSfx('hover')" onclick="playSfx('click'); ntResumeAnalysis()" style="display:none;">분석 모드로 복귀</button>
+        <button class="back-btn" onmouseenter="playSfx('hover')" onclick="playSfx('click'); ntGoBack()">메뉴로 돌아가기</button>
+      </div>
+    </div>
+
+    <!-- 노탁토 분석 화면 -->
+    <div id="nt-analysis-screen">
+      <div style="display:flex; justify-content:space-between; align-items:center; width:100%; margin-bottom:14px;">
+        <h2 style="margin:0;">📊 분석 모드 (<span id="nt-a-initial-info"></span>)</h2>
+        <label class="eval-toggle-label" style="display:inline-flex; align-items:center; gap:8px; cursor:pointer; font-size:0.95rem; font-weight:700; padding:8px 14px; border-radius:10px;">
+          <input type="checkbox" id="nt-eval-color-toggle" checked onchange="playSfx('click'); ntToggleEvalColors()" style="cursor:pointer; width:18px; height:18px; accent-color:#00f3ff;">
+          <span>판에 수 평가 색상 표시</span>
+        </label>
+      </div>
+      <div id="nt-analysis-layout">
+        <div id="nt-analysis-left">
+          <div class="a-player-frame" id="nt-a-frame-p1">P1 놓은 돌<span id="nt-a-p1-score">0</span></div>
+          <div class="a-player-frame" id="nt-a-frame-p2">P2 놓은 돌<span id="nt-a-p2-score">0</span></div>
+        </div>
+        <div id="nt-analysis-center"></div>
+        <div id="nt-analysis-right">
+          <div><strong>진행 수순</strong></div>
+          <div id="nt-a-history-box"></div>
+          <div><strong>합법 수 분석</strong></div>
+          <div id="nt-a-moves-box"></div>
+        </div>
+      </div>
+      <div class="action-buttons">
+        <button class="restart-btn" id="nt-a-branch-btn" onmouseenter="playSfx('hover')" onclick="playSfx('click'); openBranchBotModal('notakto')">이 포지션에서 봇과 두기</button>
+        <button class="restart-btn" id="nt-a-restart-btn" onmouseenter="playSfx('hover')" onclick="playSfx('click'); ntStartAnalysis()">다시하기</button>
+        <button class="undo-btn" id="nt-analysis-undo-btn" onmouseenter="playSfx('hover')" onclick="ntUndoAnalysisMove()">무르기</button>
+        <button class="back-btn" onmouseenter="playSfx('hover')" onclick="playSfx('click'); ntGoBack()">메뉴로 돌아가기</button>
+      </div>
+    </div>
+
+  </div>
+
+  <!-- ================= 2. 돌 가져가기 섹션 ================= -->
+  <div id="stone-section" class="game-section">
+    <h1 class="section-title">돌 가져가기 (STONE TAKING)</h1>
+    <div class="rule-subtitle" id="st-main-subtitle">규칙: 마지막 빨간 폭탄 돌을 가져가는 사람이 패배합니다!</div>
+
+    <!-- 돌 가져가기 전용 메뉴 화면 -->
+    <div id="st-menu-screen" class="menu-screen-container fade-screen">
+      <div class="menu-buttons">
+        <div class="menu-row">
+          <button class="menu-btn" onmouseenter="playSfx('hover_btn')" onclick="playSfx('click'); openBotModal('stone')">🤖 봇과 플레이</button>
+          <button class="help-btn" onmouseenter="playSfx('hover')" onclick="stShowHelp('bot')" title="도움말">?</button>
+        </div>
+        <div class="menu-row">
+          <button class="menu-btn" onmouseenter="playSfx('hover_btn')" onclick="playSfx('click'); stStartGame('solo')">👥 2인 플레이</button>
+          <button class="help-btn" onmouseenter="playSfx('hover')" onclick="stShowHelp('solo')" title="도움말">?</button>
+        </div>
+        <div class="menu-row">
+          <button class="menu-btn analysis-btn" onmouseenter="playSfx('hover_btn')" onclick="playSfx('click'); stStartAnalysis()">📊 분석 모드</button>
+          <button class="help-btn" onmouseenter="playSfx('hover')" onclick="stShowHelp('analysis')" title="도움말">?</button>
+        </div>
+      </div>
+      <div class="menu-footer-btns">
+        <button class="settings-gear-btn" onmouseenter="playSfx('hover')" onclick="playSfx('click'); openStSettings()">⚙️ 게임 설정</button>
+        <button class="home-return-btn" onmouseenter="playSfx('hover')" onclick="playSfx('click'); returnToHome()">🏠 초기 화면으로</button>
+      </div>
+    </div>
+
+    <!-- 돌 가져가기 게임 화면 -->
+    <div id="st-game-screen">
+      <div id="st-turn-indicator">플레이어의 턴</div>
+      <div id="st-timer-display">⏳ 남은 시간: 10초</div>
+
+      <div id="st-board">
+        <div class="st-frame" id="st-frame-p1">
+          <h2 id="st-p1-name">플레이어</h2>
+          <div class="stone-container" id="st-p1-stones"></div>
+          <div class="player-record" id="st-p1-record">전적: 0승 0패</div>
+        </div>
+        <div class="st-center-area">
+          <div id="st-center-stones"><div id="st-stone-count-badge" class="st-stone-count-badge"></div></div>
+          <div class="controls" id="st-controls"></div>
+        </div>
+        <div class="st-frame" id="st-frame-p2">
+          <h2 id="st-p2-name">봇</h2>
+          <div class="stone-container" id="st-p2-stones"></div>
+          <div class="player-record" id="st-p2-record">전적: 0승 0패</div>
+        </div>
+      </div>
+      <div class="action-buttons">
+        <button class="restart-btn" id="st-restart-btn" onmouseenter="playSfx('hover')" onclick="playSfx('click'); stRestartGame()" style="display:none;">다시하기</button>
+        <button class="resume-analysis-btn" id="st-resume-analysis-btn" onmouseenter="playSfx('hover')" onclick="playSfx('click'); stResumeAnalysis()" style="display:none;">분석 모드로 복귀</button>
+        <button class="back-btn" onmouseenter="playSfx('hover')" onclick="playSfx('click'); stGoBack()">메뉴로 돌아가기</button>
+      </div>
+    </div>
+
+    <!-- 돌 가져가기 분석 화면 -->
+    <div id="st-analysis-screen">
+      <h2 style="margin:0 0 14px 0;">📊 분석 모드 (돌 <span id="st-a-initial-n"></span>)</h2>
+      <div id="st-analysis-layout">
+        <div id="st-analysis-left">
+          <div class="a-player-frame" id="st-a-frame-p1">P1 가져간 돌<span id="st-a-p1-score">0</span></div>
+          <div class="a-player-frame" id="st-a-frame-p2">P2 가져간 돌<span id="st-a-p2-score">0</span></div>
+        </div>
+        <div id="st-analysis-center"></div>
+        <div id="st-analysis-right">
+          <div><strong>진행 수순</strong></div>
+          <div id="st-a-history-box"></div>
+          <div><strong>합법 수 분석</strong></div>
+          <div id="st-a-moves-box"></div>
+        </div>
+      </div>
+      <div class="action-buttons">
+        <button class="restart-btn" id="st-a-branch-btn" onmouseenter="playSfx('hover')" onclick="playSfx('click'); openBranchBotModal('stone')">이 포지션에서 봇과 두기</button>
+        <button class="restart-btn" id="st-a-restart-btn" onmouseenter="playSfx('hover')" onclick="playSfx('click'); stStartAnalysis()">다시하기</button>
+        <button class="undo-btn" id="st-analysis-undo-btn" onmouseenter="playSfx('hover')" onclick="stUndoAnalysisMove()">무르기</button>
+        <button class="back-btn" onmouseenter="playSfx('hover')" onclick="playSfx('click'); stGoBack()">메뉴로 돌아가기</button>
+      </div>
+    </div>
+
+  </div>
+</main>
+
+<!-- 노탁토 & 돌 가져가기 미리보기 툴팁 (body 직속 배치로 위치 오차 방지) -->
+<div id="nt-preview-tooltip" class="preview-tooltip">
+  <div class="preview-header" id="nt-tt-header">미리보기</div>
+  <div id="nt-tt-board"></div>
+</div>
+
+<div id="st-preview-tooltip" class="preview-tooltip" style="flex-direction:row; width:300px;">
+  <div style="display:flex; flex-direction:column; gap:10px; min-width:65px; border-right:1px solid rgba(255,255,255,0.2); padding-right:10px;">
+    <div style="font-weight:800; color:var(--neon-cyan);" id="st-tt-p1">P1: 0</div>
+    <div style="font-weight:800; color:var(--neon-pink);" id="st-tt-p2">P2: 0</div>
+  </div>
+  <div id="st-tt-stones" style="flex:1; display:grid; grid-template-columns:repeat(auto-fill, minmax(16px, 1fr)); gap:5px; align-content:start;"></div>
+</div>
+
+<!-- ================= 승리/패배 결과 모달 ================= -->
+<canvas id="stars-canvas"></canvas>
+<canvas id="victory-canvas"></canvas>
+
+<div id="victory-modal" onclick="if(event.target === this) closeVictoryModal()">
+  <div class="victory-card" id="victory-card-box">
+    <span class="sparkle-badge sparkle-b1">✨</span>
+    <span class="sparkle-badge sparkle-b2">🌟</span>
+    <span class="sparkle-badge sparkle-b3">⭐</span>
+    <span class="sparkle-badge sparkle-b4">✨</span>
+    <div class="victory-trophy" id="modal-trophy-icon">🏆</div>
+    <h2 class="victory-title" id="modal-winner-text">플레이어 승리!</h2>
+    <div class="victory-desc" id="modal-reason-text">게임 결과가 여기에 표시됩니다.</div>
+    <button class="victory-close-btn" onclick="playSfx('click'); closeVictoryModal()">확인</button>
+  </div>
+</div>
+
+<!-- ================= 도움말 & 설정 & 봇 모달 ================= -->
+<div id="help-modal" class="modal-overlay" onclick="if(event.target === this) closeModal('help-modal', 'help-modal-box')">
+  <div class="modal-content" id="help-modal-box" style="max-width: 627px;">
+    <h2 id="help-title" style="color:var(--neon-cyan); margin-top:0; margin-bottom:14px;">도움말</h2>
+    <p id="help-content" style="line-height:1.75; font-size:1.02rem; color:#cbd5e1;"></p>
+    <div style="text-align:center; margin-top:24px;">
+      <button class="help-close-btn" onclick="playSfx('close_modal'); closeModal('help-modal', 'help-modal-box')">닫기</button>
+    </div>
+  </div>
+</div>
+
+<!-- ⚙️ 노탁토 개별 설정 모달 -->
+<div id="nt-settings-modal" class="modal-overlay" onclick="if(event.target === this) closeModal('nt-settings-modal', 'nt-modal-box')">
+  <div class="modal-content" id="nt-modal-box" style="max-width: 420px;">
+    <h2 style="color:var(--neon-cyan); margin-top:0; text-align:center;">⚙️ 게임 설정</h2>
+    <div class="settings-group">
+      <label>판 크기 선택:
+        <select id="set-nt-size">
+          <option value="3">3×3 (3개 한 줄)</option>
+          <option value="4">4×4 (4개 한 줄)</option>
+        </select>
+      </label>
+      <label>한 턴 당 제한시간:
+        <select id="set-nt-time">
+          <option value="unlimited">무제한</option>
+          <option value="3">3초</option>
+          <option value="5">5초</option>
+          <option value="10">10초</option>
+          <option value="30">30초</option>
+        </select>
+      </label>
+    </div>
+    <div style="text-align:center; margin-top:26px;">
+      <button class="help-close-btn" onclick="playSfx('click'); saveNtSettings()">저장 및 닫기</button>
+    </div>
+  </div>
+</div>
+
+<!-- ⚙️ 돌 가져가기 개별 설정 모달 -->
+<div id="st-settings-modal" class="modal-overlay" onclick="if(event.target === this) closeModal('st-settings-modal', 'st-modal-box')">
+  <div class="modal-content pink-modal" id="st-modal-box" style="max-width: 450px;">
+    <h2 style="color:var(--neon-pink); margin-top:0; text-align:center;">⚙️ 게임 설정</h2>
+    <div class="settings-group">
+      <label>전체 돌 개수:
+        <select id="set-st-n">
+          <option value="random">랜덤 (10, 15, 20개)</option>
+          <option value="10">10개</option><option value="11">11개</option><option value="12">12개</option>
+          <option value="13">13개</option><option value="14">14개</option><option value="15">15개</option>
+          <option value="16">16개</option><option value="17">17개</option><option value="18">18개</option>
+          <option value="19">19개</option><option value="20">20개</option><option value="21">21개</option>
+          <option value="22">22개</option><option value="23">23개</option><option value="24">24개</option>
+          <option value="25">25개</option><option value="26">26개</option><option value="27">27개</option>
+          <option value="28">28개</option><option value="29">29개</option><option value="30">30개</option>
+        </select>
+      </label>
+      <label>최대로 가져가는 개수:
+        <select id="set-st-limit">
+          <option value="random">랜덤 (3, 4, 5개)</option>
+          <option value="3">3개</option>
+          <option value="4">4개</option>
+          <option value="5">5개</option>
+        </select>
+      </label>
+      <label>게임 모드:
+        <select id="set-st-mode">
+          <option value="bomb">폭탄</option>
+          <option value="gem">보석</option>
+        </select>
+      </label>
+      <label>한 턴 당 제한시간:
+        <select id="set-st-time">
+          <option value="unlimited">무제한</option>
+          <option value="3">3초</option>
+          <option value="5">5초</option>
+          <option value="10">10초</option>
+          <option value="30">30초</option>
+        </select>
+      </label>
+    </div>
+    <div style="text-align:center; margin-top:26px;">
+      <button class="help-close-btn" onclick="playSfx('click'); saveStSettings()">저장 및 닫기</button>
+    </div>
+  </div>
+</div>
+
+<!-- 🤖 봇 설정 모달 -->
+<div id="bot-setup-modal" class="modal-overlay" onclick="if(event.target === this) closeModal('bot-setup-modal', 'bs-modal-box')">
+  <div class="modal-content" id="bs-modal-box" style="max-width:410px;">
+    <h2 style="color:var(--neon-cyan); margin-top:0; text-align:center;">🤖 봇 설정</h2>
+    <div class="settings-group">
+      <label>봇 난이도:
+        <select id="bot-setup-diff">
+          <option value="최상">최상</option>
+          <option value="상">상</option>
+          <option value="중" selected>중</option>
+          <option value="하">하</option>
+          <option value="최하">최하</option>
+        </select>
+      </label>
+      <label>선공 설정:
+        <select id="bot-setup-turn">
+          <option value="player">플레이어 선공</option>
+          <option value="bot">봇 선공</option>
+        </select>
+      </label>
+    </div>
+    <div style="text-align:center; margin-top:26px; display:flex; gap:12px; justify-content:center;">
+      <button class="help-close-btn" onclick="playSfx('click'); startGameWithBot()">게임 시작</button>
+      <button class="undo-btn" onclick="playSfx('close_modal'); closeModal('bot-setup-modal', 'bs-modal-box')">취소</button>
+    </div>
+  </div>
+</div>
+
+<!-- ⚔️ 분석 모드에서 포지션 이어두기 전용 모달 -->
+<div id="branch-bot-modal" class="modal-overlay" onclick="if(event.target === this) closeModal('branch-bot-modal', 'bb-modal-box')">
+  <div class="modal-content" id="bb-modal-box" style="max-width:430px;">
+    <h2 style="color:var(--neon-cyan); margin-top:0; text-align:center;">⚔️ 이 포지션에서 봇과 두기</h2>
+    <div class="settings-group">
+      <label>내 역할 선택:
+        <select id="branch-player-role">
+          <option value="1">P1 플레이어</option>
+          <option value="2">P2 플레이어</option>
+        </select>
+      </label>
+      <label>봇 난이도:
+        <select id="branch-bot-diff">
+          <option value="최상">최상</option>
+          <option value="상">상</option>
+          <option value="중" selected>중</option>
+          <option value="하">하</option>
+          <option value="최하">최하</option>
+        </select>
+      </label>
+    </div>
+    <div style="text-align:center; margin-top:26px; display:flex; gap:12px; justify-content:center;">
+      <button class="help-close-btn" onclick="playSfx('click'); startBranchBotGame()">플레이 시작</button>
+      <button class="undo-btn" onclick="playSfx('close_modal'); closeModal('branch-bot-modal', 'bb-modal-box')">취소</button>
+    </div>
+  </div>
+</div>
+
+<script>
+  /* ================= Web Audio API 고퀄리티 사운드 엔진 ================= */
+  let isMuted = false;
+  const AudioCtx = window.AudioContext || window.webkitAudioContext;
+  let audioCtx = null;
+
+  function initAudio() {
+    if (!audioCtx) audioCtx = new AudioCtx();
+    if (audioCtx.state === 'suspended') audioCtx.resume();
+  }
+  document.addEventListener('click', initAudio, { once: true });
+  document.addEventListener('keydown', initAudio, { once: true });
+
+  function playSfx(type) {
+    if (isMuted) return;
+    try {
+      initAudio();
+      if (!audioCtx) return;
+      const t = audioCtx.currentTime;
+      const osc = audioCtx.createOscillator();
+      const gain = audioCtx.createGain();
+
+      switch (type) {
+        case 'hover':
+          osc.type = 'sine';
+          osc.frequency.setValueAtTime(1250, t);
+          osc.frequency.exponentialRampToValueAtTime(820, t + 0.045);
+          gain.gain.setValueAtTime(0.045, t);
+          gain.gain.exponentialRampToValueAtTime(0.001, t + 0.045);
+          osc.connect(gain); gain.connect(audioCtx.destination);
+          osc.start(t); osc.stop(t + 0.05);
+          break;
+        case 'hover_btn':
+          osc.type = 'square';
+          osc.frequency.setValueAtTime(320, t);
+          osc.frequency.exponentialRampToValueAtTime(160, t + 0.05);
+          gain.gain.setValueAtTime(0.04, t);
+          gain.gain.exponentialRampToValueAtTime(0.001, t + 0.05);
+          osc.connect(gain); gain.connect(audioCtx.destination);
+          osc.start(t); osc.stop(t + 0.06);
+          break;
+        case 'hover_deep':
+          osc.type = 'triangle';
+          osc.frequency.setValueAtTime(160, t);
+          osc.frequency.linearRampToValueAtTime(320, t + 0.2);
+          gain.gain.setValueAtTime(0.07, t);
+          gain.gain.linearRampToValueAtTime(0.001, t + 0.2);
+          osc.connect(gain); gain.connect(audioCtx.destination);
+          osc.start(t); osc.stop(t + 0.22);
+          break;
+        case 'hover_deep_alt':
+          osc.type = 'triangle';
+          osc.frequency.setValueAtTime(420, t);
+          osc.frequency.linearRampToValueAtTime(210, t + 0.2);
+          gain.gain.setValueAtTime(0.07, t);
+          gain.gain.linearRampToValueAtTime(0.001, t + 0.2);
+          osc.connect(gain); gain.connect(audioCtx.destination);
+          osc.start(t); osc.stop(t + 0.22);
+          break;
+        case 'click':
+          osc.type = 'square';
+          osc.frequency.setValueAtTime(600, t);
+          osc.frequency.exponentialRampToValueAtTime(110, t + 0.07);
+          gain.gain.setValueAtTime(0.13, t);
+          gain.gain.exponentialRampToValueAtTime(0.001, t + 0.08);
+          osc.connect(gain); gain.connect(audioCtx.destination);
+          osc.start(t); osc.stop(t + 0.09);
+
+          const osc2 = audioCtx.createOscillator();
+          const gain2 = audioCtx.createGain();
+          osc2.type = 'sine';
+          osc2.frequency.setValueAtTime(850, t + 0.02);
+          osc2.frequency.linearRampToValueAtTime(1350, t + 0.16);
+          gain2.gain.setValueAtTime(0.08, t + 0.02);
+          gain2.gain.exponentialRampToValueAtTime(0.001, t + 0.16);
+          osc2.connect(gain2); gain2.connect(audioCtx.destination);
+          osc2.start(t + 0.02); osc2.stop(t + 0.17);
+          break;
+        case 'open_modal':
+          osc.type = 'sine';
+          osc.frequency.setValueAtTime(440, t);
+          osc.frequency.linearRampToValueAtTime(880, t + 0.14);
+          gain.gain.setValueAtTime(0.09, t);
+          gain.gain.linearRampToValueAtTime(0.001, t + 0.22);
+          osc.connect(gain); gain.connect(audioCtx.destination);
+          osc.start(t); osc.stop(t + 0.24);
+          break;
+        case 'close_modal':
+          osc.type = 'sine';
+          osc.frequency.setValueAtTime(880, t);
+          osc.frequency.linearRampToValueAtTime(440, t + 0.12);
+          gain.gain.setValueAtTime(0.09, t);
+          gain.gain.linearRampToValueAtTime(0.001, t + 0.18);
+          osc.connect(gain); gain.connect(audioCtx.destination);
+          osc.start(t); osc.stop(t + 0.2);
+          break;
+        case 'tick':
+          osc.type = 'sine';
+          osc.frequency.setValueAtTime(980, t);
+          gain.gain.setValueAtTime(0.12, t);
+          gain.gain.exponentialRampToValueAtTime(0.001, t + 0.08);
+          osc.connect(gain); gain.connect(audioCtx.destination);
+          osc.start(t); osc.stop(t + 0.09);
+          break;
+      }
+    } catch (e) {}
+  }
+
+  function playPlaceStone() {
+    if (isMuted) return;
+    try {
+      initAudio();
+      if (!audioCtx) return;
+      const t = audioCtx.currentTime;
+
+      const oscClick = audioCtx.createOscillator();
+      const gainClick = audioCtx.createGain();
+      oscClick.type = 'square';
+      oscClick.frequency.setValueAtTime(1300, t);
+      oscClick.frequency.exponentialRampToValueAtTime(120, t + 0.025);
+      gainClick.gain.setValueAtTime(0.22, t);
+      gainClick.gain.exponentialRampToValueAtTime(0.001, t + 0.025);
+      oscClick.connect(gainClick); gainClick.connect(audioCtx.destination);
+      oscClick.start(t); oscClick.stop(t + 0.03);
+
+      const oscThud = audioCtx.createOscillator();
+      const gainThud = audioCtx.createGain();
+      oscThud.type = 'triangle';
+      oscThud.frequency.setValueAtTime(280, t);
+      oscThud.frequency.exponentialRampToValueAtTime(65, t + 0.08);
+      gainThud.gain.setValueAtTime(0.55, t);
+      gainThud.gain.exponentialRampToValueAtTime(0.001, t + 0.08);
+      oscThud.connect(gainThud); gainThud.connect(audioCtx.destination);
+      oscThud.start(t); oscThud.stop(t + 0.09);
+    } catch (e) {}
+  }
+
+  function playTakeStone() {
+    if (isMuted) return;
+    try {
+      initAudio();
+      if (!audioCtx) return;
+      const t = audioCtx.currentTime;
+      [0, 0.022, 0.045, 0.068].forEach((delay, idx) => {
+        const osc = audioCtx.createOscillator();
+        const gain = audioCtx.createGain();
+        osc.type = 'sine';
+        osc.frequency.setValueAtTime(1350 + idx * 320, t + delay);
+        osc.frequency.exponentialRampToValueAtTime(780 + idx * 110, t + delay + 0.035);
+        gain.gain.setValueAtTime(0.18, t + delay);
+        gain.gain.exponentialRampToValueAtTime(0.001, t + delay + 0.04);
+        osc.connect(gain); gain.connect(audioCtx.destination);
+        osc.start(t + delay); osc.stop(t + delay + 0.045);
+      });
+    } catch (e) {}
+  }
+
+  function playWinSound() {
+    if (isMuted) return;
+    [523.25, 659.25, 783.99, 1046.50].forEach((f, i) => {
+      setTimeout(() => {
+        if (!audioCtx || isMuted) return;
+        const osc = audioCtx.createOscillator();
+        const gain = audioCtx.createGain();
+        osc.type = 'sine';
+        osc.frequency.setValueAtTime(f, audioCtx.currentTime);
+        gain.gain.setValueAtTime(0.18, audioCtx.currentTime);
+        gain.gain.exponentialRampToValueAtTime(0.001, audioCtx.currentTime + 0.4);
+        osc.connect(gain); gain.connect(audioCtx.destination);
+        osc.start(); osc.stop(audioCtx.currentTime + 0.4);
+      }, i * 120);
+    });
+  }
+
+  function playLoseSound() {
+    if (isMuted) return;
+    [349.23, 329.63, 311.13, 293.66].forEach((f, i) => {
+      setTimeout(() => {
+        if (!audioCtx || isMuted) return;
+        const osc = audioCtx.createOscillator();
+        const gain = audioCtx.createGain();
+        osc.type = 'sawtooth';
+        osc.frequency.setValueAtTime(f, audioCtx.currentTime);
+        gain.gain.setValueAtTime(0.14, audioCtx.currentTime);
+        gain.gain.exponentialRampToValueAtTime(0.001, audioCtx.currentTime + 0.45);
+        osc.connect(gain); gain.connect(audioCtx.destination);
+        osc.start(); osc.stop(audioCtx.currentTime + 0.45);
+      }, i * 260);
+    });
+  }
+
+  function playBtnSound(type = 'default') {
+    if (type === 'help') playSfx('open_modal');
+    else playSfx('click');
+  }
+
+  function toggleMute() {
+    isMuted = !isMuted;
+    document.getElementById('sound-icon').textContent = isMuted ? '🔇' : '🔊';
+    document.getElementById('sound-text').textContent = isMuted ? 'SFX OFF' : 'SFX ON';
+    if (!isMuted) playSfx('click');
+  }
+
+  /* ================= 3D 카드 틸트 효과 ================= */
+  function tiltCard(e, card) {
+    const rect = card.getBoundingClientRect();
+    const x = e.clientX - rect.left;
+    const y = e.clientY - rect.top;
+    const centerX = rect.width / 2;
+    const centerY = rect.height / 2;
+    const rotateX = ((y - centerY) / centerY) * -6;
+    const rotateY = ((x - centerX) / centerX) * 6;
+    card.style.transform = `rotateX(${rotateX}deg) rotateY(${rotateY}deg) scale(1.02)`;
+    card.style.setProperty('--mouse-x', `${x}px`);
+    card.style.setProperty('--mouse-y', `${y}px`);
+  }
+  function resetTilt(card) {
+    card.style.transform = 'rotateX(0deg) rotateY(0deg) scale(1)';
+  }
+
+  /* ================= 전역 상태 & 설정 ================= */
+  let ntSize = 3;
+  let ntTimeSetting = 'unlimited';
+  let stNSetting = 'random';
+  let stLimitSetting = 'random';
+  let stTimeSetting = 'unlimited';
+  let stN = 10;
+  let stLimit = 3;
+  let stModeType = 'bomb';
+
+  let botPendingGame = '';
+  let botDifficulty = '중';
+  let botFirstTurn = 'player';
+
+  let ntScore = { p1Wins: 0, p2Wins: 0 };
+  let stScore = { p1Wins: 0, p2Wins: 0 };
+
+  let branchGameType = '';
+  let isBranchPlay = false;
+  let branchHumanPlayer = 1;
+
+  function applyStRandomRules() {
+    if (stNSetting === 'random') {
+      const nPool = [10, 15, 20];
+      stN = nPool[Math.floor(Math.random() * nPool.length)];
+    } else {
+      stN = parseInt(stNSetting);
+    }
+    if (stLimitSetting === 'random') {
+      const limitPool = [3, 4, 5];
+      stLimit = limitPool[Math.floor(Math.random() * limitPool.length)];
+    } else {
+      stLimit = parseInt(stLimitSetting);
+    }
+  }
+
+  function getWinMoveProbability(diff) {
+    if (diff === '최상') return 1.0;
+    if (diff === '상') return 0.9;
+    if (diff === '중') return 0.8;
+    if (diff === '하') return 0.65;
+    if (diff === '최하') return 0.50;
+    return 0.8;
+  }
+
+  function openModal(modalId, boxId) {
+    const modal = document.getElementById(modalId);
+    const box = document.getElementById(boxId);
+    modal.classList.remove('fade-modal-out');
+    box.classList.remove('pop-modal-out');
+    modal.classList.add('fade-modal-in');
+    box.classList.add('pop-modal-in');
+    modal.style.display = 'flex';
+  }
+  function closeModal(modalId, boxId) {
+    const modal = document.getElementById(modalId);
+    const box = document.getElementById(boxId);
+    modal.classList.remove('fade-modal-in');
+    box.classList.remove('pop-modal-in');
+    modal.classList.add('fade-modal-out');
+    box.classList.add('pop-modal-out');
+    setTimeout(() => { modal.style.display = 'none'; }, 200);
+  }
+
+  function openNtSettings() {
+    document.getElementById('set-nt-size').value = ntSize;
+    document.getElementById('set-nt-time').value = ntTimeSetting;
+    openModal('nt-settings-modal', 'nt-modal-box');
+  }
+  function saveNtSettings() {
+    ntSize = parseInt(document.getElementById('set-nt-size').value);
+    ntTimeSetting = document.getElementById('set-nt-time').value;
+    ntScore = { p1Wins: 0, p2Wins: 0 };
+    ntUpdateSubtitle();
+    closeModal('nt-settings-modal', 'nt-modal-box');
+  }
+
+  function openStSettings() {
+    document.getElementById('set-st-n').value = stNSetting;
+    document.getElementById('set-st-limit').value = stLimitSetting;
+    document.getElementById('set-st-mode').value = stModeType;
+    document.getElementById('set-st-time').value = stTimeSetting;
+    openModal('st-settings-modal', 'st-modal-box');
+  }
+  function saveStSettings() {
+    stNSetting = document.getElementById('set-st-n').value;
+    stLimitSetting = document.getElementById('set-st-limit').value;
+    stModeType = document.getElementById('set-st-mode').value;
+    stTimeSetting = document.getElementById('set-st-time').value;
+    stScore = { p1Wins: 0, p2Wins: 0 };
+    stUpdateSubtitle(false);
+    closeModal('st-settings-modal', 'st-modal-box');
+  }
+
+  function openBotModal(gameType) {
+    botPendingGame = gameType;
+    const bsBox = document.getElementById('bs-modal-box');
+    if (gameType === 'stone') bsBox.classList.add('pink-modal');
+    else bsBox.classList.remove('pink-modal');
+    openModal('bot-setup-modal', 'bs-modal-box');
+  }
+  function startGameWithBot() {
+    botDifficulty = document.getElementById('bot-setup-diff').value;
+    botFirstTurn = document.getElementById('bot-setup-turn').value;
+    closeModal('bot-setup-modal', 'bs-modal-box');
+    if (botPendingGame === 'notakto') {
+      ntScore = { p1Wins: 0, p2Wins: 0 };
+      ntStartGame('bot');
+    } else {
+      stScore = { p1Wins: 0, p2Wins: 0 };
+      stStartGame('bot');
+    }
+  }
+
+  function openBranchBotModal(gameType) {
+    branchGameType = gameType;
+    const bbBox = document.getElementById('bb-modal-box');
+    if (gameType === 'stone') bbBox.classList.add('pink-modal');
+    else bbBox.classList.remove('pink-modal');
+    document.getElementById('branch-player-role').value = (gameType === 'notakto' ? ntATurn : stATurn).toString();
+    openModal('branch-bot-modal', 'bb-modal-box');
+  }
+  function startBranchBotGame() {
+    branchHumanPlayer = parseInt(document.getElementById('branch-player-role').value) || 1;
+    botDifficulty = document.getElementById('branch-bot-diff').value;
+    closeModal('branch-bot-modal', 'bb-modal-box');
+    if (branchGameType === 'notakto') ntStartBranchPlay();
+    else stStartBranchPlay();
+  }
+
+  /* ================= 화면 네비게이션 ================= */
+  const homeScreen = document.getElementById('home-screen');
+  const notaktoSection = document.getElementById('notakto-section');
+  const stoneSection = document.getElementById('stone-section');
+
+  function switchScreen(el, displayType = 'flex') {
+    el.classList.remove('fade-screen');
+    void el.offsetWidth;
+    el.classList.add('fade-screen');
+    el.style.display = displayType;
+  }
+
+  function openGameSection(game) {
+    closeVictoryModal();
+    homeScreen.style.display = 'none';
+    const orb1 = document.querySelector('.orb-1');
+    const orb2 = document.querySelector('.orb-2');
+    if (game === 'notakto') {
+      if (orb1) orb1.style.background = 'var(--neon-cyan)';
+      if (orb2) orb2.style.background = 'var(--neon-cyan)';
+      ntScore = { p1Wins: 0, p2Wins: 0 };
+      ntGoBack();
+      switchScreen(notaktoSection, 'flex');
+      stoneSection.style.display = 'none';
+    } else if (game === 'stone') {
+      if (orb1) orb1.style.background = 'var(--neon-pink)';
+      if (orb2) orb2.style.background = 'var(--neon-pink)';
+      stScore = { p1Wins: 0, p2Wins: 0 };
+      stGoBack();
+      switchScreen(stoneSection, 'flex');
+      notaktoSection.style.display = 'none';
+    }
+  }
+
+  function returnToHome() {
+    closeVictoryModal();
+    const orb1 = document.querySelector('.orb-1');
+    const orb2 = document.querySelector('.orb-2');
+    if (orb1) orb1.style.background = 'var(--neon-cyan)';
+    if (orb2) orb2.style.background = 'var(--neon-pink)';
+    ntGoBack();
+    stGoBack();
+    notaktoSection.style.display = 'none';
+    stoneSection.style.display = 'none';
+    switchScreen(homeScreen, 'flex');
+  }
+
+  function highlightWinner(winnerP1Num) {
+    ['nt-frame-p1','nt-frame-p2','st-frame-p1','st-frame-p2'].forEach(id => {
+      const el = document.getElementById(id);
+      if (el) { el.classList.remove('winner-frame'); el.classList.remove('active-turn'); }
+    });
+    if (winnerP1Num === 1) {
+      document.getElementById('nt-frame-p1')?.classList.add('winner-frame');
+      document.getElementById('st-frame-p1')?.classList.add('winner-frame');
+    } else if (winnerP1Num === 2) {
+      document.getElementById('nt-frame-p2')?.classList.add('winner-frame');
+      document.getElementById('st-frame-p2')?.classList.add('winner-frame');
+    }
+  }
+
+  function updateScoreDisplay() {
+    const ntP1Rec = document.getElementById('nt-p1-record');
+    const ntP2Rec = document.getElementById('nt-p2-record');
+    if (ntP1Rec && ntP2Rec) {
+      if (isBranchPlay && branchGameType === 'notakto') {
+        ntP1Rec.style.display = 'none'; ntP2Rec.style.display = 'none';
+      } else {
+        ntP1Rec.style.display = 'block'; ntP2Rec.style.display = 'block';
+        ntP1Rec.innerText = `전적: ${ntScore.p1Wins}승 ${ntScore.p2Wins}패`;
+        ntP2Rec.innerText = `전적: ${ntScore.p2Wins}승 ${ntScore.p1Wins}패`;
+      }
+    }
+    const stP1Rec = document.getElementById('st-p1-record');
+    const stP2Rec = document.getElementById('st-p2-record');
+    if (stP1Rec && stP2Rec) {
+      if (isBranchPlay && branchGameType === 'stone') {
+        stP1Rec.style.display = 'none'; stP2Rec.style.display = 'none';
+      } else {
+        stP1Rec.style.display = 'block'; stP2Rec.style.display = 'block';
+        stP1Rec.innerText = `전적: ${stScore.p1Wins}승 ${stScore.p2Wins}패`;
+        stP2Rec.innerText = `전적: ${stScore.p2Wins}승 ${stScore.p1Wins}패`;
+      }
+    }
+  }
+
+  /* ================= 1. 노탁토 게임 & 분석 스크립트 ================= */
+  let ntBoardSize = 3, ntWinLines = [], ntWinMasks = [], ntSymMaps = [];
+  const ntExactMemo = new Map();
+  let ntShowEvalColors = true;
+
+  const ntMenuScreen = document.getElementById('nt-menu-screen');
+  const ntGameScreen = document.getElementById('nt-game-screen');
+  const ntAnalysisScreen = document.getElementById('nt-analysis-screen');
+  const ntTooltip = document.getElementById('nt-preview-tooltip');
+
+  let ntActionCounter = 0;
+  let ntMode = 'bot';
+  let ntGameBoardMask = 0, ntCurrentPlayer = 1, ntGameOver = false, ntEndState = '';
+  let ntGameHistory = [];
+  let ntBotTimeout = null;
+  let ntTimerInterval = null;
+  let ntTimeLeft = 0;
+
+  function ntUpdateSubtitle() {
+    let timeText = ntTimeSetting === 'unlimited' ? '무제한' : ntTimeSetting + '초';
+    document.getElementById('nt-main-subtitle').innerText = `규칙: 가로·세로·대각선 한 줄을 먼저 완성하는 사람이 패배합니다! (${ntSize}×${ntSize} 판 | 시간: ${timeText})`;
+  }
+
+  function ntStopTimer() {
+    if (ntTimerInterval) clearInterval(ntTimerInterval);
+    ntTimerInterval = null;
+    document.getElementById('nt-timer-display').style.display = 'none';
+  }
+
+  function ntStartTimer() {
+    ntStopTimer();
+    if (ntGameOver) return;
+    let isBotTurn = (ntMode === 'bot' && (isBranchPlay ? (ntCurrentPlayer !== branchHumanPlayer) : (ntCurrentPlayer === 2)));
+    if (isBotTurn || ntTimeSetting === 'unlimited') return;
+
+    ntTimeLeft = parseInt(ntTimeSetting);
+    const timerDisplay = document.getElementById('nt-timer-display');
+    timerDisplay.style.display = 'block';
+    timerDisplay.innerText = `⏳ 남은 시간: ${ntTimeLeft}초`;
+
+    ntTimerInterval = setInterval(() => {
+      ntTimeLeft--;
+      if (ntTimeLeft > 0) {
+        if (ntTimeLeft <= 3) playSfx('tick');
+        timerDisplay.innerText = `⏳ 남은 시간: ${ntTimeLeft}초`;
+      } else {
+        ntStopTimer();
+        ntHandleTimeout();
+      }
+    }, 1000);
+  }
+
+  function ntHandleTimeout() {
+    if (ntGameOver) return;
+    ntGameOver = true;
+    let winner = "", loserSubject = "", isLoss = false, winnerP1Num = 1;
+
+    if (ntMode === 'bot') {
+      winner = "봇"; loserSubject = "플레이어가"; isLoss = true; ntEndState = 'lose';
+      winnerP1Num = isBranchPlay ? (branchHumanPlayer === 1 ? 2 : 1) : 2;
+      if (!isBranchPlay) {
+        if (winnerP1Num === 1) ntScore.p1Wins++; else ntScore.p2Wins++;
+      }
+    } else {
+      if (ntCurrentPlayer === 1) {
+        winner = "플레이어 2"; loserSubject = "플레이어 1이"; winnerP1Num = 2; ntScore.p2Wins++;
+      } else {
+        winner = "플레이어 1"; loserSubject = "플레이어 2가"; winnerP1Num = 1; ntScore.p1Wins++;
+      }
+    }
+    document.getElementById('nt-turn-indicator').innerText = isLoss && ntMode === 'bot' ? `봇 승리!` : `🎉 ${winner} 승리! 🎉`;
+    updateScoreDisplay();
+    ntUpdateGameUI();
+    highlightWinner(winnerP1Num);
+    document.getElementById('nt-restart-btn').style.display = 'inline-block';
+    ntRenderGameBoard();
+    showVictoryModal(winner, `${loserSubject} 시간 초과로 패배했습니다.`, isLoss);
+  }
+
+  function ntInitBoardGeometry(N) {
+    ntBoardSize = N; ntWinLines = []; ntWinMasks = [];
+    for (let r = 0; r < N; r++) { let line = []; for (let c = 0; c < N; c++) line.push(r * N + c); ntWinLines.push(line); }
+    for (let c = 0; c < N; c++) { let line = []; for (let r = 0; r < N; r++) line.push(r * N + c); ntWinLines.push(line); }
+    let diag1 = [], diag2 = [];
+    for (let i = 0; i < N; i++) { diag1.push(i * N + i); diag2.push(i * N + (N - 1 - i)); }
+    ntWinLines.push(diag1, diag2);
+    ntWinMasks = ntWinLines.map(line => { let mask = 0; for (let idx of line) mask |= (1 << idx); return mask; });
+    ntSymMaps = [];
+    for (let s = 0; s < 8; s++) {
+      let map = new Array(N * N);
+      for (let r = 0; r < N; r++) {
+        for (let c = 0; c < N; c++) {
+          let nr = r, nc = c;
+          if (s & 1) { let tmp = nr; nr = nc; nc = tmp; }
+          if (s & 2) { nr = N - 1 - nr; }
+          if (s & 4) { nc = N - 1 - nc; }
+          map[r * N + c] = nr * N + nc;
+        }
+      }
+      ntSymMaps.push(map);
+    }
+  }
+
+  function ntIsBoardDead(mask) {
+    for (let i = 0; i < ntWinMasks.length; i++) if ((mask & ntWinMasks[i]) === ntWinMasks[i]) return true;
+    return false;
+  }
+  function ntGetDeadLineCells(mask) {
+    let cells = new Set();
+    for (let i = 0; i < ntWinMasks.length; i++) if ((mask & ntWinMasks[i]) === ntWinMasks[i]) ntWinLines[i].forEach(c => cells.add(c));
+    return cells;
+  }
+  function ntCanonicalize(mask) {
+    let minMask = mask; let total = ntBoardSize * ntBoardSize;
+    for (let s = 1; s < 8; s++) {
+      let map = ntSymMaps[s], m = 0;
+      for (let i = 0; i < total; i++) if (mask & (1 << i)) m |= (1 << map[i]);
+      if (m < minMask) minMask = m;
+    }
+    return minMask;
+  }
+  function ntCanForceWinSingle(mask, depth) {
+    if (ntIsBoardDead(mask)) return true;
+    let cMask = ntCanonicalize(mask);
+    let exactKey = `${ntBoardSize}:${cMask}`;
+    if (ntExactMemo.has(exactKey)) return ntExactMemo.get(exactKey);
+    if (depth <= 0) return null;
+
+    let tried = new Set(), hasUnknown = false, total = ntBoardSize * ntBoardSize;
+    for (let c = 0; c < total; c++) {
+      if ((cMask & (1 << c)) === 0) {
+        let nextMask = cMask | (1 << c);
+        if (ntIsBoardDead(nextMask)) continue;
+        let cNext = ntCanonicalize(nextMask);
+        if (tried.has(cNext)) continue;
+        tried.add(cNext);
+        let oppRes = ntCanForceWinSingle(cNext, depth - 1);
+        if (oppRes === false) { ntExactMemo.set(exactKey, true); return true; }
+        else if (oppRes === null) hasUnknown = true;
+      }
+    }
+    if (!hasUnknown) { ntExactMemo.set(exactKey, false); return false; }
+    return null;
+  }
+  function ntGetLegalMoves(mask) {
+    let moves = []; if (ntIsBoardDead(mask)) return moves;
+    let total = ntBoardSize * ntBoardSize;
+    for (let c = 0; c < total; c++) if ((mask & (1 << c)) === 0) moves.push(c);
+    return moves;
+  }
+  function ntCountWinningResponses(mask, depth) {
+    return ntGetLegalMoves(mask).filter(om => !ntIsBoardDead(mask | (1 << om)) && ntCanForceWinSingle(mask | (1 << om), Math.max(1, depth)) === false).length;
+  }
+  function ntFindBestResponse(mask, depth) {
+    let oppMoves = ntGetLegalMoves(mask);
+    for (let om of oppMoves) {
+      let nb = mask | (1 << om);
+      if (!ntIsBoardDead(nb) && ntCanForceWinSingle(nb, Math.max(1, depth)) === false) return om;
+    }
+    return oppMoves[0] !== undefined ? oppMoves[0] : null;
+  }
+  async function ntEvaluateAllMovesAsync(mask) {
+    let currentAction = ntActionCounter;
+    let moves = ntGetLegalMoves(mask), results = [], total = ntBoardSize * ntBoardSize, searchDepth = total;
+    for (let cell of moves) {
+      if (ntActionCounter !== currentAction) return null;
+      await new Promise(resolve => setTimeout(resolve, 0));
+      if (ntActionCounter !== currentAction) return null;
+
+      let nextMask = mask | (1 << cell);
+      if (ntIsBoardDead(nextMask)) { results.push({ cell, status: 'lose_immediately', oppBest: null, oppWinCount: 999 }); continue; }
+      let oppWins = ntCanForceWinSingle(nextMask, searchDepth);
+      if (oppWins === false) results.push({ cell, status: 'win', oppBest: null, oppWinCount: 0 });
+      else {
+        let oppBest = ntFindBestResponse(nextMask, searchDepth - 1);
+        let oppWinCount = ntCountWinningResponses(nextMask, searchDepth - 1);
+        results.push({ cell, status: 'bad', oppBest, oppWinCount });
+      }
+    }
+    return results;
+  }
+
+  function ntShowHelp(topic) {
+    playBtnSound('help');
+    let title = "", content = "";
+    if (topic === 'bot') {
+      title = "🤖 봇과 플레이";
+      content = "컴퓨터 봇을 상대로 번갈아가며 진행하는 모드입니다.<br><br><b>[노탁토 규칙]</b><br>1. 시작 전 <b>3×3, 4×4</b> 중 원하는 크기의 판을 선택합니다.<br>2. 두 플레이어가 모두 <b>같은 'X' 기호</b>를 사용합니다.<br>3. 가로, 세로, 대각선 중 <b>어디든 한 줄로 이어지게 만드는 사람이 패배</b>합니다.";
+    } else if (topic === 'solo') {
+      title = "👥 2인 플레이";
+      content = "하나의 기기에서 두 명의 플레이어가 번갈아가며 진행하는 모드입니다.<br><br><b>[노탁토 규칙]</b><br>1. 시작 전 <b>3×3, 4×4</b> 중 원하는 크기의 판을 선택합니다.<br>2. 두 플레이어가 모두 <b>같은 'X' 기호</b>를 사용합니다.<br>3. 가로, 세로, 대각선 중 <b>어디든 한 줄로 이어지게 만드는 사람이 패배</b>합니다.";
+    } else if (topic === 'analysis') {
+      title = "📊 분석 모드";
+      content = "게임의 <b>모든 합법적인 수(Legal Moves)</b>를 계산하여 최적의 경로를 보여줍니다.<br><br>" +
+                "- <span style='color:#00ff88; font-weight:bold;'>[필승 수]</span>: 이 곳에 두면 상대방은 어떻게 두더라도 패배를 피할 수 없습니다.<br>" +
+                "- <span style='color:#ff5ca8; font-weight:bold;'>[나쁜 수]</span>: 이 곳에 두면 상대방에게 필승 기회를 내어주거나 즉시 패배하게 됩니다.<br>" +
+                "- <b>표기법 및 화살표(->)의 의미</b>: 예를 들어 <code>3번 진행 -> 5번 대응</code>과 같이 표기된 경우, 내가 3번 칸에 두었을 때 <b>상대방이 두게 될 최선의 대응(필승 수)</b>을 의미합니다. 화살표 뒤에 <code>X</code>가 있다면 상대방은 방어할 수 없습니다.<br><br>" +
+                "각 칸이나 수 목록에 마우스를 올리면 게임판 변화를 미리 볼 수 있습니다.";
+    }
+    document.getElementById('help-modal-box').classList.remove('pink-modal');
+    document.getElementById('help-title').innerText = title;
+    document.getElementById('help-content').innerHTML = content;
+    openModal('help-modal', 'help-modal-box');
+  }
+
+  function ntRestartGame() {
+    closeVictoryModal();
+    ntStopTimer();
+    if (isBranchPlay) ntStartBranchPlay();
+    else ntStartGame(ntMode);
+  }
+
+  function ntResumeAnalysis() {
+    closeVictoryModal();
+    ntStopTimer();
+    ntGameScreen.style.display = 'none';
+    switchScreen(ntAnalysisScreen, 'flex');
+    ntUpdateAnalysisBoard();
+  }
+
+  function ntStartGame(selectedMode) {
+    ntInitBoardGeometry(ntSize);
+    ntActionCounter++; ntMode = selectedMode;
+    isBranchPlay = false;
+    let firstTurn = ntMode === 'bot' ? botFirstTurn : 'player';
+
+    document.getElementById('nt-p1-name').innerText = ntMode === 'bot' ? '플레이어' : '플레이어 1';
+    document.getElementById('nt-p2-name').innerText = ntMode === 'bot' ? `봇 (${botDifficulty})` : '플레이어 2';
+
+    document.getElementById('nt-restart-btn').style.display = 'none';
+    document.getElementById('nt-resume-analysis-btn').style.display = 'none';
+
+    ntMenuScreen.style.display = 'none';
+    switchScreen(ntGameScreen, 'flex');
+
+    ntGameBoardMask = 0; ntGameHistory = []; ntGameOver = false; ntEndState = '';
+    if (ntBotTimeout) { clearTimeout(ntBotTimeout); ntBotTimeout = null; }
+    highlightWinner(0);
+    updateScoreDisplay();
+
+    ntCurrentPlayer = (ntMode === 'bot' && firstTurn === 'bot') ? 2 : 1;
+    ntUpdateSubtitle(); ntUpdateGameUI(); ntRenderGameBoard();
+
+    if (ntCurrentPlayer === 2 && ntMode === 'bot') ntScheduleBotTurn();
+  }
+
+  function ntStartBranchPlay() {
+    ntActionCounter++;
+    ntMode = 'bot';
+    isBranchPlay = true;
+
+    ntGameBoardMask = ntABoardMask;
+    ntCurrentPlayer = ntATurn;
+    ntGameHistory = JSON.parse(JSON.stringify(ntAHistory));
+    ntGameOver = ntIsBoardDead(ntGameBoardMask);
+    ntEndState = '';
+    if (ntBotTimeout) { clearTimeout(ntBotTimeout); ntBotTimeout = null; }
+
+    if (branchHumanPlayer === 1) {
+      document.getElementById('nt-p1-name').innerText = '플레이어 (P1)';
+      document.getElementById('nt-p2-name').innerText = `봇 (${botDifficulty})`;
+    } else {
+      document.getElementById('nt-p1-name').innerText = `봇 (${botDifficulty})`;
+      document.getElementById('nt-p2-name').innerText = '플레이어 (P2)';
+    }
+
+    document.getElementById('nt-restart-btn').style.display = 'none';
+    document.getElementById('nt-resume-analysis-btn').style.display = 'inline-block';
+
+    ntAnalysisScreen.style.display = 'none';
+    switchScreen(ntGameScreen, 'flex');
+
+    highlightWinner(0);
+    updateScoreDisplay();
+    ntUpdateSubtitle();
+    ntUpdateGameUI();
+    ntRenderGameBoard();
+
+    if (ntCurrentPlayer !== branchHumanPlayer && !ntGameOver) ntScheduleBotTurn();
+  }
+
+  function ntScheduleBotTurn() {
+    document.getElementById('nt-turn-indicator').innerText = `봇 (${botDifficulty})의 턴`;
+    ntBotTimeout = setTimeout(ntBotTurn, 420);
+  }
+
+  function ntRenderGameBoard() {
+    const container = document.getElementById('nt-game-board-container');
+    container.innerHTML = '';
+    let isBotTurn = (ntMode === 'bot' && (isBranchPlay ? (ntCurrentPlayer !== branchHumanPlayer) : (ntCurrentPlayer === 2)));
+    let totalCells = ntBoardSize * ntBoardSize;
+    let dead = ntIsBoardDead(ntGameBoardMask);
+    let deadCells = ntGetDeadLineCells(ntGameBoardMask);
+
+    let grid = document.createElement('div');
+    let boardClass = `ttt-grid size-${ntBoardSize}`;
+    if (dead) boardClass += (ntEndState === 'lose' ? ' dead-board' : ' win-board');
+    grid.className = boardClass;
+
+    let endStateClass = dead ? (ntEndState === 'lose' ? ' dead-line-stone' : ' win-line-stone') : '';
+
+    for (let c = 0; c < totalCells; c++) {
+      let cell = document.createElement('div');
+      let occupied = (ntGameBoardMask & (1 << c)) !== 0;
+      cell.className = 'ttt-cell' + (occupied ? ' occupied' : '') + (dead || ntGameOver || isBotTurn ? ' disabled' : '');
+
+      if (occupied) {
+        let stone = document.createElement('div');
+        stone.className = 'board-stone' + (deadCells.has(c) ? endStateClass : '');
+        cell.appendChild(stone);
+      } else if (!dead && !ntGameOver && !isBotTurn) {
+        cell.onmouseenter = () => playSfx('hover');
+        cell.onclick = () => ntHandlePlayerMove(c);
+      }
+      grid.appendChild(cell);
+    }
+    container.appendChild(grid);
+  }
+
+  function ntUpdateGameUI() {
+    if (ntGameOver) { ntStopTimer(); return; }
+    document.getElementById('nt-p1-stones-count').innerText = ntGameHistory.filter(h => h.player === 1).length;
+    document.getElementById('nt-p2-stones-count').innerText = ntGameHistory.filter(h => h.player === 2).length;
+
+    const f1 = document.getElementById('nt-frame-p1'), f2 = document.getElementById('nt-frame-p2');
+    f1.classList.remove('active-turn'); f2.classList.remove('active-turn');
+    if (ntCurrentPlayer === 1) f1.classList.add('active-turn'); else f2.classList.add('active-turn');
+
+    let p1Name = isBranchPlay ? (branchHumanPlayer === 1 ? "플레이어 (P1)" : "봇") : (ntMode === 'bot' ? "플레이어" : "플레이어 1");
+    let p2Name = isBranchPlay ? (branchHumanPlayer === 2 ? "플레이어 (P2)" : "봇") : (ntMode === 'bot' ? "봇" : "플레이어 2");
+    document.getElementById('nt-turn-indicator').innerText = `${ntCurrentPlayer === 1 ? p1Name : p2Name}의 턴`;
+    ntStartTimer();
+  }
+
+  function ntHandlePlayerMove(c) {
+    if (ntGameOver || ntIsBoardDead(ntGameBoardMask) || (ntGameBoardMask & (1 << c)) !== 0) return;
+    ntExecuteGameMove(c);
+  }
+
+  function ntExecuteGameMove(c) {
+    ntStopTimer();
+    playPlaceStone();
+    ntActionCounter++;
+    ntGameHistory.push({ player: ntCurrentPlayer, c });
+    ntGameBoardMask |= (1 << c);
+
+    if (ntIsBoardDead(ntGameBoardMask)) {
+      ntGameOver = true;
+      let loserSubject = "", winner = "", isLoss = false, winnerP1Num = 1;
+
+      if (ntMode === 'bot') {
+        let isHumanCurrent = isBranchPlay ? (ntCurrentPlayer === branchHumanPlayer) : (ntCurrentPlayer === 1);
+        if (isHumanCurrent) {
+          loserSubject = "플레이어가"; winner = "봇"; isLoss = true; ntEndState = 'lose';
+          winnerP1Num = (isBranchPlay && branchHumanPlayer === 2) ? 1 : 2;
+          if (!isBranchPlay) ntScore.p2Wins++;
+        } else {
+          loserSubject = "봇이"; winner = "플레이어"; isLoss = false; ntEndState = 'win';
+          winnerP1Num = (isBranchPlay && branchHumanPlayer === 2) ? 2 : 1;
+          if (!isBranchPlay) ntScore.p1Wins++;
+        }
+      } else {
+        isLoss = false; ntEndState = 'win';
+        if (ntCurrentPlayer === 1) { loserSubject = "플레이어 1이"; winner = "플레이어 2"; winnerP1Num = 2; ntScore.p2Wins++; }
+        else { loserSubject = "플레이어 2가"; winner = "플레이어 1"; winnerP1Num = 1; ntScore.p1Wins++; }
+      }
+
+      document.getElementById('nt-p1-stones-count').innerText = ntGameHistory.filter(h => h.player === 1).length;
+      document.getElementById('nt-p2-stones-count').innerText = ntGameHistory.filter(h => h.player === 2).length;
+
+      updateScoreDisplay();
+      ntRenderGameBoard();
+      highlightWinner(winnerP1Num);
+      document.getElementById('nt-restart-btn').style.display = 'inline-block';
+      document.getElementById('nt-turn-indicator').innerText = isLoss && ntMode === 'bot' ? `봇 승리!` : `🎉 ${winner} 승리! 🎉`;
+      showVictoryModal(winner, `${loserSubject} 한 줄을 완성했습니다.`, isLoss);
+    } else {
+      ntCurrentPlayer = ntCurrentPlayer === 1 ? 2 : 1;
+      ntUpdateGameUI(); ntRenderGameBoard();
+      let isBotCurrent = isBranchPlay ? (ntCurrentPlayer !== branchHumanPlayer) : (ntCurrentPlayer === 2 && ntMode === 'bot');
+      if (isBotCurrent) ntScheduleBotTurn();
+    }
+  }
+
+  async function ntBotTurn() {
+    ntBotTimeout = null; if (ntGameOver) return;
+    let evaluated = await ntEvaluateAllMovesAsync(ntGameBoardMask);
+    if (!evaluated || evaluated.length === 0) return;
+
+    let winProb = getWinMoveProbability(botDifficulty);
+    let winMoves = evaluated.filter(e => e.status === 'win').map(e => e.cell);
+    let badMoves = evaluated.filter(e => e.status === 'bad').sort((a, b) => a.oppWinCount - b.oppWinCount).map(e => e.cell);
+    let loseImmediatelyMoves = evaluated.filter(e => e.status === 'lose_immediately').map(e => e.cell);
+
+    let bestMove = null;
+    if (winMoves.length > 0) bestMove = winMoves[Math.floor(Math.random() * winMoves.length)];
+    else if (badMoves.length > 0) {
+      let fewestWins = evaluated.find(e => e.cell === badMoves[0]).oppWinCount;
+      let bestBads = evaluated.filter(e => e.status === 'bad' && e.oppWinCount === fewestWins).map(e => e.cell);
+      bestMove = bestBads[Math.floor(Math.random() * bestBads.length)];
+    } else if (loseImmediatelyMoves.length > 0) {
+      bestMove = loseImmediatelyMoves[Math.floor(Math.random() * loseImmediatelyMoves.length)];
+    }
+
+    let chosenCell = null;
+    if (Math.random() < winProb && bestMove !== null) chosenCell = bestMove;
+    else {
+      let subOptimal = evaluated.map(e => e.cell).filter(c => c !== bestMove);
+      chosenCell = subOptimal.length > 0 ? subOptimal[Math.floor(Math.random() * subOptimal.length)] : bestMove;
+    }
+    ntExecuteGameMove(chosenCell);
+  }
+
+  function ntGoBack() {
+    closeVictoryModal(); ntActionCounter++; ntStopTimer();
+    if (ntBotTimeout) { clearTimeout(ntBotTimeout); ntBotTimeout = null; }
+    ntTooltip.style.display = 'none';
+    ntGameScreen.style.display = 'none'; ntAnalysisScreen.style.display = 'none';
+    document.getElementById('nt-restart-btn').style.display = 'none';
+    document.getElementById('nt-resume-analysis-btn').style.display = 'none';
+    isBranchPlay = false;
+    ntScore = { p1Wins: 0, p2Wins: 0 };
+    highlightWinner(0);
+    updateScoreDisplay();
+    ntUpdateSubtitle();
+    switchScreen(ntMenuScreen, 'flex');
+  }
+
+  /* 노탁토 분석 모드 */
+  function ntToggleEvalColors() {
+    const t = document.getElementById('nt-eval-color-toggle');
+    ntShowEvalColors = t ? t.checked : true;
+    const c = document.getElementById('nt-analysis-center');
+    if (!ntShowEvalColors) c.classList.add('hide-eval-colors');
+    else c.classList.remove('hide-eval-colors');
+  }
+
+  let ntABoardMask = 0, ntATurn = 1, ntAHistory = [];
+  function ntStartAnalysis() {
+    ntInitBoardGeometry(ntSize);
+    ntActionCounter++;
+    ntMenuScreen.style.display = 'none';
+    switchScreen(ntAnalysisScreen, 'flex');
+    document.getElementById('nt-a-initial-info').innerText = `${ntBoardSize}×${ntBoardSize} 판`;
+    ntABoardMask = 0; ntATurn = 1; ntAHistory = [];
+    ntUpdateAnalysisBoard();
+  }
+
+  function ntUpdateAnalysisBoard() {
+    document.getElementById('nt-a-p1-score').innerText = ntAHistory.filter(h => h.player === 1).length;
+    document.getElementById('nt-a-p2-score').innerText = ntAHistory.filter(h => h.player === 2).length;
+
+    let dead = ntIsBoardDead(ntABoardMask);
+    const f1 = document.getElementById('nt-a-frame-p1'), f2 = document.getElementById('nt-a-frame-p2');
+    f1.classList.remove('active-turn', 'winner-frame'); f2.classList.remove('active-turn', 'winner-frame');
+    if (!dead) {
+      if (ntATurn === 1) f1.classList.add('active-turn'); else f2.classList.add('active-turn');
+    } else {
+      let winner = ntATurn === 1 ? 1 : 2;
+      if (winner === 1) f1.classList.add('winner-frame'); else f2.classList.add('winner-frame');
+    }
+
+    document.getElementById('nt-a-restart-btn').disabled = false;
+    document.getElementById('nt-a-branch-btn').disabled = dead;
+
+    const center = document.getElementById('nt-analysis-center'); center.innerHTML = '';
+    let totalCells = ntBoardSize * ntBoardSize; let deadCells = ntGetDeadLineCells(ntABoardMask);
+    let grid = document.createElement('div');
+    grid.className = `ttt-grid size-${ntBoardSize}` + (dead ? ' win-board' : '');
+
+    for (let c = 0; c < totalCells; c++) {
+      let cell = document.createElement('div');
+      let occupied = (ntABoardMask & (1 << c)) !== 0;
+      cell.className = 'ttt-cell' + (occupied ? ' occupied' : '') + (dead ? ' disabled' : '');
+      let coord = document.createElement('span'); coord.className = 'cell-coord'; coord.innerText = c + 1; cell.appendChild(coord);
+
+      if (occupied) {
+        let stone = document.createElement('div');
+        stone.className = 'board-stone' + (deadCells.has(c) ? ' win-line-stone' : '');
+        cell.appendChild(stone);
+      } else if (!dead) {
+        cell.onclick = () => ntApplyAnalysisMove(c);
+        cell.onmouseenter = (e) => { playSfx('hover'); ntShowTooltip(e, c); };
+        cell.onmousemove = (e) => ntMoveTooltip(e);
+        cell.onmouseleave = () => ntTooltip.style.display = 'none';
+      }
+      grid.appendChild(cell);
+    }
+    center.appendChild(grid);
+    const hBox = document.getElementById('nt-a-history-box');
+    hBox.innerText = ntAHistory.map((h, i) => `${i + 1}.P${h.player}:${h.c + 1}`).join(", ");
+    hBox.scrollTop = hBox.scrollHeight;
+    ntRenderAnalysisMoves(dead);
+  }
+
+  async function ntRenderAnalysisMoves(dead) {
+    const box = document.getElementById('nt-a-moves-box'); box.innerHTML = '';
+    document.getElementById('nt-analysis-undo-btn').disabled = ntAHistory.length === 0;
+    if (dead) {
+      let winner = ntATurn === 1 ? 1 : 2;
+      box.innerHTML = `<div style="color:#00ff88; font-size:1.15rem; font-weight:800; padding:10px;">게임 종료: P${winner} 승리!</div>`;
+      return;
+    }
+    box.innerHTML = `<div class="analysis-loading">⏳ 분석중...</div>`;
+    let list = await ntEvaluateAllMovesAsync(ntABoardMask);
+    if (!list) return;
+    box.innerHTML = '';
+    let cells = document.querySelectorAll('#nt-analysis-center .ttt-cell');
+    for (let res of list) {
+      let btnClass = 'analysis-move-btn', text = '';
+      if (cells[res.cell]) {
+        if (res.status === 'win') cells[res.cell].classList.add('cell-win');
+        else cells[res.cell].classList.add('cell-bad');
+      }
+      if (res.status === 'lose_immediately') {
+        btnClass += ' bad-move';
+        text = `${res.cell + 1}번 진행 [나쁜 수] (패배 확정)`;
+      } else if (res.status === 'win') {
+        btnClass += ' win-move';
+        text = `${res.cell + 1}번 진행 -> X [필승 수]`;
+      } else {
+        btnClass += ' bad-move';
+        text = `${res.cell + 1}번 진행 -> ${res.oppBest + 1}번 대응 [나쁜 수]`;
+      }
+      let btn = document.createElement('button'); btn.className = btnClass; btn.innerText = text;
+      btn.onclick = () => ntApplyAnalysisMove(res.cell);
+      btn.onmouseenter = (e) => { playSfx('hover'); ntShowTooltip(e, res.cell); };
+      btn.onmousemove = (e) => ntMoveTooltip(e);
+      btn.onmouseleave = () => ntTooltip.style.display = 'none';
+      box.appendChild(btn);
+    }
+  }
+
+  function ntApplyAnalysisMove(c) {
+    playPlaceStone();
+    ntActionCounter++;
+    ntAHistory.push({ player: ntATurn, c });
+    ntABoardMask |= (1 << c);
+    ntATurn = ntATurn === 1 ? 2 : 1;
+    ntTooltip.style.display = 'none';
+    ntUpdateAnalysisBoard();
+  }
+  function ntUndoAnalysisMove() {
+    if (ntAHistory.length === 0) return;
+    playSfx('click');
+    ntActionCounter++;
+    let last = ntAHistory.pop();
+    ntABoardMask &= ~(1 << last.c);
+    ntATurn = last.player;
+    ntTooltip.style.display = 'none';
+    ntUpdateAnalysisBoard();
+  }
+
+  function ntShowTooltip(e, moveC) {
+    let nMask = ntABoardMask | (1 << moveC), dead = ntIsBoardDead(nMask), dCells = ntGetDeadLineCells(nMask);
+    document.getElementById('nt-tt-header').innerText = `[P${ntATurn} -> ${moveC + 1}번 칸] 착수 후 상태`;
+    const tb = document.getElementById('nt-tt-board'); tb.innerHTML = '';
+    let grid = document.createElement('div'); grid.className = `p-grid p-size-${ntBoardSize}` + (dead ? ' p-win' : '');
+    for (let c = 0; c < ntBoardSize * ntBoardSize; c++) {
+      let pCell = document.createElement('div'); pCell.className = 'p-cell';
+      if ((nMask & (1 << c)) !== 0) {
+        let st = document.createElement('div');
+        st.className = 'nt-p-stone' + (c === moveC ? ' p-new' : '') + (dCells.has(c) ? ' p-win-stone' : '');
+        pCell.appendChild(st);
+      }
+      grid.appendChild(pCell);
+    }
+    tb.appendChild(grid); ntTooltip.style.display = 'flex'; ntMoveTooltip(e);
+  }
+  function ntMoveTooltip(e) {
+    const w = ntTooltip.offsetWidth || 200;
+    const h = ntTooltip.offsetHeight || 160;
+    let x = e.clientX;
+    let y = e.clientY;
+    if (x + w > window.innerWidth - 10) x = e.clientX - w;
+    if (y + h > window.innerHeight - 10) y = e.clientY - h;
+    ntTooltip.style.left = Math.max(8, x) + 'px';
+    ntTooltip.style.top = Math.max(8, y) + 'px';
+  }
+
+  /* ================= 2. 돌 가져가기 게임 & 분석 스크립트 ================= */
+  const stMenuScreen = document.getElementById('st-menu-screen');
+  const stGameScreen = document.getElementById('st-game-screen');
+  const stAnalysisScreen = document.getElementById('st-analysis-screen');
+  const stTooltip = document.getElementById('st-preview-tooltip');
+
+  let stMode = 'bot';
+  let stCurrentPlayer = 1, stStonesArr = [], stIsAnimating = false, stGameOver = false;
+  let stGameHistory = [];
+  let stBotTimeout = null;
+  let stTimerInterval = null;
+  let stTimeLeft = 0;
+
+  function stUpdateSubtitle(isGameActive = false) {
+    let sub = document.getElementById('st-main-subtitle');
+    let nText = isGameActive ? stN : (stNSetting === 'random' ? '랜덤' : stNSetting);
+    let limitText = isGameActive ? stLimit : (stLimitSetting === 'random' ? '랜덤' : stLimitSetting);
+    let timeText = stTimeSetting === 'unlimited' ? '무제한' : stTimeSetting + '초';
+    let modeName = stModeType === 'gem' ? '보석 모드' : '폭탄 모드';
+
+    if (stModeType === 'gem') {
+      sub.innerText = `규칙: 보석 모드 - 마지막 초록색 보석 돌을 가져가는 사람이 승리합니다! (돌 ${nText}개 | 최대 ${limitText}개 | ${modeName} | 시간: ${timeText})`;
+    } else {
+      sub.innerText = `규칙: 폭탄 모드 - 마지막 빨간색 폭탄 돌을 가져가는 사람이 패배합니다! (돌 ${nText}개 | 최대 ${limitText}개 | ${modeName} | 시간: ${timeText})`;
+    }
+  }
+
+  function stStopTimer() {
+    if (stTimerInterval) clearInterval(stTimerInterval);
+    stTimerInterval = null;
+    document.getElementById('st-timer-display').style.display = 'none';
+  }
+
+  function stStartTimer() {
+    stStopTimer();
+    if (stGameOver) return;
+    let isBotTurn = (stMode === 'bot' && (isBranchPlay ? (stCurrentPlayer !== branchHumanPlayer) : (stCurrentPlayer === 2)));
+    if (isBotTurn || stTimeSetting === 'unlimited') return;
+
+    stTimeLeft = parseInt(stTimeSetting);
+    const timerDisplay = document.getElementById('st-timer-display');
+    timerDisplay.style.display = 'block';
+    timerDisplay.innerText = `⏳ 남은 시간: ${stTimeLeft}초`;
+
+    stTimerInterval = setInterval(() => {
+      stTimeLeft--;
+      if (stTimeLeft > 0) {
+        if (stTimeLeft <= 3) playSfx('tick');
+        timerDisplay.innerText = `⏳ 남은 시간: ${stTimeLeft}초`;
+      } else {
+        stStopTimer();
+        stHandleTimeout();
+      }
+    }, 1000);
+  }
+
+  function stHandleTimeout() {
+    if (stGameOver) return;
+    stGameOver = true;
+    for (let i = 1; i <= stLimit; i++) { const btn = document.getElementById(`st-btn-${i}`); if (btn) btn.disabled = true; }
+
+    let winner = "", loserSubject = "", isLoss = false, winnerP1Num = 1;
+    if (stMode === 'bot') {
+      winner = "봇"; loserSubject = "플레이어가"; isLoss = true;
+      winnerP1Num = isBranchPlay ? (branchHumanPlayer === 1 ? 2 : 1) : 2;
+      if (!isBranchPlay) {
+        if (winnerP1Num === 1) stScore.p1Wins++; else stScore.p2Wins++;
+      }
+    } else {
+      if (stCurrentPlayer === 1) {
+        winner = "플레이어 2"; loserSubject = "플레이어 1이"; winnerP1Num = 2; stScore.p2Wins++;
+      } else {
+        winner = "플레이어 1"; loserSubject = "플레이어 2가"; winnerP1Num = 1; stScore.p1Wins++;
+      }
+    }
+    document.getElementById('st-turn-indicator').innerText = isLoss && stMode === 'bot' ? `봇 승리!` : `🎉 ${winner} 승리! 🎉`;
+    updateScoreDisplay();
+    stUpdateUI(); highlightWinner(winnerP1Num);
+    document.getElementById('st-restart-btn').style.display = 'inline-block';
+    showVictoryModal(winner, `${loserSubject} 시간 초과로 패배했습니다.`, isLoss);
+  }
+
+  function stBuildTakeButtons() {
+    const c = document.getElementById('st-controls'); c.replaceChildren();
+    for (let i = 1; i <= stLimit; i++) {
+      const btn = document.createElement('button');
+      btn.id = `st-btn-${i}`;
+      btn.textContent = `${i}개`;
+      btn.onmouseenter = () => playSfx('hover_btn');
+      btn.addEventListener('click', () => stPlayerTake(i));
+      c.appendChild(btn);
+    }
+  }
+
+  function stRestartGame() {
+    closeVictoryModal();
+    stStopTimer();
+    if (isBranchPlay) stStartBranchPlay();
+    else stStartGame(stMode);
+  }
+
+  function stResumeAnalysis() {
+    closeVictoryModal();
+    stStopTimer();
+    stGameScreen.style.display = 'none';
+    switchScreen(stAnalysisScreen, 'flex');
+    stUpdateAnalysisBoard();
+  }
+
+  function stStartGame(selectedMode) {
+    stMode = selectedMode;
+    applyStRandomRules();
+    stUpdateSubtitle(true);
+    isBranchPlay = false;
+    let firstTurn = stMode === 'bot' ? botFirstTurn : 'player';
+
+    document.getElementById('st-p1-name').innerText = stMode === 'bot' ? '플레이어' : '플레이어 1';
+    document.getElementById('st-p2-name').innerText = stMode === 'bot' ? `봇 (${botDifficulty})` : '플레이어 2';
+
+    stBuildTakeButtons();
+    document.getElementById('st-restart-btn').style.display = 'none';
+    document.getElementById('st-resume-analysis-btn').style.display = 'none';
+
+    stMenuScreen.style.display = 'none';
+    switchScreen(stGameScreen, 'flex');
+    highlightWinner(0);
+    updateScoreDisplay();
+
+    stCurrentPlayer = (stMode === 'bot' && firstTurn === 'bot') ? 2 : 1;
+    stGameOver = false; stStonesArr = []; stGameHistory = []; stIsAnimating = false;
+    if (stBotTimeout) { clearTimeout(stBotTimeout); stBotTimeout = null; }
+
+    const cs = document.getElementById('st-center-stones');
+    cs.innerHTML = '<div id="st-stone-count-badge" class="st-stone-count-badge"></div>';
+    document.getElementById('st-p1-stones').innerHTML = '';
+    document.getElementById('st-p2-stones').innerHTML = '';
+
+    let cRect = cs.getBoundingClientRect();
+    for (let i = 0; i < stN; i++) {
+      let stone = document.createElement('div');
+      let sClass = (i === 0) ? (stModeType === 'bomb' ? 'st-bomb-stone' : 'st-gem-stone') : 'st-normal-stone';
+      stone.className = 'stone ' + sClass;
+      stone.style.left = (20 + Math.random() * Math.max(40, cRect.width - 70)) + 'px';
+      stone.style.top = (20 + Math.random() * Math.max(40, cRect.height - 80)) + 'px';
+      cs.appendChild(stone);
+      stStonesArr.push(stone);
+    }
+    stUpdateUI();
+    if (stCurrentPlayer === 2 && stMode === 'bot') stBotTimeout = setTimeout(stBotTurn, 600);
+  }
+
+  function stStartBranchPlay() {
+    stMode = 'bot';
+    isBranchPlay = true;
+    stUpdateSubtitle(true);
+
+    if (branchHumanPlayer === 1) {
+      document.getElementById('st-p1-name').innerText = '플레이어 (P1)';
+      document.getElementById('st-p2-name').innerText = `봇 (${botDifficulty})`;
+    } else {
+      document.getElementById('st-p1-name').innerText = `봇 (${botDifficulty})`;
+      document.getElementById('st-p2-name').innerText = '플레이어 (P2)';
+    }
+
+    stBuildTakeButtons();
+    document.getElementById('st-restart-btn').style.display = 'none';
+    document.getElementById('st-resume-analysis-btn').style.display = 'inline-block';
+
+    stAnalysisScreen.style.display = 'none';
+    switchScreen(stGameScreen, 'flex');
+
+    highlightWinner(0);
+    updateScoreDisplay();
+
+    stCurrentPlayer = stATurn;
+    stGameOver = (stACurrentN === 0);
+    stStonesArr = [];
+    stGameHistory = JSON.parse(JSON.stringify(stAHistoryMeta)).map((count, idx) => ({
+      player: (idx % 2) + 1,
+      count: count
+    }));
+    stIsAnimating = false;
+    if (stBotTimeout) { clearTimeout(stBotTimeout); stBotTimeout = null; }
+
+    const cs = document.getElementById('st-center-stones');
+    cs.innerHTML = '<div id="st-stone-count-badge" class="st-stone-count-badge"></div>';
+
+    const p1Box = document.getElementById('st-p1-stones');
+    const p2Box = document.getElementById('st-p2-stones');
+    p1Box.innerHTML = ''; p2Box.innerHTML = '';
+
+    let p1Rect = p1Box.getBoundingClientRect();
+    for (let i = 0; i < stAP1Score; i++) {
+      let s = document.createElement('div');
+      s.className = 'stone st-normal-stone';
+      s.style.left = (10 + Math.random() * Math.max(10, p1Rect.width - 45)) + 'px';
+      s.style.top = (10 + Math.random() * Math.max(10, p1Rect.height - 45)) + 'px';
+      p1Box.appendChild(s);
+    }
+
+    let p2Rect = p2Box.getBoundingClientRect();
+    for (let i = 0; i < stAP2Score; i++) {
+      let s = document.createElement('div');
+      s.className = 'stone st-normal-stone';
+      s.style.left = (10 + Math.random() * Math.max(10, p2Rect.width - 45)) + 'px';
+      s.style.top = (10 + Math.random() * Math.max(10, p2Rect.height - 45)) + 'px';
+      p2Box.appendChild(s);
+    }
+
+    let cRect = cs.getBoundingClientRect();
+    for (let i = 0; i < stACurrentN; i++) {
+      let stone = document.createElement('div');
+      let sClass = (i === 0) ? (stModeType === 'bomb' ? 'st-bomb-stone' : 'st-gem-stone') : 'st-normal-stone';
+      stone.className = 'stone ' + sClass;
+      stone.style.left = (20 + Math.random() * Math.max(40, cRect.width - 70)) + 'px';
+      stone.style.top = (20 + Math.random() * Math.max(40, cRect.height - 80)) + 'px';
+      cs.appendChild(stone);
+      stStonesArr.push(stone);
+    }
+
+    stUpdateUI();
+    if (stCurrentPlayer !== branchHumanPlayer && !stGameOver) {
+      stBotTimeout = setTimeout(stBotTurn, 600);
+    }
+  }
+
+  function stUpdateUI() {
+    const badge = document.getElementById('st-stone-count-badge');
+    if (badge) badge.innerText = stStonesArr.length > 0 ? stStonesArr.length : '';
+
+    const f1 = document.getElementById('st-frame-p1'), f2 = document.getElementById('st-frame-p2');
+    f1.classList.remove('active-turn'); f2.classList.remove('active-turn');
+    if (!stGameOver) {
+      if (stCurrentPlayer === 1) f1.classList.add('active-turn'); else f2.classList.add('active-turn');
+    }
+
+    if (stGameOver) {
+      for (let i = 1; i <= stLimit; i++) { const btn = document.getElementById(`st-btn-${i}`); if (btn) btn.disabled = true; }
+      stStopTimer();
+      return;
+    }
+    let p1Name = isBranchPlay ? (branchHumanPlayer === 1 ? "플레이어 (P1)" : "봇") : (stMode === 'bot' ? "플레이어" : "플레이어 1");
+    let p2Name = isBranchPlay ? (branchHumanPlayer === 2 ? "플레이어 (P2)" : "봇") : (stMode === 'bot' ? "봇" : "플레이어 2");
+    document.getElementById('st-turn-indicator').innerText = `${stCurrentPlayer === 1 ? p1Name : p2Name}의 턴`;
+
+    let isBotTurn = (stMode === 'bot' && (isBranchPlay ? (stCurrentPlayer !== branchHumanPlayer) : (stCurrentPlayer === 2)));
+    for (let i = 1; i <= stLimit; i++) {
+      const btn = document.getElementById(`st-btn-${i}`);
+      if (btn) btn.disabled = stIsAnimating || stStonesArr.length < i || isBotTurn;
+    }
+    stStartTimer();
+  }
+
+  function stPlayerTake(count) {
+    if (!stIsAnimating && stStonesArr.length >= count) stExecuteMove(count);
+  }
+
+  function stExecuteMove(count) {
+    stStopTimer();
+    playTakeStone();
+    stIsAnimating = true;
+    for (let i = 1; i <= stLimit; i++) { const btn = document.getElementById(`st-btn-${i}`); if (btn) btn.disabled = true; }
+    stGameHistory.push({ player: stCurrentPlayer, count: count });
+
+    let tContainer = stCurrentPlayer === 1 ? document.getElementById('st-p1-stones') : document.getElementById('st-p2-stones');
+    let taken = stStonesArr.splice(-count, count);
+    const badge = document.getElementById('st-stone-count-badge');
+    if (badge) badge.innerText = stStonesArr.length > 0 ? stStonesArr.length : '';
+    let completed = 0;
+    let tRect = tContainer.getBoundingClientRect();
+
+    taken.forEach(stone => {
+      let sRect = stone.getBoundingClientRect();
+      let destX = Math.random() * Math.max(10, tRect.width - 45);
+      let destY = Math.random() * Math.max(10, tRect.height - 45);
+      let dX = (tRect.left + 10 + destX) - sRect.left;
+      let dY = (tRect.top + 10 + destY) - sRect.top;
+
+      let ghost = stone.cloneNode();
+      ghost.style.position = 'absolute';
+      ghost.style.left = stone.style.left;
+      ghost.style.top = stone.style.top;
+      ghost.style.margin = '0';
+      ghost.style.zIndex = '9999';
+      ghost.style.transition = 'transform 0.4s ease-out';
+
+      stone.style.display = 'none';
+      document.getElementById('st-center-stones').appendChild(ghost);
+      ghost.getBoundingClientRect();
+      ghost.style.transform = `translate3d(${dX}px, ${dY}px, 0)`;
+
+      ghost.addEventListener('transitionend', () => {
+        ghost.remove();
+        stone.style.display = 'block';
+        stone.style.position = 'absolute';
+        stone.style.left = (10 + destX) + 'px';
+        stone.style.top = (10 + destY) + 'px';
+        stone.style.transform = 'none';
+        tContainer.appendChild(stone);
+        completed++;
+        if (completed === taken.length) { stIsAnimating = false; stCheckWinCondition(); }
+      }, { once: true });
+    });
+  }
+
+  function stCheckWinCondition() {
+    if (stStonesArr.length === 0) {
+      stGameOver = true;
+      let loserSubject = "", winner = "", isLoss = false;
+      let didCurrentPlayerWin = (stModeType === 'gem');
+      let winnerP1Num = 1;
+
+      if (stMode === 'bot') {
+        let isHumanCurrent = isBranchPlay ? (stCurrentPlayer === branchHumanPlayer) : (stCurrentPlayer === 1);
+        let humanPNum = isBranchPlay ? branchHumanPlayer : 1;
+        let botPNum = isBranchPlay ? (branchHumanPlayer === 1 ? 2 : 1) : 2;
+
+        if (isHumanCurrent) {
+          if (didCurrentPlayerWin) {
+            winner = "플레이어"; isLoss = false; loserSubject = "플레이어가"; winnerP1Num = humanPNum;
+            if (!isBranchPlay) { if (humanPNum === 1) stScore.p1Wins++; else stScore.p2Wins++; }
+          } else {
+            winner = "봇"; isLoss = true; loserSubject = "플레이어가"; winnerP1Num = botPNum;
+            if (!isBranchPlay) { if (botPNum === 1) stScore.p1Wins++; else stScore.p2Wins++; }
+          }
+        } else {
+          if (didCurrentPlayerWin) {
+            winner = "봇"; isLoss = true; loserSubject = "봇이"; winnerP1Num = botPNum;
+            if (!isBranchPlay) { if (botPNum === 1) stScore.p1Wins++; else stScore.p2Wins++; }
+          } else {
+            winner = "플레이어"; isLoss = false; loserSubject = "봇이"; winnerP1Num = humanPNum;
+            if (!isBranchPlay) { if (humanPNum === 1) stScore.p1Wins++; else stScore.p2Wins++; }
+          }
+        }
+      } else {
+        isLoss = false;
+        if (stCurrentPlayer === 1) {
+          if (didCurrentPlayerWin) { winner = "플레이어 1"; loserSubject = "플레이어 1이"; winnerP1Num = 1; stScore.p1Wins++; }
+          else { winner = "플레이어 2"; loserSubject = "플레이어 1이"; winnerP1Num = 2; stScore.p2Wins++; }
+        } else {
+          if (didCurrentPlayerWin) { winner = "플레이어 2"; loserSubject = "플레이어 2가"; winnerP1Num = 2; stScore.p2Wins++; }
+          else { winner = "플레이어 1"; loserSubject = "플레이어 2가"; winnerP1Num = 1; stScore.p1Wins++; }
+        }
+      }
+
+      document.getElementById('st-turn-indicator').innerText = isLoss && stMode === 'bot' ? `봇 승리!` : `🎉 ${winner} 승리! 🎉`;
+      updateScoreDisplay();
+      stUpdateUI();
+      highlightWinner(winnerP1Num);
+      document.getElementById('st-restart-btn').style.display = 'inline-block';
+
+      let actionText = stModeType === 'gem' ? "마지막 초록색 보석 돌을 가져갔습니다." : "마지막 빨간색 폭탄 돌을 가져갔습니다.";
+      showVictoryModal(winner, `${loserSubject} ${actionText}`, isLoss);
+    } else {
+      stCurrentPlayer = stCurrentPlayer === 1 ? 2 : 1;
+      stUpdateUI();
+      let isBotCurrent = isBranchPlay ? (stCurrentPlayer !== branchHumanPlayer) : (stCurrentPlayer === 2 && stMode === 'bot');
+      if (isBotCurrent) stBotTimeout = setTimeout(stBotTurn, 600);
+    }
+  }
+
+  function stBotTurn() {
+    stBotTimeout = null; if (stGameOver) return;
+    let n = stStonesArr.length;
+    let w = (stModeType === 'bomb') ? (n - 1) % (stLimit + 1) : n % (stLimit + 1);
+    let move = 1;
+    let winProb = getWinMoveProbability(botDifficulty);
+    const lMax = Math.min(stLimit, n);
+
+    if (w === 0) {
+      if (Math.random() < winProb) move = 1;
+      else {
+        let choices = []; for (let i = 1; i <= lMax; i++) if (i !== 1) choices.push(i);
+        move = choices.length ? choices[Math.floor(Math.random() * choices.length)] : 1;
+      }
+    } else {
+      if (Math.random() < winProb) move = w;
+      else {
+        let choices = []; for (let i = 1; i <= lMax; i++) if (i !== w) choices.push(i);
+        move = choices.length ? choices[Math.floor(Math.random() * choices.length)] : lMax;
+      }
+    }
+    stExecuteMove(move);
+  }
+
+  function stGoBack() {
+    closeVictoryModal(); stStopTimer();
+    if (stBotTimeout) { clearTimeout(stBotTimeout); stBotTimeout = null; }
+    stTooltip.style.display = 'none';
+    stGameScreen.style.display = 'none'; stAnalysisScreen.style.display = 'none';
+    document.getElementById('st-restart-btn').style.display = 'none';
+    document.getElementById('st-resume-analysis-btn').style.display = 'none';
+    isBranchPlay = false;
+    stScore = { p1Wins: 0, p2Wins: 0 };
+    highlightWinner(0);
+    updateScoreDisplay();
+    stUpdateSubtitle(false);
+    switchScreen(stMenuScreen, 'flex');
+  }
+
+  function stShowHelp(topic) {
+    playBtnSound('help');
+    let title = "", content = "";
+    let winCon = stModeType === 'gem'
+      ? "가장 마지막에 남는 단 1개의 <b>'마지막 돌(초록색 보석)'을 가져가게 되는 플레이어가 최종 승리</b>합니다."
+      : "가장 마지막에 남는 단 1개의 <b>'마지막 돌(빨간색 폭탄)'을 가져가게 되는 플레이어가 최종 패배</b>합니다.";
+    if (topic === 'bot') {
+      title = "🤖 봇과 플레이";
+      content = `컴퓨터 봇을 상대로 번갈아가며 진행하는 모드입니다.<br><br><b>[승리 조건]</b><br>자신의 턴에 지정된 개수만큼 돌을 가져갑니다. ${winCon}`;
+    } else if (topic === 'solo') {
+      title = "👥 2인 플레이";
+      content = `하나의 기기에서 두 명의 플레이어가 역할을 번갈아가며 진행하는 모드입니다.<br><br><b>[승리 조건]</b><br>자신의 턴에 지정된 개수만큼 돌을 가져갑니다. ${winCon}`;
+    } else if (topic === 'analysis') {
+      title = "📊 분석 모드";
+      content = "게임의 <b>모든 합법적인 수(Legal Moves)</b>를 계산하여 최적의 경로를 보여줍니다.<br><br>" +
+                "- <span style='color:#00ff88; font-weight:bold;'>[필승 수]</span>: 이 수를 두면 상대방은 방어할 수 없으며 무조건 승리합니다.<br>" +
+                "- <span style='color:#ff5ca8; font-weight:bold;'>[나쁜 수]</span>: 이 수를 두면 상대방에게 필승의 기회를 내어주게 됩니다.<br>" +
+                "- <b>표기법 의미</b>: 예를 들어 <code>-3(7)</code>은 <b>3개</b>를 가져가고, <b>7개</b>의 돌이 남는다는 뜻입니다.<br>" +
+                "- <b>화살표(->)의 의미</b>: 예를 들어 <code>-3(7) 진행 -> -3(4) 대응</code>과 같이 표기된 경우, 내가 앞의 수를 두었을 때 <b>상대방이 두게 될 최선의 대응(필승 수)</b>을 의미합니다. 화살표 뒤에 <code>X</code>가 있다면 상대방은 방어할 수 없습니다.";
+    }
+    document.getElementById('help-modal-box').classList.add('pink-modal');
+    document.getElementById('help-title').innerText = title;
+    document.getElementById('help-content').innerHTML = content;
+    openModal('help-modal', 'help-modal-box');
+  }
+
+  /* 돌 가져가기 분석 모드 (돌 렌더링 및 개수 배지 완비) */
+  let stACurrentN = 0, stATurn = 1, stAP1Score = 0, stAP2Score = 0;
+  let stAHistoryLog = [], stAHistoryMeta = [];
+
+  function stStartAnalysis() {
+    stMenuScreen.style.display = 'none';
+    switchScreen(stAnalysisScreen, 'flex');
+    applyStRandomRules();
+    const modeText = stModeType === 'gem' ? '보석 모드' : '폭탄 모드';
+    document.getElementById('st-a-initial-n').innerText = `${stN}개, 최대 ${stLimit}개, ${modeText}`;
+    stACurrentN = stN; stATurn = 1; stAP1Score = 0; stAP2Score = 0;
+    stAHistoryLog = []; stAHistoryMeta = [];
+    stUpdateAnalysisBoard();
+  }
+
+  function stUpdateAnalysisBoard() {
+    document.getElementById('st-analysis-undo-btn').disabled = (stAHistoryMeta.length === 0);
+    document.getElementById('st-a-p1-score').innerText = stAP1Score;
+    document.getElementById('st-a-p2-score').innerText = stAP2Score;
+
+    const f1 = document.getElementById('st-a-frame-p1'), f2 = document.getElementById('st-a-frame-p2');
+    f1.classList.remove('active-turn', 'winner-frame'); f2.classList.remove('active-turn', 'winner-frame');
+    if (stACurrentN > 0) {
+      if (stATurn === 1) f1.classList.add('active-turn'); else f2.classList.add('active-turn');
+    } else {
+      let winner = (stModeType === 'bomb') ? (stATurn === 1 ? 1 : 2) : (stATurn === 1 ? 2 : 1);
+      if (winner === 1) f1.classList.add('winner-frame'); else f2.classList.add('winner-frame');
+    }
+
+    document.getElementById('st-a-restart-btn').disabled = false;
+    document.getElementById('st-a-branch-btn').disabled = (stACurrentN === 0);
+
+    const c = document.getElementById('st-analysis-center');
+    c.innerHTML = '';
+
+    for (let i = 0; i < stACurrentN; i++) {
+      let st = document.createElement('div');
+      let isLastStone = (i === stACurrentN - 1);
+      let sClass = isLastStone ? (stModeType === 'bomb' ? 'st-bomb-stone' : 'st-gem-stone') : 'st-normal-stone';
+      st.className = 'a-stone ' + sClass;
+      c.appendChild(st);
+    }
+
+    let badge = document.createElement('div');
+    badge.className = 'st-stone-count-badge';
+    badge.innerText = stACurrentN > 0 ? stACurrentN : '';
+    c.appendChild(badge);
+
+    const hb = document.getElementById('st-a-history-box');
+    hb.innerText = stAHistoryLog.map((log, i) => `${i + 1}.P${(i % 2) + 1}:${log}`).join(", ");
+    hb.scrollTop = hb.scrollHeight;
+    stRenderAnalysisMoves();
+  }
+
+  function stRenderAnalysisMoves() {
+    const box = document.getElementById('st-a-moves-box');
+    box.innerHTML = '';
+    if (stACurrentN === 0) {
+      let winner = (stModeType === 'bomb') ? (stATurn === 1 ? 1 : 2) : (stATurn === 1 ? 2 : 1);
+      box.innerHTML = `<div style="color:#00ff88; font-size:1.2rem; font-weight:800; padding:10px;">게임 종료 (P${winner} 승리!)</div>`;
+      return;
+    }
+
+    let maxT = Math.min(stLimit, stACurrentN);
+    let modulo = stLimit + 1;
+    for (let i = 1; i <= maxT; i++) {
+      let nN = stACurrentN - i;
+      let pP1 = stAP1Score + (stATurn === 1 ? i : 0);
+      let pP2 = stAP2Score + (stATurn === 2 ? i : 0);
+      let oppT = '', lTag = '', bClass = 'analysis-move-btn';
+
+      if (stModeType === 'bomb') {
+        if (nN === 0) {
+          oppT = ''; lTag = ` [나쁜 수] (패배 확정)`; bClass += ' bad-move';
+        } else {
+          let target = (nN - 1) % modulo;
+          if (target !== 0) {
+            let oppPick = target < 0 ? (modulo + target) : target;
+            if (oppPick > stLimit) oppPick = 1;
+            oppT = ` -> -${oppPick}(${nN - oppPick}) 대응`; lTag = ` [나쁜 수]`; bClass += ' bad-move';
+          } else {
+            oppT = ` -> X [필승 수]`; bClass += ' win-move';
+          }
+        }
+      } else {
+        if (nN === 0) {
+          oppT = ''; lTag = ` [필승 수] (승리 확정)`; bClass += ' win-move';
+        } else {
+          let target = nN % modulo;
+          if (target !== 0) {
+            let oppPick = target < 0 ? (modulo + target) : target;
+            if (oppPick > stLimit) oppPick = 1;
+            oppT = ` -> -${oppPick}(${nN - oppPick}) 대응`; lTag = ` [나쁜 수]`; bClass += ' bad-move';
+          } else {
+            oppT = ` -> X [필승 수]`; bClass += ' win-move';
+          }
+        }
+      }
+
+      let fullText = `-${i}(${nN}) 진행${oppT}${lTag}`;
+      let btn = document.createElement('button');
+      btn.className = bClass;
+      btn.innerText = fullText;
+      btn.onclick = () => {
+        playTakeStone();
+        stAHistoryLog.push(`-${i}(${nN})`);
+        stAHistoryMeta.push(i);
+        if (stATurn === 1) stAP1Score += i; else stAP2Score += i;
+        stACurrentN -= i;
+        stATurn = stATurn === 1 ? 2 : 1;
+        stUpdateAnalysisBoard();
+        stTooltip.style.display = 'none';
+      };
+      btn.onmouseenter = (e) => {
+        playSfx('hover');
+        document.getElementById('st-tt-p1').innerText = `P1: ${pP1}`;
+        document.getElementById('st-tt-p2').innerText = `P2: ${pP2}`;
+        let ts = document.getElementById('st-tt-stones');
+        ts.innerHTML = '';
+        for (let j = 0; j < nN; j++) {
+          let s = document.createElement('div');
+          let isLast = (j === nN - 1);
+          let pClass = isLast ? (stModeType === 'bomb' ? 'p-bomb-stone' : 'p-gem-stone') : 'p-normal-stone';
+          s.className = 'st-p-stone ' + pClass;
+          ts.appendChild(s);
+        }
+        stTooltip.style.display = 'flex';
+        stMoveTooltip(e);
+      };
+      btn.onmousemove = (e) => stMoveTooltip(e);
+      btn.onmouseleave = () => stTooltip.style.display = 'none';
+      box.appendChild(btn);
+    }
+  }
+
+  function stUndoAnalysisMove() {
+    if (stAHistoryMeta.length === 0) return;
+    playSfx('click');
+    let t = stAHistoryMeta.pop();
+    stAHistoryLog.pop();
+    stATurn = stATurn === 1 ? 2 : 1;
+    if (stATurn === 1) stAP1Score -= t; else stAP2Score -= t;
+    stACurrentN += t;
+    stUpdateAnalysisBoard();
+    stTooltip.style.display = 'none';
+  }
+
+  function stMoveTooltip(e) {
+    const w = stTooltip.offsetWidth || 300;
+    const h = stTooltip.offsetHeight || 140;
+    let x = e.clientX;
+    let y = e.clientY;
+    if (x + w > window.innerWidth - 10) x = e.clientX - w;
+    if (y + h > window.innerHeight - 10) y = e.clientY - h;
+    stTooltip.style.left = Math.max(8, x) + 'px';
+    stTooltip.style.top = Math.max(8, y) + 'px';
+  }
+
+  /* ================= 승리/패배 폭죽 & 별빛 & 배경 파티클 애니메이션 ================= */
+  const victoryCanvas = document.getElementById('victory-canvas');
+  const victoryCtx = victoryCanvas.getContext('2d');
+  let confettiParticles = [], confettiAnimId = null;
+
+  const starsCanvas = document.getElementById('stars-canvas');
+  const starsCtx = starsCanvas.getContext('2d');
+  let starParticles = [], starsAnimId = null;
+
+  function resizeCanvases() {
+    victoryCanvas.width = window.innerWidth; victoryCanvas.height = window.innerHeight;
+    starsCanvas.width = window.innerWidth; starsCanvas.height = window.innerHeight;
+  }
+  window.addEventListener('resize', resizeCanvases);
+
+  function startStars() {
+    resizeCanvases(); starsCanvas.style.display = 'block'; starParticles = [];
+    for (let i = 0; i < 110; i++) {
+      starParticles.push({
+        x: Math.random() * starsCanvas.width, y: Math.random() * starsCanvas.height,
+        r: Math.random() * 2 + 1, alpha: Math.random(), speed: Math.random() * 0.03 + 0.01
+      });
+    }
+    function drawStars() {
+      starsCtx.clearRect(0, 0, starsCanvas.width, starsCanvas.height);
+      starParticles.forEach(s => {
+        s.alpha += s.speed; if (s.alpha > 1 || s.alpha < 0) s.speed *= -1;
+        starsCtx.beginPath(); starsCtx.arc(s.x, s.y, s.r, 0, Math.PI * 2);
+        starsCtx.fillStyle = `rgba(0, 243, 255, ${Math.abs(s.alpha)})`;
+        starsCtx.fill();
+      });
+      starsAnimId = requestAnimationFrame(drawStars);
+    }
+    if (starsAnimId) cancelAnimationFrame(starsAnimId);
+    drawStars();
+  }
+  function stopStars() {
+    starsCanvas.style.display = 'none';
+    if (starsAnimId) cancelAnimationFrame(starsAnimId);
+  }
+
+  function startConfetti() {
+    resizeCanvases(); victoryCanvas.style.display = 'block'; confettiParticles = [];
+    const colors = ['#00f3ff', '#ff007f', '#ffd700', '#00ff88', '#8a2be2', '#ffffff'];
+    for (let i = 0; i < 150; i++) {
+      confettiParticles.push({
+        x: window.innerWidth / 2 + (Math.random() - 0.5) * 200,
+        y: window.innerHeight / 2 + (Math.random() - 0.5) * 100,
+        w: Math.random() * 12 + 6, h: Math.random() * 8 + 5,
+        color: colors[Math.floor(Math.random() * colors.length)],
+        vx: (Math.random() - 0.5) * 18, vy: Math.random() * -16 - 6,
+        gravity: 0.35, rotation: Math.random() * 360, vRot: (Math.random() - 0.5) * 12, opacity: 1
+      });
+    }
+    if (confettiAnimId) cancelAnimationFrame(confettiAnimId);
+    updateConfetti();
+  }
+  function updateConfetti() {
+    victoryCtx.clearRect(0, 0, victoryCanvas.width, victoryCanvas.height);
+    let alive = false;
+    for (let p of confettiParticles) {
+      p.x += p.vx; p.y += p.vy; p.vy += p.gravity; p.vx *= 0.98; p.rotation += p.vRot;
+      if (p.vy > 0 && p.y > window.innerHeight * 0.4) p.opacity -= 0.007;
+      if (p.opacity > 0 && p.y < window.innerHeight + 50) {
+        alive = true;
+        victoryCtx.save(); victoryCtx.translate(p.x, p.y); victoryCtx.rotate((p.rotation * Math.PI) / 180);
+        victoryCtx.globalAlpha = Math.max(0, p.opacity); victoryCtx.fillStyle = p.color;
+        victoryCtx.fillRect(-p.w / 2, -p.h / 2, p.w, p.h);
+        victoryCtx.restore();
+      }
+    }
+    if (alive) confettiAnimId = requestAnimationFrame(updateConfetti);
+    else stopConfetti();
+  }
+  function stopConfetti() {
+    if (confettiAnimId) { cancelAnimationFrame(confettiAnimId); confettiAnimId = null; }
+    victoryCanvas.style.display = 'none';
+  }
+
+  let victoryModalHideTimeout = null;
+
+  function showVictoryModal(winner, reason, isLoss = false) {
+    const modal = document.getElementById('victory-modal');
+    const cardBox = document.getElementById('victory-card-box');
+    const trophyEl = document.getElementById('modal-trophy-icon');
+    const titleEl = document.getElementById('modal-winner-text');
+    const reasonEl = document.getElementById('modal-reason-text');
+
+    if (victoryModalHideTimeout) {
+      clearTimeout(victoryModalHideTimeout);
+      victoryModalHideTimeout = null;
+    }
+
+    modal.classList.remove('fade-modal-out');
+    modal.classList.add('fade-modal-in');
+
+    if (isLoss) {
+      stopConfetti(); stopStars(); playLoseSound();
+      cardBox.className = 'victory-card state-loss loss-card-in';
+      trophyEl.innerText = '💀'; titleEl.innerText = '패배했습니다...'; reasonEl.innerText = reason;
+    } else {
+      startConfetti(); startStars(); playWinSound();
+      cardBox.className = 'victory-card state-win win-card-in';
+      trophyEl.innerText = '🏆'; titleEl.innerText = `✨ ${winner} 승리! ✨`; reasonEl.innerText = reason;
+    }
+    modal.style.display = 'flex';
+  }
+
+  function closeVictoryModal(immediate = false) {
+    const modal = document.getElementById('victory-modal');
+    const cardBox = document.getElementById('victory-card-box');
+    stopConfetti(); stopStars();
+
+    if (victoryModalHideTimeout) {
+      clearTimeout(victoryModalHideTimeout);
+      victoryModalHideTimeout = null;
+    }
+
+    if (immediate || modal.style.display === 'none' || modal.style.display === '') {
+      modal.style.display = 'none';
+      modal.classList.remove('fade-modal-in', 'fade-modal-out');
+      cardBox.classList.remove('win-card-in', 'loss-card-in', 'card-out');
+      return;
+    }
+
+    modal.classList.remove('fade-modal-in');
+    modal.classList.add('fade-modal-out');
+    cardBox.classList.remove('win-card-in', 'loss-card-in');
+    cardBox.classList.add('card-out');
+
+    victoryModalHideTimeout = setTimeout(() => {
+      modal.style.display = 'none';
+      modal.classList.remove('fade-modal-out');
+      cardBox.classList.remove('card-out');
+      victoryModalHideTimeout = null;
+    }, 210);
+  }
+
+  /* 배경 사이버 파티클 애니메이션 */
+  const bgCanvas = document.getElementById('bg-canvas');
+  const bgCtx = bgCanvas.getContext('2d');
+  let bgParticles = [];
+
+  function resizeBg() {
+    bgCanvas.width = window.innerWidth;
+    bgCanvas.height = window.innerHeight;
+  }
+  window.addEventListener('resize', resizeBg);
+  resizeBg();
+
+  for (let i = 0; i < 65; i++) {
+    bgParticles.push({
+      x: Math.random() * bgCanvas.width,
+      y: Math.random() * bgCanvas.height,
+      r: Math.random() * 2 + 0.6,
+      dx: (Math.random() - 0.5) * 1.1,
+      dy: (Math.random() - 0.5) * 1.1,
+      color: Math.random() > 0.5 ? '#00f3ff' : '#ff007f'
+    });
+  }
+
+  function animateBgParticles() {
+    bgCtx.clearRect(0, 0, bgCanvas.width, bgCanvas.height);
+    bgParticles.forEach(p => {
+      p.x += p.dx; p.y += p.dy;
+      if (p.x < 0 || p.x > bgCanvas.width) p.dx *= -1;
+      if (p.y < 0 || p.y > bgCanvas.height) p.dy *= -1;
+
+      bgCtx.beginPath();
+      bgCtx.arc(p.x, p.y, p.r, 0, Math.PI * 2);
+      bgCtx.fillStyle = p.color;
+      bgCtx.globalAlpha = 0.55;
+      bgCtx.fill();
+    });
+    requestAnimationFrame(animateBgParticles);
+  }
+  animateBgParticles();
+
+  ntUpdateSubtitle();
+  stUpdateSubtitle(false);
+</script>
+</body>
+</html>
