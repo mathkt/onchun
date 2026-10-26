@@ -1,0 +1,175 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+<title>10 무게중심 · 부산의 활동수학</title>
+<link rel="stylesheet" href="../../common.css">
+<link rel="stylesheet" href="../book.css">
+<style>
+  .setup{display:flex;gap:10px;flex-wrap:wrap;align-items:center;background:#fff;border-radius:14px;padding:10px 14px;margin:8px 0}
+  .result{font-family:var(--f-head);font-size:1.2rem;color:var(--bk-red);min-height:1.5em;margin:6px 0}
+  svg.board{width:100%;max-width:560px;height:auto;display:block;margin:6px auto;background:#fff;border-radius:16px;border:2px solid var(--bk-line);touch-action:none;user-select:none}
+  .handle{cursor:grab}
+  .seat{display:inline-flex;gap:8px;align-items:center}
+  .seat select{font:inherit;padding:6px 8px;border-radius:8px;border:2px solid var(--bk-line)}
+</style>
+</head>
+<body class="bk">
+<script src="../../common.js" data-num="10" data-name="무게중심" data-sub="3단원 수학 교과 활동" data-home="../../"></script>
+<div class="bk-wrap">
+  <section class="ch-intro">
+    <div class="ch-intro__text">
+      <div class="bk-ribbon">10</div>
+      <h1 class="bk-h-unit">무게중심</h1>
+      <p class="ch-lead">을숙도의 철새가 뒤뚱거리며 걷는 건 무게중심을 앞으로 옮겨 추진력을 얻기 위해서예요. 균형을 이루는 점, 무게중심을 찾아보세요.</p>
+      <p class="ch-goal">★ 이 단원에서는 — 삼각형의 꼭짓점에 대한 무게중심을 찾고 실생활 문제를 해결할 수 있다.</p>
+    </div>
+    <div class="ch-intro__pic"><img src="../../img/ch10.jpg" alt="을숙도 철새 도래지"><span class="ch-place">📍 을숙도 철새 도래지</span></div>
+  </section>
+
+  <nav class="tabs" id="tabs">
+    <button class="tab on" data-t="t1"><span class="tab__n">1</span>삼각형 면의 무게중심</button>
+    <button class="tab" data-t="t2"><span class="tab__n">2</span>지렛대 원리</button>
+    <button class="tab" data-t="t3"><span class="tab__n">3</span>꼭짓점의 무게중심 1</button>
+    <button class="tab" data-t="t4"><span class="tab__n">4</span>꼭짓점의 무게중심 2</button>
+  </nav>
+
+  <!-- ===== 1 면의 무게중심 ===== -->
+  <section class="act-page" id="t1">
+    <div class="bk-panel">
+      <div class="bk-act"><span class="bk-act__n">1</span><span class="bk-act__t">삼각형의 면의 무게중심</span><span class="bk-tag">추론</span><span class="bk-tag">의사소통</span></div>
+      <p class="bk-muted">삼각형의 높이를 n등분하여 직사각형을 그리면, 각 직사각형의 무게중심(두 대각선의 교점)은 어디에 놓일까요? 등분 수를 늘려 보세요. 꼭짓점은 드래그할 수 있어요.</p>
+      <div class="setup"><label>등분 <input type="range" id="cg-n" min="2" max="30" value="6" style="width:160px"> <b id="cg-nv">6</b></label><label><input type="checkbox" id="cg-med" checked> 중선 보이기</label></div>
+      <svg class="board" id="cg-svg" viewBox="0 0 560 360"></svg>
+      <div class="result" id="cg-res"></div>
+    </div>
+    <div class="bk-panel bk-panel--pink secret">
+      <h3>🔍 생각해 보기</h3>
+      <div class="q"><b>2</b> 직사각형을 늘려갈 때 무게중심을 연결한 선분은 어떤 성질을 가질까?</div>
+      <details class="reveal"><summary>힌트 보기</summary><p>직사각형의 무게중심들은 모두 <b>한 직선(중선)</b> 위에 있어요. 그래서 자 위에 중선이 오도록 올리면 평형이 유지되고, 세 중선의 교점이 면의 무게중심이에요.</p></details>
+    </div>
+  </section>
+
+  <!-- ===== 2 지렛대 ===== -->
+  <section class="act-page" id="t2" hidden>
+    <div class="bk-panel">
+      <div class="bk-act"><span class="bk-act__n">2</span><span class="bk-act__t">아르키메데스의 지렛대 원리</span><span class="bk-tag">연결</span><span class="bk-tag">문제 해결</span></div>
+      <p class="bk-muted">받침점에서 a, b만큼 떨어진 곳에 M, N의 힘이 작용할 때 <b>M×a = N×b</b>이면 평형. 몸무게 비가 1:2인 딸과 아빠가 평형이 되게 앉혀 보세요. (A·B·받침점·C·D 간격은 모두 같아요)</p>
+      <div class="setup"><span class="seat">👧 딸(1): <select id="lv-d" class="sel"><option>A</option><option>B</option><option>C</option><option>D</option></select></span><span class="seat">👨 아빠(2): <select id="lv-f" class="sel"><option>A</option><option>B</option><option>C</option><option>D</option></select></span></div>
+      <svg class="board" id="lv-svg" viewBox="0 0 560 240"></svg>
+      <div class="result" id="lv-res"></div>
+      <h4 class="sub">모빌: 추 1개는 A에, 3개는 B에 — 실을 어디에 매달아야 균형이 잡힐까?</h4>
+      <div class="setup"><label>실의 위치 <input type="range" id="mb-x" min="0" max="8" value="4" style="width:200px"></label></div>
+      <svg class="board" id="mb-svg" viewBox="0 0 560 200"></svg>
+      <div class="result" id="mb-res"></div>
+    </div>
+    <div class="bk-panel bk-panel--pink secret">
+      <h3>🔍 생각해 보기</h3>
+      <div class="q"><b>1</b> 딸과 아빠의 위치에는 어떤 규칙이 있을까? <b>3</b> 무게 1, 2, 3, 4인 추를 모빌에 매달아 평형을 이루려면?</div>
+      <details class="reveal"><summary>힌트 보기</summary><p>딸은 받침점에서 아빠보다 <b>2배 멀리</b> 앉아야 해요(딸 D ↔ 아빠 B, 또는 딸 A ↔ 아빠 C). 모빌에서 A의 1개와 B의 3개는 B에 3배 가까운 곳, 즉 A·B를 3:1로 나누는 점에 실을 매달면 돼요.</p></details>
+    </div>
+  </section>
+
+  <!-- ===== 3 꼭짓점의 무게중심 1 ===== -->
+  <section class="act-page" id="t3" hidden>
+    <div class="bk-panel">
+      <div class="bk-act"><span class="bk-act__n">3</span><span class="bk-act__t">삼각형의 꼭짓점의 무게중심 1</span><span class="bk-tag">연결</span><span class="bk-tag">문제 해결</span></div>
+      <p class="bk-muted">세 꼭짓점에 무게 1인 추가 하나씩. 지렛대 원리로 무게중심을 찾아요. 단계 버튼을 눌러 보세요. 꼭짓점은 드래그할 수 있어요.</p>
+      <div class="setup"><button class="bk-btn bk-btn--sky bk-btn--sm" id="vg-1">① A·B의 무게중심 M</button><button class="bk-btn bk-btn--sky bk-btn--sm" id="vg-2">② M(무게 2)과 C의 무게중심 G</button><button class="bk-btn bk-btn--mint bk-btn--sm" id="vg-3">③ 세 중선의 교점과 비교</button><button class="bk-btn bk-btn--ghost bk-btn--sm" id="vg-0">지우기</button></div>
+      <svg class="board" id="vg-svg" viewBox="0 0 560 360"></svg>
+      <div class="result" id="vg-res"></div>
+    </div>
+    <div class="bk-panel bk-panel--pink secret">
+      <h3>🔍 생각해 보기</h3>
+      <div class="q"><b>3</b> 활동 1에서 구한 면의 무게중심과 꼭짓점의 무게중심을 비교해 보자.</div>
+      <details class="reveal"><summary>힌트 보기</summary><p>M은 AB의 중점, G는 MC를 <b>2:1</b>로 나누는 점(무게 2 : 1이므로 거리는 1 : 2). 이는 중선 CM 위에서 꼭짓점으로부터 2/3 지점 — 세 중선의 교점과 <b>똑같은 점</b>이에요.</p></details>
+    </div>
+  </section>
+
+  <!-- ===== 4 꼭짓점의 무게중심 2 ===== -->
+  <section class="act-page" id="t4" hidden>
+    <div class="bk-panel">
+      <div class="bk-act"><span class="bk-act__n">4</span><span class="bk-act__t">삼각형의 꼭짓점의 무게중심 2</span><span class="bk-tag">연결</span><span class="bk-tag">문제 해결</span></div>
+      <p class="bk-muted">세 꼭짓점에 쌓기나무 3개, 4개, 6개를 올렸어요. 무게가 다르면 무게중심은 어디로 갈까요? 무게를 바꾸고 꼭짓점을 드래그해 보세요. 쌓기나무 7개 묶음을 어디에 두면 받침점 ✚에서 균형이 잡힐지도 찾아보세요.</p>
+      <div class="setup"><label>A <input type="number" id="wg-a" value="3" min="1" max="12" class="num num--2" style="font-size:1rem;letter-spacing:0"></label><label>B <input type="number" id="wg-b" value="4" min="1" max="12" class="num num--2" style="font-size:1rem;letter-spacing:0"></label><label>C <input type="number" id="wg-c" value="6" min="1" max="12" class="num num--2" style="font-size:1rem;letter-spacing:0"></label><label><input type="checkbox" id="wg-seven"> 7개 묶음 놓아 보기 (드래그)</label></div>
+      <svg class="board" id="wg-svg" viewBox="0 0 560 360"></svg>
+      <div class="result" id="wg-res"></div>
+    </div>
+    <div class="bk-panel bk-panel--pink secret">
+      <h3>🔍 생각해 보기</h3>
+      <div class="q"><b>1</b> 7개 묶음을 놓는 위치를 어떻게 찾을 수 있을까?</div>
+      <details class="reveal"><summary>힌트 보기</summary><p>A·B의 무게중심은 AB를 4:3으로 나누는 점(무게 3과 4 → 거리는 반대로 4:3). 거기 실린 무게 7과 C의 6의 무게중심은 그 선분을 6:7로 나누는 점이 세 묶음의 무게중심 G예요. 받침점을 G에 두면 균형! 7개 묶음을 더 올리면 G가 그쪽으로 당겨지니, 받침점을 중심으로 반대편에 놓아야 해요.</p></details>
+    </div>
+  </section>
+</div>
+
+<script>
+const $ = s => document.querySelector(s);
+document.querySelectorAll('#tabs .tab').forEach(b => b.onclick = () => { document.querySelectorAll('#tabs .tab').forEach(x => x.classList.toggle('on', x === b)); document.querySelectorAll('.act-page').forEach(p => { p.hidden = p.id !== b.dataset.t; p.style.display = p.hidden ? 'none' : ''; }); window.scrollTo({ top: $('#tabs').offsetTop - 70, behavior: 'smooth' }); });
+(function(){ const h=location.hash.slice(1); const b=h&&document.querySelector(`#tabs .tab[data-t="${h}"]`); if(b) b.click(); })();
+function svgPt(svg, e) { const p = svg.createSVGPoint(); p.x = e.clientX; p.y = e.clientY; return p.matrixTransform(svg.getScreenCTM().inverse()); }
+function draggable(svg, pts, onMove) { let cur = null; svg.addEventListener('pointerdown', e => { const p = svgPt(svg, e); let best = null, bd = 30; pts().forEach((q, i) => { const d = Math.hypot(q[0] - p.x, q[1] - p.y); if (d < bd) { bd = d; best = i; } }); if (best !== null) { cur = best; svg.setPointerCapture(e.pointerId); } }); svg.addEventListener('pointermove', e => { if (cur === null) return; const p = svgPt(svg, e); onMove(cur, [Math.max(10, Math.min(550, p.x)), Math.max(10, Math.min(350, p.y))]); }); svg.addEventListener('pointerup', () => cur = null); svg.addEventListener('pointercancel', () => cur = null); }
+const tri = (svg, P, extra) => `<polygon points="${P.map(p => p.join(',')).join(' ')}" fill="#FFF4DF" stroke="#2C2A26" stroke-width="3" stroke-linejoin="round"/>${extra || ''}${P.map((p, i) => `<circle class="handle" cx="${p[0]}" cy="${p[1]}" r="11" fill="#E9533F" stroke="#fff" stroke-width="2"/><text x="${p[0] + 14}" y="${p[1] - 10}" font-family="Jua" font-size="18">${'ABC'[i]}</text>`).join('')}`;
+
+/* ===== 1 면의 무게중심 ===== */
+(function () {
+  let P = [[280, 40], [60, 320], [500, 320]]; const svg = $('#cg-svg');
+  function draw() { const n = +$('#cg-n').value; $('#cg-nv').textContent = n; const [A, B, C] = P; let h = '', cs = [];
+    for (let k = 0; k < n; k++) { const t0 = k / n, t1 = (k + 1) / n, tm = (t0 + t1) / 2; const L = t => [A[0] + (B[0] - A[0]) * t, A[1] + (B[1] - A[1]) * t], R = t => [A[0] + (C[0] - A[0]) * t, A[1] + (C[1] - A[1]) * t]; // 높이 방향 등분 (A에서 BC 쪽)
+      const l0 = L(t0), l1 = L(t1), r0 = R(t0), r1 = R(t1); const y0 = (l0[1] + r0[1]) / 2, y1 = (l1[1] + r1[1]) / 2; const xl = Math.min(l0[0], l1[0], r0[0], r1[0]) , xr = Math.max(l0[0], l1[0], r0[0], r1[0]);
+      // 직사각형: 가로 = 그 높이의 중간 선분, 세로 = 등분 두께
+      const ml = L(tm), mr = R(tm); const yt = A[1] + (((B[1] + C[1]) / 2) - A[1]) * t0, yb = A[1] + (((B[1] + C[1]) / 2) - A[1]) * t1;
+      h += `<rect x="${Math.min(ml[0], mr[0])}" y="${Math.min(yt, yb)}" width="${Math.abs(mr[0] - ml[0])}" height="${Math.abs(yb - yt)}" fill="#AEDBF2" fill-opacity=".55" stroke="#2F8FC9"/>`; cs.push([(ml[0] + mr[0]) / 2, (yt + yb) / 2]); }
+    cs.forEach(c => h += `<circle cx="${c[0]}" cy="${c[1]}" r="3.5" fill="#E9533F"/>`);
+    if ($('#cg-med').checked) { const Mb = [(B[0] + C[0]) / 2, (B[1] + C[1]) / 2]; h += `<line x1="${A[0]}" y1="${A[1]}" x2="${Mb[0]}" y2="${Mb[1]}" stroke="#F5A623" stroke-width="3" stroke-dasharray="8 5"/>`; const Mc = [(A[0] + B[0]) / 2, (A[1] + B[1]) / 2], Ma = [(A[0] + C[0]) / 2, (A[1] + C[1]) / 2]; h += `<line x1="${C[0]}" y1="${C[1]}" x2="${Mc[0]}" y2="${Mc[1]}" stroke="#F5A623" stroke-width="2" stroke-dasharray="4 4" opacity=".6"/><line x1="${B[0]}" y1="${B[1]}" x2="${Ma[0]}" y2="${Ma[1]}" stroke="#F5A623" stroke-width="2" stroke-dasharray="4 4" opacity=".6"/>`; const G = [(A[0] + B[0] + C[0]) / 3, (A[1] + B[1] + C[1]) / 3]; h += `<circle cx="${G[0]}" cy="${G[1]}" r="8" fill="#F5A623" stroke="#fff" stroke-width="2"/><text x="${G[0] + 12}" y="${G[1] + 5}" font-family="Jua" font-size="16" fill="#C9731A">G</text>`; }
+    svg.innerHTML = tri(svg, P, h); $('#cg-res').textContent = `직사각형 ${n}개의 무게중심(빨간 점)이 모두 A에서 BC의 중점으로 가는 중선 위에 있어요.`; }
+  $('#cg-n').oninput = draw; $('#cg-med').onchange = draw; draggable(svg, () => P, (i, p) => { P[i] = p; draw(); }); draw();
+})();
+
+/* ===== 2 지렛대 ===== */
+(function () {
+  const svg = $('#lv-svg'); const X = { A: 80, B: 180, C: 380, D: 480 }, pivot = 280;
+  function draw() { const d = $('#lv-d').value, f = $('#lv-f').value; const torque = 1 * (X[d] - pivot) + 2 * (X[f] - pivot); const ang = Math.max(-12, Math.min(12, torque / 25));
+    svg.innerHTML = `<polygon points="265,200 295,200 280,150" fill="#8B5A2B"/><g transform="rotate(${ang} 280 150)"><rect x="60" y="140" width="440" height="12" rx="6" fill="#C9A24D" stroke="#8B5A2B" stroke-width="2"/>${Object.entries(X).map(([k, x]) => `<text x="${x}" y="175" text-anchor="middle" font-family="Jua" fill="#5F5B55">${k}</text><line x1="${x}" y1="140" x2="${x}" y2="152" stroke="#8B5A2B" stroke-width="2"/>`).join('')}<text x="${X[d]}" y="130" text-anchor="middle" font-size="36">👧</text><text x="${X[f]}" y="128" text-anchor="middle" font-size="44">👨</text></g><text x="280" y="225" text-anchor="middle" font-family="Jua" fill="#5F5B55">받침점</text>`;
+    const da = Math.abs(X[d] - pivot) / 100, fa = Math.abs(X[f] - pivot) / 100; const same = Math.sign(X[d] - pivot) === Math.sign(X[f] - pivot) && X[d] !== X[f] || d === f;
+    $('#lv-res').textContent = d === f ? '같은 자리에는 앉을 수 없어요.' : same ? '둘 다 같은 쪽에 있어요!' : torque === 0 ? `🎉 평형! 딸 1×${da} = 아빠 2×${fa}` : `기울어요: 딸 1×${da} = ${da}, 아빠 2×${fa} = ${2 * fa}`; }
+  $('#lv-d').onchange = draw; $('#lv-f').onchange = draw; draw();
+  // 모빌
+  const ms = $('#mb-svg'); function drawM() { const x = +$('#mb-x').value; const L = 60, R = 500, px = L + x * (R - L) / 8; const torque = 1 * (L - px) + 3 * (R - px); const ang = Math.max(-14, Math.min(14, -torque / 60));
+    ms.innerHTML = `<line x1="${px}" y1="10" x2="${px}" y2="70" stroke="#2C2A26" stroke-width="2"/><g transform="rotate(${ang} ${px} 70)"><rect x="${L}" y="66" width="${R - L}" height="8" rx="4" fill="#C9A24D" stroke="#8B5A2B"/>${Array.from({ length: 9 }, (_, i) => `<circle cx="${L + i * (R - L) / 8}" cy="70" r="4" fill="#E9533F"/>`).join('')}<text x="${L}" y="55" text-anchor="middle" font-family="Jua">A</text><text x="${R}" y="55" text-anchor="middle" font-family="Jua">B</text><line x1="${L}" y1="74" x2="${L}" y2="110" stroke="#2C2A26"/><rect x="${L - 12}" y="110" width="24" height="24" fill="#5BB8E8"/><line x1="${R}" y1="74" x2="${R}" y2="110" stroke="#2C2A26"/><rect x="${R - 12}" y="110" width="24" height="24" fill="#5BB8E8"/><rect x="${R - 12}" y="136" width="24" height="24" fill="#5BB8E8"/><rect x="${R - 12}" y="162" width="24" height="24" fill="#5BB8E8"/></g>`;
+    $('#mb-res').textContent = torque === 0 ? `🎉 균형! A에서 ${x}칸: 1×${x} = 3×${8 - x}` : `1×${x} = ${x}, 3×${8 - x} = ${3 * (8 - x)} → ${torque > 0 ? 'B 쪽' : 'A 쪽'}으로 기울어요`; }
+  $('#mb-x').oninput = drawM; drawM();
+})();
+
+/* ===== 3 꼭짓점 무게중심 1 ===== */
+(function () {
+  let P = [[120, 80], [80, 320], [480, 300]], st = 0; const svg = $('#vg-svg');
+  function draw() { const [A, B, C] = P; const M = [(A[0] + B[0]) / 2, (A[1] + B[1]) / 2]; const G = [(M[0] * 1 + C[0] * 2) / 3 * 0 + (2 * M[0] + C[0]) / 3, (2 * M[1] + C[1]) / 3]; let h = '';
+    P.forEach(p => h += `<rect x="${p[0] - 10}" y="${p[1] - 10}" width="20" height="20" fill="#5BB8E8" opacity=".5"/>`);
+    if (st >= 1) h += `<circle cx="${M[0]}" cy="${M[1]}" r="8" fill="#2F8FC9" stroke="#fff" stroke-width="2"/><text x="${M[0] - 28}" y="${M[1] - 8}" font-family="Jua" font-size="16" fill="#2F8FC9">M (2)</text>`;
+    if (st >= 2) h += `<line x1="${M[0]}" y1="${M[1]}" x2="${C[0]}" y2="${C[1]}" stroke="#2F8FC9" stroke-width="2" stroke-dasharray="6 4"/><circle cx="${G[0]}" cy="${G[1]}" r="9" fill="#F5A623" stroke="#fff" stroke-width="2"/><text x="${G[0] + 12}" y="${G[1] - 6}" font-family="Jua" font-size="16" fill="#C9731A">G</text>`;
+    if (st >= 3) { const Mb = [(B[0] + C[0]) / 2, (B[1] + C[1]) / 2], Ma = [(A[0] + C[0]) / 2, (A[1] + C[1]) / 2]; h += `<line x1="${A[0]}" y1="${A[1]}" x2="${Mb[0]}" y2="${Mb[1]}" stroke="#3A9E82" stroke-width="2"/><line x1="${B[0]}" y1="${B[1]}" x2="${Ma[0]}" y2="${Ma[1]}" stroke="#3A9E82" stroke-width="2"/><line x1="${C[0]}" y1="${C[1]}" x2="${M[0]}" y2="${M[1]}" stroke="#3A9E82" stroke-width="2"/>`; }
+    svg.innerHTML = tri(svg, P, h);
+    $('#vg-res').textContent = st === 0 ? '' : st === 1 ? 'M은 A와 B의 가운데(무게 1:1이니 거리 1:1). M에 실린 무게는 2.' : st === 2 ? 'G는 M(무게 2)과 C(무게 1)의 무게중심 → MC를 1:2로 나누는 점 (MG : GC = 1 : 2).' : '🎉 세 중선이 모두 G를 지나요! 꼭짓점의 무게중심 = 면의 무게중심.'; }
+  ['0','1','2','3'].forEach(k => $('#vg-' + k).onclick = () => { st = +k; draw(); }); draggable(svg, () => P, (i, p) => { P[i] = p; draw(); }); draw();
+})();
+
+/* ===== 4 꼭짓점 무게중심 2 ===== */
+(function () {
+  let P = [[120, 80], [80, 320], [480, 300]], S = [300, 200]; const svg = $('#wg-svg');
+  function draw() { const w = [+$('#wg-a').value || 1, +$('#wg-b').value || 1, +$('#wg-c').value || 1]; const seven = $('#wg-seven').checked; const [A, B, C] = P;
+    const tot = w[0] + w[1] + w[2]; const G = [(A[0] * w[0] + B[0] * w[1] + C[0] * w[2]) / tot, (A[1] * w[0] + B[1] * w[1] + C[1] * w[2]) / tot];
+    const MAB = [(A[0] * w[0] + B[0] * w[1]) / (w[0] + w[1]), (A[1] * w[0] + B[1] * w[1]) / (w[0] + w[1])];
+    let h = `<line x1="${MAB[0]}" y1="${MAB[1]}" x2="${C[0]}" y2="${C[1]}" stroke="#2F8FC9" stroke-width="2" stroke-dasharray="6 4"/><circle cx="${MAB[0]}" cy="${MAB[1]}" r="6" fill="#2F8FC9"/><text x="${MAB[0] + 10}" y="${MAB[1] - 6}" font-size="13" fill="#2F8FC9">A·B 무게중심 (${w[0] + w[1]})</text>`;
+    P.forEach((p, i) => { for (let k = 0; k < w[i]; k++) h += `<rect x="${p[0] - 9 + (k % 3) * 2}" y="${p[1] - 22 - Math.floor(k / 3) * 8 - (k % 3) * 2}" width="18" height="10" fill="#C9A24D" stroke="#8B5A2B"/>`; h += `<text x="${p[0] + 14}" y="${p[1] + 22}" font-family="Jua" font-size="15" fill="#5F5B55">${w[i]}개</text>`; });
+    h += `<circle cx="${G[0]}" cy="${G[1]}" r="10" fill="#F5A623" stroke="#fff" stroke-width="2"/><text x="${G[0] + 12}" y="${G[1] - 8}" font-family="Jua" font-size="16" fill="#C9731A">G</text>`;
+    let msg = `무게중심 G: A·B의 무게중심은 AB를 ${w[1]}:${w[0]}로 나눈 점, 그 점(무게 ${w[0] + w[1]})과 C(${w[2]})의 무게중심.`;
+    if (seven) { const t2 = tot + 7; const G2 = [(G[0] * tot + S[0] * 7) / t2, (G[1] * tot + S[1] * 7) / t2]; h += `<g><rect x="${S[0] - 14}" y="${S[1] - 14}" width="28" height="28" rx="4" fill="#E9533F" opacity=".85"/><text x="${S[0]}" y="${S[1] + 5}" text-anchor="middle" font-family="Jua" fill="#fff">7</text></g><text x="${G[0] - 6}" y="${G[1] + 6}" font-family="Jua" font-size="18" fill="#2C2A26">✚</text><circle cx="${G2[0]}" cy="${G2[1]}" r="7" fill="#3A9E82" stroke="#fff"/>`; const d = Math.hypot(G2[0] - G[0], G2[1] - G[1]); msg = d < 6 ? '🎉 7개 묶음을 넣어도 전체 무게중심(초록)이 받침점 ✚ 위에 있어요. 균형!' : `7개 묶음(빨강)을 드래그하세요. 전체 무게중심(초록)이 받침점 ✚에서 ${Math.round(d)}만큼 떨어져 있어요. — 묶음을 G 위에 두면 당연히 균형이고, 그 외엔 균형이 깨져요.`; }
+    svg.innerHTML = tri(svg, P, h); $('#wg-res').textContent = msg; }
+  ['a','b','c'].forEach(k => $('#wg-' + k).oninput = draw); $('#wg-seven').onchange = draw;
+  draggable(svg, () => $('#wg-seven').checked ? [...P, S] : P, (i, p) => { if (i === 3) S = p; else P[i] = p; draw(); }); draw();
+})();
+</script>
+</body>
+</html>

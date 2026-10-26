@@ -1,0 +1,177 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+<title>11 정사면체의 전개도 · 부산의 활동수학</title>
+<link rel="stylesheet" href="../../common.css">
+<link rel="stylesheet" href="../book.css">
+<style>
+  .setup{display:flex;gap:10px;flex-wrap:wrap;align-items:center;background:#fff;border-radius:14px;padding:10px 14px;margin:8px 0}
+  .result{font-family:var(--f-head);font-size:1.2rem;color:var(--bk-red);min-height:1.5em;margin:6px 0}
+  .duo{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+  @media(max-width:640px){.duo{grid-template-columns:1fr}}
+  svg.board{width:100%;height:auto;display:block;background:#fff;border-radius:16px;border:2px solid var(--bk-line);touch-action:none;user-select:none}
+  .edge{stroke:#2C2A26;stroke-width:4;cursor:pointer;stroke-linecap:round}
+  .edge.cut{stroke:#E9533F;stroke-dasharray:8 6}
+  .cap{font-size:.85rem;color:var(--bk-ink-soft);text-align:center;margin-top:4px}
+  .steps{display:flex;gap:6px;flex-wrap:wrap}
+  .letter{width:100%;max-width:420px;margin:0 auto;display:block;background:#fff;border:2px solid var(--bk-line);border-radius:16px}
+  textarea.msg{font:inherit;width:100%;max-width:420px;border:2px solid var(--bk-line);border-radius:12px;padding:8px;min-height:60px}
+</style>
+</head>
+<body class="bk">
+<script src="../../common.js" data-num="11" data-name="정사면체의 전개도" data-sub="3단원 수학 교과 활동" data-home="../../"></script>
+<div class="bk-wrap">
+  <section class="ch-intro">
+    <div class="ch-intro__text">
+      <div class="bk-ribbon">11</div>
+      <h1 class="bk-h-unit">정사면체의 전개도</h1>
+      <p class="ch-lead">방파제의 테트라포드는 정사면체를 변형한 구조물. 어느 방향으로 굴려도 모양이 같고 무게중심이 낮아 파도에도 끄떡없어요. 정사면체를 잘라 펼쳐 봅시다.</p>
+      <p class="ch-goal">★ 이 단원에서는 — 정사면체의 표면을 잘라 펼친 다양한 전개도를 만들 수 있다.</p>
+    </div>
+    <div class="ch-intro__pic"><img src="../../img/ch11.jpg" alt="죽성드림세트장"><span class="ch-place">📍 죽성드림세트장</span></div>
+  </section>
+
+  <nav class="tabs" id="tabs">
+    <button class="tab on" data-t="t1"><span class="tab__n">1</span>정사면체의 전개도</button>
+    <button class="tab" data-t="t2"><span class="tab__n">2</span>직사각형 모양 전개도</button>
+    <button class="tab" data-t="t3"><span class="tab__n">3</span>비밀 편지지</button>
+    <button class="tab tab--pink" data-t="t4"><span class="tab__n">★</span>다양한 전개도</button>
+  </nav>
+
+  <!-- ===== 1 ===== -->
+  <section class="act-page" id="t1">
+    <div class="bk-panel">
+      <div class="bk-act"><span class="bk-act__n">1</span><span class="bk-act__t">정사면체의 전개도</span><span class="bk-tag">연결</span><span class="bk-tag">정보 처리</span></div>
+      <p class="bk-muted">정사면체의 모서리 6개 중 <b>3개</b>를 잘라 펼쳐요. 왼쪽 그림에서 자를 모서리를 눌러 고르세요(드래그하면 돌아가요). 오른쪽에 펼친 전개도가 나타나요.</p>
+      <div class="duo">
+        <div><svg class="board" id="td-svg"></svg><div class="cap">자르는 모서리(빨간 점선) 3개 고르기</div></div>
+        <div><svg class="board" id="td-net" viewBox="0 0 320 300"></svg><div class="cap" id="td-cap">전개도</div></div>
+      </div>
+      <div class="setup"><button class="bk-btn bk-btn--ghost bk-btn--sm" id="td-clear">다시 고르기</button><span class="result" id="td-res" style="margin:0"></span></div>
+    </div>
+    <div class="bk-panel bk-panel--pink secret">
+      <h3>🔍 생각해 보기</h3>
+      <div class="q"><b>2</b> 정사면체의 전개도는 몇 가지일까?</div>
+      <details class="reveal"><summary>힌트 보기</summary><p>자른 모서리 3개가 <b>한 꼭짓점에 모이면</b> 큰 정삼각형 모양, 3개가 <b>한 줄로 이어지면</b> 평행사변형 모양. 모서리로만 자르면 이 <b>2가지</b>뿐이에요. (3개가 삼각형을 이루면 펼쳐지지 않아요!)</p></details>
+    </div>
+  </section>
+
+  <!-- ===== 2 ===== -->
+  <section class="act-page" id="t2" hidden>
+    <div class="bk-panel">
+      <div class="bk-act"><span class="bk-act__n">2</span><span class="bk-act__t">정사면체의 직사각형 모양의 전개도</span><span class="bk-tag">연결</span><span class="bk-tag">정보 처리</span></div>
+      <p class="bk-muted">전개도는 꼭 모서리를 따라 자를 필요가 없어요. 삼각형 전개도의 양 끝을 잘라 옮겨 붙이면 <b>직사각형</b>이 돼요. 삼각뿔 우유팩·과자 봉지가 이렇게 만들어져요(자투리가 없어 경제적!).</p>
+      <div class="setup"><div class="steps"><button class="bk-btn bk-btn--sky bk-btn--sm" data-s="0">① 삼각형 전개도</button><button class="bk-btn bk-btn--sky bk-btn--sm" data-s="1">② 자를 선 표시</button><button class="bk-btn bk-btn--sky bk-btn--sm" data-s="2">③ 잘라서 옮겨 붙이기</button><button class="bk-btn bk-btn--mint bk-btn--sm" data-s="3">④ 직사각형 완성</button></div></div>
+      <svg class="board" id="rc-svg" viewBox="0 0 560 320" style="max-width:560px;margin:0 auto"></svg>
+      <div class="result" id="rc-res"></div>
+    </div>
+    <div class="bk-panel bk-panel--pink secret">
+      <h3>🔍 생각해 보기</h3>
+      <div class="q"><b>2</b> 직사각형 전개도를 접어 정사면체가 되는지 확인하고, 정사면체에서 잘라야 하는 선을 찾아보자. <b>3</b> 평행사변형 전개도로도 직사각형을 만들 수 있을까?</div>
+      <details class="reveal"><summary>힌트 보기</summary><p>직사각형 전개도에서 자른 선은 정사면체의 <b>모서리가 아닌 표면 위</b>를 지나요 — 한 꼭짓점에서 맞은편 모서리의 중점까지. 평행사변형 전개도도 끝의 작은 삼각형을 떼어 반대편에 붙이면 직사각형이 돼요.</p></details>
+    </div>
+  </section>
+
+  <!-- ===== 3 ===== -->
+  <section class="act-page" id="t3" hidden>
+    <div class="bk-panel">
+      <div class="bk-act"><span class="bk-act__n">3</span><span class="bk-act__t">정사면체의 전개도를 이용한 비밀 편지지 만들기</span><span class="bk-tag">추론</span><span class="bk-tag">연결</span><span class="bk-tag">정보 처리</span></div>
+      <p class="bk-muted">비밀 메시지를 쓰면 전개도의 네 면에 흩어져 들어가요. 접어야만 읽을 수 있는 편지! 인쇄해서 잘라 접어 보세요.</p>
+      <div class="setup"><textarea class="msg" id="lt-msg" placeholder="비밀 메시지 (짧게)">수학 축전에 와 줘서 고마워!</textarea><button class="bk-btn bk-btn--primary bk-btn--sm" id="lt-go">편지지 만들기</button><button class="bk-btn bk-btn--ghost bk-btn--sm" onclick="window.print()">🖨 인쇄</button></div>
+      <svg class="letter" id="lt-svg" viewBox="0 0 420 380"></svg>
+      <p class="cap">점선은 접는 선, 실선은 자르는 선. 접으면 글자가 모여 메시지가 돼요.</p>
+    </div>
+  </section>
+
+  <!-- ===== ★ ===== -->
+  <section class="act-page" id="t4" hidden>
+    <div class="bk-panel bk-panel--pink">
+      <div class="bk-act"><span class="bk-act__n" style="background:var(--bk-red)">★</span><span class="bk-act__t">나도 수학자 — 정사면체의 다양한 전개도</span><span class="bk-tag">연결</span><span class="bk-tag">정보 처리</span></div>
+      <p class="bk-muted">모서리가 아닌 표면을 자르면 삼각형, 사각형, 오각형… 여러 모양의 전개도를 얻을 수 있어요. 삼각형 전개도에서 자를 선을 직접 그어 보세요: 큰 삼각형의 꼭짓점에서 출발해 가운데 삼각형의 변까지 잇는 선 3개를 긋고 '펼쳐 보기'.</p>
+      <div class="setup"><label>자르는 각도 <input type="range" id="va-t" min="0" max="100" value="50" style="width:200px"></label><button class="bk-btn bk-btn--sky bk-btn--sm" id="va-show">펼쳐 보기</button></div>
+      <svg class="board" id="va-svg" viewBox="0 0 560 300" style="max-width:560px;margin:0 auto"></svg>
+      <div class="result" id="va-res"></div>
+      <p class="bk-muted">실생활에서 쓰일 입체도형을 골라 나만의 전개도를 만들고 장점을 탐구해 보세요.</p>
+    </div>
+  </section>
+</div>
+
+<script src="../poly3d.js"></script>
+<script>
+const $ = s => document.querySelector(s);
+document.querySelectorAll('#tabs .tab').forEach(b => b.onclick = () => { document.querySelectorAll('#tabs .tab').forEach(x => x.classList.toggle('on', x === b)); document.querySelectorAll('.act-page').forEach(p => { p.hidden = p.id !== b.dataset.t; p.style.display = p.hidden ? 'none' : ''; }); window.scrollTo({ top: $('#tabs').offsetTop - 70, behavior: 'smooth' }); });
+(function(){ const h=location.hash.slice(1); const b=h&&document.querySelector(`#tabs .tab[data-t="${h}"]`); if(b) b.click(); })();
+const S3 = Math.sqrt(3);
+
+/* ===== 1 정사면체 자르기 ===== */
+(function () {
+  const v = Poly3D.viewer($('#td-svg'), { size: 300, color: () => [.36, .72, .91] }); const T = Poly3D.P.tetra; const E = Poly3D.edgesOf(T.F); let cut = new Set();
+  const names = ['A', 'B', 'C', 'D'];
+  function extra(RV, proj) { let h = ''; E.forEach(([a, b], i) => { const p = proj(RV[a]), q = proj(RV[b]); h += `<line class="edge ${cut.has(i) ? 'cut' : ''}" data-i="${i}" x1="${p[0]}" y1="${p[1]}" x2="${q[0]}" y2="${q[1]}" stroke-opacity="${(RV[a][2] + RV[b][2]) / 2 > -.1 ? 1 : .35}"/>`; }); RV.forEach((p, i) => { const q = proj(p); h += `<text x="${q[0] + 8}" y="${q[1] - 8}" font-family="Jua" font-size="16" fill="#E9533F">${names[i]}</text>`; }); return h; }
+  function show() { v.set(T, extra); $('#td-svg').querySelectorAll('.edge').forEach(e => e.onclick = ev => { ev.stopPropagation(); const i = +e.dataset.i; if (cut.has(i)) cut.delete(i); else if (cut.size < 3) cut.add(i); show(); }); net(); }
+  // pointerdown on edge shouldn't start drag much — fine
+  function net() { const ns = $('#td-net'); const c = [...cut].map(i => E[i]); const cap = $('#td-cap'), res = $('#td-res');
+    if (c.length < 3) { ns.innerHTML = ''; cap.textContent = `모서리 ${c.length}/3 선택`; res.textContent = ''; return; }
+    const deg = [0, 0, 0, 0]; c.forEach(([a, b]) => { deg[a]++; deg[b]++; }); const seen = new Set(); const adj = {}; c.forEach(([a, b]) => { (adj[a] ||= []).push(b); (adj[b] ||= []).push(a); }); const st = [c[0][0]]; while (st.length) { const x = st.pop(); if (seen.has(x)) continue; seen.add(x); (adj[x] || []).forEach(y => st.push(y)); }
+    const connected = seen.size === 4; const star = deg.some(d => d === 3);
+    if (!connected) { ns.innerHTML = `<text x="160" y="150" text-anchor="middle" font-family="Jua" fill="#E9533F">삼각형 모양으로 자르면 펼쳐지지 않아요!</text>`; cap.textContent = '자른 모서리가 한 면의 둘레를 이루면 안 돼요'; res.textContent = '세 모서리가 모든 꼭짓점을 지나야 펼쳐져요.'; return; }
+    const s = 120, h = s * S3 / 2;
+    if (star) { ns.innerHTML = `<g stroke="#2C2A26" stroke-width="2" fill="#AEDBF2"><polygon points="160,30 ${160 - s},${30 + 2 * h} ${160 + s},${30 + 2 * h}"/><polygon points="${160 - s / 2},${30 + h} ${160 + s / 2},${30 + h} 160,${30 + 2 * h}" fill="#FFE8BF"/></g><g stroke="#2C2A26" stroke-dasharray="6 4" fill="none"><line x1="${160 - s / 2}" y1="${30 + h}" x2="${160 + s / 2}" y2="${30 + h}"/><line x1="${160 - s / 2}" y1="${30 + h}" x2="160" y2="${30 + 2 * h}"/><line x1="${160 + s / 2}" y1="${30 + h}" x2="160" y2="${30 + 2 * h}"/></g>`; cap.textContent = '큰 정삼각형 모양 전개도'; res.textContent = `세 모서리가 꼭짓점 ${names[deg.indexOf(3)]}에 모여요 → 정삼각형 모양!`; }
+    else { ns.innerHTML = `<g stroke="#2C2A26" stroke-width="2" fill="#AEDBF2"><polygon points="20,${150 + h / 2} ${20 + s / 2},${150 - h / 2} ${20 + s},${150 + h / 2}"/><polygon points="${20 + s / 2},${150 - h / 2} ${20 + s},${150 + h / 2} ${20 + 1.5 * s},${150 - h / 2}" fill="#FFE8BF"/><polygon points="${20 + s},${150 + h / 2} ${20 + 1.5 * s},${150 - h / 2} ${20 + 2 * s},${150 + h / 2}"/><polygon points="${20 + 1.5 * s},${150 - h / 2} ${20 + 2 * s},${150 + h / 2} ${20 + 2.5 * s},${150 - h / 2}" fill="#FFE8BF"/></g>`; ns.setAttribute('viewBox', '0 0 360 300'); cap.textContent = '평행사변형 모양 전개도'; res.textContent = '세 모서리가 한 줄로 이어져요 → 평행사변형 모양!'; }
+  }
+  $('#td-clear').onclick = () => { cut = new Set(); show(); }; show(); v.spin(true); setTimeout(() => v.spin(false), 3000);
+})();
+
+/* ===== 2 직사각형 ===== */
+(function () {
+  const svg = $('#rc-svg'); const s = 160, h = s * S3 / 2; const A = [280, 40], B = [280 - s, 40 + 2 * h], C = [280 + s, 40 + 2 * h]; const M = [(B[0] + C[0]) / 2, B[1]], L = [(A[0] + B[0]) / 2, (A[1] + B[1]) / 2], R = [(A[0] + C[0]) / 2, (A[1] + C[1]) / 2];
+  const P = p => p.join(',');
+  function draw(st) { let g = `<polygon points="${P(A)} ${P(B)} ${P(C)}" fill="#AEDBF2" stroke="#2C2A26" stroke-width="2"/><g stroke="#2C2A26" stroke-dasharray="6 4" fill="none"><polygon points="${P(L)} ${P(R)} ${P(M)}"/></g>`;
+    if (st === 1) g += `<g stroke="#E9533F" stroke-width="3"><line x1="${L[0]}" y1="${L[1]}" x2="${(B[0] + M[0]) / 2}" y2="${B[1]}"/><line x1="${R[0]}" y1="${R[1]}" x2="${(C[0] + M[0]) / 2}" y2="${C[1]}"/></g>`;
+    if (st >= 2) { // 아래 양 끝 삼각형을 잘라 위로 옮김
+      // 직사각형 = 가로 1.5s × 세로 h: 왼쪽 아래 삼각형(B, Bm, L)을 L 중심으로 180° 돌려 위로, 오른쪽도 R 중심으로
+      const Bm = [(B[0] + M[0]) / 2, B[1]], Cm = [(C[0] + M[0]) / 2, C[1]];
+      const rot = (p, c) => [2 * c[0] - p[0], 2 * c[1] - p[1]]; // L 또는 R 중심 180° 회전
+      const tL = [B, Bm, L].map(p => rot(p, L)), tR = [C, Cm, R].map(p => rot(p, R));
+      g = `<polygon points="${P(L)} ${P(R)} ${P(Cm)} ${P(Bm)}" fill="#AEDBF2" stroke="#2C2A26" stroke-width="2"/><polygon points="${P(L)} ${P(R)} ${P(M)}" fill="#FFE8BF" stroke="#2C2A26" stroke-dasharray="6 4"/>`;
+      const prog = st === 3 ? 1 : .55; const lerp = (a, b) => [a[0] + (b[0] - a[0]) * prog, a[1] + (b[1] - a[1]) * prog];
+      g += `<polygon points="${[B, Bm, L].map((p, i) => P(lerp(p, tL[i]))).join(' ')}" fill="#9ED9C6" stroke="#2C2A26" stroke-width="2"/><polygon points="${[C, Cm, R].map((p, i) => P(lerp(p, tR[i]))).join(' ')}" fill="#9ED9C6" stroke="#2C2A26" stroke-width="2"/>`;
+      if (st === 3) g += `<rect x="${tL[1][0]}" y="${tL[0][1]}" width="${Cm[0] - Bm[0]}" height="${Bm[1] - tL[0][1]}" fill="none" stroke="#E9533F" stroke-width="3"/>`; }
+    svg.innerHTML = g; $('#rc-res').textContent = ['정삼각형 전개도 (가운데 삼각형이 바닥, 셋을 접어 올리면 정사면체)', '양쪽 아래 꼭짓점에서 AB·AC의 중점까지… 빨간 선을 따라 잘라요.', '잘라낸 작은 삼각형 두 개를 180° 돌려 위로 옮겨 붙여요.', '🎉 직사각형 완성! 가로 : 세로 = 3 : √3 ≈ 1.73 : 1. 자투리 없이 종이를 쓸 수 있어요.'][st]; }
+  document.querySelectorAll('#t2 .steps button').forEach(b => b.onclick = () => draw(+b.dataset.s)); draw(0);
+})();
+
+/* ===== 3 비밀 편지지 ===== */
+(function () {
+  function make() { const msg = ($('#lt-msg').value || '비밀').trim(); const parts = [[], [], [], []]; [...msg].forEach((ch, i) => parts[i % 4].push(ch)); // 글자를 네 면에 번갈아
+    const s = 180, h = s * S3 / 2; const A = [210, 20], B = [210 - s, 20 + 2 * h], C = [210 + s, 20 + 2 * h]; const M = [210, B[1]], L = [(A[0] + B[0]) / 2, (A[1] + B[1]) / 2], R = [(A[0] + C[0]) / 2, (A[1] + C[1]) / 2];
+    const faces = [[L, R, M], [A, L, R], [L, B, M], [R, M, C]]; const rots = [0, 180, 180, 180]; const P = p => p.join(',');
+    let g = `<polygon points="${P(A)} ${P(B)} ${P(C)}" fill="#FFFDF5" stroke="#2C2A26" stroke-width="2"/><g stroke="#2C2A26" stroke-dasharray="6 4" fill="none"><polygon points="${P(L)} ${P(R)} ${P(M)}"/></g>`;
+    faces.forEach((f, i) => { const c = [(f[0][0] + f[1][0] + f[2][0]) / 3, (f[0][1] + f[1][1] + f[2][1]) / 3]; const txt = parts[i].join(''); g += `<text x="${c[0]}" y="${c[1] + 6}" text-anchor="middle" font-family="Jua" font-size="${txt.length > 6 ? 12 : 16}" transform="rotate(${rots[i]} ${c[0]} ${c[1]})" fill="#2C2A26">${txt.replace(/</g, '&lt;')}</text>`; });
+    g += `<text x="210" y="${B[1] + 40}" text-anchor="middle" font-size="12" fill="#5F5B55">글자 순서: 가운데 면 → 위 → 왼쪽 → 오른쪽 면을 돌아가며 한 글자씩</text>`; $('#lt-svg').innerHTML = g; }
+  $('#lt-go').onclick = make; make();
+})();
+
+/* ===== ★ 다양한 전개도 ===== */
+(function () {
+  const svg = $('#va-svg'); const s = 150, h = s * S3 / 2; const A = [280, 20], B = [280 - s, 20 + 2 * h], C = [280 + s, 20 + 2 * h]; const M = [280, B[1]], L = [(A[0] + B[0]) / 2, (A[1] + B[1]) / 2], R = [(A[0] + C[0]) / 2, (A[1] + C[1]) / 2]; const P = p => p.join(',');
+  function draw(show) { const t = +$('#va-t').value / 100; // 가운데 삼각형 각 변 위의 점
+    const on = (p, q) => [p[0] + (q[0] - p[0]) * t, p[1] + (q[1] - p[1]) * t]; const X = on(L, R), Y = on(R, M), Z = on(M, L);
+    let g = `<polygon points="${P(A)} ${P(B)} ${P(C)}" fill="#AEDBF2" stroke="#2C2A26" stroke-width="2"/><polygon points="${P(L)} ${P(R)} ${P(M)}" fill="#FFE8BF" stroke="#2C2A26" stroke-dasharray="6 4"/>`;
+    g += `<g stroke="#E9533F" stroke-width="3"><line x1="${A[0]}" y1="${A[1]}" x2="${X[0]}" y2="${X[1]}"/><line x1="${C[0]}" y1="${C[1]}" x2="${Y[0]}" y2="${Y[1]}"/><line x1="${B[0]}" y1="${B[1]}" x2="${Z[0]}" y2="${Z[1]}"/></g>`;
+    if (show) { // 잘린 세 조각을 가운데 삼각형 반대편 변으로 180° 회전
+      const rot = (p, c) => [2 * c[0] - p[0], 2 * c[1] - p[1]];
+      const pieces = [[[A, L, X], L], [[A, R, X], R], [[C, R, Y], R], [[C, M, Y], M], [[B, M, Z], M], [[B, L, Z], L]];
+      // 각 꼭짓점 주변 두 조각: A 쪽은 L과 R 둘레로 회전해 아래로, 등 — 간단화: 조각 (A,L,X)→L중심, (A,R,X)→R중심, (C,R,Y)→R, (C,M,Y)→M, (B,M,Z)→M, (B,L,Z)→L
+      pieces.forEach(([pt, c]) => g += `<polygon points="${pt.map(p => P(rot(p, c))).join(' ')}" fill="#9ED9C6" stroke="#2C2A26" stroke-width="2" opacity=".9"/>`);
+      g += `<polygon points="${P(L)} ${P(R)} ${P(M)}" fill="#FFE8BF" stroke="#2C2A26" stroke-width="2"/>`;
+      const sides = t === 0 || t === 1 ? 4 : 6; $('#va-res').textContent = `🎉 새 전개도! 자른 조각 6개가 가운데 삼각형 둘레에 붙어 ${t === .5 ? '육각형' : '여러 모양'}이 됐어요. 각도를 바꾸면 모양이 달라져요.`; }
+    else $('#va-res').textContent = '빨간 선은 모서리가 아닌 면 위를 지나는 자르는 선이에요.';
+    svg.innerHTML = g; }
+  $('#va-t').oninput = () => draw(false); $('#va-show').onclick = () => draw(true); draw(false);
+})();
+</script>
+</body>
+</html>

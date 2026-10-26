@@ -1,0 +1,174 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+<title>17 관찰 최적 위치 · 부산의 활동수학</title>
+<link rel="stylesheet" href="../../common.css">
+<link rel="stylesheet" href="../book.css">
+<style>
+  .setup{display:flex;gap:10px;flex-wrap:wrap;align-items:center;background:#fff;border-radius:14px;padding:10px 14px;margin:8px 0}
+  .result{font-family:var(--f-head);font-size:1.2rem;color:var(--bk-red);min-height:1.5em;margin:6px 0}
+  svg.board{width:100%;max-width:600px;height:auto;display:block;margin:6px auto;background:#fff;border-radius:16px;border:2px solid var(--bk-line);touch-action:none;user-select:none}
+  .stat{display:flex;gap:8px;flex-wrap:wrap;margin:8px 0;justify-content:center}
+  .stat div{background:#fff;border:2px solid var(--bk-line);border-radius:12px;padding:6px 14px;font-size:.85rem;text-align:center}
+  .stat b{font-family:var(--f-head);font-size:1.2rem;font-weight:400;display:block}
+  .stat div.hl{border-color:var(--bk-orange);background:var(--bk-yellow)}
+</style>
+</head>
+<body class="bk">
+<script src="../../common.js" data-num="17" data-name="관찰 최적 위치" data-sub="4단원 수학 진로 활동" data-home="../../"></script>
+<div class="bk-wrap">
+  <section class="ch-intro">
+    <div class="ch-intro__text">
+      <div class="bk-ribbon">17</div>
+      <h1 class="bk-h-unit">관찰 최적 위치</h1>
+      <p class="ch-lead">초량 삼거리의 정발 장군 동상. 어디에서 봐야 가장 크게 보일까요? 원과 접선·할선의 성질로 '가장 잘 보이는 자리'를 찾아봐요.</p>
+      <p class="ch-goal">★ 이 단원에서는 — 원, 접선, 할선에 대해 이해하고 여러 가지 문제를 해결할 수 있다.</p>
+    </div>
+    <div class="ch-intro__pic"><img src="../../img/ch17.jpg" alt="정발 장군 동상"><span class="ch-place">📍 정발 장군 동상</span></div>
+  </section>
+
+  <nav class="tabs" id="tabs">
+    <button class="tab on" data-t="t1"><span class="tab__n">1</span>원의 할선 정리</button>
+    <button class="tab" data-t="t2"><span class="tab__n">2</span>슈팅각</button>
+    <button class="tab" data-t="t3"><span class="tab__n">3</span>슈팅각이 최대인 지점</button>
+    <button class="tab" data-t="t4"><span class="tab__n">4</span>동상의 관찰 최적 위치</button>
+  </nav>
+
+  <!-- ===== 1 ===== -->
+  <section class="act-page" id="t1">
+    <div class="bk-panel">
+      <div class="bk-act"><span class="bk-act__n">1</span><span class="bk-act__t">원의 할선 정리</span><span class="bk-tag">문제 해결</span><span class="bk-tag">추론</span></div>
+      <p class="bk-muted">원 밖의 점 P에서 그은 접선의 접점 C, 할선이 원과 만나는 점 A, B. 그러면 <b>PC² = PA × PB</b>. P와 할선의 방향(빨간 점)을 드래그하며 확인해 보세요.</p>
+      <svg class="board" id="sc-svg" viewBox="0 0 600 360"></svg>
+      <div class="stat" id="sc-stat"></div>
+    </div>
+    <div class="bk-panel bk-panel--pink secret">
+      <h3>🔍 설명하기</h3>
+      <div class="q"><b>1</b> 삼각형 APC와 삼각형 CPB가 닮음임을 설명해 보자. <b>2</b> 닮음비로 PC² = PA×PB를 설명해 보자.</div>
+      <details class="reveal"><summary>힌트 보기</summary><p>∠P는 공통, 그리고 접선과 현이 이루는 각 ∠PCA = ∠CBA(원주각) → 두 각이 같으니 AA 닮음. PA : PC = PC : PB → PC² = PA × PB.</p></details>
+    </div>
+  </section>
+
+  <!-- ===== 2 ===== -->
+  <section class="act-page" id="t2" hidden>
+    <div class="bk-panel">
+      <div class="bk-act"><span class="bk-act__n">2</span><span class="bk-act__t">슈팅각</span><span class="bk-tag">문제 해결</span><span class="bk-tag">추론</span><span class="bk-tag">연결</span></div>
+      <p class="bk-muted">골대 양 끝 A, B와 슈팅 지점 P가 이루는 각 ∠APB가 슈팅각. 클수록 골이 될 확률이 높아요. 공(P)을 드래그해 보세요. 같은 슈팅각이 되는 점들이 어떤 도형을 이루는지 보세요.</p>
+      <div class="setup"><label>골대 폭 <input class="num num--2" id="sa-w" value="7.3" style="font-size:1rem;letter-spacing:0"> m</label><label>보고 싶은 각 <input type="range" id="sa-deg" min="10" max="80" value="36"> <b id="sa-degv">36</b>°</label><label><input type="checkbox" id="sa-locus" checked> 같은 각의 자취(원) 보기</label></div>
+      <svg class="board" id="sa-svg" viewBox="0 0 600 420"></svg>
+      <div class="stat" id="sa-stat"></div>
+    </div>
+    <div class="bk-panel bk-panel--pink secret">
+      <h3>🔍 생각해 보기</h3>
+      <div class="q"><b>1</b> 골대 폭 7m일 때 슈팅각 60°인 지점은 골대 중앙에서 얼마나 떨어져 있을까? <b>2</b> 슈팅각이 15°인 점을 모두 이으면? <b>3</b> 큰 원 위의 P와 작은 원 위의 Q, ∠APB와 ∠AQB 중 어느 것이 클까?</div>
+      <details class="reveal"><summary>힌트 보기</summary><p>중앙 정면에서 x = 3.5 / tan 30° ≈ 6.06 m. 같은 슈팅각인 점들은 A, B를 지나는 <b>원</b> 위에 있어요(원주각). 작은 원일수록 각이 커요 → ∠AQB > ∠APB.</p></details>
+    </div>
+  </section>
+
+  <!-- ===== 3 ===== -->
+  <section class="act-page" id="t3" hidden>
+    <div class="bk-panel">
+      <div class="bk-act"><span class="bk-act__n">3</span><span class="bk-act__t">슈팅각이 최대가 되는 지점</span><span class="bk-tag">문제 해결</span><span class="bk-tag">추론</span></div>
+      <p class="bk-muted">골대 끝 A에서 16 m 떨어진 지점에서 골라인과 수직으로 달려오며 슈팅! 어디서 차야 슈팅각이 최대일까요? 선수(초록)를 드래그하거나 '달리기'를 눌러 보세요.</p>
+      <div class="setup"><label>골대 폭 <input class="num num--2" id="mx-w" value="7" style="font-size:1rem;letter-spacing:0"> m</label><label>A에서 거리 <input class="num num--2" id="mx-d" value="16" style="font-size:1rem;letter-spacing:0"> m</label><button class="bk-btn bk-btn--sky bk-btn--sm" id="mx-run">🏃 달리기</button><label><input type="checkbox" id="mx-circle" checked> 접하는 원 보기</label></div>
+      <svg class="board" id="mx-svg" viewBox="0 0 600 420"></svg>
+      <div class="stat" id="mx-stat"></div>
+      <div class="result" id="mx-res"></div>
+    </div>
+    <div class="bk-panel bk-panel--pink secret">
+      <h3>🔍 생각해 보기</h3>
+      <div class="q"><b>2</b> 골대 폭 7 m, A에서 16 m 떨어진 직선 위에서 슈팅각이 최대인 지점은 골라인에서 x m. x를 구해 보자. (할선 정리)</div>
+      <details class="reveal"><summary>힌트 보기</summary><p>최대인 지점 P는 A, B를 지나면서 달리는 직선에 <b>접하는 원</b>의 접점. 할선 정리로 x² = 16 × (16+7) → x = √368 ≈ 19.2 m.</p></details>
+    </div>
+  </section>
+
+  <!-- ===== 4 ===== -->
+  <section class="act-page" id="t4" hidden>
+    <div class="bk-panel">
+      <div class="bk-act"><span class="bk-act__n">4</span><span class="bk-act__t">송상현 동상의 관찰 최적 위치</span><span class="bk-tag">연결</span><span class="bk-tag">문제 해결</span><span class="bk-tag">정보 처리</span></div>
+      <p class="bk-muted">눈높이보다 h만큼 높은 곳에 길이 d인 동상이 서 있어요. ∠APB가 최대가 되는 자리는 A, B를 지나고 시선(수평선)에 접하는 원의 접점. 관찰자를 드래그해 보세요.</p>
+      <div class="setup"><label>기단 높이 <input class="num num--2" id="ob-base" value="5" style="font-size:1rem;letter-spacing:0"> m</label><label>동상 높이 <input class="num num--2" id="ob-d" value="4.5" style="font-size:1rem;letter-spacing:0"> m</label><label>눈높이 <input class="num num--2" id="ob-eye" value="1.5" style="font-size:1rem;letter-spacing:0"> m</label></div>
+      <svg class="board" id="ob-svg" viewBox="0 0 600 400"></svg>
+      <div class="stat" id="ob-stat"></div>
+      <div class="result" id="ob-res"></div>
+    </div>
+    <div class="bk-panel bk-panel--pink secret">
+      <h3>🔍 식 세우기</h3>
+      <div class="q"><b>4</b> OP = x라 할 때 할선 정리로 x를 h, d로 나타내 보자. <b>5</b> 기단 5 m, 동상 4.5 m, 눈높이 1.5 m인 학생의 최적 위치는?</div>
+      <details class="reveal"><summary>힌트 보기</summary><p>x² = h(h + d) → <b>x = √(h(h+d))</b>. h = 5 − 1.5 = 3.5, d = 4.5 → x = √(3.5 × 8) = √28 ≈ 5.29 m. 교실 칠판도 클리노미터 앱으로 높이를 재서 최적 자리를 찾아보세요. 영화관 경사 좌석도 같은 원리!</p></details>
+    </div>
+  </section>
+</div>
+
+<script>
+const $ = s => document.querySelector(s);
+document.querySelectorAll('#tabs .tab').forEach(b => b.onclick = () => { document.querySelectorAll('#tabs .tab').forEach(x => x.classList.toggle('on', x === b)); document.querySelectorAll('.act-page').forEach(p => { p.hidden = p.id !== b.dataset.t; p.style.display = p.hidden ? 'none' : ''; }); window.scrollTo({ top: $('#tabs').offsetTop - 70, behavior: 'smooth' }); });
+(function(){ const h=location.hash.slice(1); const b=h&&document.querySelector(`#tabs .tab[data-t="${h}"]`); if(b) b.click(); })();
+function svgPt(svg, e) { const p = svg.createSVGPoint(); p.x = e.clientX; p.y = e.clientY; return p.matrixTransform(svg.getScreenCTM().inverse()); }
+function dragger(svg, getPts, onMove) { let cur = null; svg.addEventListener('pointerdown', e => { const p = svgPt(svg, e); let best = null, bd = 28; getPts().forEach((q, i) => { const d = Math.hypot(q[0] - p.x, q[1] - p.y); if (d < bd) { bd = d; best = i; } }); if (best !== null) { cur = best; svg.setPointerCapture(e.pointerId); } }); svg.addEventListener('pointermove', e => { if (cur === null) return; const p = svgPt(svg, e); onMove(cur, [p.x, p.y]); }); svg.addEventListener('pointerup', () => cur = null); svg.addEventListener('pointercancel', () => cur = null); }
+const angDeg = (P, A, B) => { const a = Math.atan2(A[1] - P[1], A[0] - P[0]), b = Math.atan2(B[1] - P[1], B[0] - P[0]); let d = Math.abs(a - b); if (d > Math.PI) d = 2 * Math.PI - d; return d * 180 / Math.PI; };
+
+/* ===== 1 할선 정리 ===== */
+(function () {
+  const svg = $('#sc-svg'); const O = [360, 190], R = 110; let P = [80, 230], dirPt = [300, 120];
+  function draw() { const d = Math.hypot(P[0] - O[0], P[1] - O[1]); if (d <= R + 5) P = [O[0] - (R + 40), O[1]];
+    // 접점 C (위쪽 접선)
+    const ang = Math.atan2(O[1] - P[1], O[0] - P[0]); const t = Math.acos(R / Math.hypot(P[0] - O[0], P[1] - O[1])); const C = [O[0] + R * Math.cos(ang + Math.PI - t), O[1] + R * Math.sin(ang + Math.PI - t)];
+    // 할선: P → dirPt 방향, 원과 교점
+    const dx = dirPt[0] - P[0], dy = dirPt[1] - P[1]; const L = Math.hypot(dx, dy); const ux = dx / L, uy = dy / L; const fx = P[0] - O[0], fy = P[1] - O[1]; const b = 2 * (fx * ux + fy * uy), c = fx * fx + fy * fy - R * R; const disc = b * b - 4 * c;
+    let h = `<circle cx="${O[0]}" cy="${O[1]}" r="${R}" fill="#FFF4DF" stroke="#2C2A26" stroke-width="2"/><circle cx="${O[0]}" cy="${O[1]}" r="3" fill="#2C2A26"/><text x="${O[0] + 8}" y="${O[1] + 16}" font-family="Jua">O</text>`;
+    h += `<line x1="${P[0]}" y1="${P[1]}" x2="${C[0]}" y2="${C[1]}" stroke="#3A9E82" stroke-width="3"/><circle cx="${C[0]}" cy="${C[1]}" r="6" fill="#3A9E82"/><text x="${C[0] + 6}" y="${C[1] - 10}" font-family="Jua" fill="#3A9E82">C</text>`;
+    let PA = 0, PB = 0;
+    if (disc > 0) { const t1 = (-b - Math.sqrt(disc)) / 2, t2 = (-b + Math.sqrt(disc)) / 2; const A = [P[0] + ux * t1, P[1] + uy * t1], B = [P[0] + ux * t2, P[1] + uy * t2]; PA = t1; PB = t2; h += `<line x1="${P[0]}" y1="${P[1]}" x2="${B[0]}" y2="${B[1]}" stroke="#2F8FC9" stroke-width="3"/><circle cx="${A[0]}" cy="${A[1]}" r="6" fill="#2F8FC9"/><circle cx="${B[0]}" cy="${B[1]}" r="6" fill="#2F8FC9"/><text x="${A[0] + 8}" y="${A[1] - 8}" font-family="Jua" fill="#2F8FC9">A</text><text x="${B[0] + 8}" y="${B[1] + 18}" font-family="Jua" fill="#2F8FC9">B</text><line x1="${A[0]}" y1="${A[1]}" x2="${C[0]}" y2="${C[1]}" stroke="#999" stroke-dasharray="4 3"/><line x1="${B[0]}" y1="${B[1]}" x2="${C[0]}" y2="${C[1]}" stroke="#999" stroke-dasharray="4 3"/>`; }
+    else h += `<line x1="${P[0]}" y1="${P[1]}" x2="${P[0] + ux * 500}" y2="${P[1] + uy * 500}" stroke="#2F8FC9" stroke-width="2" stroke-dasharray="6 4"/>`;
+    h += `<circle cx="${dirPt[0]}" cy="${dirPt[1]}" r="7" fill="#E9533F" opacity=".7"/><circle cx="${P[0]}" cy="${P[1]}" r="9" fill="#E9533F" stroke="#fff" stroke-width="2"/><text x="${P[0] - 22}" y="${P[1] + 6}" font-family="Jua" fill="#E9533F">P</text>`;
+    svg.innerHTML = h; const PC = Math.hypot(C[0] - P[0], C[1] - P[1]) / 10;
+    $('#sc-stat').innerHTML = disc > 0 ? `<div>PC<b>${PC.toFixed(2)}</b></div><div>PC²<b>${(PC * PC).toFixed(2)}</b></div><div>PA<b>${(PA / 10).toFixed(2)}</b></div><div>PB<b>${(PB / 10).toFixed(2)}</b></div><div class="hl">PA × PB<b>${(PA * PB / 100).toFixed(2)}</b></div>` : `<div>할선이 원과 만나도록 빨간 점을 움직여 보세요</div>`; }
+  dragger(svg, () => [P, dirPt], (i, p) => { if (i === 0) P = p; else dirPt = p; draw(); }); draw();
+})();
+
+/* ===== 2 슈팅각 ===== */
+(function () {
+  const svg = $('#sa-svg'); const SC = 14; const gy = 60, cx = 300; let P = [300, 220];
+  function draw() { const w = +$('#sa-w').value || 7.3; const A = [cx - w * SC / 2, gy], B = [cx + w * SC / 2, gy]; const deg = +$('#sa-deg').value; $('#sa-degv').textContent = deg;
+    let h = `<rect x="40" y="${gy}" width="520" height="340" fill="#DFF5EE"/><line x1="40" y1="${gy}" x2="560" y2="${gy}" stroke="#fff" stroke-width="3"/><rect x="${A[0]}" y="${gy - 10}" width="${B[0] - A[0]}" height="10" fill="#fff" stroke="#2C2A26"/><circle cx="${cx}" cy="${gy + 11 * SC}" r="4" fill="#fff" stroke="#2C2A26"/><text x="${cx + 8}" y="${gy + 11 * SC + 4}" font-size="11" fill="#2C2A26">페널티 마크 (11 m)</text>`;
+    if ($('#sa-locus').checked) { const half = w * SC / 2; const r = half / Math.sin(deg * Math.PI / 180); const oy = gy + Math.sqrt(Math.max(0, r * r - half * half)); h += `<circle cx="${cx}" cy="${oy}" r="${r}" fill="none" stroke="#F5A623" stroke-width="2" stroke-dasharray="6 4"/><text x="${cx + r - 10}" y="${oy}" font-size="12" fill="#C9731A">슈팅각 ${deg}°</text>`; }
+    h += `<line x1="${P[0]}" y1="${P[1]}" x2="${A[0]}" y2="${A[1]}" stroke="#2F8FC9" stroke-width="2"/><line x1="${P[0]}" y1="${P[1]}" x2="${B[0]}" y2="${B[1]}" stroke="#2F8FC9" stroke-width="2"/><text x="${A[0] - 16}" y="${gy - 14}" font-family="Jua">A</text><text x="${B[0] + 6}" y="${gy - 14}" font-family="Jua">B</text><circle cx="${P[0]}" cy="${P[1]}" r="10" fill="#fff" stroke="#2C2A26" stroke-width="2"/><text x="${P[0] + 12}" y="${P[1] + 5}" font-family="Jua">P ⚽</text>`;
+    svg.innerHTML = h; const ang = angDeg(P, A, B); const dist = Math.hypot(P[0] - cx, P[1] - gy) / SC; $('#sa-stat').innerHTML = `<div class="hl">슈팅각 ∠APB<b>${ang.toFixed(1)}°</b></div><div>골대 중앙까지<b>${dist.toFixed(1)} m</b></div><div>골대 폭<b>${w} m</b></div>`; }
+  dragger(svg, () => [P], (i, p) => { P = [Math.max(45, Math.min(555, p[0])), Math.max(gy + 5, Math.min(410, p[1]))]; draw(); }); $('#sa-w').oninput = draw; $('#sa-deg').oninput = draw; $('#sa-locus').onchange = draw; draw();
+})();
+
+/* ===== 3 최대 지점 ===== */
+(function () {
+  const svg = $('#mx-svg'); const gy = 60; let y = 300, timer = null; const SC = 12;
+  function draw() { const w = +$('#mx-w').value || 7, d = +$('#mx-d').value || 16; const ax = 120; const A = [ax, gy], B = [ax + w * SC, gy]; const lx = ax + d * SC; const P = [lx, y];
+    let h = `<rect x="40" y="${gy}" width="520" height="340" fill="#DFF5EE"/><line x1="40" y1="${gy}" x2="560" y2="${gy}" stroke="#fff" stroke-width="3"/><rect x="${A[0]}" y="${gy - 10}" width="${B[0] - A[0]}" height="10" fill="#fff" stroke="#2C2A26"/><line x1="${lx}" y1="${gy}" x2="${lx}" y2="400" stroke="#2C2A26" stroke-dasharray="6 4"/><text x="${A[0] - 16}" y="${gy - 14}" font-family="Jua">A</text><text x="${B[0] + 6}" y="${gy - 14}" font-family="Jua">B</text><text x="${lx + 6}" y="${gy + 16}" font-size="12">A에서 ${d} m</text>`;
+    const xBest = Math.sqrt(d * (d + w)); const yBest = gy + xBest * SC;
+    if ($('#mx-circle').checked) { const r = (xBest * SC); // 원: A,B 지나고 직선 x=lx에 접함 → 중심 (ax + w*SC/2, ?) 반지름 = lx - 중심x
+      const ocx = ax + w * SC / 2; const rr = lx - ocx; const ocy = gy + Math.sqrt(Math.max(0, rr * rr - (w * SC / 2) ** 2)); h += `<circle cx="${ocx}" cy="${ocy}" r="${rr}" fill="none" stroke="#F5A623" stroke-width="2" stroke-dasharray="6 4"/><circle cx="${lx}" cy="${ocy}" r="5" fill="#F5A623"/>`; }
+    h += `<line x1="${P[0]}" y1="${P[1]}" x2="${A[0]}" y2="${A[1]}" stroke="#2F8FC9" stroke-width="2"/><line x1="${P[0]}" y1="${P[1]}" x2="${B[0]}" y2="${B[1]}" stroke="#2F8FC9" stroke-width="2"/><circle cx="${P[0]}" cy="${P[1]}" r="12" fill="#3A9E82" stroke="#fff" stroke-width="2"/><text x="${P[0] + 14}" y="${P[1] + 5}" font-family="Jua">🏃 P</text>`;
+    // 각도 그래프 (오른쪽)
+    let g = ''; const gx0 = 400, gw = 150; let maxA = 0; for (let yy = gy + 5; yy <= 400; yy += 4) { const a = angDeg([lx, yy], A, B); maxA = Math.max(maxA, a); } for (let yy = gy + 5; yy <= 400; yy += 4) { const a = angDeg([lx, yy], A, B); g += `${yy === gy + 5 ? 'M' : 'L'}${gx0 + a / maxA * gw} ${yy} `; } h += `<path d="${g}" fill="none" stroke="#E9533F" stroke-width="2"/><text x="${gx0}" y="${gy - 14}" font-size="11" fill="#E9533F">슈팅각 그래프 →</text>`;
+    svg.innerHTML = h; const ang = angDeg(P, A, B); const x = (y - gy) / SC; $('#mx-stat').innerHTML = `<div>골라인에서<b>${x.toFixed(1)} m</b></div><div class="hl">슈팅각<b>${ang.toFixed(2)}°</b></div><div>최대 지점 x = √(${d}×${d + w})<b>${xBest.toFixed(2)} m</b></div>`;
+    $('#mx-res').textContent = Math.abs(x - xBest) < .5 ? '🎉 지금이 슈팅각이 최대! 원이 직선에 접하는 점이에요.' : x < xBest ? '골대에 너무 가까워요. 조금 더 뒤에서!' : '더 다가가면 각이 커져요.'; }
+  dragger(svg, () => [[(+$('#mx-d').value || 16) * SC + 120, y]], (i, p) => { y = Math.max(gy + 5, Math.min(400, p[1])); draw(); });
+  $('#mx-run').onclick = () => { clearInterval(timer); y = 400; timer = setInterval(() => { y -= 3; if (y < gy + 20) clearInterval(timer); draw(); }, 40); };
+  $('#mx-w').oninput = draw; $('#mx-d').oninput = draw; $('#mx-circle').onchange = draw; draw();
+})();
+
+/* ===== 4 동상 ===== */
+(function () {
+  const svg = $('#ob-svg'); let px = 420; const SC = 26, groundY = 340, ox = 120;
+  function draw() { const base = +$('#ob-base').value || 5, d = +$('#ob-d').value || 4.5, eye = +$('#ob-eye').value || 1.5; const h0 = base - eye; const eyeY = groundY - eye * SC; const B = [ox, groundY - base * SC], A = [ox, groundY - (base + d) * SC];
+    let h = `<rect x="0" y="${groundY}" width="600" height="60" fill="#DFF5EE"/><rect x="${ox - 25}" y="${B[1]}" width="50" height="${groundY - B[1]}" fill="#c9c3b0" stroke="#2C2A26"/><rect x="${ox - 12}" y="${A[1]}" width="24" height="${B[1] - A[1]}" rx="6" fill="#8B5A2B" stroke="#2C2A26"/><text x="${ox + 30}" y="${A[1] + 6}" font-family="Jua">A</text><text x="${ox + 30}" y="${B[1] + 6}" font-family="Jua">B</text><text x="${ox - 70}" y="${(A[1] + B[1]) / 2}" font-size="12">동상 ${d} m</text><text x="${ox - 70}" y="${(B[1] + groundY) / 2}" font-size="12">기단 ${base} m</text>`;
+    h += `<line x1="${ox}" y1="${eyeY}" x2="590" y2="${eyeY}" stroke="#999" stroke-dasharray="6 4"/><text x="560" y="${eyeY - 6}" font-size="11" fill="#5F5B55">시선 (눈높이 ${eye} m)</text><text x="${ox - 6}" y="${eyeY + 4}" font-family="Jua" font-size="13" text-anchor="end">O</text>`;
+    const xBest = Math.sqrt(h0 * (h0 + d)); const r = (h0 + d / 2) * SC; const oc = [ox + xBest * SC, eyeY - r]; h += `<circle cx="${oc[0]}" cy="${oc[1]}" r="${r}" fill="none" stroke="#F5A623" stroke-width="2" stroke-dasharray="6 4"/><circle cx="${ox + xBest * SC}" cy="${eyeY}" r="5" fill="#F5A623"/><text x="${ox + xBest * SC}" y="${eyeY + 18}" font-size="11" fill="#C9731A" text-anchor="middle">최적 ${xBest.toFixed(2)} m</text>`;
+    const P = [px, eyeY]; h += `<line x1="${P[0]}" y1="${P[1]}" x2="${A[0]}" y2="${A[1]}" stroke="#2F8FC9" stroke-width="2"/><line x1="${P[0]}" y1="${P[1]}" x2="${B[0]}" y2="${B[1]}" stroke="#2F8FC9" stroke-width="2"/><text x="${px - 10}" y="${groundY + 2}" font-size="30">🧍</text><text x="${px + 12}" y="${eyeY - 8}" font-family="Jua">P</text>`;
+    svg.innerHTML = h; const ang = angDeg(P, A, B); const x = (px - ox) / SC; $('#ob-stat').innerHTML = `<div>h = ${base} − ${eye}<b>${h0.toFixed(1)} m</b></div><div>d<b>${d} m</b></div><div>OP = x<b>${x.toFixed(2)} m</b></div><div class="hl">∠APB<b>${ang.toFixed(2)}°</b></div><div>x = √(h(h+d))<b>${xBest.toFixed(2)} m</b></div>`; $('#ob-res').textContent = Math.abs(x - xBest) < .25 ? '🎉 가장 크게 보이는 자리!' : x < xBest ? '너무 가까워요 — 고개를 많이 들어야 해요.' : '조금 더 가까이!'; }
+  dragger(svg, () => [[px, groundY - (+$('#ob-eye').value || 1.5) * SC]], (i, p) => { px = Math.max(ox + 20, Math.min(580, p[0])); draw(); }); ['base', 'd', 'eye'].forEach(k => $('#ob-' + k).oninput = draw); draw();
+})();
+</script>
+</body>
+</html>

@@ -1,0 +1,176 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+<title>09 이진법 · 부산의 활동수학</title>
+<link rel="stylesheet" href="../../common.css">
+<link rel="stylesheet" href="../book.css">
+<style>
+  .setup{display:flex;gap:10px;flex-wrap:wrap;align-items:center;background:#fff;border-radius:14px;padding:10px 14px;margin:8px 0}
+  .result{font-family:var(--f-head);font-size:1.25rem;color:var(--bk-red);min-height:1.5em;margin:6px 0}
+  .cards{display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:10px}
+  .mcard{background:#fff;border:3px solid var(--bk-sky);border-radius:14px;padding:8px;box-shadow:0 4px 0 #3a95c4}
+  .mcard h4{margin:0 0 6px;font-family:var(--f-head);font-weight:400;text-align:center;color:var(--bk-sky)}
+  .mcard .g{display:grid;grid-template-columns:repeat(4,1fr);gap:3px}
+  .mcard .g span{background:var(--bk-cream);border-radius:5px;text-align:center;font-family:var(--f-head);padding:3px 0}
+  .mcard .g span:first-child{background:var(--bk-yellow);outline:2px solid var(--bk-orange)}
+  .mcard.on{border-color:var(--bk-orange);background:#FFF4DF}
+  .mcard.asking{border-color:var(--bk-red);box-shadow:0 0 0 4px #FDEEF2}
+  .rods{display:flex;gap:10px;align-items:flex-end;justify-content:center;flex-wrap:wrap;min-height:60px}
+  .rodbtn{border:2px solid var(--bk-ink);border-radius:6px;background:#F3D98B;height:30px;cursor:pointer;font-family:var(--f-head);display:grid;place-items:center;-webkit-tap-highlight-color:transparent}
+  .rodbtn.on{background:var(--bk-orange);color:#fff}
+  .ruler{position:relative;height:60px;background:#fff;border:2px solid var(--bk-line);border-radius:10px;margin:8px 0;overflow:hidden}
+  .ruler .pen{position:absolute;left:10px;top:8px;height:16px;background:linear-gradient(90deg,#2F8FC9,#9B6BD6);border-radius:8px}
+  .ruler .rodfill{position:absolute;left:10px;top:32px;height:16px;display:flex}
+  .ruler .rodfill i{height:100%;border-right:2px solid #fff;background:var(--bk-orange)}
+  .lens{display:flex;gap:4px;flex-wrap:wrap}
+  .lens span{width:34px;height:34px;display:grid;place-items:center;border-radius:8px;background:#f3f0e6;color:#aaa;font-size:.85rem}
+  .lens span.ok{background:#DFF5EE;color:#1F6B50;font-weight:700}
+  .bulbs{display:flex;gap:10px;justify-content:center;margin:6px 0}
+  .bulb{display:flex;flex-direction:column;align-items:center;gap:4px;cursor:pointer;-webkit-tap-highlight-color:transparent}
+  .bulb i{width:44px;height:44px;border-radius:50% 50% 45% 45%;background:#ddd;border:2px solid #aaa;display:grid;place-items:center;font-style:normal;transition:.15s}
+  .bulb.on i{background:#FFE27A;border-color:#F5A623;box-shadow:0 0 18px #FFE27A}
+  .bulb small{font-family:var(--f-head)}
+  .cipher{display:flex;flex-direction:column;gap:4px}
+  .cipher .row{display:flex;gap:8px;align-items:center}
+  .cipher .row .b{width:22px;height:22px;border-radius:50%;background:#ddd;border:1px solid #aaa}
+  .cipher .row .b.on{background:#FFE27A;border-color:#F5A623}
+  .cipher .row b{font-family:var(--f-head);width:28px;text-align:center}
+  .alpha{display:grid;grid-template-columns:repeat(auto-fill,minmax(150px,1fr));gap:3px;font-size:.8rem;font-family:var(--f-mono,monospace)}
+  .alpha span{background:#fff;border:1px solid var(--bk-line);border-radius:6px;padding:2px 6px}
+</style>
+</head>
+<body class="bk">
+<script src="../../common.js" data-num="09" data-name="이진법" data-sub="3단원 수학 교과 활동" data-home="../../"></script>
+<div class="bk-wrap">
+  <section class="ch-intro">
+    <div class="ch-intro__text">
+      <div class="bk-ribbon">09</div>
+      <h1 class="bk-h-unit">이진법</h1>
+      <p class="ch-lead">마늘 100개는 '한 접', 오징어 20마리는 '한 축'. 수를 나타내는 방법은 다양해요. 0과 1만으로 모든 수를 나타내는 이진법으로 마술도 하고 암호도 만들어 봐요.</p>
+      <p class="ch-goal">★ 이 단원에서는 — 이진법의 뜻을 알고, 다양한 문제를 해결할 수 있다.</p>
+    </div>
+    <div class="ch-intro__pic"><img src="../../img/ch09.jpg" alt="엄궁농산물도매시장"><span class="ch-place">📍 엄궁농산물도매시장</span></div>
+  </section>
+
+  <nav class="tabs" id="tabs">
+    <button class="tab on" data-t="t1"><span class="tab__n">1</span>마법 카드</button>
+    <button class="tab" data-t="t2"><span class="tab__n">2</span>특별한 막대로 길이 재기</button>
+    <button class="tab" data-t="t3"><span class="tab__n">3</span>전구 암호</button>
+    <button class="tab tab--pink" data-t="t4"><span class="tab__n">★</span>진법 이야기</button>
+  </nav>
+
+  <!-- ===== 1 마법 카드 ===== -->
+  <section class="act-page" id="t1">
+    <div class="bk-panel">
+      <div class="bk-act"><span class="bk-act__n">1</span><span class="bk-act__t">마법 카드 만들기</span><span class="bk-tag">추론</span><span class="bk-tag">연결</span></div>
+      <p class="bk-muted">마음속으로 수를 하나 생각하세요. 마술사가 카드를 보여주면 그 수가 있는지 '예 / 아니요'로만 답하세요.</p>
+      <div class="setup"><label>범위 <select id="mc-n" class="sel"><option value="4">1~15 (카드 4장)</option><option value="5">1~31 (카드 5장)</option><option value="6">1~63 (카드 6장)</option></select></label><button class="bk-btn bk-btn--primary bk-btn--sm" id="mc-start">마술 시작</button></div>
+      <div class="stage stage--sm"><div class="magician"><div class="magician__face">🎩</div><div class="bubble" id="mc-say">1부터 15까지의 수 중 하나를 생각하세요. 준비되면 '마술 시작'!</div></div></div>
+      <div class="bk-row" id="mc-btns" hidden><button class="bk-btn bk-btn--sky" id="mc-yes">예, 있어요</button><button class="bk-btn bk-btn--ghost" id="mc-no">아니요, 없어요</button></div>
+      <div class="cards" id="mc-cards" style="margin-top:10px"></div>
+    </div>
+    <div class="bk-panel bk-panel--pink secret">
+      <h3>🔍 비밀 밝히기</h3>
+      <div class="q"><b>1</b> '예'라고 답한 카드의 <b>첫 번째 칸의 수</b>와 생각한 수는 어떤 관계일까?</div>
+      <div class="q"><b>3</b> 6은 카드 2와 카드 3에만 있다. 왜일까? <b>4</b> 각 카드의 첫 칸 수(1, 2, 4, 8, …)의 특징은?</div>
+      <details class="reveal"><summary>힌트 보기</summary><p>카드 k에는 "이진법으로 나타냈을 때 2^(k−1) 자리가 1인 수"가 들어 있어요. 6 = 4 + 2 = 110₍₂₎이므로 2와 4의 카드에만! '예'라고 답한 카드들의 첫 칸 수를 더하면 생각한 수가 돼요.</p></details>
+      <div class="q"><b>5</b> 1~31을 맞힐 수 있는 카드 5장을 만들어 보자. (위에서 범위를 바꾸면 자동으로 만들어져요 — 규칙: 1은 카드1, 2는 카드2, 3=1+2는 카드1·2, 4는 새 카드3 …)</div>
+    </div>
+  </section>
+
+  <!-- ===== 2 막대 ===== -->
+  <section class="act-page" id="t2" hidden>
+    <div class="bk-panel">
+      <div class="bk-act"><span class="bk-act__n">2</span><span class="bk-act__t">특별한 막대를 이용하여 길이 재기</span><span class="bk-tag">연결</span><span class="bk-tag">문제 해결</span></div>
+      <p class="bk-muted">길이가 1, 2, 4, 8인 막대가 하나씩 있어요. 막대를 골라 이어 붙여 볼펜의 길이를 재어 보세요.</p>
+      <div class="setup"><div class="seg"><button class="bk-btn bk-btn--sm" id="rd-set2">1, 2, 4, 8</button><button class="bk-btn bk-btn--sm bk-btn--ghost" id="rd-set3">1, 3, 9</button></div><button class="bk-btn bk-btn--sky bk-btn--sm" id="rd-new">새 볼펜</button></div>
+      <div class="ruler"><div class="pen" id="rd-pen"></div><div class="rodfill" id="rd-fill"></div></div>
+      <div class="rods" id="rd-rods"></div>
+      <div class="result" id="rd-res"></div>
+      <h4 class="sub">이 막대들로 잴 수 있는 길이</h4>
+      <div class="lens" id="rd-lens"></div>
+    </div>
+    <div class="bk-panel bk-panel--pink secret">
+      <h3>🔍 생각해 보기</h3>
+      <div class="q"><b>2</b> 1, 2, 4, 8 막대로 잴 수 있는 길이를 모두 구해 보자. <b>3</b> 1, 3, 9 막대로 1부터 15까지 모두 잴 수 있을까?</div>
+      <details class="reveal"><summary>힌트 보기</summary><p>1, 2, 4, 8로는 1~15 전부(15가지)! 모든 수는 2의 거듭제곱의 합으로 한 가지로 나타내지니까요(이진법). 1, 3, 9로는 더하기만 해서는 2, 5, 6, 7, 8… 을 못 재요. 하지만 양팔저울처럼 <b>빼기</b>도 허용하면(3−1=2, 9−3−1=5…) 1~13을 모두 잴 수 있어요.</p></details>
+    </div>
+  </section>
+
+  <!-- ===== 3 전구 암호 ===== -->
+  <section class="act-page" id="t3" hidden>
+    <div class="bk-panel">
+      <div class="bk-act"><span class="bk-act__n">3</span><span class="bk-act__t">전구를 이용하여 암호 만들기</span><span class="bk-tag">의사소통</span><span class="bk-tag">연결</span></div>
+      <p class="bk-muted">A=1, B=2, … Z=26. 각 수를 1, 2, 4, 8, 16의 합으로 나타내고, 쓰인 수의 전구만 켜요. 전구를 눌러 켜고 끄면 어떤 글자인지 알 수 있어요.</p>
+      <div class="bulbs" id="bl-bulbs"></div>
+      <div class="result" id="bl-res"></div>
+      <div class="setup"><label>단어 암호화: <input class="num" id="bl-word" value="MATH" style="letter-spacing:.1em;width:140px;text-transform:uppercase"></label><button class="bk-btn bk-btn--primary bk-btn--sm" id="bl-enc">전구로 바꾸기</button><button class="bk-btn bk-btn--mint bk-btn--sm" id="bl-quiz">암호 풀기 퀴즈</button></div>
+      <div class="cipher" id="bl-out"></div>
+      <details class="reveal" style="margin-left:0"><summary>알파벳 표 보기</summary><div class="alpha" id="bl-tbl"></div></details>
+    </div>
+    <div class="bk-panel bk-panel--pink secret">
+      <h3>🔍 생각해 보기</h3>
+      <div class="q"><b>1</b> 전구 5개면 몇 가지 글자(수)를 나타낼 수 있을까? 전구가 하나 더 있으면?</div>
+      <details class="reveal"><summary>힌트 보기</summary><p>전구 하나마다 켜짐/꺼짐 2가지 → 5개면 2⁵ = 32가지(0~31). 6개면 64가지. 컴퓨터가 0과 1로 글자를 저장하는 원리와 같아요.</p></details>
+    </div>
+  </section>
+
+  <!-- ===== ★ 진법 ===== -->
+  <section class="act-page" id="t4" hidden>
+    <div class="bk-panel bk-panel--pink">
+      <div class="bk-act"><span class="bk-act__n" style="background:var(--bk-red)">★</span><span class="bk-act__t">읽을거리 — 다양한 진법 이야기</span><span class="bk-tag">연결</span></div>
+      <div class="setup"><label>십진수 <input class="num" id="bs-n" value="123" style="width:120px;letter-spacing:0"></label></div>
+      <div id="bs-out" style="line-height:2"></div>
+      <p class="bk-muted" style="margin-top:10px">바빌로니아는 60진법(60초=1분, 60분=1시간이 그 흔적), 마야는 20진법, 이집트는 10의 거듭제곱 상형문자를 썼어요.</p>
+    </div>
+  </section>
+</div>
+
+<script>
+const $ = s => document.querySelector(s); const ri = n => Math.floor(Math.random() * n);
+document.querySelectorAll('#tabs .tab').forEach(b => b.onclick = () => { document.querySelectorAll('#tabs .tab').forEach(x => x.classList.toggle('on', x === b)); document.querySelectorAll('.act-page').forEach(p => { p.hidden = p.id !== b.dataset.t; p.style.display = p.hidden ? 'none' : ''; }); window.scrollTo({ top: $('#tabs').offsetTop - 70, behavior: 'smooth' }); });
+(function(){ const h=location.hash.slice(1); const b=h&&document.querySelector(`#tabs .tab[data-t="${h}"]`); if(b) b.click(); })();
+
+/* ===== 1 마법 카드 ===== */
+(function () {
+  let k = 4, cards = [], step = 0, sum = 0, playing = false;
+  function build() { k = +$('#mc-n').value; const max = 2 ** k - 1; cards = []; for (let i = 0; i < k; i++) cards.push({ bit: 2 ** i, nums: [] }); for (let n = 1; n <= max; n++) cards.forEach(c => { if (n & c.bit) c.nums.push(n); }); render(); $('#mc-say').textContent = `1부터 ${max}까지의 수 중 하나를 생각하세요. 준비되면 '마술 시작'!`; }
+  function render() { $('#mc-cards').innerHTML = cards.map((c, i) => `<div class="mcard ${playing && i === step ? 'asking' : ''} ${c.yes ? 'on' : ''}"><h4>카드 ${i + 1}</h4><div class="g">${c.nums.map(n => `<span>${n}</span>`).join('')}</div></div>`).join(''); }
+  $('#mc-n').onchange = build; $('#mc-start').onclick = () => { cards.forEach(c => c.yes = false); step = 0; sum = 0; playing = true; $('#mc-btns').hidden = false; ask(); };
+  function ask() { render(); $('#mc-say').textContent = `카드 ${step + 1}에 생각한 수가 있나요?`; }
+  function answer(y) { if (!playing) return; if (y) { sum += cards[step].bit; cards[step].yes = true; } step++; if (step < k) { ask(); return; } playing = false; $('#mc-btns').hidden = true; render(); $('#mc-say').innerHTML = `당신이 생각한 수는 바로… <b style="font-size:1.5rem;color:var(--bk-red)">${sum}</b>! ('예'라고 한 카드의 첫 칸 수를 더했어요: ${cards.filter(c => c.yes).map(c => c.bit).join(' + ') || '없음'})`; }
+  $('#mc-yes').onclick = () => answer(true); $('#mc-no').onclick = () => answer(false); build();
+})();
+
+/* ===== 2 막대 ===== */
+(function () {
+  let rods = [1, 2, 4, 8], on = new Set(), target = 11; const UNIT = 30;
+  function sums() { const s = new Set([0]); rods.forEach(r => [...s].forEach(x => s.add(x + r))); s.delete(0); return s; }
+  function render() { $('#rd-pen').style.width = target * UNIT + 'px'; $('#rd-rods').innerHTML = rods.map((r, i) => `<div class="rodbtn ${on.has(i) ? 'on' : ''}" style="width:${r * UNIT}px" data-i="${i}">${r}</div>`).join(''); $('#rd-rods').querySelectorAll('.rodbtn').forEach(b => b.onclick = () => { const i = +b.dataset.i; on.has(i) ? on.delete(i) : on.add(i); render(); });
+    const used = [...on].map(i => rods[i]); const tot = used.reduce((a, b) => a + b, 0); $('#rd-fill').innerHTML = used.map(r => `<i style="width:${r * UNIT}px"></i>`).join('');
+    $('#rd-res').textContent = tot === 0 ? '막대를 골라 보세요.' : tot === target ? `🎉 ${used.join(' + ')} = ${target}. 볼펜의 길이는 ${target}!` : `${used.join(' + ')} = ${tot} (볼펜은 ${tot < target ? '더 길어요' : '더 짧아요'})`;
+    const S = sums(); const maxL = rods.reduce((a, b) => a + b, 0); $('#rd-lens').innerHTML = Array.from({ length: Math.min(15, maxL) }, (_, i) => `<span class="${S.has(i + 1) ? 'ok' : ''}">${i + 1}</span>`).join('') + `<span class="bk-muted" style="width:auto;padding:0 8px">${[...S].filter(x => x <= 15).length}가지</span>`; }
+  function newPen() { const S = [...sums()].filter(x => x <= 15); target = S[ri(S.length)]; on = new Set(); render(); }
+  $('#rd-set2').onclick = () => { rods = [1, 2, 4, 8]; $('#rd-set2').classList.remove('bk-btn--ghost'); $('#rd-set3').classList.add('bk-btn--ghost'); newPen(); };
+  $('#rd-set3').onclick = () => { rods = [1, 3, 9]; $('#rd-set3').classList.remove('bk-btn--ghost'); $('#rd-set2').classList.add('bk-btn--ghost'); newPen(); };
+  $('#rd-new').onclick = newPen; newPen();
+})();
+
+/* ===== 3 전구 ===== */
+(function () {
+  const BITS = [1, 2, 4, 8, 16]; let st = [0, 0, 0, 0, 0]; const L = n => n >= 1 && n <= 26 ? String.fromCharCode(64 + n) : '—';
+  function render() { $('#bl-bulbs').innerHTML = BITS.map((b, i) => `<div class="bulb ${st[i] ? 'on' : ''}" data-i="${i}"><i>${st[i] ? '💡' : ''}</i><small>${b} 전구</small></div>`).join(''); $('#bl-bulbs').querySelectorAll('.bulb').forEach(d => d.onclick = () => { st[+d.dataset.i] ^= 1; render(); });
+    const n = st.reduce((s, x, i) => s + x * BITS[i], 0); $('#bl-res').textContent = `${st.join('')} → ${BITS.filter((_, i) => st[i]).join(' + ') || 0} = ${n} → 알파벳 ${L(n)}`; }
+  $('#bl-enc').onclick = () => { const w = $('#bl-word').value.toUpperCase().replace(/[^A-Z]/g, ''); $('#bl-out').innerHTML = [...w].map(ch => { const n = ch.charCodeAt(0) - 64; return `<div class="row"><b>${ch}</b><span class="bk-muted" style="width:30px">${n}</span>${BITS.map(b => `<span class="b ${n & b ? 'on' : ''}"></span>`).join('')}<span class="bk-muted">${BITS.map(b => n & b ? 1 : 0).join('')}</span></div>`; }).join(''); };
+  $('#bl-quiz').onclick = () => { const words = ['BUSAN', 'MATH', 'ONCHEON', 'PIXEL', 'EULER', 'GAUSS']; const w = words[ri(words.length)]; $('#bl-out').innerHTML = [...w].map(ch => { const n = ch.charCodeAt(0) - 64; return `<div class="row"><b>?</b>${BITS.map(b => `<span class="b ${n & b ? 'on' : ''}"></span>`).join('')}</div>`; }).join('') + `<div class="row"><input class="num" style="letter-spacing:.1em;width:160px;text-transform:uppercase" placeholder="단어는?" id="bl-ans"><button class="bk-btn bk-btn--sky bk-btn--sm" id="bl-chk">확인</button></div>`; $('#bl-chk').onclick = () => alert($('#bl-ans').value.toUpperCase() === w ? '🎉 정답!' : '다시 생각해 보세요. 전구 1·2·4·8·16을 더해 보면…'); };
+  $('#bl-tbl').innerHTML = Array.from({ length: 26 }, (_, i) => `<span>${L(i + 1)} ${String(i + 1).padStart(2)} ${BITS.map(b => (i + 1) & b ? 1 : 0).join(' ')}</span>`).join('');
+  render();
+})();
+
+/* ===== ★ 진법 ===== */
+(function () { const run = () => { const n = Math.max(0, Math.floor(+$('#bs-n').value || 0)); const b2 = n.toString(2); $('#bs-out').innerHTML = `십진수 <b>${n}</b> = ${[...String(n)].map((d, i, a) => `${d}×10<sup>${a.length - 1 - i}</sup>`).join(' + ')}<br>이진수 <b>${b2}₍₂₎</b> = ${[...b2].map((d, i, a) => d === '1' ? `2<sup>${a.length - 1 - i}</sup>` : null).filter(Boolean).join(' + ')} = ${n}<br>60진법: ${Math.floor(n / 60)}×60 + ${n % 60} → 바빌로니아 식으로 (${Math.floor(n / 60)}, ${n % 60})`; }; $('#bs-n').oninput = run; run(); })();
+</script>
+</body>
+</html>

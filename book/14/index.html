@@ -1,0 +1,188 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+<title>14 픽의 정리 · 부산의 활동수학</title>
+<link rel="stylesheet" href="../../common.css">
+<link rel="stylesheet" href="../book.css">
+<style>
+  .setup{display:flex;gap:10px;flex-wrap:wrap;align-items:center;background:#fff;border-radius:14px;padding:10px 14px;margin:8px 0}
+  .result{font-family:var(--f-head);font-size:1.2rem;color:var(--bk-red);min-height:1.5em;margin:6px 0}
+  svg.board{width:100%;max-width:600px;height:auto;display:block;margin:6px auto;background:#fff;border-radius:16px;border:2px solid var(--bk-line);touch-action:none;user-select:none}
+  .stat{display:flex;gap:8px;flex-wrap:wrap;margin:8px 0;justify-content:center}
+  .stat div{background:#fff;border:2px solid var(--bk-line);border-radius:12px;padding:6px 14px;font-size:.85rem;text-align:center}
+  .stat b{font-family:var(--f-head);font-size:1.3rem;font-weight:400;display:block}
+  .stat div.hl{border-color:var(--bk-orange);background:var(--bk-yellow)}
+  .pick{display:flex;flex-wrap:wrap;gap:6px}
+  .pick button{font:inherit;font-size:.85rem;padding:6px 10px;border-radius:999px;border:2px solid var(--bk-sky);background:#fff;cursor:pointer}
+  .pick button.on{background:var(--bk-sky);color:#fff}
+  .wrap-img{position:relative;max-width:600px;margin:6px auto;border-radius:16px;overflow:hidden;border:2px solid var(--bk-line);background:#fff}
+  .wrap-img img{width:100%;display:block;opacity:.85}
+  .wrap-img svg{position:absolute;inset:0;width:100%;height:100%;touch-action:none}
+</style>
+</head>
+<body class="bk">
+<script src="../../common.js" data-num="14" data-name="픽의 정리" data-sub="4단원 수학 진로 활동" data-home="../../"></script>
+<div class="bk-wrap">
+  <section class="ch-intro">
+    <div class="ch-intro__text">
+      <div class="bk-ribbon">14</div>
+      <h1 class="bk-h-unit">픽의 정리</h1>
+      <p class="ch-lead">지도에서 경계선에 점을 찍으면 면적이 자동으로 계산돼요. 감천문화마을의 면적은 얼마나 될까요? 격자점만 세어 넓이를 구하는 마법 같은 정리를 발견해 보세요.</p>
+      <p class="ch-goal">★ 이 단원에서는 — 픽의 정리를 이해하고, 격자 다각형의 넓이를 계산할 수 있다.</p>
+    </div>
+    <div class="ch-intro__pic"><img src="../../img/ch14.jpg" alt="감천문화마을"><span class="ch-place">📍 감천문화마을</span></div>
+  </section>
+
+  <nav class="tabs" id="tabs">
+    <button class="tab on" data-t="t1"><span class="tab__n">1</span>격자 삼각형</button>
+    <button class="tab" data-t="t2"><span class="tab__n">2</span>격자 다각형 — 픽의 정리</button>
+    <button class="tab" data-t="t3"><span class="tab__n">3</span>손바닥 넓이</button>
+    <button class="tab" data-t="t4"><span class="tab__n">4</span>구멍 있는 다각형</button>
+    <button class="tab tab--pink" data-t="t5"><span class="tab__n">★</span>지도 면적 구하기</button>
+  </nav>
+
+  <!-- ===== 1·2·4 공용 격자 ===== -->
+  <section class="act-page" id="t1">
+    <div class="bk-panel">
+      <div class="bk-act"><span class="bk-act__n">1</span><span class="bk-act__t">격자 삼각형의 넓이 구하기</span><span class="bk-tag">추론</span><span class="bk-tag">문제 해결</span></div>
+      <p class="bk-muted">x좌표, y좌표가 모두 정수인 점이 <b>격자점</b>, 꼭짓점이 모두 격자점인 다각형이 <b>격자 다각형</b>. 격자점을 눌러 삼각형을 그려 보세요(점 3개 → 자동 완성). 내부 점 i와 둘레 위의 점 b를 세어 봐요.</p>
+      <svg class="board" id="g1-svg" viewBox="0 0 600 420"></svg>
+      <div class="stat" id="g1-stat"></div>
+      <div class="setup"><button class="bk-btn bk-btn--sky bk-btn--sm" id="g1-ex">책의 삼각형 ABC</button><button class="bk-btn bk-btn--ghost bk-btn--sm" id="g1-clear">지우기</button><label><input type="checkbox" id="g1-show"> i, b, 넓이 보이기</label></div>
+      <div class="result" id="g1-res"></div>
+    </div>
+    <div class="bk-panel bk-panel--pink secret">
+      <h3>🔍 생각해 보기</h3>
+      <div class="q"><b>2</b> 삼각형을 넓이 1/2인 격자 삼각형으로 나누어 넓이를 구해 보자. <b>4</b> 넓이는 i, b와 어떤 관계일까?</div>
+      <details class="reveal"><summary>힌트 보기</summary><p>넓이 1/2인 가장 작은 격자 삼각형은 내부 점 0, 둘레 점 3 → 0 + 3/2 − 1 = 1/2. 삼각형 몇 개를 그려 i, b, 넓이를 표로 모아 보면 규칙이 보여요.</p></details>
+    </div>
+  </section>
+
+  <section class="act-page" id="t2" hidden>
+    <div class="bk-panel">
+      <div class="bk-act"><span class="bk-act__n">2</span><span class="bk-act__t">격자 다각형의 넓이 구하기</span><span class="bk-tag">의사소통</span><span class="bk-tag">문제 해결</span></div>
+      <p class="bk-muted">격자점을 차례로 눌러 다각형을 그리고 '닫기'. 여러 다각형을 그려 표를 채우고 S = □ + □ − □ 를 찾아보세요.</p>
+      <svg class="board" id="g2-svg" viewBox="0 0 600 420"></svg>
+      <div class="stat" id="g2-stat"></div>
+      <div class="setup"><button class="bk-btn bk-btn--primary bk-btn--sm" id="g2-close">닫기 (다각형 완성)</button><button class="bk-btn bk-btn--mint bk-btn--sm" id="g2-add">표에 기록</button><button class="bk-btn bk-btn--ghost bk-btn--sm" id="g2-clear">지우기</button><label><input type="checkbox" id="g2-show" checked> 넓이 보이기</label></div>
+      <table class="tbl" style="margin-left:0"><thead><tr><th>다각형</th><th>넓이 S</th><th>내부 점 i</th><th>둘레 점 b</th><th>i + b/2 − 1</th></tr></thead><tbody id="g2-tbl"></tbody></table>
+      <div class="result" id="g2-res"></div>
+    </div>
+    <div class="bk-panel bk-panel--pink secret">
+      <h3>🔍 픽의 정리</h3>
+      <details class="reveal"><summary>정리 보기</summary><p>구멍이 없는 격자 다각형의 넓이 <b>S = i + b/2 − 1</b>. 오스트리아 수학자 픽(Georg Pick, 1859~1942)이 1899년에 증명했어요.</p></details>
+    </div>
+  </section>
+
+  <section class="act-page" id="t3" hidden>
+    <div class="bk-panel">
+      <div class="bk-act"><span class="bk-act__n">3</span><span class="bk-act__t">손바닥의 넓이 구하기</span><span class="bk-tag">의사소통</span><span class="bk-tag">정보 처리</span></div>
+      <p class="bk-muted">한 칸이 1cm인 격자에 손바닥을 대고(화면에 손을 대 보세요!) 손 모양에 가장 가까운 격자 다각형을 그린 뒤 픽의 정리로 넓이를 구해요. 격자점을 눌러 따라 그리고 '닫기'.</p>
+      <svg class="board" id="g3-svg" viewBox="0 0 600 500"></svg>
+      <div class="stat" id="g3-stat"></div>
+      <div class="setup"><button class="bk-btn bk-btn--primary bk-btn--sm" id="g3-close">닫기</button><button class="bk-btn bk-btn--ghost bk-btn--sm" id="g3-undo">한 점 무르기</button><button class="bk-btn bk-btn--ghost bk-btn--sm" id="g3-clear">지우기</button><label><input type="checkbox" id="g3-show" checked> 넓이 보이기</label></div>
+      <div class="result" id="g3-res"></div>
+    </div>
+  </section>
+
+  <section class="act-page" id="t4" hidden>
+    <div class="bk-panel">
+      <div class="bk-act"><span class="bk-act__n">4</span><span class="bk-act__t">구멍이 있는 격자 다각형의 넓이</span><span class="bk-tag">추론</span><span class="bk-tag">문제 해결</span></div>
+      <p class="bk-muted">바깥 다각형을 그려 '닫기'한 뒤, 이어서 구멍을 그리고 '닫기'하세요. 구멍 h개일 때 S = i + b/2 − 1 + h 가 되는지 확인해요. (b에는 구멍 둘레의 점도 포함)</p>
+      <svg class="board" id="g4-svg" viewBox="0 0 600 420"></svg>
+      <div class="stat" id="g4-stat"></div>
+      <div class="setup"><button class="bk-btn bk-btn--primary bk-btn--sm" id="g4-close">닫기 (바깥 → 구멍 순서)</button><button class="bk-btn bk-btn--sky bk-btn--sm" id="g4-ex">책의 예시</button><button class="bk-btn bk-btn--ghost bk-btn--sm" id="g4-clear">지우기</button><label><input type="checkbox" id="g4-show" checked> 넓이 보이기</label></div>
+      <div class="result" id="g4-res"></div>
+    </div>
+    <div class="bk-panel bk-panel--pink secret">
+      <h3>🔍 제2의 픽의 정리</h3>
+      <details class="reveal"><summary>정리 보기</summary><p>구멍이 h개인 격자 다각형의 넓이 <b>S = i + b/2 − 1 + h</b>. 구멍마다 둘레 점이 늘어 −1이 하나씩 더 생기므로 그만큼 +h로 보정해요.</p></details>
+      <div class="q"><b>★</b> 내부 점이 5개, 넓이가 7인 격자 다각형을 여러 가지 만들어 보자. (b = 2(S − i + 1) = 6)</div>
+    </div>
+  </section>
+
+  <!-- ===== ★ 지도 ===== -->
+  <section class="act-page" id="t5" hidden>
+    <div class="bk-panel bk-panel--pink">
+      <div class="bk-act"><span class="bk-act__n" style="background:var(--bk-red)">★</span><span class="bk-act__t">나도 수학자 — 부산의 면적 구하기</span><span class="bk-tag">연결</span><span class="bk-tag">정보 처리</span></div>
+      <p class="bk-muted">지도 이미지를 올리고(캡처한 부산 지도 등) 한 칸의 실제 길이를 정하면, 격자점을 눌러 경계를 따라 그릴 수 있어요. 픽의 정리로 면적이 나옵니다. 부산광역시 실제 면적은 약 <b>770 km²</b>.</p>
+      <div class="setup"><input type="file" id="mp-file" accept="image/*"><label>한 칸 = <input class="num num--2" id="mp-scale" value="2" style="font-size:1rem;letter-spacing:0"> km</label><label>칸 수(가로) <input type="range" id="mp-n" min="8" max="40" value="20"></label><button class="bk-btn bk-btn--primary bk-btn--sm" id="mp-close">닫기</button><button class="bk-btn bk-btn--ghost bk-btn--sm" id="mp-undo">무르기</button><button class="bk-btn bk-btn--ghost bk-btn--sm" id="mp-clear">지우기</button></div>
+      <div class="wrap-img" id="mp-wrap"><img id="mp-img" alt="" src="" hidden><svg id="mp-svg" viewBox="0 0 600 420"></svg></div>
+      <div class="stat" id="mp-stat"></div>
+      <div class="result" id="mp-res"></div>
+      <p class="bk-muted">실제 면적과 차이가 나면? 칸을 더 잘게(칸 수 ↑) 하고 점을 더 많이 찍으면 가까워져요.</p>
+    </div>
+  </section>
+</div>
+
+<script>
+const $ = s => document.querySelector(s);
+document.querySelectorAll('#tabs .tab').forEach(b => b.onclick = () => { document.querySelectorAll('#tabs .tab').forEach(x => x.classList.toggle('on', x === b)); document.querySelectorAll('.act-page').forEach(p => { p.hidden = p.id !== b.dataset.t; p.style.display = p.hidden ? 'none' : ''; }); window.scrollTo({ top: $('#tabs').offsetTop - 70, behavior: 'smooth' }); });
+(function(){ const h=location.hash.slice(1); const b=h&&document.querySelector(`#tabs .tab[data-t="${h}"]`); if(b) b.click(); })();
+const gcd = (a, b) => b ? gcd(b, a % b) : a;
+function shoelace(P) { let s = 0; for (let i = 0; i < P.length; i++) { const [x1, y1] = P[i], [x2, y2] = P[(i + 1) % P.length]; s += x1 * y2 - x2 * y1; } return Math.abs(s) / 2; }
+function boundaryPts(P) { let b = 0; for (let i = 0; i < P.length; i++) { const [x1, y1] = P[i], [x2, y2] = P[(i + 1) % P.length]; b += gcd(Math.abs(x2 - x1), Math.abs(y2 - y1)); } return b; }
+function simple(P) { // 변이 서로 교차하지 않는지
+  const n = P.length; const cr = (a, b, c) => (b[0] - a[0]) * (c[1] - a[1]) - (b[1] - a[1]) * (c[0] - a[0]); const inter = (p, q, r, s) => { const d1 = cr(r, s, p), d2 = cr(r, s, q), d3 = cr(p, q, r), d4 = cr(p, q, s); return (d1 > 0) !== (d2 > 0) && (d3 > 0) !== (d4 > 0); };
+  for (let i = 0; i < n; i++) for (let j = i + 2; j < n; j++) { if (i === 0 && j === n - 1) continue; if (inter(P[i], P[(i + 1) % n], P[j], P[(j + 1) % n])) return false; } return true; }
+
+/* 격자 편집기 */
+function gridTool(svgId, opts) {
+  const svg = $('#' + svgId); const W = +svg.getAttribute('viewBox').split(' ')[2], H = +svg.getAttribute('viewBox').split(' ')[3]; const cell = opts.cell || 40; const ox = 30, oy = H - 30; const cols = Math.floor((W - 60) / cell), rows = Math.floor((H - 60) / cell);
+  let polys = [], cur = []; const X = x => ox + x * cell, Y = y => oy - y * cell;
+  function draw() { let h = `<g stroke="#E7DFC9" stroke-width="1">${Array.from({ length: cols + 1 }, (_, i) => `<line x1="${X(i)}" y1="${Y(0)}" x2="${X(i)}" y2="${Y(rows)}"/>`).join('')}${Array.from({ length: rows + 1 }, (_, j) => `<line x1="${X(0)}" y1="${Y(j)}" x2="${X(cols)}" y2="${Y(j)}"/>`).join('')}</g>`;
+    if (opts.axes) h += `<g font-size="11" fill="#9c8a55">${Array.from({ length: cols + 1 }, (_, i) => `<text x="${X(i)}" y="${Y(0) + 16}" text-anchor="middle">${i}</text>`).join('')}${Array.from({ length: rows + 1 }, (_, j) => `<text x="${X(0) - 10}" y="${Y(j) + 4}" text-anchor="end">${j}</text>`).join('')}</g>`;
+    const allP = [...polys]; const info = stats(); const inner = new Set(), bnd = new Set();
+    if (polys.length && opts.showPts && opts.showPts()) { for (let x = 0; x <= cols; x++) for (let y = 0; y <= rows; y++) { const c = classify([x, y]); if (c === 'in') inner.add(x + ',' + y); else if (c === 'on') bnd.add(x + ',' + y); } }
+    polys.forEach((P, k) => h += `<polygon points="${P.map(p => X(p[0]) + ',' + Y(p[1])).join(' ')}" fill="${k === 0 ? '#AEDBF2' : '#fff'}" fill-opacity="${k === 0 ? .6 : 1}" stroke="#2F8FC9" stroke-width="3" stroke-linejoin="round"/>`);
+    if (cur.length) h += `<polyline points="${cur.map(p => X(p[0]) + ',' + Y(p[1])).join(' ')}" fill="none" stroke="#F5A623" stroke-width="3" stroke-dasharray="6 4"/>`;
+    for (let x = 0; x <= cols; x++) for (let y = 0; y <= rows; y++) { const k = x + ',' + y; const col = inner.has(k) ? '#E9533F' : bnd.has(k) ? '#3A9E82' : '#c9c3b0'; h += `<circle cx="${X(x)}" cy="${Y(y)}" r="${inner.has(k) || bnd.has(k) ? 5 : 3}" fill="${col}" data-x="${x}" data-y="${y}" style="cursor:pointer"/>`; }
+    cur.forEach((p, i) => h += `<circle cx="${X(p[0])}" cy="${Y(p[1])}" r="7" fill="#F5A623" stroke="#fff" stroke-width="2"/>`);
+    svg.innerHTML = h; opts.onUpdate && opts.onUpdate(info); }
+  function classify([x, y]) { // 'in' | 'on' | 'out' — 구멍 고려
+    const onEdge = P => { for (let i = 0; i < P.length; i++) { const [x1, y1] = P[i], [x2, y2] = P[(i + 1) % P.length]; const cr = (x2 - x1) * (y - y1) - (y2 - y1) * (x - x1); if (cr === 0 && Math.min(x1, x2) <= x && x <= Math.max(x1, x2) && Math.min(y1, y2) <= y && y <= Math.max(y1, y2)) return true; } return false; };
+    const inside = P => { let c = false; for (let i = 0, j = P.length - 1; i < P.length; j = i++) { const [xi, yi] = P[i], [xj, yj] = P[j]; if ((yi > y) !== (yj > y) && x < (xj - xi) * (y - yi) / (yj - yi) + xi) c = !c; } return c; };
+    for (const P of polys) if (onEdge(P)) return 'on'; if (!polys.length || !inside(polys[0])) return 'out'; for (let k = 1; k < polys.length; k++) if (inside(polys[k])) return 'out'; return 'in'; }
+  function stats() { if (!polys.length) return null; let i = 0, b = 0; for (let x = 0; x <= cols; x++) for (let y = 0; y <= rows; y++) { const c = classify([x, y]); if (c === 'in') i++; else if (c === 'on') b++; } const S = shoelace(polys[0]) - polys.slice(1).reduce((s, P) => s + shoelace(P), 0); return { i, b, S, h: polys.length - 1 }; }
+  svg.addEventListener('pointerdown', e => { const t = e.target.closest('circle[data-x]'); if (!t) return; const p = [+t.dataset.x, +t.dataset.y]; if (cur.length && cur[0][0] === p[0] && cur[0][1] === p[1] && cur.length >= 3) { close(); return; } if (cur.some(q => q[0] === p[0] && q[1] === p[1])) return; cur.push(p); if (opts.auto && cur.length === opts.auto) close(); else draw(); });
+  function close() { if (cur.length < 3) return; if (!simple(cur)) { alert('변이 서로 교차해요. 다시 그려 보세요.'); cur = []; draw(); return; } if (opts.single) polys = [cur]; else polys.push(cur); cur = []; draw(); }
+  draw();
+  return { draw, close, clear: () => { polys = []; cur = []; draw(); }, undo: () => { if (cur.length) cur.pop(); else polys.pop(); draw(); }, set: ps => { polys = ps; cur = []; draw(); }, stats, get polys() { return polys; } };
+}
+const statHtml = (s, show, hole) => !s ? '' : `<div>내부 점 i<b>${show ? s.i : '?'}</b></div><div>둘레 점 b<b>${show ? s.b : '?'}</b></div>${hole ? `<div>구멍 h<b>${s.h}</b></div>` : ''}<div class="hl">넓이 S<b>${show ? s.S : '?'}</b></div>`;
+
+/* 1 */
+const g1 = gridTool('g1-svg', { auto: 3, single: true, axes: true, showPts: () => $('#g1-show').checked, onUpdate: s => { const show = $('#g1-show').checked; $('#g1-stat').innerHTML = statHtml(s, show); $('#g1-res').textContent = s && show ? `i + b/2 − 1 = ${s.i} + ${s.b}/2 − 1 = ${s.i + s.b / 2 - 1} ${s.i + s.b / 2 - 1 === s.S ? '= 넓이 ✅' : ''}` : s ? '격자점을 세어 보고 "보이기"를 켜서 확인!' : ''; } });
+$('#g1-ex').onclick = () => g1.set([[[1, 1], [5, 2], [3, 5]]]); $('#g1-clear').onclick = g1.clear; $('#g1-show').onchange = g1.draw;
+/* 2 */
+let g2n = 0; const g2 = gridTool('g2-svg', { single: true, showPts: () => $('#g2-show').checked, onUpdate: s => { $('#g2-stat').innerHTML = statHtml(s, $('#g2-show').checked); } });
+$('#g2-close').onclick = g2.close; $('#g2-clear').onclick = g2.clear; $('#g2-show').onchange = g2.draw;
+$('#g2-add').onclick = () => { const s = g2.stats(); if (!s) return; g2n++; const f = s.i + s.b / 2 - 1; $('#g2-tbl').innerHTML += `<tr><td>${g2n}</td><td>${s.S}</td><td>${s.i}</td><td>${s.b}</td><td style="color:${f === s.S ? 'var(--bk-green)' : 'var(--bk-red)'}">${f}</td></tr>`; $('#g2-res').textContent = g2n >= 3 ? '🎉 S = i + b/2 − 1 — 픽의 정리!' : '다각형을 더 그려 표를 채워 보세요.'; };
+/* 3 */
+const g3 = gridTool('g3-svg', { single: true, cell: 32, showPts: () => $('#g3-show').checked, onUpdate: s => { $('#g3-stat').innerHTML = statHtml(s, $('#g3-show').checked); $('#g3-res').textContent = s ? `손바닥 넓이 ≈ ${s.i} + ${s.b}/2 − 1 = ${s.i + s.b / 2 - 1} cm²` : ''; } });
+$('#g3-close').onclick = g3.close; $('#g3-undo').onclick = g3.undo; $('#g3-clear').onclick = g3.clear; $('#g3-show').onchange = g3.draw;
+/* 4 */
+const g4 = gridTool('g4-svg', { showPts: () => $('#g4-show').checked, onUpdate: s => { $('#g4-stat').innerHTML = statHtml(s, $('#g4-show').checked, true); $('#g4-res').textContent = s ? `i + b/2 − 1 + h = ${s.i} + ${s.b}/2 − 1 + ${s.h} = ${s.i + s.b / 2 - 1 + s.h} ${s.i + s.b / 2 - 1 + s.h === s.S ? '= 넓이 ✅ (제2의 픽의 정리)' : ''}` : ''; } });
+$('#g4-close').onclick = g4.close; $('#g4-clear').onclick = g4.clear; $('#g4-show').onchange = g4.draw; $('#g4-ex').onclick = () => g4.set([[[1, 1], [10, 1], [10, 7], [1, 7]], [[3, 3], [5, 3], [5, 5], [3, 5]], [[7, 2], [8, 4], [7, 6], [6, 4]]]);
+
+/* ★ 지도 */
+(function () {
+  const svg = $('#mp-svg'); let cur = [], poly = null, n = 20; const W = 600, H = 420;
+  function draw() { const cell = W / n; const H2 = +svg.getAttribute('viewBox').split(' ')[3]; const rows = Math.floor(H2 / cell); let h = `<g stroke="#2F8FC9" stroke-opacity=".5">${Array.from({ length: n + 1 }, (_, i) => `<line x1="${i * cell}" y1="0" x2="${i * cell}" y2="${rows * cell}"/>`).join('')}${Array.from({ length: rows + 1 }, (_, j) => `<line x1="0" y1="${j * cell}" x2="${n * cell}" y2="${j * cell}"/>`).join('')}</g>`;
+    if (poly) h += `<polygon points="${poly.map(p => p[0] * cell + ',' + p[1] * cell).join(' ')}" fill="#F5A623" fill-opacity=".35" stroke="#E8891B" stroke-width="3"/>`;
+    if (cur.length) h += `<polyline points="${cur.map(p => p[0] * cell + ',' + p[1] * cell).join(' ')}" fill="none" stroke="#E9533F" stroke-width="3"/>`;
+    for (let x = 0; x <= n; x++) for (let y = 0; y <= rows; y++) h += `<circle cx="${x * cell}" cy="${y * cell}" r="4" fill="#2F8FC9" data-x="${x}" data-y="${y}" style="cursor:pointer"/>`;
+    cur.forEach(p => h += `<circle cx="${p[0] * cell}" cy="${p[1] * cell}" r="6" fill="#E9533F" stroke="#fff"/>`); svg.innerHTML = h;
+    if (poly) { const i = countIn(poly, rows), b = boundaryPts(poly); const S = i + b / 2 - 1; const k = +$('#mp-scale').value || 1; $('#mp-stat').innerHTML = `<div>내부 점<b>${i}</b></div><div>둘레 점<b>${b}</b></div><div>칸 넓이<b>${S}</b></div><div class="hl">면적<b>${(S * k * k).toFixed(1)} km²</b></div>`; $('#mp-res').textContent = `S = ${i} + ${b}/2 − 1 = ${S}칸 × (${k} km)² = ${(S * k * k).toFixed(1)} km²`; } else { $('#mp-stat').innerHTML = ''; $('#mp-res').textContent = cur.length ? `점 ${cur.length}개 — 경계를 따라 계속 누르고 '닫기'` : '지도를 올리고 격자점을 눌러 경계를 따라 그리세요.'; } }
+  function countIn(P, rows) { let i = 0; for (let x = 0; x <= n; x++) for (let y = 0; y <= rows; y++) { let c = false, on = false; for (let a = 0, bb = P.length - 1; a < P.length; bb = a++) { const [xi, yi] = P[a], [xj, yj] = P[bb]; const cr = (xj - xi) * (y - yi) - (yj - yi) * (x - xi); if (cr === 0 && Math.min(xi, xj) <= x && x <= Math.max(xi, xj) && Math.min(yi, yj) <= y && y <= Math.max(yi, yj)) on = true; if ((yi > y) !== (yj > y) && x < (xj - xi) * (y - yi) / (yj - yi) + xi) c = !c; } if (c && !on) i++; } return i; }
+  svg.addEventListener('pointerdown', e => { const t = e.target.closest('circle[data-x]'); if (!t) return; const p = [+t.dataset.x, +t.dataset.y]; if (cur.some(q => q[0] === p[0] && q[1] === p[1])) return; cur.push(p); draw(); });
+  $('#mp-close').onclick = () => { if (cur.length < 3) return; if (!simple(cur)) { alert('변이 교차해요.'); return; } poly = cur; cur = []; draw(); }; $('#mp-undo').onclick = () => { if (cur.length) cur.pop(); else poly = null; draw(); }; $('#mp-clear').onclick = () => { cur = []; poly = null; draw(); };
+  $('#mp-n').oninput = () => { n = +$('#mp-n').value; cur = []; poly = null; draw(); }; $('#mp-scale').oninput = draw;
+  $('#mp-file').onchange = e => { const f = e.target.files[0]; if (!f) return; const img = $('#mp-img'); img.src = URL.createObjectURL(f); img.hidden = false; img.onload = () => { const r = img.naturalHeight / img.naturalWidth; svg.setAttribute('viewBox', `0 0 600 ${Math.round(600 * r)}`); draw(); }; };
+  draw();
+})();
+</script>
+</body>
+</html>
