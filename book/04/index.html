@@ -58,6 +58,38 @@
   .players>div{flex:1;min-width:200px;background:#fff;border:2px solid var(--bk-line);border-radius:12px;padding:8px 12px}
   .players>div.on{border-color:var(--bk-orange)}
   .chance button{min-height:40px}
+  .chance button.hid{border-style:dashed;color:var(--bk-ink-soft)}
+  .seg{display:inline-flex;border:2px solid var(--bk-purple);border-radius:999px;overflow:hidden;background:#fff}
+  .seg button{font:inherit;font-family:var(--f-head);font-size:1rem;border:0;background:#fff;padding:8px 14px;min-height:42px;cursor:pointer;color:var(--bk-ink)}
+  .seg button.on{background:var(--bk-purple);color:#fff}
+  .oc.ai-pick{outline:3px solid var(--bk-purple);background:#EBDDFB}
+  #om-dice.rolling{animation:shake .16s infinite}
+  /* 고리 풀기 */
+  .rg-legend{display:flex;flex-direction:column;gap:6px;max-width:520px;margin:6px auto}
+  .rg-legend div{background:#fff;border:2px solid var(--bk-line);border-radius:12px;padding:6px 10px;font-size:.92rem;display:flex;gap:8px;align-items:center;flex-wrap:wrap}
+  .rg-legend i{width:14px;height:14px;border-radius:50%;display:inline-block;flex:none}
+  /* 달고나 퀴즈 */
+  .qz{background:#fff;border:2px solid var(--bk-line);border-radius:16px;padding:14px;margin:10px 0}
+  .qz-top{display:flex;justify-content:space-between;align-items:center;gap:8px;margin-bottom:8px;font-size:.9rem;color:var(--bk-ink-soft)}
+  .qz-dots{display:flex;gap:4px}
+  .qz-dots span{width:12px;height:12px;border-radius:50%;background:var(--bk-line)}
+  .qz-dots span.ok{background:var(--bk-green)}.qz-dots span.no{background:var(--bk-red)}.qz-dots span.cur{background:var(--bk-orange)}
+  .qz-q{font-family:var(--f-head);font-size:1.15rem;line-height:1.45;margin:4px 0 10px}
+  .qz-ch{display:grid;grid-template-columns:1fr 1fr;gap:8px}
+  @media(max-width:480px){.qz-ch{grid-template-columns:1fr}}
+  .qz-ch button{font:inherit;font-size:1rem;text-align:left;padding:10px 12px;min-height:48px;border-radius:12px;border:2px solid var(--bk-line);background:#fff;cursor:pointer;color:var(--bk-ink)}
+  .qz-ch button:not(:disabled):hover{border-color:var(--bk-orange)}
+  .qz-ch button.ok{border-color:var(--bk-green);background:#E8F6E8}
+  .qz-ch button.no{border-color:var(--bk-red);background:#FDEEF2}
+  .qz-ch button:disabled{cursor:default;color:var(--bk-ink)}
+  .qz-fb{margin-top:10px;border-radius:12px;padding:10px 12px;font-size:.95rem;line-height:1.5}
+  .qz-fb.ok{background:#E8F6E8}.qz-fb.no{background:#FDEEF2}
+  .qz-fb b{font-family:var(--f-head);font-weight:400;font-size:1.1rem}
+  .qz-ops{display:grid;gap:6px;margin:0 0 10px}
+  .qz-ops div{background:var(--bk-cream);border-radius:10px;padding:6px 10px;font-size:.92rem}
+  .qz-nav{display:flex;justify-content:flex-end;margin-top:10px}
+  .score2{display:flex;justify-content:center;gap:14px;align-items:center;font-family:var(--f-head);font-size:1.2rem;margin:6px 0}
+  .score2 b{font-size:1.8rem;font-weight:400;color:var(--bk-red)}
   /* 고리 */
   .strings{position:relative;max-width:420px;margin:10px auto;background:#fff;border-radius:14px;border:2px solid var(--bk-line)}
   .strings svg{width:100%;height:auto;display:block}
@@ -69,7 +101,9 @@
   .seqs{display:grid;grid-template-columns:repeat(4,1fr);gap:6px;max-width:520px}
   .sq{background:#fff;border:2px solid var(--bk-line);border-radius:8px;padding:6px;text-align:center;font-family:var(--f-mono,monospace);letter-spacing:.1em}
   .sq.a{border-color:var(--bk-sky);background:var(--bk-sky-soft)}.sq.b{border-color:var(--bk-red);background:#FDEEF2}
-  .dalgona{font-size:1.6rem;letter-spacing:2px}
+  .dalgona{font-size:1.6rem;letter-spacing:2px;overflow-wrap:anywhere}
+  #dg-seqs{grid-template-columns:repeat(auto-fill,minmax(min(100%,108px),1fr))}
+  #dg-seqs .sq{min-width:0;font-size:.85rem;letter-spacing:.04em;overflow-wrap:anywhere}
 </style>
 </head>
 <body class="bk">
@@ -145,7 +179,8 @@
     <div class="bk-panel">
       <div class="bk-act"><span class="bk-act__n">3</span><span class="bk-act__t">주사위 오목 게임</span><span class="bk-tag">추론</span><span class="bk-tag">의사소통</span></div>
       <div class="bk-rule"><ol><li>주사위를 던져 결과에 해당하는 곳에 바둑돌을 놓는다. 6이 나오면 '6' 또는 '짝수', 5가 나오면 '5' 또는 '홀수' 또는 '소수' 중 한 곳.</li><li>먼저 바둑돌 5개를 한 줄로 놓으면 이긴다.</li><li>찬스 카드(2장)는 주사위를 던지기 전에 내고, 그 효과에 해당하는 곳에 놓는다. (찬스 카드를 쓰면 수가 적힌 곳에만 놓을 수 있다.)</li></ol></div>
-      <div class="players"><div class="on" id="om-p1">⚫ 검은 돌 (플레이어 1)<div class="chance" id="om-c1"></div></div><div id="om-p2">⚪ 흰 돌 (플레이어 2)<div class="chance" id="om-c2"></div></div></div>
+      <div class="setup"><span class="seg" id="om-mode" role="group" aria-label="대결 방식"><button data-m="2p" class="on">👥 2인</button><button data-m="ai">🤖 AI 대결</button></span><label id="om-lvl-w" hidden>AI 수준 <select id="om-lvl" class="sel"><option value="easy" selected>쉬움</option><option value="normal">보통</option></select></label></div>
+      <div class="players"><div class="on" id="om-p1"><span id="om-p1n">⚫ 검은 돌 (플레이어 1)</span><div class="chance" id="om-c1"></div></div><div id="om-p2"><span id="om-p2n">⚪ 흰 돌 (플레이어 2)</span><div class="chance" id="om-c2"></div></div></div>
       <div class="setup"><button class="bk-btn bk-btn--primary" id="om-roll">🎲 주사위 던지기</button><span class="dice" id="om-dice"></span><span id="om-msg" class="bk-muted"></span><button class="bk-btn bk-btn--ghost bk-btn--sm" id="om-reset">새 게임</button></div>
       <div class="omok" id="om-board"></div>
       <div class="result" id="om-res"></div>
@@ -163,9 +198,10 @@
     <div class="bk-panel">
       <div class="bk-act"><span class="bk-act__n">4</span><span class="bk-act__t">행운의 고리 만들기</span><span class="bk-tag">문제 해결</span><span class="bk-tag">추론</span><span class="bk-tag">연결</span></div>
       <div class="bk-rule"><ol><li>20cm 끈 6개를 준비한다.</li><li>한 사람이 끈의 중간을 잡고, 다른 사람은 <b>위쪽</b> 끈을 2개씩 묶어 세 쌍의 매듭을 만든다. 그다음 <b>아래쪽</b>도 2개씩 묶는다.</li><li>눈을 감고 소원을 빈다. 하나의 큰 고리가 나오면 소원이 이루어진다!</li></ol></div>
-      <div class="strings" id="rg-box"><svg viewBox="0 0 420 290" id="rg-svg"></svg></div>
-      <div class="setup"><button class="bk-btn bk-btn--primary" id="rg-tie">아래쪽 무작위로 묶기</button><button class="bk-btn bk-btn--sky" id="rg-auto">1000번 해 보기</button><button class="bk-btn bk-btn--ghost bk-btn--sm" id="rg-clear">기록 지우기</button></div>
+      <div class="strings" id="rg-box"><svg viewBox="0 0 420 300" id="rg-svg" role="img" aria-label="끈 6개와 매듭 그림"></svg></div>
+      <div class="setup"><button class="bk-btn bk-btn--primary" id="rg-tie">아래쪽 무작위로 묶기</button><button class="bk-btn bk-btn--mint" id="rg-untie">🪢 고리 풀어서 보기</button><button class="bk-btn bk-btn--sky" id="rg-auto">1000번 해 보기</button><button class="bk-btn bk-btn--ghost bk-btn--sm" id="rg-clear">기록 지우기</button></div>
       <div class="result" id="rg-res"></div>
+      <div class="rg-legend" id="rg-legend"></div>
       <div class="tally"><div>하나의 큰 고리<b id="rg-1">0</b></div><div>두 개의 고리<b id="rg-2">0</b></div><div>세 개의 고리<b id="rg-3">0</b></div><div>시행 횟수<b id="rg-n">0</b></div></div>
       <p class="bk-muted" id="rg-rate"></p>
     </div>
@@ -182,11 +218,18 @@
     <div class="bk-panel bk-panel--pink">
       <div class="bk-act"><span class="bk-act__n" style="background:var(--bk-red)">★</span><span class="bk-act__t">나도 수학자 — 공평하게 배분하기</span><span class="bk-tag">문제 해결</span><span class="bk-tag">추론</span><span class="bk-tag">연결</span></div>
       <p class="bk-muted">푸리와 매매는 달고나를 8개씩 걸고 5번 먼저 이기는 사람이 모두 갖기로 했어요. 그런데 푸리 3승, 매매 2승에서 게임이 중단됐어요. 어떻게 나누는 것이 공평할까요?</p>
+      <div class="score2"><span>푸리</span><b>3</b><span>:</span><b>2</b><span>매매</span></div>
+      <p class="bk-muted" style="text-align:center;margin:0">🍬 걸린 달고나 16개 · 5번 먼저 이기면 승리 · 한 판에서 두 사람이 이길 가능성은 같다고 해요</p>
+      <div class="qz" id="dq"></div>
+    </div>
+    <div class="bk-panel">
+      <details class="reveal" style="margin-left:0"><summary>🔎 더 탐구하기 — 다른 점수에서 중단됐다면?</summary>
       <div class="setup"><label>푸리 <select id="dg-a" class="sel"><option>0</option><option>1</option><option>2</option><option selected>3</option><option>4</option></select>승</label><label>매매 <select id="dg-b" class="sel"><option>0</option><option>1</option><option selected>2</option><option>3</option><option>4</option></select>승</label><span class="bk-muted">(5선승, 달고나 16개)</span></div>
       <p id="dg-need"></p>
       <div class="seqs" id="dg-seqs"></div>
       <div class="result" id="dg-res"></div>
       <div class="dalgona" id="dg-pic"></div>
+      </details>
     </div>
     <div class="bk-panel secret">
       <h3>🔍 읽을거리 — 도박에서 시작된 확률의 탄생</h3>
@@ -244,52 +287,169 @@ function bars(el, vals, labels) { const m = Math.max(...vals, 1); el.innerHTML =
 (function () {
   const B = ['4 짝수 소수 4 2 6 6 5 소수','홀수 1 짝수 3 5 홀수 짝수 3 4','2 소수 5 6 홀수 1 6 2 짝수','짝수 3 4 1 소수 6 5 홀수 2','홀수 6 소수 짝수 3 홀수 4 3 1','1 4 2 6 홀수 짝수 3 2 홀수','2 5 6 소수 2 짝수 짝수 1 6','짝수 2 홀수 5 4 소수 짝수 3 5','소수 4 소수 6 2 3 1 짝수 6'].map(r => r.split(' '));
   const CARDS = ['약수','배수','이상','이하','초과','미만','서로소','사이','상대방 돌 빼기'];
-  let st, turn, dice, card, over, cards, secondRoll;
+  const REM = '상대방 돌 빼기', FACE = '⚀⚁⚂⚃⚄⚅', DIRS = [[0,1],[1,0],[1,1],[1,-1]];
+  let st, turn, dice, card, over, cards, secondRoll, gid = 0, mode = '2p', lvl = 'easy', aiPick = null;
   const board = $('#om-board');
+  const isAI = () => mode === 'ai' && turn === 'w';
+  const opp = p => p === 'b' ? 'w' : 'b';
+  const later = (fn, ms) => { const g = gid; setTimeout(() => { if (g === gid) fn(); }, ms); };
   const gcd = (a, b) => b ? gcd(b, a % b) : a;
-  function ok(lbl, d) { const n = +lbl; if (card === '상대방 돌 빼기') return false;
-    if (card) { if (isNaN(n)) return false; if (card === '약수') return d % n === 0; if (card === '배수') return n % d === 0; if (card === '이상') return n >= d; if (card === '이하') return n <= d; if (card === '초과') return n > d; if (card === '미만') return n < d; if (card === '서로소') return gcd(n, d) === 1; if (card === '사이') { const [a, b] = [Math.min(d, secondRoll), Math.max(d, secondRoll)]; return n > a && n < b; } }
+  function okWith(lbl, d, cd, d2) { const n = +lbl; if (cd === REM) return false;
+    if (cd) { if (isNaN(n)) return false; if (cd === '약수') return d % n === 0; if (cd === '배수') return n % d === 0; if (cd === '이상') return n >= d; if (cd === '이하') return n <= d; if (cd === '초과') return n > d; if (cd === '미만') return n < d; if (cd === '서로소') return gcd(n, d) === 1; if (cd === '사이') { const a = Math.min(d, d2), b = Math.max(d, d2); return n > a && n < b; } }
     if (!isNaN(n)) return n === d; if (lbl === '짝수') return d % 2 === 0; if (lbl === '홀수') return d % 2 === 1; if (lbl === '소수') return [2,3,5].includes(d); return false; }
+  const ok = (lbl, d) => okWith(lbl, d, card, secondRoll);
+  function legal(d, cd, d2) { const out = []; B.forEach((row, r) => row.forEach((lbl, c) => { if (!st[r][c] && okWith(lbl, d, cd, d2)) out.push([r, c]); })); return out; }
+  // (r,c)에 p 돌이 있다고 보고 5목이 되는지 (이웃만 셈 → 놓기 전·후 모두 사용 가능)
+  function winAt(r, c, p) { for (const [dr, dc] of DIRS) { let n = 1; for (const s of [1, -1]) { let rr = r + dr * s, cc = c + dc * s; while (st[rr]?.[cc] === p) { n++; rr += dr * s; cc += dc * s; } } if (n >= 5) return true; } return false; }
+  const win = (r, c) => winAt(r, c, turn);
+  function threats(p) { const s = new Set(); for (let r = 0; r < 9; r++) for (let c = 0; c < 9; c++) if (!st[r][c] && winAt(r, c, p)) s.add(r * 9 + c); return s; }
+  const hasStones = p => st.some(row => row.includes(p));
+
   function render(highlight) {
-    board.innerHTML = ''; B.forEach((row, r) => row.forEach((lbl, c) => { const d = document.createElement('div'); const s = st[r][c]; const can = highlight && !s && dice && ok(lbl, dice); const rem = highlight && s && s !== turn && card === '상대방 돌 빼기'; d.className = 'oc' + (can || rem ? ' can' : ''); d.innerHTML = (isNaN(+lbl) ? `<span class="lf">${lbl}</span><span class="l1">${lbl[0]}</span>` : lbl) + (s ? `<div class="st ${s}"></div>` : ''); if (can) d.onclick = () => place(r, c); if (rem) d.onclick = () => { st[r][c] = ''; endTurn(`상대 돌을 뺐어요.`); }; board.appendChild(d); }));
-    ['p1','p2'].forEach((p, i) => { $('#om-' + p).classList.toggle('on', (i ? 'w' : 'b') === turn); const box = $('#om-c' + (i + 1)); box.innerHTML = ''; cards[i ? 'w' : 'b'].forEach((cd, k) => { const b = document.createElement('button'); b.textContent = cd; b.disabled = (i ? 'w' : 'b') !== turn || !!dice || over; b.className = card === cd && (i ? 'w' : 'b') === turn ? 'on' : ''; b.onclick = () => { card = card === cd ? null : cd; render(false); }; box.appendChild(b); }); });
+    board.innerHTML = ''; const ai = isAI();
+    B.forEach((row, r) => row.forEach((lbl, c) => { const d = document.createElement('div'); const s = st[r][c]; const can = highlight && !s && dice && ok(lbl, dice); const rem = highlight && s && s !== turn && card === REM;
+      d.className = 'oc' + (can || rem ? ' can' : '') + (aiPick && aiPick[0] === r && aiPick[1] === c ? ' ai-pick' : '');
+      d.innerHTML = (isNaN(+lbl) ? `<span class="lf">${lbl}</span><span class="l1">${lbl[0]}</span>` : lbl) + (s ? `<div class="st ${s}"></div>` : '');
+      if (can && !ai) d.onclick = () => place(r, c);
+      if (rem && !ai) d.onclick = () => removeStone(r, c);
+      board.appendChild(d); }));
+    ['p1','p2'].forEach((p, i) => { const who = i ? 'w' : 'b'; $('#om-' + p).classList.toggle('on', who === turn && !over); const box = $('#om-c' + (i + 1)); box.innerHTML = '';
+      const hidden = mode === 'ai' && who === 'w';
+      cards[who].forEach(cd => { const b = document.createElement('button'); const shown = !hidden || (card === cd && turn === 'w'); b.textContent = shown ? cd : '🂠 찬스 ?'; b.disabled = hidden || who !== turn || !!dice || over; b.className = (card === cd && who === turn ? 'on' : '') + (shown ? '' : ' hid'); if (!hidden) b.onclick = () => { card = card === cd ? null : cd; render(false); }; box.appendChild(b); });
+      if (!cards[who].length) box.innerHTML = '<span class="bk-muted" style="font-size:.85rem">찬스 카드 없음</span>'; });
+    $('#om-roll').disabled = over || !!dice || ai;
   }
-  function place(r, c) { st[r][c] = turn; if (win(r, c)) { over = true; $('#om-res').textContent = `🎉 ${turn === 'b' ? '검은 돌' : '흰 돌'} 오목 완성! 승리!`; render(false); return; } endTurn(''); }
-  function endTurn(msg) { if (card) cards[turn] = cards[turn].filter(x => x !== card); card = null; dice = null; turn = turn === 'b' ? 'w' : 'b'; $('#om-msg').textContent = msg; $('#om-dice').textContent = ''; render(false); }
-  function win(r, c) { for (const [dr, dc] of [[0,1],[1,0],[1,1],[1,-1]]) { let n = 1; for (const s of [1, -1]) { let rr = r + dr * s, cc = c + dc * s; while (st[rr]?.[cc] === turn) { n++; rr += dr * s; cc += dc * s; } } if (n >= 5) return true; } return false; }
-  $('#om-roll').onclick = () => { if (over || dice) return; dice = 1 + ri(6); secondRoll = card === '사이' ? 1 + ri(6) : null; $('#om-dice').textContent = '⚀⚁⚂⚃⚄⚅'[dice - 1] + (secondRoll ? '⚀⚁⚂⚃⚄⚅'[secondRoll - 1] : '');
-    if (card === '상대방 돌 빼기') { const opp = turn === 'b' ? 'w' : 'b'; if (!st.some(r => r.includes(opp))) { $('#om-msg').textContent = '뺄 상대 돌이 없어요 → 카드는 돌려받고 차례 넘김'; card = null; setTimeout(() => endTurn('상대 돌이 없어 카드를 쓰지 못했어요.'), 900); return; } $('#om-msg').textContent = '뺄 상대 돌을 고르세요'; render(true); return; }
-    render(true); const any = board.querySelector('.can'); $('#om-msg').textContent = any ? (card ? `찬스 '${card}' 적용 — 놓을 곳을 고르세요` : '놓을 곳을 고르세요') : '놓을 곳이 없어요 → 차례 넘김'; if (!any) { const keep = card; card = null; setTimeout(() => endTurn(keep ? `놓을 곳이 없어 넘겼어요. (찬스 '${keep}'은 돌려받아요)` : '놓을 곳이 없어 넘겼어요.'), 900); } };
-  $('#om-reset').onclick = () => { st = B.map(r => r.map(() => '')); turn = 'b'; dice = null; card = null; over = false; const deck = shuffle([...CARDS]); cards = { b: deck.slice(0, 2), w: deck.slice(2, 4) }; $('#om-res').textContent = ''; $('#om-msg').textContent = ''; $('#om-dice').textContent = ''; render(false); };
+  function finish(msg) { over = true; $('#om-res').textContent = msg; $('#om-msg').textContent = '새 게임을 눌러 다시 시작하세요.'; render(false); }
+  function place(r, c, msg) { aiPick = null; st[r][c] = turn; if (win(r, c)) { if (card) cards[turn] = cards[turn].filter(x => x !== card); card = null; dice = null; finish(mode === 'ai' ? (turn === 'b' ? '🎉 오목 완성! 내가(검은 돌) AI를 이겼어요!' : '🤖 AI(흰 돌)가 오목을 완성했어요. 다시 도전!') : `🎉 ${turn === 'b' ? '검은 돌' : '흰 돌'} 오목 완성! 승리!`); return; } endTurn(msg || ''); }
+  function removeStone(r, c, msg) { aiPick = null; st[r][c] = ''; endTurn(msg || '상대 돌을 뺐어요.'); }
+  function endTurn(msg) { if (card) cards[turn] = cards[turn].filter(x => x !== card); card = null; dice = null; secondRoll = null; turn = opp(turn); $('#om-msg').textContent = msg; $('#om-dice').textContent = ''; render(false); if (isAI() && !over) later(aiTurn, 900); }
+  // 카드는 돌려받고(소모 X) 차례만 넘김
+  function passTurn(msg) { card = null; endTurn(msg); }
+
+  function doRoll() { if (over || dice) return; dice = 1 + ri(6); secondRoll = card === '사이' ? 1 + ri(6) : null; const el = $('#om-dice'); el.classList.add('rolling'); render(false);
+    let k = 0; const g = gid; const spin = () => { if (g !== gid) return; if (k++ < 6) { el.textContent = FACE[ri(6)] + (secondRoll ? FACE[ri(6)] : ''); setTimeout(spin, 70); } else { el.classList.remove('rolling'); el.textContent = FACE[dice - 1] + (secondRoll ? FACE[secondRoll - 1] : ''); resolve(); } }; spin(); }
+  function resolve() { const who = isAI() ? '🤖 AI: ' : '';
+    if (card === REM) { if (!hasStones(opp(turn))) { $('#om-msg').textContent = who + '뺄 상대 돌이 없어요 → 카드는 돌려받고 차례 넘김'; render(false); later(() => passTurn('상대 돌이 없어 카드를 쓰지 못했어요. (카드는 돌려받아요)'), 900); return; }
+      $('#om-msg').textContent = who + '뺄 상대 돌을 고르세요'; render(true); if (isAI()) later(aiRemove, 800); return; }
+    const any = legal(dice, card, secondRoll).length; render(true);
+    if (!any) { const keep = card; $('#om-msg').textContent = who + '놓을 곳이 없어요 → 차례 넘김'; later(() => passTurn(keep ? `놓을 곳이 없어 넘겼어요. (찬스 '${keep}'은 돌려받아요)` : '놓을 곳이 없어 넘겼어요.'), 900); return; }
+    $('#om-msg').textContent = who + (card ? `찬스 '${card}' 적용 — 놓을 곳을 고르세요` : '놓을 곳을 고르세요'); if (isAI()) later(aiPlace, 800); }
+
+  /* ---- AI (흰 돌) ---- */
+  function lineInfo(r, c, p, dr, dc) { let n = 0, open = 0; for (const s of [1, -1]) { let rr = r + dr * s, cc = c + dc * s; while (st[rr]?.[cc] === p) { n++; rr += dr * s; cc += dc * s; } if (rr >= 0 && rr < 9 && cc >= 0 && cc < 9 && !st[rr][cc]) open++; } return [n, open]; }
+  function cellScore(r, c) { let sc = 0; for (const [dr, dc] of DIRS) { const [m, mo] = lineInfo(r, c, 'w', dr, dc), [o, oo] = lineInfo(r, c, 'b', dr, dc); if (mo || m >= 4) sc += 4 ** m * (0.4 + 0.6 * mo); if (oo || o >= 4) sc += 0.8 * 4 ** o * (0.4 + 0.6 * oo); } return sc + (8 - Math.abs(r - 4) - Math.abs(c - 4)) * 0.3; }
+  function bestCell(cells) { const myW = threats('w'), opW = threats('b'); const k = ([r, c]) => r * 9 + c;
+    const w = cells.find(x => myW.has(k(x))) || cells.find(x => opW.has(k(x))); if (w) return w;
+    let best = cells[0], bs = -1; cells.forEach(x => { const s = cellScore(...x) + Math.random() * 0.2; if (s > bs) { bs = s; best = x; } }); return best; }
+  function bestRemoval() { let best = null, bt = Infinity, bv = -1; for (let r = 0; r < 9; r++) for (let c = 0; c < 9; c++) if (st[r][c] === 'b') { st[r][c] = ''; const t = threats('b').size; st[r][c] = 'b'; let v = 0; for (const [dr, dc] of DIRS) v += lineInfo(r, c, 'b', dr, dc)[0]; if (t < bt || (t === bt && v > bv)) { best = [r, c]; bt = t; bv = v; } } return [best, bt]; }
+  // 카드 cd(없으면 null)를 쓸 때 기대 점수: 이기는 칸 2점, 막는 칸 1점 (주사위 모든 경우 평균)
+  function expect(cd, myW, opW) { let tot = 0, n = 0; for (let d = 1; d <= 6; d++) for (const d2 of (cd === '사이' ? [1,2,3,4,5,6] : [null])) { n++; const cs = legal(d, cd, d2).map(([r, c]) => r * 9 + c); if (cs.some(x => myW.has(x))) tot += 2; else if (cs.some(x => opW.has(x))) tot += 1; } return tot / n; }
+  function chooseCard() { const mine = cards.w; if (!mine.length) return null;
+    if (lvl === 'easy') { if (Math.random() < 0.15) { const c = mine[ri(mine.length)]; if (c !== REM || hasStones('b')) return c; } return null; }
+    const myW = threats('w'), opW = threats('b'); if (!myW.size && !opW.size) return null;
+    let best = null, bs = expect(null, myW, opW);
+    mine.forEach(cd => { if (cd === REM) return; const s = expect(cd, myW, opW); if (s > bs + 0.05) { best = cd; bs = s; } });
+    if (mine.includes(REM) && opW.size && hasStones('b')) { const [, left] = bestRemoval(); const s = left === 0 ? 1.6 : left < opW.size ? 0.9 : 0; if (s > bs) best = REM; }
+    return best; }
+  function aiTurn() { if (!isAI() || over) return; const cd = chooseCard();
+    if (cd) { card = cd; $('#om-msg').textContent = `🤖 AI가 찬스 카드 '${cd}'를 냈어요!`; render(false); later(doRoll, 1000); }
+    else { $('#om-msg').textContent = '🤖 AI가 주사위를 던져요…'; render(false); later(doRoll, 600); } }
+  function aiPlace() { if (!isAI() || over || !dice) return; const cells = legal(dice, card, secondRoll); if (!cells.length) return;
+    const pick = lvl === 'easy' && Math.random() >= 0.3 ? cells[ri(cells.length)] : bestCell(cells);
+    aiPick = pick; render(true); later(() => place(pick[0], pick[1], `🤖 AI가 ${pick[0] + 1}행 ${pick[1] + 1}열('${B[pick[0]][pick[1]]}')에 놓았어요. 내 차례!`), 600); }
+  function aiRemove() { if (!isAI() || over) return; const [pick] = bestRemoval(); if (!pick) { passTurn('상대 돌이 없어 카드를 쓰지 못했어요.'); return; }
+    aiPick = pick; render(true); later(() => removeStone(pick[0], pick[1], `🤖 AI가 ${pick[0] + 1}행 ${pick[1] + 1}열의 내 돌을 뺐어요!`), 700); }
+
+  $('#om-roll').onclick = () => { if (!isAI()) doRoll(); };
+  $('#om-reset').onclick = () => { gid++; st = B.map(r => r.map(() => '')); turn = 'b'; dice = null; card = null; secondRoll = null; over = false; aiPick = null; const deck = shuffle([...CARDS]); cards = { b: deck.slice(0, 2), w: deck.slice(2, 4) }; $('#om-dice').classList.remove('rolling'); $('#om-res').textContent = ''; $('#om-msg').textContent = mode === 'ai' ? '내가 검은 돌(먼저)이에요. 주사위를 던지세요!' : ''; $('#om-dice').textContent = ''; render(false); };
+  document.querySelectorAll('#om-mode button').forEach(b => b.onclick = () => { mode = b.dataset.m; document.querySelectorAll('#om-mode button').forEach(x => x.classList.toggle('on', x === b)); $('#om-lvl-w').hidden = mode !== 'ai'; $('#om-p1n').textContent = mode === 'ai' ? '⚫ 검은 돌 (나)' : '⚫ 검은 돌 (플레이어 1)'; $('#om-p2n').textContent = mode === 'ai' ? '⚪ 흰 돌 (🤖 AI)' : '⚪ 흰 돌 (플레이어 2)'; $('#om-reset').click(); });
+  $('#om-lvl').onchange = e => { lvl = e.target.value; };
   $('#om-reset').click();
 })();
 
 /* ===== 4 행운의 고리 ===== */
 (function () {
   let tally = JSON.parse(localStorage.getItem('rings') || '[0,0,0]');
+  let cur = null, info = null, tNow = 0, untangled = false, raf = 0;
   const svg = $('#rg-svg');
-  function loops(bottom) { // 위쪽 고정: (0,1)(2,3)(4,5), bottom: 배열 pairs
-    const adj = {}; const add = (a, b) => { (adj[a] ||= []).push(b); (adj[b] ||= []).push(a); };
-    [[0,1],[2,3],[4,5]].forEach(p => add('t' + p[0], 't' + p[1])); bottom.forEach(p => add('b' + p[0], 'b' + p[1])); for (let i = 0; i < 6; i++) add('t' + i, 'b' + i);
-    const seen = new Set(); let n = 0; for (const k in adj) { if (seen.has(k)) continue; n++; const stack = [k]; while (stack.length) { const x = stack.pop(); if (seen.has(x)) continue; seen.add(x); adj[x].forEach(y => stack.push(y)); } } return n;
-  }
+  const X = i => 60 + i * 60, T = 60, Bm = 205, TOP = [1, 0, 3, 2, 5, 4], LET = 'abcdef';
+  const COL = ['#E9533F', '#2F8FC9', '#5CB85C'], BASE = '#C9A24D';
+  // 고리 따라가기: 위 매듭 → 끈 아래로 → 아래 매듭 → 끈 위로 → …
+  function trace(bottom) { const bp = []; bottom.forEach(([a, b]) => { bp[a] = b; bp[b] = a; }); const used = new Set(), res = [];
+    for (let s = 0; s < 6; s++) { if (used.has(s)) continue; const lp = []; let i = s; do { lp.push({ s: i, down: true }); used.add(i); const j = bp[i]; lp.push({ s: j, down: false }); used.add(j); i = TOP[j]; } while (i !== s); res.push(lp); } return res; }
+  const loops = bottom => trace(bottom).length;
   function randPairs() { const a = shuffle([0,1,2,3,4,5]); return [[a[0],a[1]],[a[2],a[3]],[a[4],a[5]]]; }
-  function draw(bottom) {
-    const X = i => 60 + i * 60; let h = '';
-    const T = 50, Bm = 200;
-    for (let i = 0; i < 6; i++) h += `<line x1="${X(i)}" y1="${T}" x2="${X(i)}" y2="${Bm}" stroke="#C9A24D" stroke-width="6" stroke-linecap="round"/><text x="${X(i)}" y="276" text-anchor="middle" font-size="15" font-family="Jua" fill="#5F5B55">${'abcdef'[i]}</text>`;
-    [[0,1],[2,3],[4,5]].forEach(([a, b]) => h += `<path d="M${X(a)} ${T} Q${(X(a)+X(b))/2} ${T - 40} ${X(b)} ${T}" fill="none" stroke="#E9533F" stroke-width="6" stroke-linecap="round"/>`);
-    if (bottom) bottom.forEach(([a, b]) => { const dy = 16 + Math.abs(a - b) * 14; h += `<path d="M${X(a)} ${Bm} Q${(X(a)+X(b))/2} ${Bm + dy} ${X(b)} ${Bm}" fill="none" stroke="#2F8FC9" stroke-width="6" stroke-linecap="round"/>`; });
-    svg.innerHTML = h;
-  }
+  function layout(lps) { const R = lps.map(l => 30 + 12 * l.length), gap = 34; const tot = R.reduce((a, r) => a + 2 * r, 0) + gap * (R.length - 1); let x = (420 - tot) / 2; const out = {};
+    lps.forEach((lp, li) => { const r = R[li], cx = x + r, cy = 150, k = lp.length, D = 2 * Math.PI / k; x += 2 * r + gap; lp.forEach((e, m) => { out[e.s] = { li, cx, cy, r, a0: -Math.PI / 2 + m * D, D, down: e.down }; }); }); return out; }
+  const lerp = (a, b, t) => a + (b - a) * t;
+  const mix = (h1, h2, t) => '#' + [1, 3, 5].map(i => Math.round(lerp(parseInt(h1.substr(i, 2), 16), parseInt(h2.substr(i, 2), 16), t)).toString(16).padStart(2, '0')).join('');
+  // 끈 i 위의 점 (u=0 위 끝, u=1 아래 끝), t=0 묶인 그림 → t=1 풀어 놓은 고리
+  function P(i, u, t) { const k = [X(i), T + u * (Bm - T)]; if (!info || t <= 0) return k; const L = info.lay[i]; const a = L.a0 + (L.down ? u : 1 - u) * L.D; return [lerp(k[0], L.cx + L.r * Math.cos(a), t), lerp(k[1], L.cy + L.r * Math.sin(a), t)]; }
+  function draw(t) { tNow = t; let h = ''; const f = n => n.toFixed(1);
+    const sc = i => info ? mix(BASE, COL[info.lay[i].li], t) : BASE;
+    // 매듭 곡선: 풀수록 길이가 0으로 줄고 매듭 점이 나타남
+    const knot = (a, b, ua, ky, color) => { const A = P(a, ua, t), Bp = P(b, ua, t); const mx = (A[0] + Bp[0]) / 2, my = (A[1] + Bp[1]) / 2; const cx = lerp((X(a) + X(b)) / 2, mx, t), cy = lerp(ky, my, t);
+      h += `<path d="M${f(A[0])} ${f(A[1])} Q${f(cx)} ${f(cy)} ${f(Bp[0])} ${f(Bp[1])}" fill="none" stroke="${color}" stroke-width="6" stroke-linecap="round"/>`;
+      if (t > 0) h += `<circle cx="${f(mx)}" cy="${f(my)}" r="6" fill="${color}" stroke="#fff" stroke-width="2" opacity="${f(t)}"/>`; };
+    for (let i = 0; i < 6; i++) { let d = ''; for (let k = 0; k <= 16; k++) { const p = P(i, k / 16, t); d += (k ? 'L' : 'M') + f(p[0]) + ' ' + f(p[1]); } h += `<path d="${d}" fill="none" stroke="${sc(i)}" stroke-width="6" stroke-linecap="round" stroke-linejoin="round"/>`; }
+    [[0,1],[2,3],[4,5]].forEach(([a, b]) => knot(a, b, 0, T - 40, '#E9533F'));
+    if (cur) cur.forEach(([a, b]) => knot(a, b, 1, Bm + 16 + Math.abs(a - b) * 14, '#2F8FC9'));
+    for (let i = 0; i < 6; i++) { const m = P(i, .5, t); h += `<circle cx="${f(m[0])}" cy="${f(m[1])}" r="11" fill="#fff" stroke="${sc(i)}" stroke-width="2.5"/><text x="${f(m[0])}" y="${f(m[1] + 5)}" text-anchor="middle" font-size="14" font-family="Jua" fill="#2C2A26">${i + 1}</text>`;
+      h += `<text x="${X(i)}" y="290" text-anchor="middle" font-size="15" font-family="Jua" fill="#5F5B55" opacity="${f(1 - t)}">${LET[i]}</text>`; }
+    // 풀어 놓은 고리: 아래 매듭마다 'a–b' 이름표 (고리 바깥쪽)
+    if (cur && info && t > 0) cur.forEach(([a, b]) => { const L = info.lay[a], e = P(a, 1, 1), dx = e[0] - L.cx, dy = e[1] - L.cy, dn = Math.hypot(dx, dy) || 1;
+      h += `<text x="${f(e[0] + dx / dn * 20)}" y="${f(e[1] + dy / dn * 20 + 5)}" text-anchor="middle" font-size="14" font-family="Jua" fill="#2F8FC9" opacity="${f(t)}">${LET[a]}–${LET[b]}</text>`; });
+    svg.innerHTML = h; }
+  function animate(to) { cancelAnimationFrame(raf); const from = tNow, t0 = performance.now(), dur = 1000;
+    const step = now => { const k = Math.min(1, (now - t0) / dur), e = k < .5 ? 2 * k * k : 1 - (-2 * k + 2) ** 2 / 2; draw(lerp(from, to, e)); if (k < 1) raf = requestAnimationFrame(step); }; raf = requestAnimationFrame(step); }
+  const resText = n => n === 1 ? '✨ 큰 고리 1개 — 성공! 소원이 이루어져요!' : `고리 ${n}개`;
+  function legend(show) { const el = $('#rg-legend'); if (!show || !info) { el.innerHTML = ''; return; }
+    el.innerHTML = info.lps.map((lp, li) => { const path = lp.map(e => e.s + 1).concat(lp[0].s + 1).join(' → '); const knots = lp.filter(e => e.down).map(e => { const j = cur.find(p => p.includes(e.s)); return LET[j[0]] + '–' + LET[j[1]]; }).join(', ');
+      return `<div><i style="background:${COL[li]}"></i><b>고리 ${li + 1}</b> 끈 ${lp.length}개: ${path} <span class="bk-muted">(아래 매듭 ${knots})</span></div>`; }).join(''); }
+  function setUntie(on) { untangled = on; $('#rg-untie').textContent = on ? '↩ 묶인 모양 보기' : '🪢 고리 풀어서 보기'; }
   function save() { localStorage.setItem('rings', JSON.stringify(tally)); for (let i = 0; i < 3; i++) $('#rg-' + (i + 1)).textContent = tally[i]; const n = tally.reduce((a, b) => a + b, 0); $('#rg-n').textContent = n; $('#rg-rate').textContent = n ? `하나의 큰 고리 비율: ${(tally[0] / n * 100).toFixed(1)}% (이론값 8/15 ≈ 53.3%)` : ''; }
-  $('#rg-tie').onclick = () => { const p = randPairs(); draw(p); const n = loops(p); tally[n - 1]++; save(); $('#rg-res').textContent = n === 1 ? '✨ 하나의 큰 고리! 소원이 이루어져요!' : `고리 ${n}개가 생겼어요.`; };
+  function tie() { cancelAnimationFrame(raf); cur = randPairs(); const lps = trace(cur); info = { lps, lay: layout(lps) }; setUntie(false); draw(0); legend(false); const n = lps.length; tally[n - 1]++; save(); $('#rg-res').textContent = resText(n) + ' — 「고리 풀어서 보기」로 확인해 보세요.'; }
+  $('#rg-tie').onclick = tie;
+  $('#rg-untie').onclick = () => { if (!cur) tie(); if (untangled) { setUntie(false); legend(false); animate(0); } else { setUntie(true); animate(1); legend(true); } $('#rg-res').textContent = resText(info.lps.length); };
   $('#rg-auto').onclick = () => { for (let k = 0; k < 1000; k++) tally[loops(randPairs()) - 1]++; save(); };
   $('#rg-clear').onclick = () => { tally = [0,0,0]; save(); };
-  draw(null); save();
+  draw(0); save();
 })();
 
-/* ===== ★ 달고나 ===== */
+/* ===== ★ 달고나 — 단계별 퀴즈 ===== */
+(function () {
+  const OPS = '<div class="qz-ops"><div><b>가준</b> 게임이 끝나지 않았으니 무효! 8개씩 돌려받자. (8 : 8)</div><div><b>나미</b> 푸리가 이기고 있었으니 16개 모두 푸리가 가져야 해. (16 : 0)</div><div><b>다영</b> 매매도 이길 수 있었으니 매매에게 6~7개는 줘야 해.</div></div>';
+  const Q = [
+    { q: '❶ 푸리가 5승을 채우려면 앞으로 몇 번 더 이겨야 할까요?', a: '2번', w: ['1번', '3번', '5번'], ex: '5승 − 지금 3승 = <b>2번</b> 더 이기면 돼요.' },
+    { q: '❶ 매매는 앞으로 몇 번 더 이겨야 할까요?', a: '3번', w: ['2번', '4번', '5번'], ex: '5승 − 지금 2승 = <b>3번</b>이에요.' },
+    { q: '❷ 앞으로 <u>최대</u> 몇 번만 더 하면 반드시 승부가 날까요?', a: '4번', w: ['3번', '5번', '6번'], ex: '푸리 1승 + 매매 2승 = 3판까지는 아직 승부가 안 날 수 있지만, 4판째에는 둘 중 한 명이 반드시 목표를 채워요. (2 + 3 − 1 = <b>4번</b>)' },
+    { q: '❷ 4번 더 한 결과를 푸리 승은 A, 매매 승은 B로 쓰면 AAAA부터 BBBB까지 <b>16가지</b>예요. 이 중 푸리가 최종 승리하는 경우는 몇 가지일까요?', a: '11가지', w: ['8가지', '10가지', '12가지'], grid: true, ex: 'A가 2개 이상이면 푸리 승리 → A 4개(1가지) + A 3개(4가지) + A 2개(6가지) = <b>11가지</b>. 승부가 나면 실제로는 멈추지만, 끝까지 4번 했다고 생각해도 승자는 바뀌지 않아요.' },
+    { q: '❸ 푸리가 최종 승리할 확률은 얼마일까요?', a: '11/16', w: ['3/5', '1/2', '2/3'], ex: '16가지가 모두 똑같은 가능성으로 일어나니까 푸리 <b>11/16</b>, 매매 5/16이에요.' },
+    { q: '❹ 달고나 16개를 어떻게 나누는 것이 공평할까요? (푸리 : 매매)', a: '11 : 5', w: ['8 : 8', '16 : 0', '10 : 6'], ex: '이길 확률만큼 나눠요. 16 × 11/16 = 11개, 16 × 5/16 = 5개 → <b>11 : 5</b>' },
+    { q: '세 친구의 의견 중 공평한 배분(11 : 5)에 가장 가까운 것은 누구일까요?', ops: true, a: '다영', w: ['가준', '나미', '셋 다 똑같이 멀다'], ex: '매매의 공평한 몫은 5개예요. 가준(8개)은 3개, 나미(0개)는 5개 차이지만 <b>다영</b>(6~7개)은 1~2개 차이로 가장 가까워요.' },
+  ];
+  const box = $('#dq'); let idx, res, done;
+  function grid() { let h = '<div class="seqs" style="margin:10px 0 0">'; for (let m = 0; m < 16; m++) { const s = [...Array(4)].map((_, i) => (m >> (3 - i)) & 1 ? 'B' : 'A').join(''); const aw = s.split('A').length - 1 >= 2; h += `<div class="sq ${aw ? 'a' : 'b'}">${s}</div>`; } return h + '</div><p class="bk-muted" style="margin:6px 0 0;font-size:.88rem">파란 칸 = 푸리 승리(11가지), 분홍 칸 = 매매 승리(5가지)</p>'; }
+  function dots() { return '<div class="qz-dots">' + Q.map((_, i) => `<span class="${res[i] === true ? 'ok' : res[i] === false ? 'no' : i === idx ? 'cur' : ''}"></span>`).join('') + '</div>'; }
+  function show() { const it = Q[idx]; done = false; const ch = shuffle([it.a, ...it.w]);
+    box.innerHTML = `<div class="qz-top"><span>문제 ${idx + 1} / ${Q.length}</span>${dots()}</div><div class="qz-q">${it.q}</div>${it.ops ? OPS : ''}<div class="qz-ch">${ch.map(c => `<button data-c="${c}">${c}</button>`).join('')}</div><div id="dq-fb"></div>`;
+    box.querySelectorAll('.qz-ch button').forEach(b => b.onclick = () => answer(b)); }
+  function answer(b) { if (done) return; done = true; const it = Q[idx], right = b.dataset.c === it.a; res[idx] = right;
+    box.querySelectorAll('.qz-ch button').forEach(x => { x.disabled = true; if (x.dataset.c === it.a) x.classList.add('ok'); else if (x === b) x.classList.add('no'); });
+    box.querySelector('.qz-top').innerHTML = `<span>문제 ${idx + 1} / ${Q.length}</span>${dots()}`;
+    $('#dq-fb').innerHTML = `<div class="qz-fb ${right ? 'ok' : 'no'}"><b>${right ? '⭕ 정답!' : '❌ 아쉬워요 — 정답은 ' + it.a}</b><br>${it.ex}${it.grid ? grid() : ''}</div><div class="qz-nav"><button class="bk-btn bk-btn--primary" id="dq-next">${idx + 1 < Q.length ? '다음 문제 ▶' : '결과 보기 🍬'}</button></div>`;
+    $('#dq-next').onclick = () => { idx++; idx < Q.length ? show() : summary(); }; }
+  function summary() { const n = res.filter(Boolean).length;
+    box.innerHTML = `<div class="qz-top"><span>모두 풀었어요!</span>${dots()}</div><div class="qz-q">🎉 ${Q.length}문제 중 <b style="color:var(--bk-red)">${n}문제</b> 정답! ${n === Q.length ? '완벽해요, 꼬마 파스칼!' : n >= 5 ? '아주 잘했어요!' : '한 번 더 풀어 볼까요?'}</div>
+      <ol style="margin:0 0 8px;padding-left:22px;line-height:1.7"><li>푸리는 2번, 매매는 3번 더 이겨야 해요.</li><li>최대 4번 더 하면 승부가 나고, 경우는 2⁴ = 16가지.</li><li>푸리가 이기는 경우 11가지 → 확률 11/16, 매매 5/16.</li><li>공평한 배분 = <b>푸리 11개 : 매매 5개</b> (가장 가까운 의견은 다영)</li></ol>
+      <div class="dalgona">푸리 ${'🍬'.repeat(11)}<br>매매 ${'🍬'.repeat(5)}</div><div class="qz-nav"><button class="bk-btn bk-btn--sky" id="dq-again">↺ 다시 풀기</button></div>`;
+    $('#dq-again').onclick = start; }
+  function start() { idx = 0; res = []; show(); }
+  start();
+})();
+
+/* ===== ★ 달고나 — 더 탐구하기(점수 바꿔 보기) ===== */
+
 (function () {
   function run() { const a = +$('#dg-a').value, b = +$('#dg-b').value; const na = 5 - a, nb = 5 - b, len = na + nb - 1; $('#dg-need').innerHTML = `푸리가 5번 먼저 이기려면 <b>${na}</b>번, 매매는 <b>${nb}</b>번 더 이겨야 해요. 최대 <b>${len}</b>번 더 하면 승부가 나요. 푸리가 이기는 경우를 A, 매매가 이기는 경우를 B로 나타내면:`;
     let wa = 0, h = ''; const total = 2 ** len;

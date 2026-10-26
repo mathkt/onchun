@@ -35,6 +35,7 @@
   .g5 .st{width:70%;height:70%;border-radius:50%;box-shadow:inset -4px -4px 6px rgba(0,0,0,.25),0 3px 4px rgba(0,0,0,.2)}
   .g5.can{outline:3px solid var(--bk-orange)}
   .g5.sel{outline:3px solid var(--bk-sky)}
+  .g5.mov .st{box-shadow:inset -4px -4px 6px rgba(0,0,0,.25),0 3px 4px rgba(0,0,0,.2),0 0 0 3px var(--bk-orange)}
   .mini5{display:inline-grid;grid-template-columns:repeat(5,16px);gap:2px;background:#E7C77A;padding:3px;border-radius:4px;vertical-align:middle;margin:0 6px}
   .mini5 i{width:16px;height:16px;border-radius:50%}
   .mini5 i.b{background:#222}.mini5 i.w{background:#f8f8f8}.mini5 i.e{background:#F3D98B;border-radius:2px}
@@ -231,14 +232,50 @@ $('#as-show').onclick = () => { [[2,5],[3,4]].forEach(([m,n]) => { const id = 'a
     for (const [dr, dc] of [[1,0],[-1,0],[0,1],[0,-1]]) { const r1 = r + dr, c1 = c + dc, r2 = r + 2*dr, c2 = c + 2*dc; if (g[r1]?.[c1] === '.') out.push([r1, c1]); else if (g[r1]?.[c1] && g[r1][c1] !== col && g[r2]?.[c2] === '.') out.push([r2, c2]); }
     return out;
   }
+  const RM = matchMedia('(prefers-reduced-motion: reduce)'); let busy = false;
+  const cellEl = (r, c) => grid.children[r * 5 + c];
   function draw() {
     grid.innerHTML = ''; const can = sel ? target(...sel) : [];
-    g.forEach((row, r) => row.forEach((c, cc) => { const d = document.createElement('div'); d.className = 'g5' + (sel && sel[0] === r && sel[1] === cc ? ' sel' : '') + (can.some(([a, b]) => a === r && b === cc) ? ' can' : ''); if (c !== '.') d.innerHTML = `<div class="st ${c}"></div>`; d.onclick = () => click(r, cc); grid.appendChild(d); }));
+    g.forEach((row, r) => row.forEach((c, cc) => { const d = document.createElement('div'); const mov = !sel && c !== '.' && target(r, cc).length > 0;
+      d.className = 'g5' + (sel && sel[0] === r && sel[1] === cc ? ' sel' : '') + (can.some(([a, b]) => a === r && b === cc) ? ' can' : '') + (mov ? ' mov' : '');
+      if (c !== '.') d.innerHTML = `<div class="st ${c}"></div>`; d.onclick = () => click(r, cc); grid.appendChild(d); }));
     $('#sq-mv').textContent = mv;
   }
-  function click(r, c) { if (sel) { const can = target(...sel); if (can.some(([a, b]) => a === r && b === c)) { hist.push([sel, [r, c]]); g[r][c] = g[sel[0]][sel[1]]; g[sel[0]][sel[1]] = '.'; sel = null; mv++; draw(); if (g.map(x => x.join('')).join() === goal.join()) $('#sq-res').textContent = `🎉 ${mv}번 만에 성공!`; return; } }
-    sel = g[r][c] === '.' ? null : [r, c]; draw(); }
-  $('#sq-reset').onclick = init; $('#sq-undo').onclick = () => { const h = hist.pop(); if (!h) return; g[h[0][0]][h[0][1]] = g[h[1][0]][h[1][1]]; g[h[1][0]][h[1][1]] = '.'; mv--; sel = null; $('#sq-res').textContent = ''; draw(); };
+  // FLIP: 옮기기 전 돌 위치를 재고, 다시 그린 뒤 새 칸의 돌을 그 위치에서 미끄러지게
+  function slide(from, to, after) {
+    const st = cellEl(...from)?.querySelector('.st'); const a = st?.getBoundingClientRect();
+    g[to[0]][to[1]] = g[from[0]][from[1]]; g[from[0]][from[1]] = '.'; sel = null; draw();
+    const nst = cellEl(...to).querySelector('.st');
+    if (RM.matches || !a || !nst) { after?.(); return; }
+    const b = nst.getBoundingClientRect(); busy = true;
+    const jump = Math.abs(from[0] - to[0]) + Math.abs(from[1] - to[1]) > 1;
+    nst.style.position = 'relative'; nst.style.zIndex = 2;
+    const anim = nst.animate([
+      { transform: `translate(${a.left - b.left}px,${a.top - b.top}px)` },
+      ...(jump ? [{ transform: `translate(${(a.left - b.left) / 2}px,${(a.top - b.top) / 2}px) scale(1.25)`, offset: .5 }] : []),
+      { transform: 'translate(0,0)' }
+    ], { duration: jump ? 260 : 180, easing: 'ease-out' });
+    anim.finished.catch(() => {}).then(() => { nst.style.position = nst.style.zIndex = ''; busy = false; after?.(); });
+  }
+  function doMove(from, to) {
+    hist.push([from, to]); mv++;
+    slide(from, to, () => { if (g.map(x => x.join('')).join() === goal.join()) $('#sq-res').textContent = `🎉 ${mv}번 만에 성공!`; });
+  }
+  function click(r, c) {
+    if (busy) return;
+    if (sel) { // 목적지가 여러 곳일 때: 강조된 칸을 누르면 이동, 그 밖은 취소
+      const can = target(...sel);
+      if (can.some(([a, b]) => a === r && b === c)) { doMove(sel, [r, c]); return; }
+      const same = sel[0] === r && sel[1] === c; sel = null; draw(); if (same || g[r][c] === '.') return;
+    }
+    if (g[r][c] === '.') return;
+    const can = target(r, c);
+    if (can.length === 1) { $('#sq-res').textContent = ''; doMove([r, c], can[0]); return; }
+    if (can.length === 0) { const el = cellEl(r, c); if (!RM.matches) el.animate([{ transform: 'translateX(0)' }, { transform: 'translateX(-5px)' }, { transform: 'translateX(5px)' }, { transform: 'translateX(0)' }], { duration: 220 }); $('#sq-res').textContent = ''; return; }
+    sel = [r, c]; draw();
+  }
+  $('#sq-reset').onclick = () => { if (!busy) init(); };
+  $('#sq-undo').onclick = () => { if (busy) return; const h = hist.pop(); if (!h) return; mv--; $('#sq-res').textContent = ''; slide(h[1], h[0]); };
   init();
 })();
 

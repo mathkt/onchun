@@ -40,6 +40,8 @@
   .card.taken-p2{background:var(--bk-red);color:#fff;border-color:var(--bk-red);transform:translateY(-6px)}
   .card.next{border-color:var(--bk-orange);box-shadow:0 0 0 3px var(--bk-yellow)}
   .card.key::after{content:"★";position:absolute;top:-10px;right:-6px;color:var(--bk-orange)}
+  #dv-chips.busy .chip{pointer-events:none}
+  .score .hand span{transition:background .3s}
   .bk-panel--pink .chip{border-color:var(--bk-red);box-shadow:0 4px 0 #b53a2a}.bk-panel--pink .chip.sel{background:var(--bk-red)}
 </style>
 </head>
@@ -238,15 +240,51 @@ document.querySelectorAll('#tabs .tab').forEach(b => b.onclick = () => {
   const divisorsLeft = v => cards.filter(c => c !== v && v % c === 0);
   function render() {
     chips.innerHTML = '';
-    for (let v = 1; v <= n; v++) { const c = document.createElement('button'); const inPlay = cards.includes(v); c.className = 'chip chip--card' + (inPlay ? '' : ' gone') + (inPlay && divisorsLeft(v).length === 0 ? ' chip--ghost' : ''); c.textContent = v; c.title = inPlay ? `약수: ${divisorsLeft(v).join(',') || '없음'}` : ''; c.onclick = () => take(v); chips.appendChild(c); }
+    for (let v = 1; v <= n; v++) { const c = document.createElement('button'); const inPlay = cards.includes(v); c.dataset.v = v; c.className = 'chip chip--card' + (inPlay ? '' : ' gone') + (inPlay && divisorsLeft(v).length === 0 ? ' chip--ghost' : ''); c.textContent = v; c.title = inPlay ? `약수: ${divisorsLeft(v).join(',') || '없음'}` : ''; c.onclick = () => take(v); chips.appendChild(c); }
     $('#dv-p1').textContent = p1.reduce((a, b) => a + b, 0); $('#dv-p2').textContent = p2.reduce((a, b) => a + b, 0);
     $('#dv-h1').innerHTML = p1.map(v => `<span>${v}</span>`).join(''); $('#dv-h2').innerHTML = p2.map(v => `<span>${v}</span>`).join('');
     const canMove = cards.some(v => divisorsLeft(v).length > 0);
     $('#dv-hint').textContent = over ? '' : '보라색 테두리 카드는 귀신이 가져갈 약수가 없어서 지금은 가져갈 수 없어요.';
     if (!over && !canMove) { over = true; p2.push(...cards); cards = []; render(); const a = p1.reduce((x, y) => x + y, 0), b = p2.reduce((x, y) => x + y, 0); $('#dv-result').textContent = `더 가져갈 카드가 없어요. 공격수 ${a} : 귀신 ${b} → ${a > b ? '공격수 승리! 🎉' : a < b ? '수학 귀신 승리 👻' : '무승부'}`; }
   }
-  function take(v) { if (over || !cards.includes(v)) return; const d = divisorsLeft(v); if (!d.length) { $('#dv-hint').textContent = `${josa(v, '은/는')} 귀신이 가져갈 약수가 없어서 가져갈 수 없어요.`; return; } p1.push(v); p2.push(...d); cards = cards.filter(c => c !== v && !d.includes(c)); render(); }
-  $('#dv-start').onclick = () => { n = +$('#dv-n').value; cards = Array.from({ length: n }, (_, i) => i + 1); p1 = []; p2 = []; over = false; $('#dv-result').textContent = ''; render(); };
+  /* 카드 이동 애니메이션 (FLIP): 손 영역에 자리를 먼저 만들고 → 복제 카드를 원래 자리에서 그 자리로 날림 */
+  const RM = matchMedia('(prefers-reduced-motion: reduce)'); let busy = false, gen = 0;
+  const wait = ms => new Promise(r => setTimeout(r, ms));
+  const sum = a => a.reduce((x, y) => x + y, 0);
+  const chipOf = v => chips.querySelector(`.chip[data-v="${v}"]`);
+  function fly(v, who) { // who: 1 공격수, 2 귀신
+    const src = chipOf(v), hand = $('#dv-h' + who), slot = document.createElement('span');
+    slot.textContent = v; slot.style.visibility = 'hidden'; hand.appendChild(slot);
+    const g0 = gen, land = () => { if (g0 !== gen) return; slot.style.visibility = ''; src?.classList.add('gone'); const arr = who === 1 ? p1 : p2; arr.push(v); $('#dv-p' + who).textContent = sum(arr); };
+    if (RM.matches || !src) { land(); return Promise.resolve(); }
+    const a = src.getBoundingClientRect(), b = slot.getBoundingClientRect();
+    const clone = src.cloneNode(true); clone.classList.remove('chip--ghost');
+    Object.assign(clone.style, { position: 'fixed', left: a.left + 'px', top: a.top + 'px', width: a.width + 'px', height: a.height + 'px', margin: 0, zIndex: 999, pointerEvents: 'none', boxSizing: 'border-box' });
+    if (who === 2) clone.style.borderColor = 'var(--bk-purple)';
+    document.body.appendChild(clone); src.style.visibility = 'hidden';
+    const dx = (b.left + b.width / 2) - (a.left + a.width / 2), dy = (b.top + b.height / 2) - (a.top + a.height / 2), sc = Math.max(.3, b.height / a.height);
+    const anim = clone.animate([
+      { transform: 'translate(0,0) scale(1) rotate(0)', opacity: 1 },
+      { transform: `translate(${dx * .5}px,${dy * .5 - 40}px) scale(1.15) rotate(${who === 1 ? -8 : 8}deg)`, opacity: 1, offset: .45 },
+      { transform: `translate(${dx}px,${dy}px) scale(${sc}) rotate(0)`, opacity: .4 }
+    ], { duration: 560, easing: 'cubic-bezier(.4,0,.2,1)' });
+    return anim.finished.catch(() => {}).then(() => { clone.remove(); src.style.visibility = ''; land(); });
+  }
+  async function take(v) {
+    if (busy || over || !cards.includes(v)) return; const d = divisorsLeft(v);
+    if (!d.length) { $('#dv-hint').textContent = `${josa(v, '은/는')} 귀신이 가져갈 약수가 없어서 가져갈 수 없어요.`; return; }
+    busy = true; const my = gen; chips.classList.add('busy'); $('#dv-s1').classList.add('on'); $('#dv-s2').classList.remove('on');
+    cards = cards.filter(c => c !== v && !d.includes(c));
+    await fly(v, 1); if (my !== gen) return;
+    if (!RM.matches) await wait(180);
+    $('#dv-s1').classList.remove('on'); $('#dv-s2').classList.add('on');
+    await Promise.all(d.slice().reverse().map((x, i) => (RM.matches ? Promise.resolve() : wait(i * 250)).then(() => my === gen && fly(x, 2))));
+    if (my !== gen) return;
+    if (!RM.matches) await wait(150);
+    // fly()가 이미 p1/p2에 넣었으므로 render만
+    busy = false; chips.classList.remove('busy'); $('#dv-s2').classList.remove('on'); $('#dv-s1').classList.add('on'); render();
+  }
+  $('#dv-start').onclick = () => { gen++; busy = false; chips.classList.remove('busy'); document.querySelectorAll('body > .chip').forEach(e => e.remove()); n = +$('#dv-n').value; cards = Array.from({ length: n }, (_, i) => i + 1); p1 = []; p2 = []; over = false; $('#dv-result').textContent = ''; render(); };
   $('#dv-start').click();
 })();
 

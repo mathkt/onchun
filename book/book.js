@@ -42,3 +42,20 @@ window.josa = function (w, pair) { const s = String(w); const ch = s[s.length - 
   }
   if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', init); else init();
 })();
+
+/* 이전 장 / 다음 장 이동 버튼 (모든 장 공통, 페이지 맨 아래) */
+(function () {
+  const CH = ['수학 마술','필승 전략','수학 퍼즐','확률 놀이','한붓그리기와 미로 찾기','선조들의 셈법','라틴방진','피타고라스 음계','이진법','무게중심','정사면체의 전개도','아르키메데스 다면체','정육면체·정팔면체의 전개도','픽의 정리','프랙털','종이접기 나선','관찰 최적 위치'];
+  function mount() {
+    const m = location.pathname.match(/\/book\/(\d\d)\//); if (!m || document.querySelector('.ch-nav')) return;
+    const n = +m[1], pad = k => String(k).padStart(2, '0');
+    const unit = k => k <= 5 ? 1 : k <= 8 ? 2 : k <= 13 ? 3 : 4;
+    const nav = document.createElement('nav'); nav.className = 'ch-nav';
+    nav.innerHTML =
+      (n > 1 ? `<a class="ch-nav__btn" href="../${pad(n - 1)}/index.html"><small>◀ 이전 장</small><b>${pad(n - 1)} ${CH[n - 2]}</b></a>` : '<span></span>') +
+      `<a class="ch-nav__btn ch-nav__toc" href="../index.html#u${unit(n)}"><small>📖</small><b>책 목차</b></a>` +
+      (n < CH.length ? `<a class="ch-nav__btn ch-nav__next" href="../${pad(n + 1)}/index.html"><small>다음 장 ▶</small><b>${pad(n + 1)} ${CH[n]}</b></a>` : `<a class="ch-nav__btn ch-nav__next" href="../../games/arcade/index.html"><small>마지막 장! ▶</small><b>🎮 메인 게임 하러 가기</b></a>`);
+    (document.querySelector('.bk-wrap') || document.body).appendChild(nav);
+  }
+  if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', mount); else mount();
+})();

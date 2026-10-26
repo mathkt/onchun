@@ -33,6 +33,32 @@
   .tour{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:8px}
   .tour div{background:#fff;border-radius:12px;padding:10px 12px;border:2px solid var(--bk-line);font-size:.9rem}
   .tour b{font-family:var(--f-head);font-weight:400;display:block;color:var(--bk-orange-deep)}
+  .tour button{font:inherit;text-align:left;background:#fff;border-radius:12px;padding:10px 12px;border:2px solid var(--bk-line);font-size:.9rem;cursor:pointer;color:var(--bk-ink);box-shadow:0 3px 0 #e6dcc0;-webkit-tap-highlight-color:transparent;min-height:44px}
+  .tour button:hover,.tour button:focus-visible{border-color:var(--bk-orange)}
+  .tour button b{font-family:var(--f-head);font-weight:400;display:block;color:var(--bk-orange-deep)}
+  .tmap{position:relative;max-width:900px;margin:8px auto 4px;border-radius:16px;overflow:hidden;border:2px solid var(--bk-line);background:#FCFCD7}
+  .tmap img{display:block;width:100%;height:auto}
+  .tspot{position:absolute;width:46px;height:46px;margin:-23px 0 0 -23px;border-radius:50%;border:0;padding:0;background:transparent;cursor:pointer;-webkit-tap-highlight-color:transparent}
+  .tspot::before{content:'';position:absolute;inset:3px;border-radius:50%;border:3px solid var(--bk-red);animation:tpulse 1.8s ease-out infinite}
+  .tspot span{position:absolute;left:-4px;top:-4px;min-width:22px;height:22px;padding:0 4px;border-radius:999px;background:var(--bk-red);color:#fff;font-family:var(--f-head);font-size:.8rem;line-height:22px;text-align:center;box-shadow:0 2px 0 #b53a2a}
+  .tspot:hover::before,.tspot:focus-visible::before{background:rgba(233,83,63,.18)}
+  @keyframes tpulse{0%{transform:scale(.7);opacity:1}100%{transform:scale(1.25);opacity:0}}
+  @media (prefers-reduced-motion:reduce){.tspot::before{animation:none;opacity:.8}}
+  .tsrc{font-size:.75rem;color:var(--bk-ink-soft);text-align:right;margin:0 0 10px}
+  .tm{position:fixed;inset:0;z-index:200;display:flex;align-items:center;justify-content:center;padding:16px;background:rgba(44,42,38,.55)}
+  .tm[hidden]{display:none}
+  .tm__box{position:relative;background:var(--bk-cream,#FFF9EC);border-radius:20px;max-width:520px;width:100%;max-height:calc(100dvh - 32px);overflow:auto;padding:16px 16px 14px;box-shadow:0 10px 30px rgba(0,0,0,.25)}
+  .tm__x{position:absolute;top:8px;right:8px;width:44px;height:44px;border-radius:50%;border:2px solid var(--bk-line);background:#fff;font-size:1.2rem;cursor:pointer}
+  .tm__step{font-family:var(--f-head);color:var(--bk-orange-deep);font-size:.95rem}
+  .tm__name{font-family:var(--f-head);font-weight:400;font-size:1.6rem;margin:2px 50px 8px 0}
+  .tm__pic{display:block;width:100%;max-height:42vh;object-fit:contain;background:#FCFCD7;border-radius:14px;border:2px solid var(--bk-line)}
+  .tm__q{background:#fff;border-radius:12px;border:2px solid var(--bk-line);padding:10px 12px;margin:10px 0;font-size:1rem}
+  .tm__q b{font-family:var(--f-head);font-weight:400;color:var(--bk-red)}
+  .tm__links{display:flex;gap:8px;flex-wrap:wrap}
+  .tm__links .bk-btn{text-decoration:none}
+  .tm__nav{display:flex;justify-content:space-between;align-items:center;gap:8px;margin-top:12px}
+  .tm__nav .bk-btn{min-height:44px}
+  .tm__nav small{color:var(--bk-ink-soft);font-size:.75rem;text-align:center}
 </style>
 </head>
 <body class="bk">
@@ -61,7 +87,7 @@
   <section class="act-page" id="t1">
     <div class="bk-panel">
       <div class="bk-act"><span class="bk-act__n">1</span><span class="bk-act__t">홀수점과 짝수점</span><span class="bk-tag">문제 해결</span><span class="bk-tag">연결</span></div>
-      <p class="bk-muted">점과 선으로 이루어진 도형에서 한 점에 연결된 선의 개수를 <b>차수</b>, 차수가 홀수인 점을 <b>홀수점</b>, 짝수인 점을 <b>짝수점</b>이라고 해요. 빈 곳을 누르면 점이 생기고, 점 두 개를 차례로 누르면 선이 이어져요.</p>
+      <p class="bk-muted">점과 선으로 이루어진 도형에서 한 점에 연결된 선의 개수를 <b>차수</b>, 차수가 홀수인 점을 <b>홀수점</b>, 짝수인 점을 <b>짝수점</b>이라고 해요. 빈 곳을 누르면 점이 생기고, 점 두 개를 차례로 누르면 선이 이어져요. 점을 <b>끌면</b> 자리를 옮길 수 있어요.</p>
       <div class="setup"><button class="bk-btn bk-btn--sky bk-btn--sm" id="g1-park">시민마루 산책길 [그림 2]</button><button class="bk-btn bk-btn--ghost bk-btn--sm" id="g1-clear">모두 지우기</button><button class="bk-btn bk-btn--ghost bk-btn--sm" id="g1-undo">무르기</button></div>
       <svg class="board" id="g1-svg" viewBox="0 0 560 340"></svg>
       <div class="deg" id="g1-deg"></div>
@@ -80,7 +106,7 @@
   <section class="act-page" id="t2" hidden>
     <div class="bk-panel">
       <div class="bk-act"><span class="bk-act__n">2</span><span class="bk-act__t">한붓그리기가 가능한 도형</span><span class="bk-tag">문제 해결</span></div>
-      <p class="bk-muted">붓을 떼지 않고 같은 선을 두 번 지나지 않게 그려 보세요. 출발점을 누른 뒤, 선으로 이어진 다음 점을 차례로 누르면 돼요.</p>
+      <p class="bk-muted">붓을 떼지 않고 같은 선을 두 번 지나지 않게 그려 보세요. 출발점을 누른 뒤, 선으로 이어진 다음 점을 차례로 누르면 돼요. 점을 끌어 모양을 바꿔 볼 수도 있어요.</p>
       <div class="presets" id="g2-presets"></div>
       <div class="setup"><span class="bk-muted">홀수점 <b id="g2-odd">0</b>개 · 지난 선 <b id="g2-used">0</b>/<b id="g2-total">0</b></span><button class="bk-btn bk-btn--ghost bk-btn--sm" id="g2-reset">다시 그리기</button></div>
       <svg class="board" id="g2-svg" viewBox="0 0 560 340"></svg>
@@ -136,21 +162,25 @@
     <div class="bk-panel bk-panel--pink">
       <div class="bk-act"><span class="bk-act__n" style="background:var(--bk-red)">★</span><span class="bk-act__t">나도 수학자 — 부산시민공원 매스투어</span><span class="bk-tag">추론</span><span class="bk-tag">연결</span><span class="bk-tag">정보 처리</span></div>
       <p class="bk-muted">매스투어(MathTour)는 자연물과 건축물을 보고 느끼며 그 속에 숨어 있는 수학적 원리를 탐구하는 활동이에요. 부산시민공원을 방문하면 이런 수학을 만날 수 있어요.</p>
-      <div class="tour">
-        <div><b>1. 시민마루</b>팔각정자에 앉아 산책 코스를 한 번에 둘러보는 방법은? (한붓그리기)</div>
-        <div><b>2. 꿈틀이 시소</b>상하좌우로 움직이는 시소에서 비율 알아보기</div>
-        <div><b>3. 돔플레이</b>여러 방면에서 본 모양 그려 보기</div>
-        <div><b>4. 흔적극장</b>주위에 숨어 있는 도형 찾기</div>
-        <div><b>5. 써클타워</b>물방울이 올라가는 듯한 탑에서 다각형 찾기</div>
-        <div><b>6. 원형 공연장</b>바닥 타일은 몇 개일까?</div>
-        <div><b>7. 초소</b>공원 입구까지 거리의 비율 알아보기</div>
-        <div><b>8. 공원 역사관</b>'기억의 공간'에서 나만의 마크 만들기</div>
-        <div><b>9. 기억의 기둥</b>나무 전봇대 아래의 넓이 구하기</div>
-        <div><b>10. 미로정원</b>애기동백 미로에서 탈출하는 방법은?</div>
-        <div><b>11. 거울연못</b>글자를 비추면 어떤 모양일까?</div>
+      <p class="bk-muted">🗺️ 지도의 <b style="color:var(--bk-red)">빨간 동그라미</b>나 아래 카드를 누르면 장소별 수학 질문을 볼 수 있어요. 출발(1)부터 도착(11)까지 차례로 둘러보세요!</p>
+      <div class="tmap" id="tmap"><img src="../../img/tour/map.jpg" alt="부산시민공원 매스투어 지도 (출발 시민마루 → 도착 거울연못)" width="1397" height="1035" loading="lazy"></div>
+      <p class="tsrc">그림 출처: 부산의 활동수학</p>
+      <div class="tour" id="tour"></div>
       </div>
     </div>
   </section>
+</div>
+
+<div class="tm" id="tm" hidden role="dialog" aria-modal="true" aria-labelledby="tm-name">
+  <div class="tm__box">
+    <button class="tm__x" id="tm-x" aria-label="닫기">✕</button>
+    <div class="tm__step" id="tm-step"></div>
+    <h3 class="tm__name" id="tm-name"></h3>
+    <img class="tm__pic" id="tm-pic" alt="">
+    <div class="tm__q" id="tm-q"></div>
+    <div class="tm__links" id="tm-links"></div>
+    <div class="tm__nav"><button class="bk-btn bk-btn--ghost bk-btn--sm" id="tm-prev">◀ 이전</button><small>그림 출처: 부산의 활동수학</small><button class="bk-btn bk-btn--sky bk-btn--sm" id="tm-next">다음 ▶</button></div>
+  </div>
 </div>
 
 <script>
@@ -158,6 +188,18 @@ const $ = s => document.querySelector(s); const ri = n => Math.floor(Math.random
 document.querySelectorAll('#tabs .tab').forEach(b => b.onclick = () => { document.querySelectorAll('#tabs .tab').forEach(x => x.classList.toggle('on', x === b)); document.querySelectorAll('.act-page').forEach(p => { p.hidden = p.id !== b.dataset.t; p.style.display = p.hidden ? 'none' : ''; }); });
 (function(){ const h=location.hash.slice(1); const b=h&&document.querySelector(`#tabs .tab[data-t="${h}"]`); if(b) b.click(); })();
 function svgPt(svg, e) { const p = svg.createSVGPoint(); p.x = e.clientX; p.y = e.clientY; return p.matrixTransform(svg.getScreenCTM().inverse()); }
+const clampX = x => Math.max(24, Math.min(536, x)), clampY = y => Math.max(24, Math.min(316, y));
+// 점 끌기: 8px 넘게 움직이면 드래그(점 이동), 아니면 탭(onTap)
+function nodeDrag(svg, getNodes, onTap, redraw) {
+  let d = null;
+  svg.addEventListener('pointerdown', e => { const t = e.target.closest('.node'); if (!t || (e.pointerType === 'mouse' && e.button !== 0)) return; e.preventDefault();
+    d = { i: +t.dataset.i, x: e.clientX, y: e.clientY, id: e.pointerId, moved: false }; try { svg.setPointerCapture(e.pointerId); } catch (_) {} });
+  svg.addEventListener('pointermove', e => { if (!d || e.pointerId !== d.id) return;
+    if (!d.moved && Math.hypot(e.clientX - d.x, e.clientY - d.y) > 8) d.moved = true;
+    if (d.moved) { const p = svgPt(svg, e), n = getNodes()[d.i]; if (!n) return; n[0] = clampX(p.x); n[1] = clampY(p.y); redraw(); } });
+  const end = (e, cancel) => { if (!d || e.pointerId !== d.id) return; const { i, moved } = d; d = null; try { svg.releasePointerCapture(e.pointerId); } catch (_) {} if (!moved && !cancel) onTap(i); };
+  svg.addEventListener('pointerup', e => end(e, false)); svg.addEventListener('pointercancel', e => end(e, true));
+}
 
 /* ===== 1 그래프 그리기 ===== */
 (function () {
@@ -174,9 +216,10 @@ function svgPt(svg, e) { const p = svg.createSVGPoint(); p.x = e.clientX; p.y = 
     const sorted = [...ds].sort((a, b) => b - a).join(','); $('#g1-tasks').querySelectorAll('.task').forEach(t => t.classList.toggle('ok', t.dataset.d === sorted && edges.length > 0));
   }
   const deg = i => edges.filter(e => e[0] === i || e[1] === i).length;
-  svg.addEventListener('pointerdown', e => { const p = svgPt(svg, e); const t = e.target.closest('.node');
-    if (t) { const i = +t.dataset.i; if (sel === null) sel = i; else if (sel !== i) { if (!edges.some(x => (x[0] === sel && x[1] === i) || (x[0] === i && x[1] === sel))) { edges.push([sel, i]); hist.push('e'); } sel = null; } else sel = null; draw(); return; }
-    nodes.push([p.x, p.y]); hist.push('n'); sel = null; draw(); });
+  function tap(i) { if (sel === null) sel = i; else if (sel !== i) { if (!edges.some(x => (x[0] === sel && x[1] === i) || (x[0] === i && x[1] === sel))) { edges.push([sel, i]); hist.push('e'); } sel = null; } else sel = null; draw(); }
+  nodeDrag(svg, () => nodes, tap, draw);
+  svg.addEventListener('pointerdown', e => { if (e.target.closest('.node')) return; const p = svgPt(svg, e);
+    nodes.push([clampX(p.x), clampY(p.y)]); hist.push('n'); sel = null; draw(); });
   $('#g1-clear').onclick = () => { nodes = []; edges = []; sel = null; hist = []; draw(); };
   $('#g1-undo').onclick = () => { const h = hist.pop(); if (h === 'e') edges.pop(); else if (h === 'n') { const i = nodes.length - 1; edges = edges.filter(e => e[0] !== i && e[1] !== i); nodes.pop(); } sel = null; draw(); };
   $('#g1-park').onclick = () => { nodes = PARK.nodes.map(n => [...n]); edges = PARK.edges.map(e => [...e]); sel = null; hist = []; draw(); };
@@ -206,10 +249,10 @@ function svgPt(svg, e) { const p = svg.createSVGPoint(); p.x = e.clientX; p.y = 
     svg.innerHTML = h; const odd = g.n.filter((_, i) => g.e.filter(e => e[0] === i || e[1] === i).length % 2).length;
     $('#g2-odd').textContent = odd; $('#g2-used').textContent = used.size; $('#g2-total').textContent = g.e.length;
     if (used.size === g.e.length) $('#g2-res').textContent = '🎉 한붓그리기 성공!'; else if (path.length && !nextEdges(path[path.length - 1]).length) $('#g2-res').textContent = '막혔어요. 다시 그려 보세요. 출발점을 바꿔 볼까요?'; else $('#g2-res').textContent = odd === 0 || odd === 2 ? (path.length ? '다음 점을 누르세요' : `홀수점 ${odd}개 — 출발점을 누르세요${odd === 2 ? ' (빨간 점에서 출발!)' : ''}`) : `홀수점 ${odd}개 — 이 도형은 한붓그리기가 불가능해요. 그래도 해 볼까요?`;
-    svg.querySelectorAll('.node').forEach(e => e.onpointerdown = ev => { ev.preventDefault(); click(+e.dataset.i); });
   }
   const nextEdges = i => cur.e.map((e, k) => [e, k]).filter(([e, k]) => !used.has(k) && (e[0] === i || e[1] === i));
   function click(i) { if (!path.length) { path.push(i); draw(); return; } const last = path[path.length - 1]; if (i === last) return; const cand = nextEdges(last).find(([e]) => (e[0] === last && e[1] === i) || (e[1] === last && e[0] === i)); if (!cand) return; used.add(cand[1]); path.push(i); draw(); }
+  nodeDrag(svg, () => cur.n, i => click(i), draw);
   $('#g2-presets').innerHTML = Object.keys(P).map(k => `<button>${k}</button>`).join(''); document.querySelectorAll('#g2-presets button').forEach(b => b.onclick = () => load(b.textContent));
   $('#g2-reset').onclick = () => { used = new Set(); path = []; draw(); };
   load('봉투');
@@ -293,6 +336,42 @@ function svgPt(svg, e) { const p = svg.createSVGPoint(); p.x = e.clientX; p.y = 
   $('#mz-dead').onclick = () => { const { dead, sol } = deadEnds(); const deadPts = []; animate(dead.map(cell => () => { deadPts.push(cell); draw(deadPts.map(c => ({ cells: [c, c], color: '#d9cfae', width: SZ / N * .7 }))); }), () => { draw([...deadPts.map(c => ({ cells: [c, c], color: '#d9cfae', width: SZ / N * .7 })), { cells: sol, color: '#3A9E82' }]); $('#mz-res').textContent = `막다른 길 ${dead.length}칸을 지우니 탈출 경로(${sol.length - 1}칸)만 남았어요!`; }); };
   $('#mz-stop').onclick = () => { clearInterval(timer); timer = null; walk = [[0, 0]]; done = false; draw([]); $('#mz-res').textContent = ''; };
   gen();
+})();
+/* ===== ★ 매스투어 지도 ===== */
+(function () {
+  // [이름, 지도 위 위치(%), 책의 질문, 핵심어, 관련 활동]
+  const S = [
+    ['시민마루', 90.3, 73.4, '부산시민공원을 조망할 수 있는 팔각정자인 시민마루에 앉아, 주어진 코스를 <b>한 번에 둘러볼 수 있는 방법</b>을 찾아볼까요?', '한붓그리기', { href: '#t2', label: '✏️ 한붓그리기 도전하기', tab: 't2' }],
+    ['꿈틀이 시소', 88.6, 55.1, '상하좌우 자유로운 움직임이 가능한 꿈틀이 시소에서 <b>비율</b>에 대해 알아볼까요?', '비율'],
+    ['돔플레이', 81.1, 35.3, '돔플레이를 <b>여러 방면에서 본 모양</b>을 그려 볼까요?', '여러 방향에서 본 모양'],
+    ['흔적극장', 81.6, 12.6, '주위를 둘러보면 다양한 도형들이 있습니다. <b>숨어 있는 도형</b>을 찾아볼까요?', '숨은 도형 찾기'],
+    ['써클타워', 48.9, 10.1, '물방울이 하늘로 올라가는 것만 같은 써클타워에서 <b>여러 가지 다각형</b>을 찾아볼까요?', '다각형 찾기'],
+    ['원형 공연장', 55.8, 40.6, '원형 공연장의 바닥에는 <b>몇 개의 타일</b>이 있을까요?', '타일 개수 어림하기'],
+    ['초소', 44.2, 55.6, '공원이 한눈에 들어오는 초소에서 <b>공원 입구까지의 거리의 비율</b>을 알아볼까요?', '거리의 비율'],
+    ['공원 역사관', 8.2, 28.0, '부산시민공원의 역사를 한눈에 살펴볼 수 있는 역사관의 ‘기억의 공간’에서 <b>나만의 마크</b>를 만들어 볼까요?', '나만의 마크 만들기'],
+    ['기억의 기둥', 10.6, 48.8, '나무 전봇대를 재활용하여 만든 ‘기억의 기둥’ <b>아래의 넓이</b>를 구해 볼까요?', '넓이 구하기', { href: '../14/index.html', label: '📐 픽의 정리로 넓이 구하기' }],
+    ['미로정원', 29.6, 74.4, '애기동백나무로 이루어진 미로정원에서 <b>탈출하는 방법</b>은?', '미로 탈출', { href: '#t4', label: '🧭 미로 탈출 해 보기', tab: 't4' }],
+    ['거울연못', 37.4, 87.0, '하늘빛 폭포와 터널 분수가 장관인 거울연못에 <b>글자를 비추면 어떤 모양</b>일까요?', '거울에 비친 모양(대칭)'],
+  ];
+  const pad = i => String(i + 1).padStart(2, '0');
+  $('#tmap').insertAdjacentHTML('beforeend', S.map((s, i) => `<button class="tspot" style="left:${s[1]}%;top:${s[2]}%" data-i="${i}" aria-label="${i + 1}. ${s[0]}"><span>${i + 1}</span></button>`).join(''));
+  $('#tour').innerHTML = S.map((s, i) => `<button data-i="${i}"><b>${i + 1}. ${s[0]}</b>${s[3].replace(/<\/?b>/g, '')}</button>`).join('');
+  const m = $('#tm'); let cur = 0, back = null;
+  function show(i) { cur = (i + S.length) % S.length; const [name, , , q, key, link] = S[cur];
+    $('#tm-step').textContent = cur === 0 ? '🚩 출발 · 1 / 11' : cur === S.length - 1 ? '🏁 도착 · 11 / 11' : `${cur + 1} / 11`;
+    $('#tm-name').textContent = `${cur + 1}. ${name}`;
+    const pic = $('#tm-pic'); pic.src = `../../img/tour/${pad(cur)}.jpg`; pic.alt = `${name} 그림`;
+    $('#tm-q').innerHTML = `<b>🔍 ${key}</b><br>${q}`;
+    $('#tm-links').innerHTML = (link ? `<a class="bk-btn bk-btn--primary bk-btn--sm" href="${link.href}"${link.tab ? ` data-tab="${link.tab}"` : ''}>${link.label}</a>` : '') +
+      `<a class="bk-btn bk-btn--ghost bk-btn--sm" href="https://search.naver.com/search.naver?where=image&query=${encodeURIComponent('부산시민공원 ' + name)}" target="_blank" rel="noopener">📷 실제 사진 보기</a>`;
+    $('#tm-prev').disabled = cur === 0; $('#tm-next').disabled = cur === S.length - 1; }
+  function open(i) { back = document.activeElement; show(i); m.hidden = false; document.body.style.overflow = 'hidden'; $('#tm-x').focus(); }
+  function close() { if (m.hidden) return; m.hidden = true; document.body.style.overflow = ''; back && back.focus && back.focus(); }
+  document.querySelectorAll('#tmap .tspot, #tour button').forEach(b => b.onclick = () => open(+b.dataset.i));
+  $('#tm-x').onclick = close; m.addEventListener('click', e => { if (e.target === m) close(); });
+  $('#tm-prev').onclick = () => show(cur - 1); $('#tm-next').onclick = () => show(cur + 1);
+  document.addEventListener('keydown', e => { if (m.hidden) return; if (e.key === 'Escape') close(); else if (e.key === 'ArrowLeft' && cur > 0) show(cur - 1); else if (e.key === 'ArrowRight' && cur < S.length - 1) show(cur + 1); });
+  $('#tm-links').addEventListener('click', e => { const a = e.target.closest('a[data-tab]'); if (!a) return; e.preventDefault(); close(); const t = document.querySelector(`#tabs .tab[data-t="${a.dataset.tab}"]`); t.click(); window.scrollTo({ top: 0, behavior: 'smooth' }); });
 })();
 </script>
 </body>

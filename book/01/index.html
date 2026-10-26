@@ -17,6 +17,60 @@
   }
   .mcell:not(.diag):not(.mcell--h){cursor:default}
   .mult-hint{font-size:.85rem;color:var(--bk-ink-soft);margin:-6px 0 8px}
+  /* 활동1: 모자이크 예언 상자 */
+  #s1-box{position:relative;width:190px;box-sizing:border-box}
+  #s1-box .box__note{position:relative;height:64px;display:grid;place-items:center;margin-top:6px}
+  .pred-txt{font-family:var(--f-head);font-size:2.3rem;line-height:1;color:var(--bk-red);letter-spacing:.04em;font-variant-numeric:tabular-nums}
+  .mosaic{position:absolute;inset:0;width:100%;height:100%;border-radius:10px;background:repeating-linear-gradient(45deg,#FFF4DF 0 6px,#FFEBC4 6px 12px)}
+  .pred-meter{margin-top:6px;font-size:.8rem;color:var(--bk-ink-soft)}
+  .pred-meter i{display:block;height:6px;border-radius:99px;background:var(--bk-line);margin-top:3px;overflow:hidden}
+  .pred-meter i b{display:block;height:100%;width:0;background:linear-gradient(90deg,var(--bk-orange),var(--bk-red));transition:width .7s}
+  #s1-box.revealed{background:var(--bk-yellow);border-color:var(--bk-red);animation:boxPop .6s cubic-bezier(.2,1.6,.4,1)}
+  #s1-box.revealed .pred-txt{animation:predPop .8s cubic-bezier(.2,1.6,.4,1)}
+  .pred-match{display:inline-block;margin-top:6px;background:var(--bk-red);color:#fff;border-radius:999px;padding:3px 10px;font-family:var(--f-head);font-size:.9rem;animation:predPop .6s .35s both}
+  @keyframes predPop{0%{transform:scale(.3);opacity:0}60%{transform:scale(1.35);opacity:1}100%{transform:scale(1)}}
+  @keyframes boxPop{0%{transform:scale(1)}40%{transform:scale(1.12) rotate(-3deg)}100%{transform:rotate(-2deg) scale(1.05)}}
+  .spark{position:absolute;left:50%;top:55%;pointer-events:none;font-size:1.4rem;z-index:2;animation:spark 1s ease-out forwards}
+  @keyframes spark{from{transform:translate(-50%,-50%) scale(.3);opacity:1}to{transform:translate(calc(-50% + var(--dx)),calc(-50% + var(--dy))) scale(1.15) rotate(var(--r));opacity:0}}
+  .num--match{animation:sumGlow 1.2s ease-in-out 2;border-color:var(--bk-red)!important}
+  @keyframes sumGlow{50%{box-shadow:0 0 0 6px rgba(233,83,63,.35);transform:scale(1.06)}}
+  @media(max-width:640px){
+    #s1-box{width:100%}
+    #s1-box .box__note{height:84px}
+    .pred-txt{font-size:3.2rem}
+    #s1-box.open{transform:rotate(-1deg)}
+    #s1-box.revealed{animation-name:boxPopM}
+  }
+  @keyframes boxPopM{0%{transform:scale(.96)}40%{transform:scale(1.03) rotate(-2deg)}100%{transform:rotate(-1deg)}}
+  @media(prefers-reduced-motion:reduce){#s1-box.revealed,#s1-box.revealed .pred-txt,.pred-match,.spark,.num--match{animation:none}}
+  /* 생일: 모드 */
+  .bd-modes{display:flex;gap:6px;flex-wrap:wrap;margin:6px 0 12px}
+  .bd-modes .bk-btn{flex:1 1 auto}
+  .bd-modes .bk-btn.on{background:var(--bk-red);border-color:var(--bk-red);color:#fff}
+  .bd-two{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+  .bd-col{background:#fff;border-radius:14px;padding:10px 12px;border:2px solid var(--bk-line);display:flex;flex-direction:column;gap:6px;min-width:0}
+  .bd-col h4{margin:0;font-family:var(--f-head);font-weight:400;font-size:1.1rem;color:var(--bk-sky)}
+  .bd-col:nth-child(2) h4{color:var(--bk-orange-deep)}
+  .bd-col .bday__steps{font-size:.85rem}
+  .bd-col .bday__steps li b{font-size:1rem}
+  .bd-col .num{width:100%;box-sizing:border-box;font-size:1.3rem}
+  .bd-col .num--2{width:58px;font-size:1.15rem;padding:6px 4px}
+  .bd-col label{font-size:.9rem}
+  .bd-cards{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin:10px 0}
+  .bd-card{background:var(--bk-yellow);border:3px solid var(--bk-orange);border-radius:16px;padding:10px;text-align:center;font-family:var(--f-head);min-height:76px;display:flex;flex-direction:column;justify-content:center}
+  .bd-card small{font-size:.8rem;color:var(--bk-ink-soft);font-family:var(--f-body)}
+  .bd-card b{font-weight:400;font-size:1.6rem;color:var(--bk-red)}
+  .bd-card.show{animation:cardFlip .7s ease both}
+  .bd-card.bad{background:#fff;border-color:var(--bk-line)}
+  @keyframes cardFlip{0%{transform:rotateY(90deg) scale(.8);opacity:0}100%{transform:none;opacity:1}}
+  .bd-quiz{background:#fff;border-radius:14px;padding:12px 14px;display:flex;flex-direction:column;gap:8px}
+  .bd-qnum{font-family:var(--f-head);font-size:2.4rem;color:var(--bk-red);text-align:center;line-height:1.1}
+  .bd-qform{font-size:.9rem;color:var(--bk-ink-soft);text-align:center}
+  .bd-qexp{background:var(--bk-cream);border-radius:12px;padding:8px 12px;font-size:.92rem}
+  .bd-qexp.ok{background:var(--bk-mint);border:1.5px solid var(--bk-mint-line)}
+  @media(max-width:480px){.bd-modes{flex-wrap:nowrap;gap:5px}.bd-modes .bk-btn{flex:1 1 0;min-width:0;padding:8px 4px;font-size:.86rem;white-space:nowrap}}
+  @media(max-width:420px){.bd-two{gap:6px}.bd-col{padding:8px}.bd-col .num--2{width:48px}}
+  @media(prefers-reduced-motion:reduce){.bd-card.show{animation:none}}
 </style>
 </head>
 <body class="bk">
@@ -55,7 +109,7 @@
           <div class="magician__face">🎩</div>
           <div class="bubble" id="s1-say">1에서 8까지의 숫자 중 4개를 이용하여 <b>네 자리 수</b>를 적어 주세요.</div>
         </div>
-        <div class="box" id="s1-box"><div class="box__lid">📦 예언 상자</div><div class="box__note" id="s1-pred">?</div></div>
+        <div class="box" id="s1-box"><div class="box__lid">📦 예언 상자</div><div class="box__note" id="s1-pred" aria-live="polite"><span class="pred-txt" id="s1-pred-txt">?</span><canvas class="mosaic" id="s1-mosaic" hidden aria-hidden="true"></canvas></div><div class="pred-meter" id="s1-meter" hidden><span id="s1-meter-t"></span><i><b id="s1-meter-b"></b></i></div></div>
       </div>
 
       <div class="sheet" id="s1-sheet">
@@ -163,7 +217,12 @@
       <div class="bk-act"><span class="bk-act__n" style="background:var(--bk-red)">★</span><span class="bk-act__t">나도 수학자 — 생일 알아맞히기</span><span class="bk-tag">문제 해결</span><span class="bk-tag">추론</span><span class="bk-tag">의사소통</span></div>
       <p class="bk-muted">나는 수학 마술사, 당신의 생일을 알아맞힐 수 있습니다. 계산 결과만 알려주세요!</p>
 
-      <div class="bday">
+      <div class="bd-modes" role="tablist">
+        <button class="bk-btn bk-btn--ghost bk-btn--sm on" data-bm="one">🎩 혼자 하기</button>
+        <button class="bk-btn bk-btn--ghost bk-btn--sm" data-bm="two">👯 2인 맞히기</button>
+        <button class="bk-btn bk-btn--ghost bk-btn--sm" data-bm="quiz">❓ 퀴즈</button>
+      </div>
+      <div class="bday" id="bm-one">
         <div class="bday__secret">
           <label>🤫 (마술사는 못 봐요) 내 생일: <input class="num num--2" type="tel" maxlength="2" id="bd-m" inputmode="numeric" placeholder="월"> 월 <input class="num num--2" type="tel" maxlength="2" id="bd-d" inputmode="numeric" placeholder="일"> 일</label>
           <label class="bk-muted">곱하는 수 바꿔 보기: ×<select id="bd-k" class="sel"><option>1</option><option selected>2</option><option>3</option><option>4</option><option>5</option></select></label>
@@ -173,6 +232,42 @@
           <div class="magician"><div class="magician__face">🎩</div><div class="bubble" id="bd-say">먼저, 당신이 태어난 달에 2를 곱해 보세요.</div></div>
         </div>
         <div class="bk-row"><button class="bk-btn bk-btn--primary" id="bd-go">다음 ▶</button><button class="bk-btn bk-btn--ghost" id="bd-reset">처음부터</button></div>
+      </div>
+
+      <!-- 2인 맞히기 -->
+      <div id="bm-two" hidden>
+        <p class="bk-muted" style="margin:0 0 8px">두 사람이 각자 자기 생일로 계산해요. 마술사는 <b>마지막 결과 두 개</b>만 보고 두 생일을 한꺼번에 맞혀요! (종이로 계산했다면 결과만 적어도 돼요)</p>
+        <label class="bk-muted" style="display:block;margin-bottom:8px">곱하는 수: ×<select id="b2-k" class="sel"><option>1</option><option selected>2</option><option>3</option><option>4</option><option>5</option></select></label>
+        <div class="bd-two">
+          <div class="bd-col" data-p="1"><h4>🙋 사람 1</h4>
+            <label>🤫 생일 <input class="num num--2" type="tel" maxlength="2" inputmode="numeric" placeholder="월" data-f="m">월 <input class="num num--2" type="tel" maxlength="2" inputmode="numeric" placeholder="일" data-f="d">일</label>
+            <button class="bk-btn bk-btn--sky bk-btn--sm" data-f="calc">계산하기</button>
+            <ol class="bday__steps" data-f="steps"></ol>
+            <label>최종 결과<input class="num" type="tel" maxlength="4" inputmode="numeric" placeholder="결과" data-f="r"></label>
+          </div>
+          <div class="bd-col" data-p="2"><h4>🙋 사람 2</h4>
+            <label>🤫 생일 <input class="num num--2" type="tel" maxlength="2" inputmode="numeric" placeholder="월" data-f="m">월 <input class="num num--2" type="tel" maxlength="2" inputmode="numeric" placeholder="일" data-f="d">일</label>
+            <button class="bk-btn bk-btn--sky bk-btn--sm" data-f="calc">계산하기</button>
+            <ol class="bday__steps" data-f="steps"></ol>
+            <label>최종 결과<input class="num" type="tel" maxlength="4" inputmode="numeric" placeholder="결과" data-f="r"></label>
+          </div>
+        </div>
+        <div class="stage stage--sm"><div class="magician"><div class="magician__face">🎩</div><div class="bubble" id="b2-say">두 분, 각자 계산한 마지막 결과를 알려 주세요. 저는 생일을 보지 않을게요!</div></div></div>
+        <div class="bd-cards" id="b2-cards" hidden></div>
+        <div class="bk-row"><button class="bk-btn bk-btn--primary" id="b2-go">🎩 마술사가 맞히기</button><button class="bk-btn bk-btn--ghost" id="b2-reset">처음부터</button></div>
+      </div>
+
+      <!-- 퀴즈 -->
+      <div id="bm-quiz" hidden>
+        <div class="bd-quiz">
+          <div class="bk-row" style="justify-content:space-between"><span class="bk-muted" id="bq-no">문제 1</span><span class="bk-muted">맞힌 문제 <b id="bq-score">0</b> / <span id="bq-total">0</span></span></div>
+          <div class="bd-qform" id="bq-form"></div>
+          <div class="bd-qnum" id="bq-num"></div>
+          <p class="bk-muted" style="margin:0;text-align:center">이 결과가 나온 사람의 생일은?</p>
+          <div class="bk-row" style="justify-content:center"><input class="num num--2" type="tel" maxlength="2" inputmode="numeric" placeholder="월" id="bq-m"> 월 <input class="num num--2" type="tel" maxlength="2" inputmode="numeric" placeholder="일" id="bq-d"> 일</div>
+          <div class="bk-row" style="justify-content:center"><button class="bk-btn bk-btn--primary" id="bq-check">확인</button><button class="bk-btn bk-btn--sky" id="bq-next">다음 문제 ▶</button></div>
+          <div class="bd-qexp" id="bq-exp" hidden></div>
+        </div>
       </div>
     </div>
     <div class="bk-panel secret">
@@ -224,13 +319,66 @@ const ri = n => Math.floor(Math.random() * n);
 
 /* ================= 활동 1 ================= */
 (function () {
-  let stage = 0, pairs = 2, nums = [];
+  let stage = 0, pairs = 2, nums = [], timers = [];
   const say = t => $('#s1-say').innerHTML = t;
-  const sheet = $('#s1-sheet');
+  const sheet = $('#s1-sheet'), box = $('#s1-box'), txt = $('#s1-pred-txt'), cv = $('#s1-mosaic');
+  const RM = matchMedia('(prefers-reduced-motion: reduce)');
+  /* ---- 모자이크: 실제 예언 수를 저해상도로 그린 뒤 확대(픽셀 블록) + 흐림 ---- */
+  const off = document.createElement('canvas');
+  let mz = { q: 0, shown: 0, raf: 0, v: '' };
+  const blockOf = q => 2.5 + 24 * Math.pow(1 - q, 1.2);   // CSS px 블록 크기
+  const blurOf = q => 6 * Math.pow(1 - q, 1.3);
+  function paint(q) {
+    const W = cv.clientWidth, H = cv.clientHeight; if (!W || !H) return;
+    const dpr = Math.min(2, window.devicePixelRatio || 1);
+    cv.width = Math.round(W * dpr); cv.height = Math.round(H * dpr);
+    const bw = Math.max(1, Math.round(blockOf(q) * dpr));
+    const sw = Math.max(1, Math.ceil(cv.width / bw)), sh = Math.max(1, Math.ceil(cv.height / bw));
+    off.width = sw; off.height = sh;
+    const o = off.getContext('2d'); o.setTransform(sw / cv.width, 0, 0, sh / cv.height, 0, 0);
+    o.fillStyle = '#FFF4DF'; o.fillRect(0, 0, cv.width, cv.height);
+    const fs = parseFloat(getComputedStyle(txt).fontSize) * dpr;
+    o.font = `${fs}px ${getComputedStyle(txt).fontFamily}`; o.textAlign = 'center'; o.textBaseline = 'middle';
+    o.fillStyle = '#E9533F'; o.fillText(mz.v, cv.width / 2, cv.height / 2 + fs * .04);
+    const c = cv.getContext('2d'); c.imageSmoothingEnabled = false; c.clearRect(0, 0, cv.width, cv.height);
+    c.drawImage(off, 0, 0, sw, sh, 0, 0, sw * bw, sh * bw);
+    cv.style.filter = `blur(${blurOf(q).toFixed(2)}px) saturate(${1 + (1 - q) * .6})`;
+  }
+  function toLevel(q) { // q: 0(완전 모자이크) → 1(선명)
+    mz.q = q; cancelAnimationFrame(mz.raf);
+    const pct = Math.round(q * 100); $('#s1-meter-b').style.width = pct + '%'; $('#s1-meter-t').textContent = q < 1 ? `🔮 예언이 드러나는 중… ${pct}%` : '';
+    if (RM.matches) { mz.shown = q; paint(q); return; }
+    const from = mz.shown, t0 = performance.now(), D = 800;
+    const step = t => { const k = Math.min(1, (t - t0) / D), e = 1 - Math.pow(1 - k, 3); mz.shown = from + (q - from) * e; paint(mz.shown); if (k < 1) mz.raf = requestAnimationFrame(step); };
+    mz.raf = requestAnimationFrame(step);
+  }
+  function seal(v) {
+    mz.v = String(v); mz.shown = 0; txt.textContent = mz.v; txt.style.visibility = 'hidden';
+    cv.hidden = false; $('#s1-meter').hidden = false; box.classList.add('sealed');
+    paint(0); toLevel(0);
+    document.fonts?.ready.then(() => { if (!cv.hidden) paint(mz.shown); });
+  }
+  const progress = () => (nums.length - 1) / (2 * pairs) * 0.65; // 숫자를 적을 때마다 조금씩 선명해짐
+  function reveal() {
+    cancelAnimationFrame(mz.raf); cv.hidden = true; $('#s1-meter').hidden = true; txt.style.visibility = '';
+    box.classList.remove('revealed'); void box.offsetWidth; box.classList.add('open', 'revealed');
+    const top = box.getBoundingClientRect().top - (window.BK_TOP_H?.() || 56) - ($('#tabs')?.offsetHeight || 0) - 24;
+    if (top < 0 || top > innerHeight - 200) window.scrollBy({ top, behavior: RM.matches ? 'auto' : 'smooth' });
+    const m = document.createElement('div'); m.className = 'pred-match'; m.textContent = '합과 똑같아요! ✨'; box.appendChild(m);
+    if (!RM.matches) for (let i = 0; i < 14; i++) {
+      const s = document.createElement('span'); s.className = 'spark'; s.textContent = ['✨', '⭐', '🎉', '💫'][i % 4];
+      const a = i / 14 * Math.PI * 2, r = 55 + ri(35);
+      s.style.setProperty('--dx', Math.round(Math.cos(a) * r) + 'px'); s.style.setProperty('--dy', Math.round(Math.sin(a) * r * .8) + 'px'); s.style.setProperty('--r', (ri(120) - 60) + 'deg');
+      s.style.animationDelay = (i % 3) * 60 + 'ms'; box.appendChild(s); s.addEventListener('animationend', () => s.remove());
+    }
+    sheet.querySelector('.num--sum')?.classList.add('num--match');
+  }
+  window.addEventListener('resize', () => { if (!cv.hidden) paint(mz.shown); });
+
   function addRow(who, val) {
     const r = document.createElement('div'); r.className = 'sheet__row';
     r.innerHTML = `<span class="who ${who === '마술사' ? 'who--m' : ''}">${who}</span>` + (val !== undefined ? `<span class="num num--ro">${val}</span>` : `<input class="num" type="tel" maxlength="4" inputmode="numeric" placeholder="네 자리 수">`);
-    sheet.appendChild(r); const i = r.querySelector('input'); if (i) i.focus(); return r;
+    sheet.appendChild(r); const i = r.querySelector('input'); if (i) { i.focus({ preventScroll: true }); i.addEventListener('keydown', e => { if (e.key === 'Enter') $('#s1-next').click(); }); } return r;
   }
   function valid(v) { return /^[1-8]{4}$/.test(v); }
   $('#s1-next').onclick = () => {
@@ -243,23 +391,26 @@ const ri = n => Math.floor(Math.random() * n);
       nums.push(+v);
       const audienceCount = nums.filter((_, i) => i === 0 || i % 2 === 1).length; // a1, a2, a3 …
       if (nums.length === 1) {
-        $('#s1-pred').textContent = '✉️'; $('#s1-pred').dataset.v = nums[0] + 9999 * pairs; $('#s1-box').classList.add('sealed');
-        say('저도 수를 하나 적어 <b>상자에 넣어</b> 두겠습니다. 이제 제가 적은 수 아래에 또 한 번 네 자리 수를 적어 주세요.');
+        $('#s1-pred').dataset.v = nums[0] + 9999 * pairs; seal($('#s1-pred').dataset.v);
+        say('저도 수를 하나 적어 <b>상자에 넣어</b> 두겠습니다. 🔮 아직은 흐릿하지만, 수를 적을수록 예언이 점점 드러나요. 이제 또 한 번 네 자리 수를 적어 주세요.');
         addRow('관객'); return;
       }
+      toLevel(progress());
       // 관객이 적을 때마다 마술사가 보수를 적는다
       const m = 9999 - nums[nums.length - 1]; addRow('마술사', m); nums.push(m);
+      timers.push(setTimeout(() => toLevel(progress()), RM.matches ? 0 : 550));
       if (audienceCount < pairs + 1) { say('아까 적었던 수 바로 아래에 또 한 번 네 자리 수를 적어 주세요. 저도 한 번 더 적겠습니다.'); addRow('관객'); return; }
       say(`이제 위에 적은 ${nums.length}개의 수를 계산기로 모두 더해 주세요.`); $('#s1-next').textContent = '합 계산하기 🧮'; stage = 1; return;
     }
     if (stage === 1) {
       const sum = nums.reduce((a, b) => a + b, 0);
       addRow('합', sum).querySelector('.num').classList.add('num--sum');
+      toLevel(0.85);
       say('아까 제가 적어서 상자에 넣어둔 종이를 보여드리겠습니다.'); $('#s1-next').textContent = '상자 열기 📦'; stage = 2; return;
     }
     if (stage === 2) {
-      $('#s1-pred').textContent = $('#s1-pred').dataset.v; $('#s1-box').classList.add('open');
-      say('여기까지 신기한 수학 마술이었습니다! 🎉 아래에서 비밀을 밝혀 보세요.'); $('#s1-next').textContent = '다시 하기 🔄'; stage = 3;
+      reveal();
+      say(`합 <b>${$('#s1-pred').dataset.v}</b> — 예언과 똑같지요? 여기까지 신기한 수학 마술이었습니다! 🎉 아래에서 비밀을 밝혀 보세요.`); $('#s1-next').textContent = '다시 하기 🔄'; stage = 3;
       const tb = $('#s1-tbl tbody'); tb.innerHTML = `<tr><td>${nums[0]} (처음 수)</td><td>— (상자에 ${$('#s1-pred').dataset.v})</td><td></td></tr>`;
       for (let i = 1; i + 1 < nums.length; i += 2) tb.innerHTML += `<tr><td>${nums[i]}</td><td>${nums[i + 1]}</td><td>${nums[i] + nums[i + 1]}</td></tr>`;
       tb.innerHTML += `<tr><td colspan="3">예언 = 처음 수 ${nums[0]} + 9999 × ${pairs} = ${nums[0] + 9999 * pairs}</td></tr>`;
@@ -268,13 +419,15 @@ const ri = n => Math.floor(Math.random() * n);
     if (stage === 3) { $('#s1-reset').click(); }
   };
   $('#s1-reset').onclick = () => {
+    timers.forEach(clearTimeout); timers = []; cancelAnimationFrame(mz.raf);
     stage = 0; nums = []; pairs = +$('#s1-pairs').value; $('#s1-hint').textContent = '';
     sheet.innerHTML = ''; addRow('관객'); $('#s1-next').disabled = false; $('#s1-next').textContent = '다음 ▶';
-    $('#s1-box').className = 'box'; $('#s1-pred').textContent = '?'; $('#s1-secret').hidden = true;
+    box.className = 'box'; box.querySelectorAll('.pred-match,.spark').forEach(e => e.remove());
+    txt.textContent = '?'; txt.style.visibility = ''; cv.hidden = true; $('#s1-meter').hidden = true; $('#s1-secret').hidden = true;
     say(`1에서 8까지의 숫자 중 4개를 이용하여 <b>네 자리 수</b>를 적어 주세요.${pairs !== 2 ? ` (이번엔 ${pairs}쌍 적기)` : ''}`);
   };
   $('#s1-pairs').onchange = () => { pairs = +$('#s1-pairs').value; $('#s1-pairs-out').textContent = `→ 마술사가 미리 적어둘 수 = 처음 수 + ${9999 * pairs}`; $('#s1-reset').click(); };
-  // 마지막 관객 수에 대한 설명 정정: 예언은 '처음 수 + 9999×쌍'
+  sheet.querySelector('input')?.addEventListener('keydown', e => { if (e.key === 'Enter') $('#s1-next').click(); });
   $('#s1-pairs-out').textContent = '→ 마술사가 미리 적어둘 수 = 처음 수 + 19998';
 })();
 
@@ -361,6 +514,76 @@ const ri = n => Math.floor(Math.random() * n);
   };
   $('#bd-reset').onclick = () => { step = 0; steps.innerHTML = ''; $('#bd-go').disabled = false; say(`먼저, 당신이 태어난 달에 ${$('#bd-k').value}를 곱해 보세요.`); };
   $('#bd-k').onchange = () => $('#bd-reset').click();
+})();
+
+/* ---- 생일: 모드 전환 · 2인 맞히기 · 퀴즈 ---- */
+(function () {
+  const bdVal = (m, d, k) => (m * k + 5) * 20 + d - 100;           // = 20k·m + d
+  const decode = (v, k) => ({ m: Math.floor(v / (20 * k)), d: v % (20 * k) });
+  const DIM = [31, 29, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31];
+  const okDate = (m, d) => m >= 1 && m <= 12 && d >= 1 && d <= DIM[m - 1];
+  const stepsHTML = (m, d, k) => { const a = m * k, b = (a + 5) * 20, c = b + d, e = c - 100;
+    return [`${m} × ${k} = ${a}`, `(${a} + 5) × 20 = ${b}`, `${b} + ${d} = ${c}`, `${c} − 100 = <span style="color:var(--bk-red)">${e}</span>`].map(t => `<li><b>${t}</b></li>`).join(''); };
+  // 모드 전환
+  document.querySelectorAll('.bd-modes [data-bm]').forEach(b => b.onclick = () => {
+    document.querySelectorAll('.bd-modes [data-bm]').forEach(x => { x.classList.toggle('on', x === b); x.setAttribute('aria-selected', x === b); });
+    ['one', 'two', 'quiz'].forEach(m => $('#bm-' + m).hidden = m !== b.dataset.bm);
+    if (b.dataset.bm === 'quiz' && !qz) newQ();
+  });
+
+  /* 2인 맞히기 */
+  const cols = [...document.querySelectorAll('#bm-two .bd-col')], b2say = t => $('#b2-say').innerHTML = t;
+  const f = (col, n) => col.querySelector(`[data-f="${n}"]`);
+  cols.forEach(col => {
+    f(col, 'calc').onclick = () => {
+      const m = +f(col, 'm').value, d = +f(col, 'd').value, k = +$('#b2-k').value;
+      if (!okDate(m, d)) { f(col, 'steps').innerHTML = '<li class="bk-muted">생일(월·일)을 먼저 넣어 주세요.</li>'; return; }
+      f(col, 'steps').innerHTML = stepsHTML(m, d, k); f(col, 'r').value = bdVal(m, d, k);
+    };
+    f(col, 'r').addEventListener('input', () => $('#b2-cards').hidden = true);
+  });
+  $('#b2-go').onclick = () => {
+    const k = +$('#b2-k').value, rs = cols.map(c => f(c, 'r').value.trim());
+    if (rs.some(r => !/^\d+$/.test(r))) { b2say('두 사람의 <b>최종 결과</b>가 모두 필요해요. "계산하기"를 누르거나 종이에 계산한 결과를 적어 주세요.'); return; }
+    const cards = $('#b2-cards'); cards.hidden = false; cards.innerHTML = '';
+    let allOk = true;
+    rs.forEach((r, i) => {
+      const v = +r, g = decode(v, k), ok = okDate(g.m, g.d);
+      const m = +f(cols[i], 'm').value, d = +f(cols[i], 'd').value, known = okDate(m, d);
+      const right = ok && (!known || (m === g.m && d === g.d)); if (!right) allOk = false;
+      const c = document.createElement('div'); c.className = 'bd-card' + (ok ? '' : ' bad');
+      c.innerHTML = `<small>사람 ${i + 1} · ${v} ÷ ${20 * k} = ${g.m} … ${g.d}</small><b>${ok ? `${g.m}월 ${g.d}일` : '???'}</b>${known && ok && !right ? '<small>어라? 실제와 달라요</small>' : ''}`;
+      c.style.animationDelay = (i * 0.45) + 's'; cards.appendChild(c); requestAnimationFrame(() => c.classList.add('show'));
+    });
+    b2say(allOk ? `음… 보입니다! 두 결과를 각각 <b>${josa(20 * k, "으로/로")}</b> 나누면 몫이 달, 나머지가 날짜. 🎉 두 분 생일 맞지요?`
+      : (k === 1 ? '…어라? ×1이면 20으로 나누는데, 날짜가 20 이상이면 달과 섞여 버려요!' : '…어라? 계산 결과를 다시 확인해 볼까요?'));
+  };
+  $('#b2-reset').onclick = () => { cols.forEach(c => { ['m', 'd', 'r'].forEach(n => f(c, n).value = ''); f(c, 'steps').innerHTML = ''; }); $('#b2-cards').hidden = true; b2say('두 분, 각자 계산한 마지막 결과를 알려 주세요. 저는 생일을 보지 않을게요!'); };
+  $('#b2-k').onchange = () => cols.forEach(c => { if (f(c, 'steps').innerHTML) f(c, 'calc').click(); $('#b2-cards').hidden = true; });
+
+  /* 퀴즈 */
+  let qz = null, qn = 0, score = 0, done = false;
+  function newQ() {
+    const m = 1 + ri(12), d = 1 + ri(DIM[m - 1] === 29 ? 28 : DIM[m - 1]), k = [2, 2, 3, 4, 5][ri(5)];
+    qz = { m, d, k, v: bdVal(m, d, k) }; qn++; done = false;
+    $('#bq-no').textContent = `문제 ${qn}`; $('#bq-total').textContent = qn - 1 + (done ? 1 : 0);
+    $('#bq-form').innerHTML = `계산 과정: (태어난 달 × <b>${k}</b> + 5) × 20 + 날짜 − 100 =`;
+    $('#bq-num').textContent = qz.v; $('#bq-m').value = ''; $('#bq-d').value = ''; $('#bq-exp').hidden = true; $('#bq-check').disabled = false;
+  }
+  $('#bq-check').onclick = () => {
+    if (!qz || done) return;
+    const m = +$('#bq-m').value, d = +$('#bq-d').value;
+    if (!m || !d) { $('#bq-exp').hidden = false; $('#bq-exp').className = 'bd-qexp'; $('#bq-exp').textContent = '월과 일을 모두 적어 주세요.'; return; }
+    done = true; const ok = m === qz.m && d === qz.d; if (ok) score++;
+    $('#bq-score').textContent = score; $('#bq-total').textContent = qn; $('#bq-check').disabled = true;
+    const e = $('#bq-exp'); e.hidden = false; e.className = 'bd-qexp' + (ok ? ' ok' : '');
+    e.innerHTML = `${ok ? '🎉 정답!' : `아쉬워요. 정답은 <b>${qz.m}월 ${qz.d}일</b>.`}<br>
+      풀이: 결과는 20×${qz.k}×(달) + (날짜) = <b>${20 * qz.k}</b>×(달) + (날짜). 날짜는 ${20 * qz.k}보다 작으니<br>
+      ${qz.v} ÷ ${20 * qz.k} = <b>${qz.m}</b> … <b>${qz.d}</b> → 몫이 달, 나머지가 날짜!<br>
+      <span class="bk-muted">확인: (${qz.m}×${qz.k}+5)×20+${qz.d}−100 = ${qz.v}</span>`;
+  };
+  $('#bq-next').onclick = newQ;
+  [$('#bq-m'), $('#bq-d')].forEach(i => i.addEventListener('keydown', e => { if (e.key === 'Enter') $('#bq-check').click(); }));
 })();
 
 /* ================= 수학자 2: 곱셈표 ================= */
