@@ -1,5 +1,5 @@
 /* 부산의 활동수학 축전 · 오프라인 대비 서비스 워커 (tools/build-sw.py 가 생성) */
-const VERSION = 'onchun-4bcc392b3c';
+const VERSION = 'onchun-1d912ccb4e';
 const PRECACHE = ["book/01/index.html", "book/02/index.html", "book/03/index.html", "book/04/index.html", "book/05/index.html", "book/06/index.html", "book/07/index.html", "book/08/index.html", "book/09/index.html", "book/10/index.html", "book/11/index.html", "book/12/index.html", "book/13/index.html", "book/14/index.html", "book/15/index.html", "book/16/index.html", "book/17/index.html", "book/book.css", "book/book.js", "book/index.html", "book/poly3d.js", "common.css", "common.js", "games/arcade/index.html", "games/online.js", "games/queen/index.html", "img/ch01.jpg", "img/ch02.jpg", "img/ch03.jpg", "img/ch04.jpg", "img/ch05.jpg", "img/ch06.jpg", "img/ch07.jpg", "img/ch08.jpg", "img/ch09.jpg", "img/ch10.jpg", "img/ch11.jpg", "img/ch12.jpg", "img/ch13.jpg", "img/ch14.jpg", "img/ch15.jpg", "img/ch16.jpg", "img/ch17.jpg", "index.html", "qr.html"];
 self.addEventListener('install', e => {
   e.waitUntil(caches.open(VERSION).then(c => Promise.allSettled(PRECACHE.map(u => c.add(u).catch(() => {})))).then(() => self.skipWaiting()));
