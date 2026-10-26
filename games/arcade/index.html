@@ -447,7 +447,7 @@
     transform: translateZ(25px);
     font-weight: 500;
   }
-  .card-desc b { color: #fff; }
+  .card-desc b { color: var(--text-main); }
 
   .tags-row {
     display: flex;
@@ -913,12 +913,12 @@
   .size-3 .board-stone::before { font-size: 2.8rem; }
   .size-4 .board-stone::before { font-size: 2.2rem; }
 
-  /* 봇과 플레이하여 패배한 경우 모든 X를 빨간색(네온 핑크/레드) 계열로 변경 후 일직선 X들만 밝기 변화 */
+  /* AI 플레이하여 패배한 경우 모든 X를 빨간색(네온 핑크/레드) 계열로 변경 후 일직선 X들만 밝기 변화 */
   .dead-board .board-stone::before {
     color: var(--neon-pink);
     text-shadow: 0 0 15px var(--neon-pink), 0 0 30px rgba(233, 83, 63, 0.5);
   }
-  /* 이외의 경우(봇 상대 승리, 2인 플레이, 분석 모드) 모든 X를 초록색으로 변경 후 일직선 X들만 밝기 변화 */
+  /* 이외의 경우(AI 상대 승리, 2인 플레이, 분석 모드) 모든 X를 초록색으로 변경 후 일직선 X들만 밝기 변화 */
   .win-board .board-stone::before {
     color: #3A9E82;
     text-shadow: 0 0 15px #3A9E82, 0 0 30px rgba(58, 158, 130, 0.5);
@@ -1365,7 +1365,7 @@
   .p-bomb-stone { background: linear-gradient(135deg, #E9533F, #E9533F); box-shadow: 0 0 6px #E9533F; }
   .p-gem-stone, .p-gold-stone { background: linear-gradient(135deg, #DFF5EE, #3A9E82, #2C8F6E); box-shadow: 0 0 8px #3A9E82; }
 
-  /* ================= 모달 오버레이 (설정 / 도움말 / 봇 설정 / 승리) ================= */
+  /* ================= 모달 오버레이 (설정 / 도움말 / AI 설정 / 승리) ================= */
   .modal-overlay {
     display: none;
     position: fixed;
@@ -1629,6 +1629,104 @@
     #nt-analysis-center, #st-analysis-center { min-width: 0; }
   }
 
+
+  /* ================= 팝잇 섹션 ================= */
+  :root { --neon-orange: #E8891B; }
+  .game-card.orange-theme { border-top:3px solid transparent; }
+  .game-card.orange-theme:hover { border-color:var(--neon-orange); box-shadow:0 14px 34px rgba(232,137,27,.18); }
+  .orange-theme .btn-play-main { background:#F5A623; color:#fff; box-shadow:0 5px 0 #c97d15; }
+  .orange-theme .btn-play-main:hover { background:#E8891B; transform:translateY(-2px); }
+  .orange-theme .game-code { color:var(--neon-orange); }
+  .pp-mini { display:flex; flex-direction:column; gap:8px; align-items:flex-start; }
+  .pp-mini div { display:flex; gap:7px; }
+  .pp-mini i { width:26px; height:26px; border-radius:50%; display:block; box-shadow:inset -3px -3px 5px rgba(0,0,0,.2), inset 3px 3px 5px rgba(255,255,255,.6); }
+  .pp-mini i.off { background:#d8d2c2; opacity:.5; transform:scale(.85); }
+  #popit-section .section-title { color:var(--neon-orange); }
+  #popit-section .rule-subtitle { background:#FFF1D6; border-color:#F5A623; color:#8a4e05; }
+  #popit-section .menu-screen-container { border-top:2px solid var(--neon-orange); }
+  #popit-section .menu-btn { border-color:#F5A623; box-shadow:0 5px 0 #e0c489; }
+  #popit-section .menu-btn.online-btn { background:#DFF5EE; border-color:#9ED9C6; color:#1f6b55; box-shadow:0 4px 0 #9ED9C6; }
+  .menu-btn.records-btn { background:#FFF4DF; border-color:#F5A623 !important; color:#8a4e05; box-shadow:0 4px 0 #e0c489 !important; }
+  .orange-modal { border-top:4px solid var(--neon-orange) !important; }
+  #pp-game-screen { display:none; flex-direction:column; align-items:center; width:100%; }
+  #pp-turn-indicator { font-family:'Jua',sans-serif; font-size:1.6rem; color:var(--neon-orange); margin:6px 0 4px; text-align:center; }
+  #pp-timer-display { color:var(--text-sub); margin-bottom:8px; min-height:1.2em; }
+  #pp-board { display:flex; justify-content:space-between; width:100%; align-items:stretch; gap:18px; }
+  .pp-frame { width:20%; min-height:300px; justify-content:center; }
+  .pp-stat-label { font-size:.8rem; color:var(--text-sub); margin:-4px 0 8px; }
+  .pp-center { flex:1; display:flex; flex-direction:column; align-items:center; gap:10px; min-width:0; }
+  #popit-board { width:100%; display:flex; flex-direction:column; gap:8px; background:#FFF9E8; border:2px solid #F5A623; border-radius:18px; padding:12px; box-sizing:border-box; box-shadow:inset 0 0 0 6px #fff; touch-action:none; -webkit-user-select:none; user-select:none; }
+  .pp-row { display:flex; align-items:center; gap:8px; background:#fff; border:1.5px solid #EDE3C8; border-radius:14px; padding:8px 10px; }
+  .pp-row__label { font-family:'Jua',sans-serif; width:46px; flex:none; font-size:.95rem; }
+  .pp-row__bubbles { flex:1; display:flex; flex-wrap:wrap; gap:7px; min-width:0; }
+  .pp-row__cnt { width:34px; text-align:right; flex:none; color:var(--text-sub); font-size:.85rem; font-weight:700; }
+  .bubble { width:38px; height:38px; border-radius:50%; border:0; cursor:pointer; flex:none; touch-action:none; transition:transform .12s, box-shadow .12s;
+    box-shadow:inset -3px -3px 6px rgba(0,0,0,.22), inset 3px 3px 6px rgba(255,255,255,.6), 0 3px 5px rgba(0,0,0,.14); }
+  .bubble:hover:not(.popped):not(:disabled) { transform:scale(1.08); }
+  .bubble.popped { background:#d8d2c2 !important; opacity:.45; transform:scale(.9); cursor:not-allowed; box-shadow:inset 3px 3px 6px rgba(0,0,0,.35); }
+  .bubble.selected-temp { outline:4px solid #2F8FC9; outline-offset:2px; transform:scale(1.06); }
+  .bubble:disabled:not(.popped) { cursor:default; filter:saturate(.6); }
+  #selection-box { position:fixed; z-index:40; pointer-events:none; border:2px solid #5BB8E8; background:rgba(91,184,232,.18); border-radius:6px; box-sizing:border-box; }
+  .pp-hint { font-size:.9rem; color:var(--text-sub); text-align:center; min-height:1.2em; }
+  .pp-controls button { border-color:rgba(232,137,27,.5); background:rgba(245,166,35,.15); color:var(--text-main); padding:12px 0; font-size:1.05rem; }
+  .pp-controls button:hover:not(:disabled) { background:#F5A623; color:#fff; border-color:#E8891B; box-shadow:0 0 18px rgba(245,166,35,.5); }
+  #pp-confirm:not(:disabled) { background:#F5A623; color:#fff; }
+  @media (max-width:860px) {
+    #pp-board { flex-direction:column; }
+    .pp-frame { width:100%; min-height:auto; }
+    .pp-frame .pp-stat-label { display:none; }
+    .bubble { width:34px; height:34px; }
+  }
+  /* ---- 크롬북 등 가로 화면: 카드 3개 한 줄 ---- */
+  @media (min-width:1000px) {
+    .cards-container { grid-template-columns:repeat(3, minmax(0,1fr)); gap:22px; }
+    .game-card { padding:22px 20px; }
+    .preview-stage { min-height:120px !important; padding:12px !important; }
+    .card-desc { font-size:.9rem; margin-bottom:12px; }
+    .tags-row { display:none; }
+    .card-header { margin-bottom:10px; }
+  }
+  @media (max-height:760px) and (min-width:641px) {
+    .section-title { font-size:1.7rem; margin:2px 0 6px; }
+    .rule-subtitle { font-size:.85rem; padding:6px 14px; }
+    #st-center-stones { height:250px; margin-bottom:10px; }
+    .st-frame { min-height:300px; }
+    .pp-frame { min-height:200px; }
+    .pp-controls button { padding:9px 0; }
+    .action-buttons { margin-top:8px !important; }
+  }
+  .player-record { white-space:nowrap; }
+  /* ---- 폰: 돌 가져가기 한 화면 ---- */
+  @media (max-width:640px) {
+    #sound-text { display:none; }
+    .section-title { font-size:1.35rem !important; margin:4px 0 6px !important; }
+    .rule-subtitle { font-size:.85rem !important; line-height:1.35; }
+    .st-frame h2, .nt-frame h2, .pp-frame h2 { white-space:nowrap; flex:none; }
+    #records-box button { white-space:nowrap; padding:10px 14px; font-size:.95rem; }
+    #st-center-stones { height:190px; margin-bottom:10px; }
+    .st-frame { padding:8px 12px; min-height:auto; }
+    .st-frame h2 { margin:0; font-size:1.05rem; }
+    .st-frame .stone-container { min-height:44px; }
+    .st-frame .player-record { margin:0; font-size:.8rem; }
+    #st-board, #nt-board, #pp-board { gap:10px; }
+    #st-turn-indicator, #nt-turn-indicator, #pp-turn-indicator { font-size:1.3rem !important; margin:2px 0 !important; }
+    .controls button { padding:10px 0; font-size:1rem; }
+    .st-stone-count-badge { font-size:1.7rem; bottom:8px; left:12px; }
+    .action-buttons { margin-top:10px !important; }
+    .action-buttons button { padding:8px 14px !important; font-size:.9rem !important; }
+    .rule-subtitle { padding:8px 12px !important; }
+    .menu-screen-container { padding:16px 12px !important; }
+    .pp-frame { padding:8px 12px; flex-direction:row; justify-content:space-between; align-items:center; gap:10px; }
+    .pp-frame h2 { margin:0; font-size:1.05rem; }
+    .pp-frame .player-stat { margin:0; font-size:1.6rem; }
+    .pp-frame .player-record { margin:0; font-size:.8rem; }
+    .pp-row { padding:6px 8px; gap:6px; }
+    .pp-row__label { width:38px; font-size:.85rem; }
+    .pp-row__bubbles { gap:5px; }
+    .bubble { width:28px; height:28px; }
+    .pp-row__bubbles { gap:4px; }
+  }
+
   /* ================= 책 테마 보정 (네온 효과 제거) ================= */
   * { text-shadow: none !important; }
   body { background: var(--bg-dark); display:block; }
@@ -1761,25 +1859,48 @@
 
 
 
-<script src="../../common.js" data-num="02" data-name="필승 전략 게임" data-sub="노탁토 · 돌 가져가기" data-home="../../" data-up="../index.html" data-up-name="게임 목록" data-extra="<button class=&quot;bk-btn bk-btn--ghost bk-btn--sm&quot; id=&quot;sound-toggle&quot; onclick=&quot;toggleMute()&quot;><span id=&quot;sound-icon&quot;>🔊</span> <span id=&quot;sound-text&quot;>소리</span></button><button class=&quot;bk-btn bk-btn--sm&quot; onclick=&quot;showRules(true)&quot;>📖 규칙</button>"></script>
-<script src="../online.js?v=2"></script>
+<script src="../../common.js" data-num="🎮" data-name="메인 게임" data-sub="팝잇 · 돌 가져가기 · 노탁토" data-home="../../" data-up="index.html" data-up-name="게임 목록" data-extra="<button class=&quot;bk-btn bk-btn--ghost bk-btn--sm&quot; id=&quot;sound-toggle&quot; onclick=&quot;toggleMute()&quot;><span id=&quot;sound-icon&quot;>🔊</span> <span id=&quot;sound-text&quot;>소리</span></button><button class=&quot;bk-btn bk-btn--sm&quot; onclick=&quot;showRules(true)&quot;>📖 규칙</button>"></script>
+<script src="../online.js?v=3"></script>
 
 <main>
   <!-- ================= 0. 초기 로비 화면 (1번 스타일) ================= -->
   <div id="home-screen" class="fade-screen">
-    <div class="hero-badge">02 필승 전략 · 3조가 만든 게임</div>
-    <h1 class="hero-title">어떤 게임을 해 볼까요?</h1>
-    <p class="hero-subtitle">
-      단순한 규칙 속에 숨은 필승 전략! 봇이나 친구와 겨뤄 보고, 분석 모드에서 이기는 수를 찾아보세요.
-    </p>
+    <p class="hero-subtitle" style="margin-bottom:18px">단순한 규칙 속에 숨은 필승 전략! AI나 친구와, 온라인으로 겨뤄 보세요.</p>
 
     <div class="cards-container">
+      <!-- Game 0: Pop it -->
+      <article class="game-card orange-theme" onmousemove="tiltCard(event, this)" onmouseleave="resetTilt(this)" onclick="playSfx('click'); openGameSection('popit')">
+        <div>
+          <div class="card-header">
+            <div>
+              <span class="game-code">게임 1</span>
+              <h2 class="card-title">팝잇 <span class="card-eng">POP IT</span></h2>
+            </div>
+            <span class="difficulty-pill">난이도 ★★★☆☆</span>
+          </div>
+          <div class="preview-stage" onmouseenter="playSfx('hover_deep')">
+            <div class="pp-mini">
+              <div><i style="background:#F28B9B"></i><i style="background:#F28B9B"></i></div>
+              <div><i style="background:#F5A623"></i><i style="background:#F5A623"></i><i style="background:#F5A623"></i><i style="background:#F5A623"></i><i class="off"></i></div>
+              <div><i style="background:#5BB8E8"></i><i style="background:#5BB8E8"></i><i style="background:#5BB8E8"></i><i style="background:#5BB8E8"></i><i style="background:#5BB8E8"></i><i style="background:#5BB8E8"></i></div>
+            </div>
+          </div>
+          <p class="card-desc">한 줄에서 원하는 만큼 버블을 누르고, <b>마지막 버블을 누르는 사람이 승리</b>합니다. 필승 전략은 이진법!</p>
+          <div class="tags-row"><span class="tag">#님게임</span><span class="tag">#이진법</span><span class="tag">#나도수학자</span></div>
+        </div>
+        <div class="card-actions">
+          <button class="btn-play-main" onmouseenter="playSfx('hover_btn')" onclick="event.stopPropagation(); playSfx('click'); openGameSection('popit')">
+            <span>게임 시작</span> <span>▶</span>
+          </button>
+        </div>
+      </article>
+
       <!-- Game 1: Notakto -->
       <article class="game-card cyan-theme" onmousemove="tiltCard(event, this)" onmouseleave="resetTilt(this)" onclick="playSfx('click'); openGameSection('notakto')">
         <div>
           <div class="card-header">
             <div>
-              <span class="game-code">게임 1</span>
+              <span class="game-code">게임 2</span>
               <h2 class="card-title">노탁토 <span class="card-eng">NOTAKTO</span></h2>
             </div>
             <span class="difficulty-pill">난이도 ★★★☆☆</span>
@@ -1822,7 +1943,7 @@
         <div>
           <div class="card-header">
             <div>
-              <span class="game-code">게임 2</span>
+              <span class="game-code">게임 3</span>
               <h2 class="card-title">돌 가져가기 <span class="card-eng">STONE TAKING</span></h2>
             </div>
             <span class="difficulty-pill">난이도 ★★★★☆</span>
@@ -1863,6 +1984,68 @@
     </div>
   </div>
 
+  <!-- ================= 0. 팝잇 섹션 ================= -->
+  <div id="popit-section" class="game-section">
+    <h1 class="section-title">팝잇 (POP IT)</h1>
+    <div class="rule-subtitle" id="pp-main-subtitle"></div>
+
+    <div id="pp-menu-screen" class="menu-screen-container fade-screen">
+      <div class="menu-buttons">
+        <div class="menu-row">
+          <button class="menu-btn" onmouseenter="playSfx('hover_btn')" onclick="playSfx('click'); openBotModal('popit')">🤖 AI 플레이</button>
+          <button class="help-btn" onmouseenter="playSfx('hover')" onclick="ppShowHelp('bot')" title="도움말">?</button>
+        </div>
+        <div class="menu-row">
+          <button class="menu-btn" onmouseenter="playSfx('hover_btn')" onclick="playSfx('click'); ppStartGame('solo')">👥 2인 플레이</button>
+          <button class="help-btn" onmouseenter="playSfx('hover')" onclick="ppShowHelp('solo')" title="도움말">?</button>
+        </div>
+        <div class="menu-row">
+          <button class="menu-btn online-btn" onmouseenter="playSfx('hover_btn')" onclick="playSfx('click'); openOnlineModal('popit')">🌐 온라인 대전</button>
+          <button class="help-btn" onmouseenter="playSfx('hover')" onclick="olHelp()" title="도움말">?</button>
+        </div>
+        <div class="menu-row">
+          <button class="menu-btn records-btn" onmouseenter="playSfx('hover_btn')" onclick="playSfx('click'); openRecords('popit')">📜 전적 보기</button>
+        </div>
+      </div>
+      <div class="menu-footer-btns">
+        <button class="settings-gear-btn" onmouseenter="playSfx('hover')" onclick="playSfx('click'); openPpSettings()">⚙️ 게임 설정</button>
+        <button class="home-return-btn" onmouseenter="playSfx('hover')" onclick="playSfx('click'); returnToHome()">🏠 초기 화면으로</button>
+      </div>
+    </div>
+
+    <div id="pp-game-screen">
+      <div id="pp-turn-indicator">플레이어의 턴</div>
+      <div id="pp-timer-display">⏳ 남은 시간: 10초</div>
+      <div id="pp-board">
+        <div class="st-frame pp-frame" id="pp-frame-p1">
+          <h2 id="pp-p1-name">플레이어</h2>
+          <div class="player-stat" id="pp-p1-count">0</div>
+          <div class="pp-stat-label">누른 버블</div>
+          <div class="player-record" id="pp-p1-record">전적: 0승 0패</div>
+        </div>
+        <div class="pp-center">
+          <div id="popit-board"></div>
+          <div class="pp-hint" id="pp-hint">한 줄에서 원하는 만큼 누른 뒤 [선택 완료]</div>
+          <div class="controls pp-controls">
+            <button id="pp-confirm" onclick="ppConfirm()" disabled>선택 완료 ✔</button>
+            <button id="pp-cancel" onclick="ppCancel()" disabled>취소</button>
+            <button id="pp-undo" onclick="ppUndo()" disabled>무르기</button>
+          </div>
+        </div>
+        <div class="st-frame pp-frame" id="pp-frame-p2">
+          <h2 id="pp-p2-name">AI</h2>
+          <div class="player-stat" id="pp-p2-count">0</div>
+          <div class="pp-stat-label">누른 버블</div>
+          <div class="player-record" id="pp-p2-record">전적: 0승 0패</div>
+        </div>
+      </div>
+      <div class="action-buttons">
+        <button class="restart-btn" id="pp-restart-btn" onmouseenter="playSfx('hover')" onclick="playSfx('click'); ppRestartGame()" style="display:none;">다시하기</button>
+        <button class="back-btn" onmouseenter="playSfx('hover')" onclick="playSfx('click'); ppGoBack()">메뉴로 돌아가기</button>
+      </div>
+    </div>
+  </div>
+
   <!-- ================= 1. 노탁토 섹션 ================= -->
   <div id="notakto-section" class="game-section">
     <h1 class="section-title">노탁토 (NOTAKTO)</h1>
@@ -1872,7 +2055,7 @@
     <div id="nt-menu-screen" class="menu-screen-container fade-screen">
       <div class="menu-buttons">
         <div class="menu-row">
-          <button class="menu-btn" onmouseenter="playSfx('hover_btn')" onclick="playSfx('click'); openBotModal('notakto')">🤖 봇과 플레이</button>
+          <button class="menu-btn" onmouseenter="playSfx('hover_btn')" onclick="playSfx('click'); openBotModal('notakto')">🤖 AI 플레이</button>
           <button class="help-btn" onmouseenter="playSfx('hover')" onclick="ntShowHelp('bot')" title="도움말">?</button>
         </div>
         <div class="menu-row">
@@ -1886,6 +2069,9 @@
         <div class="menu-row">
           <button class="menu-btn analysis-btn" onmouseenter="playSfx('hover_btn')" onclick="playSfx('click'); ntStartAnalysis()">📊 분석 모드</button>
           <button class="help-btn" onmouseenter="playSfx('hover')" onclick="ntShowHelp('analysis')" title="도움말">?</button>
+        </div>
+        <div class="menu-row">
+          <button class="menu-btn records-btn" onmouseenter="playSfx('hover_btn')" onclick="playSfx('click'); openRecords('notakto')">📜 전적 보기</button>
         </div>
       </div>
       <div class="menu-footer-btns">
@@ -1908,7 +2094,7 @@
         </div>
         <div class="nt-center-area" id="nt-game-board-container"></div>
         <div class="nt-frame" id="nt-frame-p2">
-          <h2 id="nt-p2-name">봇</h2>
+          <h2 id="nt-p2-name">AI</h2>
           <div class="player-stat" id="nt-p2-stones-count">0</div>
           <div class="player-sub">놓은 돌 개수</div>
           <div class="player-record" id="nt-p2-record">전적: 0승 0패</div>
@@ -1944,7 +2130,7 @@
         </div>
       </div>
       <div class="action-buttons">
-        <button class="restart-btn" id="nt-a-branch-btn" onmouseenter="playSfx('hover')" onclick="playSfx('click'); openBranchBotModal('notakto')">이 포지션에서 봇과 두기</button>
+        <button class="restart-btn" id="nt-a-branch-btn" onmouseenter="playSfx('hover')" onclick="playSfx('click'); openBranchBotModal('notakto')">이 포지션에서 AI와 두기</button>
         <button class="restart-btn" id="nt-a-restart-btn" onmouseenter="playSfx('hover')" onclick="playSfx('click'); ntStartAnalysis()">다시하기</button>
         <button class="undo-btn" id="nt-analysis-undo-btn" onmouseenter="playSfx('hover')" onclick="ntUndoAnalysisMove()">무르기</button>
         <button class="back-btn" onmouseenter="playSfx('hover')" onclick="playSfx('click'); ntGoBack()">메뉴로 돌아가기</button>
@@ -1962,7 +2148,7 @@
     <div id="st-menu-screen" class="menu-screen-container fade-screen">
       <div class="menu-buttons">
         <div class="menu-row">
-          <button class="menu-btn" onmouseenter="playSfx('hover_btn')" onclick="playSfx('click'); openBotModal('stone')">🤖 봇과 플레이</button>
+          <button class="menu-btn" onmouseenter="playSfx('hover_btn')" onclick="playSfx('click'); openBotModal('stone')">🤖 AI 플레이</button>
           <button class="help-btn" onmouseenter="playSfx('hover')" onclick="stShowHelp('bot')" title="도움말">?</button>
         </div>
         <div class="menu-row">
@@ -1976,6 +2162,9 @@
         <div class="menu-row">
           <button class="menu-btn analysis-btn" onmouseenter="playSfx('hover_btn')" onclick="playSfx('click'); stStartAnalysis()">📊 분석 모드</button>
           <button class="help-btn" onmouseenter="playSfx('hover')" onclick="stShowHelp('analysis')" title="도움말">?</button>
+        </div>
+        <div class="menu-row">
+          <button class="menu-btn records-btn" onmouseenter="playSfx('hover_btn')" onclick="playSfx('click'); openRecords('stone')">📜 전적 보기</button>
         </div>
       </div>
       <div class="menu-footer-btns">
@@ -2000,7 +2189,7 @@
           <div class="controls" id="st-controls"></div>
         </div>
         <div class="st-frame" id="st-frame-p2">
-          <h2 id="st-p2-name">봇</h2>
+          <h2 id="st-p2-name">AI</h2>
           <div class="stone-container" id="st-p2-stones"></div>
           <div class="player-record" id="st-p2-record">전적: 0승 0패</div>
         </div>
@@ -2029,7 +2218,7 @@
         </div>
       </div>
       <div class="action-buttons">
-        <button class="restart-btn" id="st-a-branch-btn" onmouseenter="playSfx('hover')" onclick="playSfx('click'); openBranchBotModal('stone')">이 포지션에서 봇과 두기</button>
+        <button class="restart-btn" id="st-a-branch-btn" onmouseenter="playSfx('hover')" onclick="playSfx('click'); openBranchBotModal('stone')">이 포지션에서 AI와 두기</button>
         <button class="restart-btn" id="st-a-restart-btn" onmouseenter="playSfx('hover')" onclick="playSfx('click'); stStartAnalysis()">다시하기</button>
         <button class="undo-btn" id="st-analysis-undo-btn" onmouseenter="playSfx('hover')" onclick="stUndoAnalysisMove()">무르기</button>
         <button class="back-btn" onmouseenter="playSfx('hover')" onclick="playSfx('click'); stGoBack()">메뉴로 돌아가기</button>
@@ -2070,11 +2259,61 @@
   </div>
 </div>
 
+<!-- ⚙️ 팝잇 설정 모달 -->
+<div id="pp-settings-modal" class="modal-overlay" onclick="if(event.target === this) closeModal('pp-settings-modal', 'pp-modal-box')">
+  <div class="modal-content orange-modal" id="pp-modal-box" style="max-width: 450px;">
+    <h2 style="color:var(--neon-orange); margin-top:0; text-align:center;">⚙️ 게임 설정</h2>
+    <div class="settings-group">
+      <label>팝잇 줄 설정:
+        <select id="set-pp-rows-mode" onchange="document.getElementById('set-pp-rows-wrap').style.display=this.value==='custom'?'':'none'">
+          <option value="random">랜덤 (2~5줄, 줄마다 2~8개)</option>
+          <option value="custom">직접 입력</option>
+        </select>
+      </label>
+      <div id="set-pp-rows-wrap" style="display:none;">
+        <label>줄별 버블 수 (띄어쓰기로 구분, 최대 7줄·줄당 20개):
+          <input id="set-pp-rows" type="text" inputmode="numeric" placeholder="예: 2 5 6" style="width:100%; box-sizing:border-box; font-size:1.1rem; padding:8px 10px; border:2px solid #D9CFAE; border-radius:10px;">
+        </label>
+        <div id="set-pp-rows-preview" style="font-size:.9rem; color:var(--text-sub); margin-top:4px;"></div>
+      </div>
+      <label>한 턴 당 제한시간:
+        <select id="set-pp-time">
+          <option value="unlimited">무제한</option>
+          <option value="5">5초</option>
+          <option value="10">10초</option>
+          <option value="20">20초</option>
+          <option value="30">30초</option>
+        </select>
+      </label>
+    </div>
+    <div style="text-align:center; margin-top:26px;">
+      <button class="help-close-btn" onclick="playSfx('click'); savePpSettings()">저장</button>
+    </div>
+  </div>
+</div>
+
+<!-- 📜 전적 모달 -->
+<div id="records-modal" class="modal-overlay" onclick="if(event.target === this) closeModal('records-modal', 'records-box')">
+  <div class="modal-content" id="records-box" style="max-width: 520px;">
+    <h2 id="records-title" style="color:var(--neon-cyan); margin-top:0;">📜 전적</h2>
+    <div id="records-body" style="line-height:1.6;"></div>
+    <div style="display:flex; gap:10px; justify-content:center; margin-top:18px;">
+      <button class="help-close-btn" onclick="playSfx('click'); closeModal('records-modal', 'records-box')">닫기</button>
+      <button class="undo-btn" onclick="playSfx('click'); clearRecords()">이 게임 전적 지우기</button>
+    </div>
+  </div>
+</div>
+
 <!-- 🌐 온라인 대전 모달 -->
 <div id="online-modal" class="modal-overlay" onclick="if(event.target === this) olCancel()">
   <div class="modal-content" id="ol-modal-box" style="max-width:420px; text-align:center;">
     <h2 style="color:var(--neon-cyan); margin-top:0;">🌐 온라인 대전</h2>
     <div id="ol-step1">
+      <div style="display:flex; gap:6px; align-items:center; margin-bottom:14px;">
+        <span style="white-space:nowrap; color:var(--text-sub);">내 이름</span>
+        <input id="ol-name" maxlength="10" placeholder="비우면 랜덤 별명" style="flex:1; min-width:0; font-size:1rem; padding:8px 10px; border:2px solid #D9CFAE; border-radius:10px; font-family:'Jua',sans-serif;">
+        <button class="undo-btn" style="padding:8px 10px; font-size:.85rem;" onclick="document.getElementById('ol-name').value = makeRandomName()">🎲</button>
+      </div>
       <button class="help-close-btn" style="width:100%;" onclick="playSfx('click'); olCreate()">방 만들기 (내가 선공)</button>
       <div style="margin:16px 0 8px; color:var(--text-sub);">또는 친구가 알려 준 번호로 들어가기</div>
       <div style="display:flex; gap:8px; justify-content:center;">
@@ -2102,7 +2341,7 @@
   </div>
 </div>
 
-<!-- ================= 도움말 & 설정 & 봇 모달 ================= -->
+<!-- ================= 도움말 & 설정 & AI 모달 ================= -->
 <div id="help-modal" class="modal-overlay" onclick="if(event.target === this) closeModal('help-modal', 'help-modal-box')">
   <div class="modal-content" id="help-modal-box" style="max-width: 627px;">
     <h2 id="help-title" style="color:var(--neon-cyan); margin-top:0; margin-bottom:14px;">도움말</h2>
@@ -2147,7 +2386,7 @@
     <div class="settings-group">
       <label>전체 돌 개수:
         <select id="set-st-n">
-          <option value="random">랜덤 (10, 15, 20개)</option>
+          <option value="random">랜덤 (10~25개)</option>
           <option value="10">10개</option><option value="11">11개</option><option value="12">12개</option>
           <option value="13">13개</option><option value="14">14개</option><option value="15">15개</option>
           <option value="16">16개</option><option value="17">17개</option><option value="18">18개</option>
@@ -2187,12 +2426,12 @@
   </div>
 </div>
 
-<!-- 🤖 봇 설정 모달 -->
+<!-- 🤖 AI 설정 모달 -->
 <div id="bot-setup-modal" class="modal-overlay" onclick="if(event.target === this) closeModal('bot-setup-modal', 'bs-modal-box')">
   <div class="modal-content" id="bs-modal-box" style="max-width:410px;">
-    <h2 style="color:var(--neon-cyan); margin-top:0; text-align:center;">🤖 봇 설정</h2>
+    <h2 style="color:var(--neon-cyan); margin-top:0; text-align:center;">🤖 AI 설정</h2>
     <div class="settings-group">
-      <label>봇 난이도:
+      <label>AI 난이도:
         <select id="bot-setup-diff">
           <option value="최상">최상</option>
           <option value="상">상</option>
@@ -2204,7 +2443,7 @@
       <label>선공 설정:
         <select id="bot-setup-turn">
           <option value="player">플레이어 선공</option>
-          <option value="bot">봇 선공</option>
+          <option value="bot">AI 선공</option>
         </select>
       </label>
     </div>
@@ -2218,7 +2457,7 @@
 <!-- ⚔️ 분석 모드에서 포지션 이어두기 전용 모달 -->
 <div id="branch-bot-modal" class="modal-overlay" onclick="if(event.target === this) closeModal('branch-bot-modal', 'bb-modal-box')">
   <div class="modal-content" id="bb-modal-box" style="max-width:430px;">
-    <h2 style="color:var(--neon-cyan); margin-top:0; text-align:center;">⚔️ 이 포지션에서 봇과 두기</h2>
+    <h2 style="color:var(--neon-cyan); margin-top:0; text-align:center;">⚔️ 이 포지션에서 AI와 두기</h2>
     <div class="settings-group">
       <label>내 역할 선택:
         <select id="branch-player-role">
@@ -2226,7 +2465,7 @@
           <option value="2">P2 플레이어</option>
         </select>
       </label>
-      <label>봇 난이도:
+      <label>AI 난이도:
         <select id="branch-bot-diff">
           <option value="최상">최상</option>
           <option value="상">상</option>
@@ -2486,8 +2725,7 @@
 
   function applyStRandomRules() {
     if (stNSetting === 'random') {
-      const nPool = [10, 15, 20];
-      stN = nPool[Math.floor(Math.random() * nPool.length)];
+      stN = 10 + Math.floor(Math.random() * 16); // 10~25
     } else {
       stN = parseInt(stNSetting);
     }
@@ -2560,8 +2798,8 @@
   function openBotModal(gameType) {
     botPendingGame = gameType;
     const bsBox = document.getElementById('bs-modal-box');
-    if (gameType === 'stone') bsBox.classList.add('pink-modal');
-    else bsBox.classList.remove('pink-modal');
+    bsBox.classList.toggle('pink-modal', gameType === 'stone');
+    bsBox.classList.toggle('orange-modal', gameType === 'popit');
     openModal('bot-setup-modal', 'bs-modal-box');
   }
   function startGameWithBot() {
@@ -2571,6 +2809,9 @@
     if (botPendingGame === 'notakto') {
       ntScore = { p1Wins: 0, p2Wins: 0 };
       ntStartGame('bot');
+    } else if (botPendingGame === 'popit') {
+      ppScore = { p1Wins: 0, p2Wins: 0 };
+      ppStartGame('bot');
     } else {
       stScore = { p1Wins: 0, p2Wins: 0 };
       stStartGame('bot');
@@ -2597,6 +2838,7 @@
   const homeScreen = document.getElementById('home-screen');
   const notaktoSection = document.getElementById('notakto-section');
   const stoneSection = document.getElementById('stone-section');
+  const popitSection = document.getElementById('popit-section');
 
   function switchScreen(el, displayType = 'flex') {
     el.classList.remove('fade-screen');
@@ -2624,7 +2866,13 @@
       stGoBack();
       switchScreen(stoneSection, 'flex');
       notaktoSection.style.display = 'none';
+    } else if (game === 'popit') {
+      ppScore = { p1Wins: 0, p2Wins: 0 };
+      ppGoBack();
+      switchScreen(popitSection, 'flex');
+      notaktoSection.style.display = 'none'; stoneSection.style.display = 'none';
     }
+    if (game !== 'popit') popitSection.style.display = 'none';
   }
 
   function returnToHome() {
@@ -2635,22 +2883,26 @@
     if (orb2) orb2.style.background = 'var(--neon-pink)';
     ntGoBack();
     stGoBack();
+    ppGoBack();
     notaktoSection.style.display = 'none';
     stoneSection.style.display = 'none';
+    popitSection.style.display = 'none';
     switchScreen(homeScreen, 'flex');
   }
 
   function highlightWinner(winnerP1Num) {
-    ['nt-frame-p1','nt-frame-p2','st-frame-p1','st-frame-p2'].forEach(id => {
+    ['nt-frame-p1','nt-frame-p2','st-frame-p1','st-frame-p2','pp-frame-p1','pp-frame-p2'].forEach(id => {
       const el = document.getElementById(id);
       if (el) { el.classList.remove('winner-frame'); el.classList.remove('active-turn'); }
     });
     if (winnerP1Num === 1) {
       document.getElementById('nt-frame-p1')?.classList.add('winner-frame');
       document.getElementById('st-frame-p1')?.classList.add('winner-frame');
+      document.getElementById('pp-frame-p1')?.classList.add('winner-frame');
     } else if (winnerP1Num === 2) {
       document.getElementById('nt-frame-p2')?.classList.add('winner-frame');
       document.getElementById('st-frame-p2')?.classList.add('winner-frame');
+      document.getElementById('pp-frame-p2')?.classList.add('winner-frame');
     }
   }
 
@@ -2678,6 +2930,252 @@
       }
     }
   }
+
+  const _updScore = updateScoreDisplay;
+  updateScoreDisplay = function () {
+    _updScore();
+    const a = document.getElementById('pp-p1-record'), b = document.getElementById('pp-p2-record');
+    if (a && b) { a.innerText = `전적: ${ppScore.p1Wins}승 ${ppScore.p2Wins}패`; b.innerText = `전적: ${ppScore.p2Wins}승 ${ppScore.p1Wins}패`; }
+  };
+
+
+  /* ================= 0. 팝잇 게임 스크립트 ================= */
+  const ppMenuScreen = document.getElementById('pp-menu-screen');
+  const ppGameScreen = document.getElementById('pp-game-screen');
+  let ppRowsSetting = 'random', ppTimeSetting = 'unlimited';
+  let ppMode = 'bot', ppInit = [2, 5, 6], ppRows = [], ppCur = 1, ppOver = false, ppHist = [], ppSelRow = null, ppSel = [];
+  let ppBotTimeout = null, ppTimerInterval = null, ppTimeLeft = 0, ppScore = { p1Wins: 0, p2Wins: 0 };
+  const PP_COLORS = ['#F28B9B', '#F5A623', '#3A9E82', '#5BB8E8', '#9B6BD6', '#E9533F', '#2F8FC9'];
+  function ppParseRows(t) { return String(t).split(/[\s,]+/).map(Number).filter(n => n >= 1).map(n => Math.min(20, Math.floor(n))).slice(0, 7); }
+  function ppRandomRows() { const k = 2 + Math.floor(Math.random() * 4); return Array.from({ length: k }, () => 2 + Math.floor(Math.random() * 7)); }
+  function ppApplyRules() { const r = ppRowsSetting === 'random' ? ppRandomRows() : ppParseRows(ppRowsSetting); ppInit = r.length ? r : [2, 5, 6]; }
+  function ppUpdateSubtitle(active) {
+    const sub = document.getElementById('pp-main-subtitle');
+    const rows = active ? ppInit.join('·') : (ppRowsSetting === 'random' ? '랜덤' : ppParseRows(ppRowsSetting).join('·'));
+    const t = ppTimeSetting === 'unlimited' ? '무제한' : ppTimeSetting + '초';
+    sub.innerHTML = `규칙: 한 줄에서 원하는 만큼 누르기 · <b>마지막 버블을 누르는 사람이 승리</b><br><small>줄 ${rows} · 시간 ${t}</small>`;
+  }
+  function openPpSettings() {
+    document.getElementById('set-pp-rows-mode').value = ppRowsSetting === 'random' ? 'random' : 'custom';
+    document.getElementById('set-pp-rows-wrap').style.display = ppRowsSetting === 'random' ? 'none' : '';
+    document.getElementById('set-pp-rows').value = ppRowsSetting === 'random' ? '' : ppRowsSetting;
+    document.getElementById('set-pp-time').value = ppTimeSetting;
+    openModal('pp-settings-modal', 'pp-modal-box');
+  }
+  function savePpSettings() {
+    const mode = document.getElementById('set-pp-rows-mode').value;
+    const rows = ppParseRows(document.getElementById('set-pp-rows').value);
+    ppRowsSetting = (mode === 'random' || !rows.length) ? 'random' : rows.join(' ');
+    ppTimeSetting = document.getElementById('set-pp-time').value;
+    ppScore = { p1Wins: 0, p2Wins: 0 };
+    ppUpdateSubtitle(false);
+    closeModal('pp-settings-modal', 'pp-modal-box');
+  }
+  document.getElementById('set-pp-rows').addEventListener('input', e => {
+    const r = ppParseRows(e.target.value);
+    document.getElementById('set-pp-rows-preview').innerText = r.length ? `${r.length}줄: ${r.join('개, ')}개` : '';
+  });
+  function ppShowHelp(topic) {
+    playBtnSound('help');
+    const rule = "<b>[팝잇 규칙]</b><br>1. 자기 차례에 <b>한 줄</b>을 골라 그 줄의 버블을 <b>1개 이상</b> 누릅니다(드래그로 여러 개 선택 가능).<br>2. 서로 다른 줄을 동시에 누를 수는 없습니다.<br>3. <b>마지막 버블을 누르는 사람이 승리</b>합니다.";
+    const title = topic === 'bot' ? '🤖 AI 플레이' : '👥 2인 플레이';
+    const lead = topic === 'bot' ? 'AI를 상대로 번갈아 진행합니다. 난이도 최상은 항상 최선의 수(이진법 XOR)를 둡니다.<br><br>' : '하나의 기기에서 두 명이 번갈아 진행합니다.<br><br>';
+    document.getElementById('help-modal-box').classList.remove('pink-modal');
+    document.getElementById('help-title').innerText = title;
+    document.getElementById('help-content').innerHTML = lead + rule;
+    openModal('help-modal', 'help-modal-box');
+  }
+  function ppStopTimer() { if (ppTimerInterval) { clearInterval(ppTimerInterval); ppTimerInterval = null; } document.getElementById('pp-timer-display').innerText = ''; }
+  function ppStartTimer() {
+    ppStopTimer();
+    if (ppTimeSetting === 'unlimited' || ppOver) return;
+    if (ppMode === 'bot' && ppCur === 2) return;
+    if (ppMode === 'online' && ppCur !== Online.myNum) return;
+    ppTimeLeft = parseInt(ppTimeSetting);
+    const el = document.getElementById('pp-timer-display');
+    el.innerText = `⏳ 남은 시간: ${ppTimeLeft}초`;
+    ppTimerInterval = setInterval(() => {
+      ppTimeLeft--; el.innerText = `⏳ 남은 시간: ${ppTimeLeft}초`;
+      if (ppTimeLeft <= 0) {
+        ppStopTimer();
+        if (ppSel.length) { ppConfirm(); return; }
+        const rows = ppRows.map((c, i) => ({ c, i })).filter(r => r.c > 0);
+        const r = rows[Math.floor(Math.random() * rows.length)];
+        ppSelRow = r.i; ppSel = [r.c - 1]; ppConfirm();
+      }
+    }, 1000);
+  }
+  function ppStartGame(mode) {
+    ppMode = mode; ppApplyRules(); ppUpdateSubtitle(true); isBranchPlay = false;
+    document.getElementById('pp-p1-name').innerText = mode === 'bot' ? '플레이어' : '플레이어 1';
+    document.getElementById('pp-p2-name').innerText = mode === 'bot' ? `AI (${botDifficulty})` : '플레이어 2';
+    document.getElementById('pp-restart-btn').style.display = 'none';
+    ppMenuScreen.style.display = 'none';
+    switchScreen(ppGameScreen, 'flex');
+    highlightWinner(0); updateScoreDisplay();
+    ppRows = [...ppInit]; ppCur = (mode === 'bot' && botFirstTurn === 'bot') ? 2 : 1;
+    ppOver = false; ppHist = []; ppSelRow = null; ppSel = [];
+    if (ppBotTimeout) { clearTimeout(ppBotTimeout); ppBotTimeout = null; }
+    ppRender(); ppUpdateUI();
+    if (ppCur === 2 && mode === 'bot') ppScheduleBot();
+  }
+  function ppLocked() { return ppOver || (ppMode === 'bot' && ppCur === 2) || (ppMode === 'online' && ppCur !== Online.myNum); }
+  function ppRender() {
+    const board = document.getElementById('popit-board'); board.innerHTML = '';
+    const lock = ppLocked();
+    ppRows.forEach((count, ri) => {
+      const row = document.createElement('div'); row.className = 'pp-row';
+      const lab = document.createElement('div'); lab.className = 'pp-row__label'; lab.style.color = PP_COLORS[ri % 7]; lab.innerText = `${ri + 1}번줄`;
+      const bb = document.createElement('div'); bb.className = 'pp-row__bubbles';
+      for (let i = 0; i < ppInit[ri]; i++) {
+        const b = document.createElement('button'); b.type = 'button';
+        const popped = i >= count;
+        b.className = 'bubble' + (popped ? ' popped' : '') + ((ppSelRow === ri && ppSel.includes(i)) ? ' selected-temp' : '');
+        b.style.background = PP_COLORS[ri % 7];
+        b.disabled = popped || lock; b.dataset.row = ri; b.dataset.idx = i;
+        bb.appendChild(b);
+      }
+      const cnt = document.createElement('div'); cnt.className = 'pp-row__cnt'; cnt.innerText = `${count}개`;
+      row.append(lab, bb, cnt); board.appendChild(row);
+    });
+    document.getElementById('pp-p1-count').innerText = ppHist.filter(h => h.player === 1).reduce((a, h) => a + h.count, 0);
+    document.getElementById('pp-p2-count').innerText = ppHist.filter(h => h.player === 2).reduce((a, h) => a + h.count, 0);
+    ppBtns();
+  }
+  function ppRenderSel() { document.querySelectorAll('#popit-board .bubble').forEach(b => b.classList.toggle('selected-temp', Number(b.dataset.row) === ppSelRow && ppSel.includes(Number(b.dataset.idx)))); ppBtns(); }
+  function ppBtns() {
+    document.getElementById('pp-confirm').disabled = !ppSel.length || ppLocked();
+    document.getElementById('pp-cancel').disabled = !ppSel.length;
+    document.getElementById('pp-undo').disabled = ppMode === 'online' || ppOver || !ppHist.length || (ppMode === 'bot' && ppCur === 2);
+    document.getElementById('pp-hint').innerText = ppOver ? '' : ppLocked() ? (ppMode === 'bot' ? 'AI가 생각 중…' : '상대 차례예요') : (ppSel.length ? `${ppSelRow + 1}번줄 ${ppSel.length}개 선택 → [선택 완료]` : '한 줄에서 원하는 만큼 누른 뒤 [선택 완료]');
+  }
+  function ppToggle(ri, i) {
+    if (ppLocked() || i >= ppRows[ri]) return;
+    if (ppSelRow !== null && ppSelRow !== ri) ppSel = [];
+    ppSelRow = ri;
+    const k = ppSel.indexOf(i);
+    if (k > -1) ppSel.splice(k, 1); else ppSel.push(i);
+    if (!ppSel.length) ppSelRow = null;
+    playSfx('click'); ppRenderSel();
+  }
+  function ppCancel() { ppSelRow = null; ppSel = []; ppRenderSel(); }
+  function ppConfirm() {
+    if (!ppSel.length || ppSelRow === null || ppLocked()) return;
+    const mv = { row: ppSelRow, count: ppSel.length };
+    ppSelRow = null; ppSel = [];
+    ppExecuteMove(mv);
+    if (ppMode === 'online') Online.sendMove(mv);
+  }
+  function ppUndo() {
+    if (ppMode === 'online' || ppOver || !ppHist.length) return;
+    if (ppMode === 'bot') { while (ppHist.length && ppHist[ppHist.length - 1].player === 2) ppHist.pop(); if (ppHist.length) ppHist.pop(); ppCur = 1; }
+    else { const last = ppHist.pop(); ppCur = last.player; }
+    ppRows = [...ppInit]; ppHist.forEach(h => ppRows[h.row] -= h.count);
+    ppSelRow = null; ppSel = []; ppRender(); ppUpdateUI();
+  }
+  function ppUpdateUI() {
+    if (ppOver) { ppStopTimer(); return; }
+    const f1 = document.getElementById('pp-frame-p1'), f2 = document.getElementById('pp-frame-p2');
+    f1.classList.remove('active-turn'); f2.classList.remove('active-turn');
+    (ppCur === 1 ? f1 : f2).classList.add('active-turn');
+    const n1 = document.getElementById('pp-p1-name').innerText, n2 = document.getElementById('pp-p2-name').innerText;
+    document.getElementById('pp-turn-indicator').innerText = `${ppCur === 1 ? n1 : n2}의 턴`;
+    ppStartTimer();
+  }
+  function ppExecuteMove(mv) {
+    ppStopTimer();
+    for (let i = 0; i < mv.count; i++) setTimeout(() => playPlaceStone(), i * 90);
+    ppHist.push({ player: ppCur, row: mv.row, count: mv.count });
+    ppRows[mv.row] = Math.max(0, ppRows[mv.row] - mv.count);
+    if (ppRows.reduce((a, b) => a + b, 0) === 0) {
+      ppOver = true;
+      let winner = '', loserSubject = '', isLoss = false, winnerP1Num = ppCur;
+      if (ppMode === 'bot') {
+        if (ppCur === 1) { winner = '플레이어'; loserSubject = '플레이어가'; ppScore.p1Wins++; }
+        else { winner = 'AI'; loserSubject = 'AI가'; isLoss = true; ppScore.p2Wins++; }
+      } else {
+        winner = `플레이어 ${ppCur}`; loserSubject = ppCur === 1 ? '플레이어 1이' : '플레이어 2가';
+        if (ppCur === 1) ppScore.p1Wins++; else ppScore.p2Wins++;
+      }
+      ppRender(); updateScoreDisplay(); highlightWinner(winnerP1Num);
+      document.getElementById('pp-restart-btn').style.display = 'inline-block';
+      document.getElementById('pp-turn-indicator').innerText = isLoss ? 'AI 승리!' : `🎉 ${winner} 승리! 🎉`;
+      showVictoryModal(winner, `${loserSubject} 마지막 버블을 눌렀습니다.`, isLoss);
+    } else {
+      ppCur = ppCur === 1 ? 2 : 1;
+      ppRender(); ppUpdateUI();
+      if (ppMode === 'bot' && ppCur === 2) ppScheduleBot();
+    }
+  }
+  function ppScheduleBot() { if (ppBotTimeout) clearTimeout(ppBotTimeout); ppBotTimeout = setTimeout(ppBotTurn, 900); }
+  function ppBotTurn() {
+    ppBotTimeout = null; if (ppOver || ppCur !== 2) return;
+    const rows = ppRows, avail = rows.map((c, i) => ({ c, i })).filter(r => r.c > 0);
+    const nim = rows.reduce((a, v) => a ^ v, 0), remaining = rows.reduce((a, b) => a + b, 0);
+    let mv;
+    const randomMove = () => { const r = avail[Math.floor(Math.random() * avail.length)]; return { row: r.i, count: 1 + Math.floor(Math.random() * r.c) }; };
+    if (remaining === 1) mv = { row: avail[0].i, count: 1 };
+    else if (Math.random() >= getWinMoveProbability(botDifficulty)) mv = randomMove();
+    else if (nim !== 0) { const wins = []; rows.forEach((c, i) => { const t = c ^ nim; if (t < c) wins.push({ row: i, count: c - t }); }); mv = wins[Math.floor(Math.random() * wins.length)]; }
+    else { const fin = avail.find(r => r.c === remaining); mv = fin ? { row: fin.i, count: fin.c } : { row: avail.reduce((a, b) => b.c > a.c ? b : a).i, count: 1 }; }
+    ppExecuteMove(mv);
+  }
+  function ppRestartGame() { closeVictoryModal(); ppStopTimer(); ppStartGame(ppMode); }
+  function ppGoBack() {
+    closeVictoryModal(); ppStopTimer();
+    if (ppBotTimeout) { clearTimeout(ppBotTimeout); ppBotTimeout = null; }
+    ppGameScreen.style.display = 'none';
+    document.getElementById('pp-restart-btn').style.display = 'none';
+    ppScore = { p1Wins: 0, p2Wins: 0 }; highlightWinner(0); updateScoreDisplay(); ppUpdateSubtitle(false);
+    switchScreen(ppMenuScreen, 'flex');
+  }
+  // 박스 드래그 / 탭 선택
+  (function () {
+    const board = document.getElementById('popit-board'); let drag = null;
+    const hit = (box, r, pad) => r.right >= box.left - pad && r.left <= box.right + pad && r.bottom >= box.top - pad && r.top <= box.bottom + pad;
+    board.addEventListener('pointerdown', e => {
+      if (ppLocked() || e.isPrimary === false || (e.pointerType === 'mouse' && e.button !== 0)) return;
+      const target = e.target.closest('.bubble'); if (target && target.disabled) return;
+      const cands = Array.from(board.querySelectorAll('.bubble')).filter(b => !b.disabled).map(b => { const r = b.getBoundingClientRect(); return { idx: +b.dataset.idx, row: +b.dataset.row, left: r.left, right: r.right, top: r.top, bottom: r.bottom }; });
+      if (!cands.length) return;
+      const dist = r => Math.hypot(Math.max(r.left - e.clientX, 0, e.clientX - r.right), Math.max(r.top - e.clientY, 0, e.clientY - r.bottom));
+      const nearest = cands.reduce((a, b) => dist(a) <= dist(b) ? a : b);
+      const row = target ? +target.dataset.row : nearest.row;
+      const base = ppSelRow === row ? [...ppSel] : [];
+      const remove = target && base.includes(+target.dataset.idx);
+      e.preventDefault(); end();
+      try { board.setPointerCapture(e.pointerId); } catch (_) { }
+      drag = { row, id: e.pointerId, player: ppCur, x: e.clientX, y: e.clientY, pad: e.pointerType === 'mouse' ? 0 : 5, mode: remove ? 'remove' : 'add', base, rects: cands.filter(r => r.row === row), moved: false };
+      if (target) ppToggle(row, +target.dataset.idx);
+    }, { passive: false });
+    function move(e) {
+      if (!drag || (e.pointerId !== undefined && e.pointerId !== drag.id)) return;
+      if (ppLocked() || ppCur !== drag.player) { end(); return; }
+      if (e.pointerType === 'mouse' && e.buttons === 0 && e.type !== 'pointerup') { end(); return; }
+      if (e.cancelable) e.preventDefault();
+      if (!drag.moved && Math.hypot(e.clientX - drag.x, e.clientY - drag.y) < 3) return;
+      drag.moved = true;
+      const box = { left: Math.min(drag.x, e.clientX), right: Math.max(drag.x, e.clientX), top: Math.min(drag.y, e.clientY), bottom: Math.max(drag.y, e.clientY) };
+      let ov = document.getElementById('selection-box');
+      if (!ov) { ov = document.createElement('div'); ov.id = 'selection-box'; document.body.appendChild(ov); }
+      Object.assign(ov.style, { left: box.left + 'px', top: box.top + 'px', width: Math.max(2, box.right - box.left) + 'px', height: Math.max(2, box.bottom - box.top) + 'px' });
+      const sel = new Set(drag.base);
+      for (const r of drag.rects) { if (r.idx >= ppRows[drag.row] || !hit(box, r, drag.pad)) continue; if (drag.mode === 'add') sel.add(r.idx); else sel.delete(r.idx); }
+      const next = [...sel].sort((a, b) => a - b);
+      if (ppSelRow === drag.row && next.join(',') === [...ppSel].sort((a, b) => a - b).join(',')) return;
+      ppSel = next; ppSelRow = next.length ? drag.row : null; ppRenderSel();
+    }
+    function end(e) {
+      if (e && e.pointerId !== undefined && drag && e.pointerId !== drag.id) return;
+      document.getElementById('selection-box')?.remove();
+      if (!drag) return; const id = drag.id; drag = null;
+      try { board.releasePointerCapture(id); } catch (_) { }
+    }
+    window.addEventListener('pointermove', move, { passive: false });
+    window.addEventListener('pointerup', e => { move(e); end(e); }, { passive: false });
+    window.addEventListener('pointercancel', end); window.addEventListener('blur', () => end());
+  })();
+  ppUpdateSubtitle(false);
 
   /* ================= 1. 노탁토 게임 & 분석 스크립트 ================= */
   let ntBoardSize = 3, ntWinLines = [], ntWinMasks = [], ntSymMaps = [];
@@ -2737,7 +3235,7 @@
     let winner = "", loserSubject = "", isLoss = false, winnerP1Num = 1;
 
     if (ntMode === 'bot') {
-      winner = "봇"; loserSubject = "플레이어가"; isLoss = true; ntEndState = 'lose';
+      winner = "AI"; loserSubject = "플레이어가"; isLoss = true; ntEndState = 'lose';
       winnerP1Num = isBranchPlay ? (branchHumanPlayer === 1 ? 2 : 1) : 2;
       if (!isBranchPlay) {
         if (winnerP1Num === 1) ntScore.p1Wins++; else ntScore.p2Wins++;
@@ -2749,7 +3247,7 @@
         winner = "플레이어 1"; loserSubject = "플레이어 2가"; winnerP1Num = 1; ntScore.p1Wins++;
       }
     }
-    document.getElementById('nt-turn-indicator').innerText = isLoss && ntMode === 'bot' ? `봇 승리!` : `🎉 ${winner} 승리! 🎉`;
+    document.getElementById('nt-turn-indicator').innerText = isLoss && ntMode === 'bot' ? `AI 승리!` : `🎉 ${winner} 승리! 🎉`;
     updateScoreDisplay();
     ntUpdateGameUI();
     highlightWinner(winnerP1Num);
@@ -2865,8 +3363,8 @@
     playBtnSound('help');
     let title = "", content = "";
     if (topic === 'bot') {
-      title = "🤖 봇과 플레이";
-      content = "컴퓨터 봇을 상대로 번갈아가며 진행하는 모드입니다.<br><br><b>[노탁토 규칙]</b><br>1. 시작 전 <b>3×3, 4×4</b> 중 원하는 크기의 판을 선택합니다.<br>2. 두 플레이어가 모두 <b>같은 'X' 기호</b>를 사용합니다.<br>3. 가로, 세로, 대각선 중 <b>어디든 한 줄로 이어지게 만드는 사람이 패배</b>합니다.";
+      title = "🤖 AI 플레이";
+      content = "컴퓨터 AI를 상대로 번갈아가며 진행하는 모드입니다.<br><br><b>[노탁토 규칙]</b><br>1. 시작 전 <b>3×3, 4×4</b> 중 원하는 크기의 판을 선택합니다.<br>2. 두 플레이어가 모두 <b>같은 'X' 기호</b>를 사용합니다.<br>3. 가로, 세로, 대각선 중 <b>어디든 한 줄로 이어지게 만드는 사람이 패배</b>합니다.";
     } else if (topic === 'solo') {
       title = "👥 2인 플레이";
       content = "하나의 기기에서 두 명의 플레이어가 번갈아가며 진행하는 모드입니다.<br><br><b>[노탁토 규칙]</b><br>1. 시작 전 <b>3×3, 4×4</b> 중 원하는 크기의 판을 선택합니다.<br>2. 두 플레이어가 모두 <b>같은 'X' 기호</b>를 사용합니다.<br>3. 가로, 세로, 대각선 중 <b>어디든 한 줄로 이어지게 만드는 사람이 패배</b>합니다.";
@@ -2906,7 +3404,7 @@
     let firstTurn = ntMode === 'bot' ? botFirstTurn : 'player';
 
     document.getElementById('nt-p1-name').innerText = ntMode === 'bot' ? '플레이어' : '플레이어 1';
-    document.getElementById('nt-p2-name').innerText = ntMode === 'bot' ? `봇 (${botDifficulty})` : '플레이어 2';
+    document.getElementById('nt-p2-name').innerText = ntMode === 'bot' ? `AI (${botDifficulty})` : '플레이어 2';
 
     document.getElementById('nt-restart-btn').style.display = 'none';
     document.getElementById('nt-resume-analysis-btn').style.display = 'none';
@@ -2939,9 +3437,9 @@
 
     if (branchHumanPlayer === 1) {
       document.getElementById('nt-p1-name').innerText = '플레이어 (P1)';
-      document.getElementById('nt-p2-name').innerText = `봇 (${botDifficulty})`;
+      document.getElementById('nt-p2-name').innerText = `AI (${botDifficulty})`;
     } else {
-      document.getElementById('nt-p1-name').innerText = `봇 (${botDifficulty})`;
+      document.getElementById('nt-p1-name').innerText = `AI (${botDifficulty})`;
       document.getElementById('nt-p2-name').innerText = '플레이어 (P2)';
     }
 
@@ -2961,7 +3459,7 @@
   }
 
   function ntScheduleBotTurn() {
-    document.getElementById('nt-turn-indicator').innerText = `봇 (${botDifficulty})의 턴`;
+    document.getElementById('nt-turn-indicator').innerText = `AI (${botDifficulty})의 턴`;
     ntBotTimeout = setTimeout(ntBotTurn, 420);
   }
 
@@ -3007,8 +3505,8 @@
     f1.classList.remove('active-turn'); f2.classList.remove('active-turn');
     if (ntCurrentPlayer === 1) f1.classList.add('active-turn'); else f2.classList.add('active-turn');
 
-    let p1Name = isBranchPlay ? (branchHumanPlayer === 1 ? "플레이어 (P1)" : "봇") : (ntMode === 'bot' ? "플레이어" : "플레이어 1");
-    let p2Name = isBranchPlay ? (branchHumanPlayer === 2 ? "플레이어 (P2)" : "봇") : (ntMode === 'bot' ? "봇" : "플레이어 2");
+    let p1Name = isBranchPlay ? (branchHumanPlayer === 1 ? "플레이어 (P1)" : "AI") : (ntMode === 'bot' ? "플레이어" : "플레이어 1");
+    let p2Name = isBranchPlay ? (branchHumanPlayer === 2 ? "플레이어 (P2)" : "AI") : (ntMode === 'bot' ? "AI" : "플레이어 2");
     document.getElementById('nt-turn-indicator').innerText = `${ntCurrentPlayer === 1 ? p1Name : p2Name}의 턴`;
     ntStartTimer();
   }
@@ -3032,11 +3530,11 @@
       if (ntMode === 'bot') {
         let isHumanCurrent = isBranchPlay ? (ntCurrentPlayer === branchHumanPlayer) : (ntCurrentPlayer === 1);
         if (isHumanCurrent) {
-          loserSubject = "플레이어가"; winner = "봇"; isLoss = true; ntEndState = 'lose';
+          loserSubject = "플레이어가"; winner = "AI"; isLoss = true; ntEndState = 'lose';
           winnerP1Num = (isBranchPlay && branchHumanPlayer === 2) ? 1 : 2;
           if (!isBranchPlay) ntScore.p2Wins++;
         } else {
-          loserSubject = "봇이"; winner = "플레이어"; isLoss = false; ntEndState = 'win';
+          loserSubject = "AI가"; winner = "플레이어"; isLoss = false; ntEndState = 'win';
           winnerP1Num = (isBranchPlay && branchHumanPlayer === 2) ? 2 : 1;
           if (!isBranchPlay) ntScore.p1Wins++;
         }
@@ -3053,7 +3551,7 @@
       ntRenderGameBoard();
       highlightWinner(winnerP1Num);
       document.getElementById('nt-restart-btn').style.display = 'inline-block';
-      document.getElementById('nt-turn-indicator').innerText = isLoss && ntMode === 'bot' ? `봇 승리!` : `🎉 ${winner} 승리! 🎉`;
+      document.getElementById('nt-turn-indicator').innerText = isLoss && ntMode === 'bot' ? `AI 승리!` : `🎉 ${winner} 승리! 🎉`;
       showVictoryModal(winner, `${loserSubject} 한 줄을 완성했습니다.`, isLoss);
     } else {
       ntCurrentPlayer = ntCurrentPlayer === 1 ? 2 : 1;
@@ -3279,11 +3777,9 @@
     let timeText = stTimeSetting === 'unlimited' ? '무제한' : stTimeSetting + '초';
     let modeName = stModeType === 'gem' ? '보석 모드' : '폭탄 모드';
 
-    if (stModeType === 'gem') {
-      sub.innerText = `규칙: 보석 모드 - 마지막 초록색 보석 돌을 가져가는 사람이 승리합니다! (돌 ${nText}개 | 최대 ${limitText}개 | ${modeName} | 시간: ${timeText})`;
-    } else {
-      sub.innerText = `규칙: 폭탄 모드 - 마지막 빨간색 폭탄 돌을 가져가는 사람이 패배합니다! (돌 ${nText}개 | 최대 ${limitText}개 | ${modeName} | 시간: ${timeText})`;
-    }
+    sub.innerHTML = stModeType === 'gem'
+      ? `규칙: 번갈아 1~${limitText}개씩 가져가기 · <b>마지막 보석 돌을 가져가면 승리</b><br><small>돌 ${nText}개 · 시간 ${timeText}</small>`
+      : `규칙: 번갈아 1~${limitText}개씩 가져가기 · <b>마지막 폭탄 돌을 가져가면 패배</b><br><small>돌 ${nText}개 · 시간 ${timeText}</small>`;
   }
 
   function stStopTimer() {
@@ -3322,7 +3818,7 @@
 
     let winner = "", loserSubject = "", isLoss = false, winnerP1Num = 1;
     if (stMode === 'bot') {
-      winner = "봇"; loserSubject = "플레이어가"; isLoss = true;
+      winner = "AI"; loserSubject = "플레이어가"; isLoss = true;
       winnerP1Num = isBranchPlay ? (branchHumanPlayer === 1 ? 2 : 1) : 2;
       if (!isBranchPlay) {
         if (winnerP1Num === 1) stScore.p1Wins++; else stScore.p2Wins++;
@@ -3334,7 +3830,7 @@
         winner = "플레이어 1"; loserSubject = "플레이어 2가"; winnerP1Num = 1; stScore.p1Wins++;
       }
     }
-    document.getElementById('st-turn-indicator').innerText = isLoss && stMode === 'bot' ? `봇 승리!` : `🎉 ${winner} 승리! 🎉`;
+    document.getElementById('st-turn-indicator').innerText = isLoss && stMode === 'bot' ? `AI 승리!` : `🎉 ${winner} 승리! 🎉`;
     updateScoreDisplay();
     stUpdateUI(); highlightWinner(winnerP1Num);
     document.getElementById('st-restart-btn').style.display = 'inline-block';
@@ -3376,7 +3872,7 @@
     let firstTurn = stMode === 'bot' ? botFirstTurn : 'player';
 
     document.getElementById('st-p1-name').innerText = stMode === 'bot' ? '플레이어' : '플레이어 1';
-    document.getElementById('st-p2-name').innerText = stMode === 'bot' ? `봇 (${botDifficulty})` : '플레이어 2';
+    document.getElementById('st-p2-name').innerText = stMode === 'bot' ? `AI (${botDifficulty})` : '플레이어 2';
 
     stBuildTakeButtons();
     document.getElementById('st-restart-btn').style.display = 'none';
@@ -3417,9 +3913,9 @@
 
     if (branchHumanPlayer === 1) {
       document.getElementById('st-p1-name').innerText = '플레이어 (P1)';
-      document.getElementById('st-p2-name').innerText = `봇 (${botDifficulty})`;
+      document.getElementById('st-p2-name').innerText = `AI (${botDifficulty})`;
     } else {
-      document.getElementById('st-p1-name').innerText = `봇 (${botDifficulty})`;
+      document.getElementById('st-p1-name').innerText = `AI (${botDifficulty})`;
       document.getElementById('st-p2-name').innerText = '플레이어 (P2)';
     }
 
@@ -3500,8 +3996,8 @@
       stStopTimer();
       return;
     }
-    let p1Name = isBranchPlay ? (branchHumanPlayer === 1 ? "플레이어 (P1)" : "봇") : (stMode === 'bot' ? "플레이어" : "플레이어 1");
-    let p2Name = isBranchPlay ? (branchHumanPlayer === 2 ? "플레이어 (P2)" : "봇") : (stMode === 'bot' ? "봇" : "플레이어 2");
+    let p1Name = isBranchPlay ? (branchHumanPlayer === 1 ? "플레이어 (P1)" : "AI") : (stMode === 'bot' ? "플레이어" : "플레이어 1");
+    let p2Name = isBranchPlay ? (branchHumanPlayer === 2 ? "플레이어 (P2)" : "AI") : (stMode === 'bot' ? "AI" : "플레이어 2");
     document.getElementById('st-turn-indicator').innerText = `${stCurrentPlayer === 1 ? p1Name : p2Name}의 턴`;
 
     let isBotTurn = (stMode === 'bot' && (isBranchPlay ? (stCurrentPlayer !== branchHumanPlayer) : (stCurrentPlayer === 2)));
@@ -3585,15 +4081,15 @@
             winner = "플레이어"; isLoss = false; loserSubject = "플레이어가"; winnerP1Num = humanPNum;
             if (!isBranchPlay) { if (humanPNum === 1) stScore.p1Wins++; else stScore.p2Wins++; }
           } else {
-            winner = "봇"; isLoss = true; loserSubject = "플레이어가"; winnerP1Num = botPNum;
+            winner = "AI"; isLoss = true; loserSubject = "플레이어가"; winnerP1Num = botPNum;
             if (!isBranchPlay) { if (botPNum === 1) stScore.p1Wins++; else stScore.p2Wins++; }
           }
         } else {
           if (didCurrentPlayerWin) {
-            winner = "봇"; isLoss = true; loserSubject = "봇이"; winnerP1Num = botPNum;
+            winner = "AI"; isLoss = true; loserSubject = "AI가"; winnerP1Num = botPNum;
             if (!isBranchPlay) { if (botPNum === 1) stScore.p1Wins++; else stScore.p2Wins++; }
           } else {
-            winner = "플레이어"; isLoss = false; loserSubject = "봇이"; winnerP1Num = humanPNum;
+            winner = "플레이어"; isLoss = false; loserSubject = "AI가"; winnerP1Num = humanPNum;
             if (!isBranchPlay) { if (humanPNum === 1) stScore.p1Wins++; else stScore.p2Wins++; }
           }
         }
@@ -3608,7 +4104,7 @@
         }
       }
 
-      document.getElementById('st-turn-indicator').innerText = isLoss && stMode === 'bot' ? `봇 승리!` : `🎉 ${winner} 승리! 🎉`;
+      document.getElementById('st-turn-indicator').innerText = isLoss && stMode === 'bot' ? `AI 승리!` : `🎉 ${winner} 승리! 🎉`;
       updateScoreDisplay();
       stUpdateUI();
       highlightWinner(winnerP1Num);
@@ -3670,8 +4166,8 @@
       ? "가장 마지막에 남는 단 1개의 <b>'마지막 돌(초록색 보석)'을 가져가게 되는 플레이어가 최종 승리</b>합니다."
       : "가장 마지막에 남는 단 1개의 <b>'마지막 돌(빨간색 폭탄)'을 가져가게 되는 플레이어가 최종 패배</b>합니다.";
     if (topic === 'bot') {
-      title = "🤖 봇과 플레이";
-      content = `컴퓨터 봇을 상대로 번갈아가며 진행하는 모드입니다.<br><br><b>[승리 조건]</b><br>자신의 턴에 지정된 개수만큼 돌을 가져갑니다. ${winCon}`;
+      title = "🤖 AI 플레이";
+      content = `컴퓨터 AI를 상대로 번갈아가며 진행하는 모드입니다.<br><br><b>[승리 조건]</b><br>자신의 턴에 지정된 개수만큼 돌을 가져갑니다. ${winCon}`;
     } else if (topic === 'solo') {
       title = "👥 2인 플레이";
       content = `하나의 기기에서 두 명의 플레이어가 역할을 번갈아가며 진행하는 모드입니다.<br><br><b>[승리 조건]</b><br>자신의 턴에 지정된 개수만큼 돌을 가져갑니다. ${winCon}`;
@@ -4032,8 +4528,9 @@
   /* ===== 📖 게임 설명 먼저 보여 주기 ===== */
   let currentGame = null;
   const RULES = {
-    notakto: ['노탁토 (NOTAKTO)', `<b>둘 다 X만</b> 두는 거꾸로 틱택토예요.<br>① 번갈아 빈 칸에 X를 놓습니다.<br>② 가로·세로·대각선 <b>한 줄을 완성한 사람이 패배</b>!<br>③ 3×3이 기본, 설정에서 4×4도 할 수 있어요.<br><br>메뉴: 🤖 봇과 플레이 · 👥 한 기기에서 2인 · 🌐 온라인 대전(4자리 방 번호) · 📊 분석 모드(이기는 수 찾기)`],
-    stone: ['돌 가져가기 (STONE TAKING)', `책의 <b>‘마지막 카드를 가져라’</b> 심화판이에요.<br>① 돌이 N개 놓여 있고, 번갈아 <b>1개~k개</b>씩 가져갑니다.<br>② <b>폭탄 모드</b>: 마지막 빨간 폭탄 돌을 가져가는 사람이 <b>패배</b>.<br>③ <b>보석 모드</b>: 마지막 초록 보석 돌을 가져가는 사람이 <b>승리</b>.<br>④ N과 k는 설정에서 정하거나 랜덤으로!<br><br>힌트: (k+1)의 배수를 남기는 쪽이 유리해요. 메뉴: 🤖 봇 · 👥 2인 · 🌐 온라인 대전 · 📊 분석 모드`],
+    popit: ['팝잇 (POP IT)', `<b>목표</b>: 마지막 버블을 내가 누르기!<br>① 자기 차례에 <b>한 줄</b>을 골라 버블을 <b>1개 이상</b> 누릅니다(드래그로 여러 개 선택).<br>② 다른 줄의 버블을 같이 누를 수는 없어요.<br>③ <b>마지막 버블을 누르는 사람이 승리</b>합니다.`],
+    notakto: ['노탁토 (NOTAKTO)', `<b>목표</b>: 한 줄을 만들지 않고 버티기!<br>① 둘 다 <b>X만</b> 번갈아 빈 칸에 놓습니다.<br>② 가로·세로·대각선 <b>한 줄을 완성한 사람이 패배</b>!<br>③ 3×3이 기본, 설정에서 4×4도 할 수 있어요.`],
+    stone: ['돌 가져가기 (STONE TAKING)', `<b>목표</b>: 마지막 폭탄 돌을 피하기! (책 ‘마지막 카드를 가져라’ 심화판)<br>① 번갈아 돌을 <b>1개~k개</b>씩 가져갑니다.<br>② <b>폭탄 모드</b>: 마지막 빨간 폭탄 돌을 가져가면 <b>패배</b>.<br>③ <b>보석 모드</b>: 마지막 초록 보석 돌을 가져가면 <b>승리</b>.`],
   };
   function showRules(force) {
     const g = currentGame; if (!g || !RULES[g]) return;
@@ -4048,12 +4545,70 @@
     closeModal('rules-modal', 'rules-box');
   }
 
-  /* ===== 🌐 온라인 대전 (games/online.js) ===== */
-  let olGame = null, olOrig = null, olBusy = false, olCur = null;
+  /* ===== 👤 이름 (세 게임 공통, 기기에 저장) ===== */
+  const NAME_KEY = 'onchun_name';
+  const NAME_ADJ = ['용감한', '씩씩한', '날쌘', '똑똑한', '엉뚱한', '느긋한', '반짝이는', '꼬마', '거대한', '수상한', '명랑한', '졸린'];
+  const NAME_ANIMAL = ['수달', '펭귄', '두더지', '고양이', '여우', '판다', '거북이', '다람쥐', '돌고래', '올빼미', '카피바라', '햄스터'];
+  function makeRandomName() { return NAME_ADJ[Math.floor(Math.random() * NAME_ADJ.length)] + ' ' + NAME_ANIMAL[Math.floor(Math.random() * NAME_ANIMAL.length)]; }
+  function getMyName() { try { return (localStorage.getItem(NAME_KEY) || '').trim(); } catch (e) { return ''; } }
+  function setMyName(n) { try { localStorage.setItem(NAME_KEY, n); } catch (e) {} }
+
+  /* ===== 📜 전적 (기기에 저장) ===== */
+  const REC_KEY = 'onchun_records';
+  const GAME_NAME = { popit: '팝잇', notakto: '노탁토', stone: '돌 가져가기' };
+  function recLoad() { try { return JSON.parse(localStorage.getItem(REC_KEY) || '{}') || {}; } catch (e) { return {}; } }
+  function recSave(r) { try { localStorage.setItem(REC_KEY, JSON.stringify(r)); } catch (e) {} }
+  function recAdd(game, key, win, opp) {
+    const r = recLoad(); r[game] = r[game] || {}; const g = r[game];
+    g[key] = g[key] || { w: 0, l: 0 }; g[key][win ? 'w' : 'l']++;
+    g.history = (g.history || []).slice(-19); g.history.push({ t: Date.now(), key, win, opp: opp || '' });
+    recSave(r);
+  }
+  let recordsGame = null;
+  function openRecords(game) {
+    recordsGame = game;
+    const g = recLoad()[game] || {};
+    const lab = k => k === 'solo' ? '👥 2인 플레이 (1번 기준)' : k === 'online' ? '🌐 온라인 대전' : '🤖 AI ' + k.slice(3);
+    const keys = ['ai:최상', 'ai:상', 'ai:중', 'ai:하', 'ai:최하', 'solo', 'online'].filter(k => g[k]);
+    let html = '';
+    if (!keys.length) html = '<p style="color:var(--text-sub); text-align:center;">아직 전적이 없어요. 한 판 해 볼까요?</p>';
+    else {
+      let tw = 0, tl = 0;
+      html += '<table style="width:100%; border-collapse:collapse; font-size:.98rem;">';
+      keys.forEach(k => { const v = g[k]; tw += v.w; tl += v.l; html += `<tr><td style="padding:6px 4px; border-bottom:1px dashed #E7DFC9;">${lab(k)}</td><td style="padding:6px 4px; border-bottom:1px dashed #E7DFC9; text-align:right; white-space:nowrap;"><b style="color:#3A9E82">${v.w}승</b> <b style="color:#C9436B">${v.l}패</b></td></tr>`; });
+      html += `<tr><td style="padding:8px 4px; font-weight:700;">합계</td><td style="padding:8px 4px; text-align:right; font-weight:700;">${tw}승 ${tl}패 (승률 ${tw + tl ? Math.round(tw * 100 / (tw + tl)) : 0}%)</td></tr></table>`;
+      const h = (g.history || []).slice().reverse().slice(0, 10);
+      if (h.length) {
+        html += '<div style="margin-top:12px; font-size:.85rem; color:var(--text-sub);">최근 기록</div><div style="display:flex; flex-wrap:wrap; gap:5px; margin-top:4px;">';
+        h.forEach(x => { const d = new Date(x.t); html += `<span style="padding:3px 8px; border-radius:999px; background:${x.win ? '#DFF5EE' : '#FDE8EE'}; font-size:.8rem;">${x.win ? '승' : '패'} · ${lab(x.key).replace(/^[^ ]+ /, '')}${x.opp ? ' · ' + x.opp : ''} · ${d.getMonth() + 1}/${d.getDate()} ${String(d.getHours()).padStart(2, '0')}:${String(d.getMinutes()).padStart(2, '0')}</span>`; });
+        html += '</div>';
+      }
+    }
+    document.getElementById('records-title').innerText = `📜 ${GAME_NAME[game]} 전적` + (getMyName() ? ` · ${getMyName()}` : '');
+    document.getElementById('records-body').innerHTML = html;
+    openModal('records-modal', 'records-box');
+  }
+  function clearRecords() { if (!recordsGame) return; const r = recLoad(); delete r[recordsGame]; recSave(r); openRecords(recordsGame); }
+
+  /* ===== 🌐 온라인 대전 (games/online.js) — 세 게임 공통 ===== */
+  const OLG = {
+    stone:   { p: 'st', mode: () => stMode, over: () => stGameOver, cur: () => stCurrentPlayer, start: () => stStartGame('online'), back: () => stGoBack(),
+               settings: () => { applyStRandomRules(); return { n: stN, limit: stLimit, mode: stModeType }; },
+               apply: s => { stNSetting = String(s.n); stLimitSetting = String(s.limit); stModeType = s.mode || stModeType; stTimeSetting = 'unlimited'; },
+               remote: m => { const go = () => { if (stIsAnimating) return setTimeout(go, 150); if (!stGameOver && stCurrentPlayer !== Online.myNum) stExecuteMove(m); }; go(); } },
+    notakto: { p: 'nt', mode: () => ntMode, over: () => ntGameOver, cur: () => ntCurrentPlayer, start: () => ntStartGame('online'), back: () => ntGoBack(),
+               settings: () => ({ size: ntSize }), apply: s => { ntSize = s.size || 3; ntTimeSetting = 'unlimited'; },
+               remote: m => { if (!ntGameOver && ntCurrentPlayer !== Online.myNum) ntExecuteGameMove(m); } },
+    popit:   { p: 'pp', mode: () => ppMode, over: () => ppOver, cur: () => ppCur, start: () => ppStartGame('online'), back: () => ppGoBack(),
+               settings: () => { ppApplyRules(); return { rows: ppInit.slice() }; }, apply: s => { ppRowsSetting = (s.rows || [2, 5, 6]).join(' '); ppTimeSetting = 'unlimited'; },
+               remote: m => { if (!ppOver && ppCur !== Online.myNum) ppExecuteMove(m); } },
+  };
+  let olGame = null, olOrig = null, olBusy = false, olCur = null, olStarted = false;
   const olMsg = t => { document.getElementById('ol-msg').innerText = t || ''; };
   function olHelp() {
+    document.getElementById('help-modal-box').classList.remove('pink-modal');
     document.getElementById('help-title').innerText = '🌐 온라인 대전';
-    document.getElementById('help-content').innerHTML = '한 사람이 <b>방 만들기</b>를 눌러 4자리 번호를 받고, 다른 사람이 그 번호를 입력해 <b>입장</b>하면 바로 시작돼요. 방을 만든 사람이 선공(1번)이고, 다시하기도 방장이 눌러요. 같은 와이파이가 아니어도 돼요.';
+    document.getElementById('help-content').innerHTML = '한 사람이 <b>방 만들기</b>를 눌러 4자리 번호를 받고, 다른 사람이 그 번호를 입력해 <b>입장</b>하면 바로 시작돼요.<br><br>· 방을 만든 사람이 <b>선공(1번)</b>, 다시하기도 방장이 눌러요.<br>· 판 설정(돌 개수, 팝잇 줄 등)은 방장 설정을 따라요.<br>· 같은 와이파이가 아니어도 되고, 폰·크롬북 어디서나 돼요.<br>· 이름을 넣어 두면 세 게임 모두에서 같은 이름이 쓰여요.';
     openModal('help-modal', 'help-modal-box');
   }
   function openOnlineModal(g) {
@@ -4061,19 +4616,23 @@
     document.getElementById('ol-step1').style.display = '';
     document.getElementById('ol-step2').style.display = 'none';
     document.getElementById('ol-code').value = '';
+    document.getElementById('ol-name').value = getMyName();
     openModal('online-modal', 'ol-modal-box');
   }
-  function olSettings() {
-    if (olGame === 'stone') { applyStRandomRules(); return { n: stN, limit: stLimit, mode: stModeType }; }
-    return { size: ntSize };
+  function olTakeName() {
+    let n = document.getElementById('ol-name').value.trim().slice(0, 10);
+    if (!n) { n = makeRandomName(); document.getElementById('ol-name').value = n; }
+    setMyName(n); return n;
   }
+  function olSaveOrig() { olOrig = { n: stNSetting, limit: stLimitSetting, rows: ppRowsSetting, stT: stTimeSetting, ntT: ntTimeSetting, ppT: ppTimeSetting }; }
+  function olRestoreOrig() { if (!olOrig) return; stNSetting = olOrig.n; stLimitSetting = olOrig.limit; ppRowsSetting = olOrig.rows; stTimeSetting = olOrig.stT; ntTimeSetting = olOrig.ntT; ppTimeSetting = olOrig.ppT; olOrig = null; }
   async function olCreate() {
     if (olBusy) return; olBusy = true; olMsg('방을 만드는 중…');
     try {
-      Online.init({ game: olGame });
-      olOrig = { n: stNSetting, limit: stLimitSetting };
-      olCur = olSettings();
-      const code = await Online.create(olCur);
+      const name = olTakeName();
+      Online.init({ game: olGame }); olSaveOrig();
+      olCur = OLG[olGame].settings();
+      const code = await Online.create(olCur, name);
       document.getElementById('ol-step1').style.display = 'none';
       document.getElementById('ol-step2').style.display = '';
       document.getElementById('ol-code-big').innerText = code; olMsg('');
@@ -4086,55 +4645,46 @@
     if (!/^\d{4}$/.test(c)) { olMsg('4자리 번호를 입력해 주세요.'); return; }
     olBusy = true; olMsg('들어가는 중…');
     try {
-      Online.init({ game: olGame });
-      olOrig = { n: stNSetting, limit: stLimitSetting };
-      const settings = await Online.join(c);
+      const name = olTakeName();
+      Online.init({ game: olGame }); olSaveOrig();
+      const settings = await Online.join(c, name);
       olStart(settings);
     } catch (e) { olMsg(e.message || String(e)); }
     olBusy = false;
   }
-  function olCancel() { if (Online.active && !olStarted) Online.leave(); closeModal('online-modal', 'ol-modal-box'); }
-  let olStarted = false;
+  function olCancel() { if (Online.active && !olStarted) { Online.leave(); olRestoreOrig(); } closeModal('online-modal', 'ol-modal-box'); }
   function olStart(settings) {
     olStarted = true;
     closeModal('online-modal', 'ol-modal-box');
     closeVictoryModal(true);
-    if (olGame === 'stone') {
-      stNSetting = String(settings.n); stLimitSetting = String(settings.limit); stModeType = settings.mode || stModeType; stTimeSetting = 'unlimited';
-      stStartGame('online');
-    } else {
-      ntSize = settings.size || 3; ntTimeSetting = 'unlimited';
-      ntStartGame('online');
-    }
-    olNames();
+    OLG[olGame].apply(settings); OLG[olGame].start(); olNames();
   }
   function olNames() {
-    const me = Online.myNum, p = olGame === 'stone' ? 'st' : 'nt';
-    document.getElementById(p + '-p1-name').innerText = me === 1 ? '나' : '상대';
-    document.getElementById(p + '-p2-name').innerText = me === 2 ? '나' : '상대';
+    const me = Online.myNum, p = OLG[olGame].p, nm = Online.names || {};
+    const n1 = nm[1] || '방장', n2 = nm[2] || '손님';
+    document.getElementById(p + '-p1-name').innerText = (me === 1 ? '나 · ' : '') + n1;
+    document.getElementById(p + '-p2-name').innerText = (me === 2 ? '나 · ' : '') + n2;
     const rb = document.getElementById(p + '-restart-btn'); if (rb) rb.innerText = me === 1 ? '다시하기' : '다시하기 (방장이 눌러요)';
+    olTurnText(OLG[olGame].cur());
   }
   function olTurnText(cur) {
-    const p = olGame === 'stone' ? 'st' : 'nt';
-    const el = document.getElementById(p + '-turn-indicator');
-    if (el && !(olGame === 'stone' ? stGameOver : ntGameOver)) el.innerText = cur === Online.myNum ? '내 턴이에요!' : '상대 턴… 기다리는 중';
+    const p = OLG[olGame].p, el = document.getElementById(p + '-turn-indicator');
+    if (el && !OLG[olGame].over()) el.innerText = cur === Online.myNum ? '내 턴이에요!' : '상대 턴… 기다리는 중';
   }
   function olEnd(msg) {
-    olStarted = false; Online.leave();
-    const p = olGame === 'stone' ? 'st' : 'nt';
-    const el = document.getElementById(p + '-turn-indicator'); if (el) el.innerText = msg;
-    setTimeout(() => { if (olGame === 'stone') { if (stMode === 'online') stGoBack(); } else { if (ntMode === 'online') ntGoBack(); } }, 1800);
+    olStarted = false; Online.leave(); olRestoreOrig();
+    const g = OLG[olGame], el = document.getElementById(g.p + '-turn-indicator'); if (el) el.innerText = msg;
+    setTimeout(() => { if (g.mode() === 'online') g.back(); }, 1800);
   }
   Online.on(ev => {
-    if (ev.type === 'joined') { olStart(olCur || olSettings()); }
+    if (!olGame) return;
+    if (ev.type === 'joined') { olStart(olCur || OLG[olGame].settings()); }
     else if (ev.type === 'reset') { olStart(ev.settings); }
-    else if (ev.type === 'move') {
-      if (olGame === 'stone') { const go = () => { if (stIsAnimating) return setTimeout(go, 150); if (!stGameOver && stCurrentPlayer !== Online.myNum) stExecuteMove(ev.move); }; go(); }
-      else if (!ntGameOver && ntCurrentPlayer !== Online.myNum) ntExecuteGameMove(ev.move);
-    }
+    else if (ev.type === 'names') { if (olStarted) olNames(); }
+    else if (ev.type === 'move') { OLG[olGame].remote(ev.move); }
     else if (ev.type === 'left') { if (olStarted) olEnd('상대가 나갔어요 😢'); }
   });
-  // 입력 막기 + 내 수 전송
+  // 입력 막기 + 내 수 전송 (돌·노탁토; 팝잇은 ppConfirm에서 직접 처리)
   const _ntHandle = ntHandlePlayerMove;
   ntHandlePlayerMove = function (c) {
     if (ntMode === 'online') {
@@ -4151,40 +4701,55 @@
     }
     _stTake(count);
   };
+  // 턴 표시 + 이름(AI 모드에서 내 이름)
+  function myTurnLabel(cur, mode, p) {
+    if (mode === 'online') return cur === Online.myNum ? '내 턴이에요!' : '상대 턴… 기다리는 중';
+    if (mode === 'bot' && cur === 1 && getMyName()) return `${getMyName()}의 턴`;
+    return null;
+  }
   const _ntUI = ntUpdateGameUI;
-  ntUpdateGameUI = function () { _ntUI(); if (ntMode === 'online') olTurnText(ntCurrentPlayer); };
+  ntUpdateGameUI = function () { _ntUI(); const t = myTurnLabel(ntCurrentPlayer, ntMode); if (t && !ntGameOver) document.getElementById('nt-turn-indicator').innerText = t; };
   const _stUI = stUpdateUI;
   stUpdateUI = function () {
     _stUI();
-    if (stMode === 'online') {
-      olTurnText(stCurrentPlayer);
-      if (stCurrentPlayer !== Online.myNum) for (let i = 1; i <= stLimit; i++) { const b = document.getElementById(`st-btn-${i}`); if (b) b.disabled = true; }
-    }
+    const t = myTurnLabel(stCurrentPlayer, stMode); if (t && !stGameOver) document.getElementById('st-turn-indicator').innerText = t;
+    if (stMode === 'online' && stCurrentPlayer !== Online.myNum) for (let i = 1; i <= stLimit; i++) { const b = document.getElementById(`st-btn-${i}`); if (b) b.disabled = true; }
   };
-  const _ntRestart = ntRestartGame, _stRestart = stRestartGame;
-  ntRestartGame = function () {
-    if (ntMode === 'online' && Online.active) { if (Online.myNum === 1) { olCur = olSettings(); Online.reset(olCur); olStart(olCur); } return; }
-    _ntRestart();
-  };
-  stRestartGame = function () {
-    if (stMode === 'online' && Online.active) {
-      if (Online.myNum === 1) { stNSetting = olOrig.n; stLimitSetting = olOrig.limit; olCur = olSettings(); Online.reset(olCur); olStart(olCur); }
-      return;
-    }
-    _stRestart();
-  };
-  const _ntBack = ntGoBack, _stBack = stGoBack;
-  function olLeaveIfAny() { if (Online.active) { olStarted = false; Online.leave(); } if (olOrig) { stNSetting = olOrig.n; stLimitSetting = olOrig.limit; olOrig = null; } }
+  const _ppUI = ppUpdateUI;
+  ppUpdateUI = function () { _ppUI(); const t = myTurnLabel(ppCur, ppMode); if (t && !ppOver) document.getElementById('pp-turn-indicator').innerText = t; };
+  // AI 모드 이름 표시
+  const _ntStart = ntStartGame, _stStart = stStartGame, _ppStart = ppStartGame;
+  function applyMyName(p, mode) { if (mode === 'bot' && getMyName()) document.getElementById(p + '-p1-name').innerText = getMyName(); }
+  ntStartGame = function (m) { _ntStart(m); applyMyName('nt', m); ntUpdateGameUI(); };
+  stStartGame = function (m) { _stStart(m); applyMyName('st', m); stUpdateUI(); };
+  ppStartGame = function (m) { _ppStart(m); applyMyName('pp', m); ppUpdateUI(); };
+  // 다시하기
+  const _ntRestart = ntRestartGame, _stRestart = stRestartGame, _ppRestart = ppRestartGame;
+  function olRestart(g) { if (Online.myNum === 1) { olRestoreOrig(); olSaveOrig(); olCur = OLG[g].settings(); Online.reset(olCur); olStart(olCur); } }
+  ntRestartGame = function () { if (ntMode === 'online' && Online.active) return olRestart('notakto'); _ntRestart(); };
+  stRestartGame = function () { if (stMode === 'online' && Online.active) return olRestart('stone'); _stRestart(); };
+  ppRestartGame = function () { if (ppMode === 'online' && Online.active) return olRestart('popit'); _ppRestart(); };
+  // 메뉴로
+  const _ntBack = ntGoBack, _stBack = stGoBack, _ppBack = ppGoBack;
+  function olLeaveIfAny() { if (Online.active) { olStarted = false; Online.leave(); } olRestoreOrig(); }
   ntGoBack = function () { olLeaveIfAny(); _ntBack(); };
   stGoBack = function () { olLeaveIfAny(); _stBack(); };
+  ppGoBack = function () { olLeaveIfAny(); _ppBack(); };
+  // 승리 모달: 온라인 표기 + 전적 기록
   const _sv = showVictoryModal;
   showVictoryModal = function (w, r, l) {
-    const mode = olGame === 'stone' ? stMode : ntMode;
+    const g = currentGame, G = g && OLG[g];
+    const mode = G ? G.mode() : '';
+    const wn = /2/.test(w) ? 2 : 1;
     if (Online.active && mode === 'online') {
-      const me = Online.myNum, wn = /2/.test(w) ? 2 : 1, mine = wn === me;
-      w = mine ? '나' : '상대';
-      r = r.replace(/플레이어 (\d)(이|가)/, (m, n) => (Number(n) === me ? '내가' : '상대가'));
+      const me = Online.myNum, mine = wn === me, nm = Online.names || {};
+      w = mine ? '나' : (nm[wn] || '상대');
+      r = r.replace(/플레이어 (\d)(이|가)/, (m, n) => (Number(n) === me ? '내가' : (nm[Number(n)] || '상대') + '가'));
       l = !mine;
+      if (G && !isBranchPlay) recAdd(g, 'online', mine, nm[me === 1 ? 2 : 1] || '');
+    } else if (G && !isBranchPlay) {
+      if (mode === 'bot') recAdd(g, 'ai:' + botDifficulty, !l);
+      else if (mode === 'solo') recAdd(g, 'solo', wn === 1);
     }
     _sv(w, r, l);
   };
@@ -4192,13 +4757,13 @@
   /* ===== 축전 허브 연동: ?game=notakto|stone 으로 바로 진입, 상단바 이름 동기화 ===== */
   function syncTopName(game) {
     const el = document.querySelector('.bk-top__name'); if (!el) return;
-    el.textContent = game === 'notakto' ? '노탁토' : game === 'stone' ? '돌 가져가기' : '필승 전략 게임';
+    el.textContent = game === 'notakto' ? '노탁토' : game === 'stone' ? '돌 가져가기' : game === 'popit' ? '팝잇' : '메인 게임';
   }
   const _openGameSection = openGameSection, _returnToHome = returnToHome;
   openGameSection = function (g) { _openGameSection(g); syncTopName(g); currentGame = g; showRules(false); };
   returnToHome = function () { _returnToHome(); syncTopName(null); currentGame = null; };
   const entryGame = new URLSearchParams(location.search).get('game');
-  if (entryGame === 'notakto' || entryGame === 'stone') openGameSection(entryGame);
+  if (entryGame === 'notakto' || entryGame === 'stone' || entryGame === 'popit') openGameSection(entryGame);
 </script>
 </body>
 </html>

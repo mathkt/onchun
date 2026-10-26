@@ -4,7 +4,7 @@
 
 - `index.html` — 메인 허브 (메인 게임 3개 + 책 목차)
 - `common.css`, `common.js` — 책 지면 스타일 공통 테마, 공통 상단바
-- `games/popit/` — 팝잇 게임 (온라인 대전·AI)
+- `games/arcade/` — 메인 게임 3종(팝잇·돌 가져가기·노탁토), `games/online.js` 공용 온라인 대전
 - `games/arcade/` — 노탁토 · 돌 가져가기 (`?game=notakto`, `?game=stone`)
 - `games/queen/` — 황금비 퀸
 - `src/` — 학생 원본 파일 보관

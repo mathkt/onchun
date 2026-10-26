@@ -34,6 +34,11 @@
   }
   if (document.body) mount(); else document.addEventListener('DOMContentLoaded', mount);
 
+  // 오프라인 대비: 서비스 워커 등록 (사이트 루트의 sw.js)
+  if ('serviceWorker' in navigator) {
+    try { navigator.serviceWorker.register(new URL(home + 'sw.js', location.href).pathname).catch(() => {}); } catch (e) {}
+  }
+
   // 공통: 두 번 탭 확대 방지(터치 기기)
   let last = 0;
   document.addEventListener('touchend', e => {
