@@ -358,8 +358,9 @@
                 </div>
             </div>
 
-            <button onclick="closeRulesModal()" class="w-full mt-6 py-3 bg-indigo-600 text-white font-bold rounded-xl shadow-lg hover:bg-indigo-700 transition text-sm sm:text-base">
-                확인 및 닫기
+            <label class="flex items-center gap-2 mt-5 text-slate-500 text-sm cursor-pointer"><input type="checkbox" id="rules-skip" class="w-5 h-5"> 다음부터 보지 않기</label>
+            <button onclick="closeRulesModal()" class="w-full mt-3 py-3 bg-indigo-600 text-white font-bold rounded-xl shadow-lg hover:bg-indigo-700 transition text-sm sm:text-base">
+                알겠어요, 시작! ▶
             </button>
         </div>
     </div>
@@ -1407,6 +1408,7 @@
         }
 
         function closeRulesModal() {
+            try { if (document.getElementById('rules-skip')?.checked) localStorage.setItem('onchun_rules_popit', '1'); } catch (e) {}
             document.getElementById('rules-modal').classList.add('hidden');
             document.getElementById('rules-modal').classList.remove('flex');
         }
@@ -2135,6 +2137,7 @@
 
         // 링크(?room=XXXXXX)로 들어온 경우 자동 참가
         window.addEventListener('DOMContentLoaded', () => {
+            try { if (!localStorage.getItem('onchun_rules_popit') && !new URLSearchParams(location.search).get('room')) openRulesModal(); } catch (e) {}
             loadMyName();
             applySoundIcon();
             let savedLevel = 'normal';

@@ -1616,7 +1616,14 @@
 
   @media (max-width: 860px) {
     header { padding: 18px 20px; }
-    .cards-container { grid-template-columns: 1fr; }
+    .cards-container { grid-template-columns: minmax(0,1fr); gap: 20px; }
+    .game-card { min-width: 0; padding: 22px 18px; }
+    .card-header { flex-wrap: wrap; gap: 8px; }
+    .card-title { white-space: normal; }
+    .card-actions { transform: none; }
+    main { padding-left: 14px !important; padding-right: 14px !important; }
+    .section-title { font-size: 1.7rem !important; }
+    .rule-subtitle { font-size: .9rem !important; }
     #nt-board, #st-board, #nt-analysis-layout, #st-analysis-layout { flex-direction: column; }
     .nt-frame, .st-frame, #nt-analysis-left, #st-analysis-left { width: 100%; flex: auto; min-height: auto; }
     #nt-analysis-center, #st-analysis-center { min-width: 0; }
@@ -1710,6 +1717,7 @@
   #stone-section .back-btn { background:#fff; color:var(--neon-pink); border:2px solid var(--neon-pink); box-shadow:0 4px 0 #B53A2A; }
   #stone-section .back-btn:hover { background:#FDEEF2; color:var(--neon-pink); box-shadow:0 4px 0 #B53A2A; }
   .restart-btn, .undo-btn { background:#fff; color:var(--text-main); border:2px solid #D9CFAE; box-shadow:0 4px 0 #d8cfb3; }
+  .menu-btn.online-btn { background:#DFF5EE; border-color:#9ED9C6; color:#1f6b55; box-shadow:0 4px 0 #9ED9C6; }
   .restart-btn:hover:not(:disabled), .undo-btn:hover:not(:disabled) { background:#FFF9E8; border-color:#D9CFAE; transform:none; }
   .restart-btn:disabled, .undo-btn:disabled { background:#F6F1E3; color:#B9B19C; border-color:#E7DFC9; box-shadow:none; }
   .resume-analysis-btn { background:#EFE6FA; color:#4B2E8C; border:2px solid var(--neon-purple); box-shadow:0 4px 0 #6a3fb0; }
@@ -1753,7 +1761,8 @@
 
 
 
-<script src="../../common.js" data-num="02" data-name="필승 전략 게임" data-sub="노탁토 · 돌 가져가기" data-home="../../" data-up="../index.html" data-up-name="게임 목록" data-extra="<button class=&quot;bk-btn bk-btn--ghost bk-btn--sm&quot; id=&quot;sound-toggle&quot; onclick=&quot;toggleMute()&quot;><span id=&quot;sound-icon&quot;>🔊</span> <span id=&quot;sound-text&quot;>소리</span></button>"></script>
+<script src="../../common.js" data-num="02" data-name="필승 전략 게임" data-sub="노탁토 · 돌 가져가기" data-home="../../" data-up="../index.html" data-up-name="게임 목록" data-extra="<button class=&quot;bk-btn bk-btn--ghost bk-btn--sm&quot; id=&quot;sound-toggle&quot; onclick=&quot;toggleMute()&quot;><span id=&quot;sound-icon&quot;>🔊</span> <span id=&quot;sound-text&quot;>소리</span></button><button class=&quot;bk-btn bk-btn--sm&quot; onclick=&quot;showRules(true)&quot;>📖 규칙</button>"></script>
+<script src="../online.js"></script>
 
 <main>
   <!-- ================= 0. 초기 로비 화면 (1번 스타일) ================= -->
@@ -1871,6 +1880,10 @@
           <button class="help-btn" onmouseenter="playSfx('hover')" onclick="ntShowHelp('solo')" title="도움말">?</button>
         </div>
         <div class="menu-row">
+          <button class="menu-btn online-btn" onmouseenter="playSfx('hover_btn')" onclick="playSfx('click'); openOnlineModal('notakto')">🌐 온라인 대전</button>
+          <button class="help-btn" onmouseenter="playSfx('hover')" onclick="olHelp()" title="도움말">?</button>
+        </div>
+        <div class="menu-row">
           <button class="menu-btn analysis-btn" onmouseenter="playSfx('hover_btn')" onclick="playSfx('click'); ntStartAnalysis()">📊 분석 모드</button>
           <button class="help-btn" onmouseenter="playSfx('hover')" onclick="ntShowHelp('analysis')" title="도움말">?</button>
         </div>
@@ -1955,6 +1968,10 @@
         <div class="menu-row">
           <button class="menu-btn" onmouseenter="playSfx('hover_btn')" onclick="playSfx('click'); stStartGame('solo')">👥 2인 플레이</button>
           <button class="help-btn" onmouseenter="playSfx('hover')" onclick="stShowHelp('solo')" title="도움말">?</button>
+        </div>
+        <div class="menu-row">
+          <button class="menu-btn online-btn" onmouseenter="playSfx('hover_btn')" onclick="playSfx('click'); openOnlineModal('stone')">🌐 온라인 대전</button>
+          <button class="help-btn" onmouseenter="playSfx('hover')" onclick="olHelp()" title="도움말">?</button>
         </div>
         <div class="menu-row">
           <button class="menu-btn analysis-btn" onmouseenter="playSfx('hover_btn')" onclick="playSfx('click'); stStartAnalysis()">📊 분석 모드</button>
@@ -2050,6 +2067,38 @@
     <h2 class="victory-title" id="modal-winner-text">플레이어 승리!</h2>
     <div class="victory-desc" id="modal-reason-text">게임 결과가 여기에 표시됩니다.</div>
     <button class="victory-close-btn" onclick="playSfx('click'); closeVictoryModal()">확인</button>
+  </div>
+</div>
+
+<!-- 🌐 온라인 대전 모달 -->
+<div id="online-modal" class="modal-overlay" onclick="if(event.target === this) olCancel()">
+  <div class="modal-content" id="ol-modal-box" style="max-width:420px; text-align:center;">
+    <h2 style="color:var(--neon-cyan); margin-top:0;">🌐 온라인 대전</h2>
+    <div id="ol-step1">
+      <button class="help-close-btn" style="width:100%;" onclick="playSfx('click'); olCreate()">방 만들기 (내가 선공)</button>
+      <div style="margin:16px 0 8px; color:var(--text-sub);">또는 친구가 알려 준 번호로 들어가기</div>
+      <div style="display:flex; gap:8px; justify-content:center;">
+        <input id="ol-code" inputmode="numeric" pattern="[0-9]*" maxlength="4" placeholder="4자리 번호" style="width:140px; font-size:1.5rem; text-align:center; letter-spacing:.2em; padding:8px; border:2px solid #D9CFAE; border-radius:12px; font-family:'Jua',sans-serif;">
+        <button class="help-close-btn" onclick="playSfx('click'); olJoin()">입장</button>
+      </div>
+    </div>
+    <div id="ol-step2" style="display:none;">
+      <div style="color:var(--text-sub);">친구에게 이 번호를 알려 주세요</div>
+      <div id="ol-code-big" style="font-size:3.4rem; font-family:'Jua',sans-serif; color:var(--neon-pink); letter-spacing:.15em; margin:6px 0;">0000</div>
+      <div id="ol-wait" style="color:var(--text-sub);">친구가 들어오면 바로 시작돼요…</div>
+    </div>
+    <div id="ol-msg" style="color:var(--neon-pink); min-height:1.4em; margin-top:10px; font-weight:700;"></div>
+    <button class="undo-btn" style="margin-top:12px;" onclick="playSfx('close_modal'); olCancel()">취소</button>
+  </div>
+</div>
+
+<!-- 📖 게임 설명(처음 진입 시) 모달 -->
+<div id="rules-modal" class="modal-overlay" onclick="if(event.target === this) closeRules()">
+  <div class="modal-content" id="rules-box" style="max-width:520px;">
+    <h2 id="rules-title" style="color:var(--neon-cyan); margin-top:0;">게임 설명</h2>
+    <div id="rules-body" style="line-height:1.7; font-size:1.02rem; color:#3d3a35;"></div>
+    <label style="display:flex; align-items:center; gap:8px; margin:16px 0 6px; color:var(--text-sub); cursor:pointer;"><input type="checkbox" id="rules-skip" style="width:20px;height:20px;"> 다음부터 보지 않기</label>
+    <div style="text-align:center; margin-top:10px;"><button class="help-close-btn" style="width:100%;" onclick="playSfx('click'); closeRules()">알겠어요, 시작! ▶</button></div>
   </div>
 </div>
 
@@ -3975,14 +4024,175 @@
   ntUpdateSubtitle();
   stUpdateSubtitle(false);
 
+
+  /* ===== 📖 게임 설명 먼저 보여 주기 ===== */
+  let currentGame = null;
+  const RULES = {
+    notakto: ['노탁토 (NOTAKTO)', `<b>둘 다 X만</b> 두는 거꾸로 틱택토예요.<br>① 번갈아 빈 칸에 X를 놓습니다.<br>② 가로·세로·대각선 <b>한 줄을 완성한 사람이 패배</b>!<br>③ 3×3이 기본, 설정에서 4×4도 할 수 있어요.<br><br>메뉴: 🤖 봇과 플레이 · 👥 한 기기에서 2인 · 🌐 온라인 대전(4자리 방 번호) · 📊 분석 모드(이기는 수 찾기)`],
+    stone: ['돌 가져가기 (STONE TAKING)', `책의 <b>‘마지막 카드를 가져라’</b> 심화판이에요.<br>① 돌이 N개 놓여 있고, 번갈아 <b>1개~k개</b>씩 가져갑니다.<br>② <b>폭탄 모드</b>: 마지막 빨간 폭탄 돌을 가져가는 사람이 <b>패배</b>.<br>③ <b>보석 모드</b>: 마지막 초록 보석 돌을 가져가는 사람이 <b>승리</b>.<br>④ N과 k는 설정에서 정하거나 랜덤으로!<br><br>힌트: (k+1)의 배수를 남기는 쪽이 유리해요. 메뉴: 🤖 봇 · 👥 2인 · 🌐 온라인 대전 · 📊 분석 모드`],
+  };
+  function showRules(force) {
+    const g = currentGame; if (!g || !RULES[g]) return;
+    if (!force) { try { if (localStorage.getItem('onchun_rules_' + g)) return; } catch (e) {} }
+    document.getElementById('rules-title').innerText = '📖 ' + RULES[g][0];
+    document.getElementById('rules-body').innerHTML = RULES[g][1];
+    document.getElementById('rules-skip').checked = false;
+    openModal('rules-modal', 'rules-box');
+  }
+  function closeRules() {
+    try { if (document.getElementById('rules-skip').checked && currentGame) localStorage.setItem('onchun_rules_' + currentGame, '1'); } catch (e) {}
+    closeModal('rules-modal', 'rules-box');
+  }
+
+  /* ===== 🌐 온라인 대전 (games/online.js) ===== */
+  let olGame = null, olOrig = null, olBusy = false, olCur = null;
+  const olMsg = t => { document.getElementById('ol-msg').innerText = t || ''; };
+  function olHelp() {
+    document.getElementById('help-title').innerText = '🌐 온라인 대전';
+    document.getElementById('help-content').innerHTML = '한 사람이 <b>방 만들기</b>를 눌러 4자리 번호를 받고, 다른 사람이 그 번호를 입력해 <b>입장</b>하면 바로 시작돼요. 방을 만든 사람이 선공(1번)이고, 다시하기도 방장이 눌러요. 같은 와이파이가 아니어도 돼요.';
+    openModal('help-modal', 'help-modal-box');
+  }
+  function openOnlineModal(g) {
+    olGame = g; olMsg('');
+    document.getElementById('ol-step1').style.display = '';
+    document.getElementById('ol-step2').style.display = 'none';
+    document.getElementById('ol-code').value = '';
+    openModal('online-modal', 'ol-modal-box');
+  }
+  function olSettings() {
+    if (olGame === 'stone') { applyStRandomRules(); return { n: stN, limit: stLimit, mode: stModeType }; }
+    return { size: ntSize };
+  }
+  async function olCreate() {
+    if (olBusy) return; olBusy = true; olMsg('방을 만드는 중…');
+    try {
+      Online.init({ game: olGame });
+      olOrig = { n: stNSetting, limit: stLimitSetting };
+      olCur = olSettings();
+      const code = await Online.create(olCur);
+      document.getElementById('ol-step1').style.display = 'none';
+      document.getElementById('ol-step2').style.display = '';
+      document.getElementById('ol-code-big').innerText = code; olMsg('');
+    } catch (e) { olMsg('연결 실패: ' + (e.message || e)); }
+    olBusy = false;
+  }
+  async function olJoin() {
+    if (olBusy) return;
+    const c = document.getElementById('ol-code').value.trim();
+    if (!/^\d{4}$/.test(c)) { olMsg('4자리 번호를 입력해 주세요.'); return; }
+    olBusy = true; olMsg('들어가는 중…');
+    try {
+      Online.init({ game: olGame });
+      olOrig = { n: stNSetting, limit: stLimitSetting };
+      const settings = await Online.join(c);
+      olStart(settings);
+    } catch (e) { olMsg(e.message || String(e)); }
+    olBusy = false;
+  }
+  function olCancel() { if (Online.active && !olStarted) Online.leave(); closeModal('online-modal', 'ol-modal-box'); }
+  let olStarted = false;
+  function olStart(settings) {
+    olStarted = true;
+    closeModal('online-modal', 'ol-modal-box');
+    closeVictoryModal(true);
+    if (olGame === 'stone') {
+      stNSetting = String(settings.n); stLimitSetting = String(settings.limit); stModeType = settings.mode || stModeType; stTimeSetting = 'unlimited';
+      stStartGame('online');
+    } else {
+      ntSize = settings.size || 3; ntTimeSetting = 'unlimited';
+      ntStartGame('online');
+    }
+    olNames();
+  }
+  function olNames() {
+    const me = Online.myNum, p = olGame === 'stone' ? 'st' : 'nt';
+    document.getElementById(p + '-p1-name').innerText = me === 1 ? '나' : '상대';
+    document.getElementById(p + '-p2-name').innerText = me === 2 ? '나' : '상대';
+    const rb = document.getElementById(p + '-restart-btn'); if (rb) rb.innerText = me === 1 ? '다시하기' : '다시하기 (방장이 눌러요)';
+  }
+  function olTurnText(cur) {
+    const p = olGame === 'stone' ? 'st' : 'nt';
+    const el = document.getElementById(p + '-turn-indicator');
+    if (el && !(olGame === 'stone' ? stGameOver : ntGameOver)) el.innerText = cur === Online.myNum ? '내 턴이에요!' : '상대 턴… 기다리는 중';
+  }
+  function olEnd(msg) {
+    olStarted = false; Online.leave();
+    const p = olGame === 'stone' ? 'st' : 'nt';
+    const el = document.getElementById(p + '-turn-indicator'); if (el) el.innerText = msg;
+    setTimeout(() => { if (olGame === 'stone') { if (stMode === 'online') stGoBack(); } else { if (ntMode === 'online') ntGoBack(); } }, 1800);
+  }
+  Online.on(ev => {
+    if (ev.type === 'joined') { olStart(olCur || olSettings()); }
+    else if (ev.type === 'reset') { olStart(ev.settings); }
+    else if (ev.type === 'move') {
+      if (olGame === 'stone') { const go = () => { if (stIsAnimating) return setTimeout(go, 150); if (!stGameOver && stCurrentPlayer !== Online.myNum) stExecuteMove(ev.move); }; go(); }
+      else if (!ntGameOver && ntCurrentPlayer !== Online.myNum) ntExecuteGameMove(ev.move);
+    }
+    else if (ev.type === 'left') { if (olStarted) olEnd('상대가 나갔어요 😢'); }
+  });
+  // 입력 막기 + 내 수 전송
+  const _ntHandle = ntHandlePlayerMove;
+  ntHandlePlayerMove = function (c) {
+    if (ntMode === 'online') {
+      if (!Online.active || ntCurrentPlayer !== Online.myNum || ntGameOver || (ntGameBoardMask & (1 << c)) !== 0) return;
+      _ntHandle(c); Online.sendMove(c); return;
+    }
+    _ntHandle(c);
+  };
+  const _stTake = stPlayerTake;
+  stPlayerTake = function (count) {
+    if (stMode === 'online') {
+      if (!Online.active || stCurrentPlayer !== Online.myNum || stGameOver || stIsAnimating || stStonesArr.length < count) return;
+      _stTake(count); Online.sendMove(count); return;
+    }
+    _stTake(count);
+  };
+  const _ntUI = ntUpdateGameUI;
+  ntUpdateGameUI = function () { _ntUI(); if (ntMode === 'online') olTurnText(ntCurrentPlayer); };
+  const _stUI = stUpdateUI;
+  stUpdateUI = function () {
+    _stUI();
+    if (stMode === 'online') {
+      olTurnText(stCurrentPlayer);
+      if (stCurrentPlayer !== Online.myNum) for (let i = 1; i <= stLimit; i++) { const b = document.getElementById(`st-btn-${i}`); if (b) b.disabled = true; }
+    }
+  };
+  const _ntRestart = ntRestartGame, _stRestart = stRestartGame;
+  ntRestartGame = function () {
+    if (ntMode === 'online' && Online.active) { if (Online.myNum === 1) { olCur = olSettings(); Online.reset(olCur); olStart(olCur); } return; }
+    _ntRestart();
+  };
+  stRestartGame = function () {
+    if (stMode === 'online' && Online.active) {
+      if (Online.myNum === 1) { stNSetting = olOrig.n; stLimitSetting = olOrig.limit; olCur = olSettings(); Online.reset(olCur); olStart(olCur); }
+      return;
+    }
+    _stRestart();
+  };
+  const _ntBack = ntGoBack, _stBack = stGoBack;
+  function olLeaveIfAny() { if (Online.active) { olStarted = false; Online.leave(); } if (olOrig) { stNSetting = olOrig.n; stLimitSetting = olOrig.limit; olOrig = null; } }
+  ntGoBack = function () { olLeaveIfAny(); _ntBack(); };
+  stGoBack = function () { olLeaveIfAny(); _stBack(); };
+  const _sv = showVictoryModal;
+  showVictoryModal = function (w, r, l) {
+    const mode = olGame === 'stone' ? stMode : ntMode;
+    if (Online.active && mode === 'online') {
+      const me = Online.myNum, wn = /2/.test(w) ? 2 : 1, mine = wn === me;
+      w = mine ? '나' : '상대';
+      r = r.replace(/플레이어 (\d)(이|가)/, (m, n) => (Number(n) === me ? '내가' : '상대가'));
+      l = !mine;
+    }
+    _sv(w, r, l);
+  };
+
   /* ===== 축전 허브 연동: ?game=notakto|stone 으로 바로 진입, 상단바 이름 동기화 ===== */
   function syncTopName(game) {
     const el = document.querySelector('.bk-top__name'); if (!el) return;
     el.textContent = game === 'notakto' ? '노탁토' : game === 'stone' ? '돌 가져가기' : '필승 전략 게임';
   }
   const _openGameSection = openGameSection, _returnToHome = returnToHome;
-  openGameSection = function (g) { _openGameSection(g); syncTopName(g); };
-  returnToHome = function () { _returnToHome(); syncTopName(null); };
+  openGameSection = function (g) { _openGameSection(g); syncTopName(g); currentGame = g; showRules(false); };
+  returnToHome = function () { _returnToHome(); syncTopName(null); currentGame = null; };
   const entryGame = new URLSearchParams(location.search).get('game');
   if (entryGame === 'notakto' || entryGame === 'stone') openGameSection(entryGame);
 </script>
