@@ -201,7 +201,7 @@
 /* ---------- 탭 ---------- */
 document.querySelectorAll('#tabs .tab').forEach(b => b.onclick = () => {
   document.querySelectorAll('#tabs .tab').forEach(x => x.classList.toggle('on', x === b));
-  document.querySelectorAll('.act-page').forEach(p => p.hidden = p.id !== b.dataset.t);
+  document.querySelectorAll('.act-page').forEach(p => { p.hidden = p.id !== b.dataset.t; p.style.display = p.hidden ? 'none' : ''; });
   window.scrollTo({ top: document.getElementById('tabs').offsetTop - 70, behavior: 'smooth' });
 });
 const $ = s => document.querySelector(s);
