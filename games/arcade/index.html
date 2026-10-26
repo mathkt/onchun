@@ -1631,6 +1631,58 @@
   }
 
 
+  /* ================= 황금비 퀸 섹션 ================= */
+  :root { --neon-gold:#C9731A; --qn-l:#FFF6DB; --qn-d:#F3D98B; --qn-move:#3a9e82; }
+  .game-card.gold-theme { border-top:3px solid transparent; }
+  .game-card.gold-theme:hover { border-color:var(--neon-gold); box-shadow:0 14px 34px rgba(201,115,26,.18); }
+  .gold-theme .btn-play-main { background:#E8891B; color:#fff; box-shadow:0 5px 0 #a95f12; }
+  .gold-theme .btn-play-main:hover { background:#C9731A; transform:translateY(-2px); }
+  .gold-theme .game-code { color:var(--neon-gold); }
+  .qn-mini { display:grid; grid-template-columns:repeat(5,28px); grid-template-rows:repeat(5,28px); border:2px solid #2C2A26; border-radius:4px; overflow:hidden; }
+  .qn-mini i { background:var(--qn-l); display:grid; place-items:center; font-style:normal; font-size:1.2rem; color:#2C2A26; position:relative; }
+  .qn-mini i.d { background:var(--qn-d); }
+  .qn-mini i.m::after { content:""; position:absolute; inset:0; background:var(--qn-move); opacity:.35; }
+  .qn-mini i.g::before { content:""; position:absolute; inset:16%; border:2px solid #E8891B; border-radius:50%; }
+  #queen-section .section-title { color:var(--neon-gold); }
+  #queen-section .rule-subtitle { background:#FFF1D6; border-color:#E8891B; color:#7a4a08; }
+  #queen-section .menu-screen-container { border-top:2px solid var(--neon-gold); }
+  #queen-section .menu-btn { border-color:#E8891B; box-shadow:0 5px 0 #e0c489; }
+  #queen-section .menu-btn.online-btn { background:#DFF5EE; border-color:#9ED9C6; color:#1f6b55; box-shadow:0 4px 0 #9ED9C6; }
+  .gold-modal { border-top:4px solid var(--neon-gold) !important; }
+  #qn-game-screen { display:none; flex-direction:column; align-items:center; width:100%; }
+  #qn-turn-indicator { font-family:'Jua',sans-serif; font-size:1.6rem; color:var(--neon-gold); margin:6px 0 4px; text-align:center; }
+  #qn-timer-display { color:var(--text-sub); margin-bottom:8px; min-height:1.2em; }
+  #qn-board { display:flex; justify-content:space-between; width:100%; align-items:stretch; gap:18px; }
+  .qn-frame { width:20%; min-height:300px; justify-content:center; }
+  .qn-center { flex:1; display:flex; flex-direction:column; align-items:center; gap:8px; min-width:0; }
+  .qn-boardWrap { display:grid; grid-template-columns:1.4em 1fr; grid-template-rows:auto 1.4em; gap:4px; width:min(100%, 480px); }
+  .qn-ylab, .qn-xlab { display:grid; font-family:'IBM Plex Mono',monospace; font-size:.7rem; color:var(--text-sub); text-align:center; }
+  .qn-ylab { grid-template-rows:repeat(var(--n),1fr); align-items:center; }
+  .qn-xlab { grid-template-columns:repeat(var(--n),1fr); grid-column:2; align-items:center; }
+  .qn-grid { display:grid; grid-template-columns:repeat(var(--n),minmax(0,1fr)); grid-template-rows:repeat(var(--n),minmax(0,1fr)); aspect-ratio:1; width:100%; border:2px solid #2C2A26; border-radius:4px; overflow:hidden; container-type:inline-size; box-shadow:0 8px 24px rgba(90,70,20,.14); }
+  .qn-cell { border:0; padding:0; margin:0; min-width:0; min-height:0; overflow:hidden; position:relative; display:grid; place-items:center; cursor:default; background:var(--qn-l); color:#2C2A26; font-size:calc(68cqi / var(--n)); line-height:1; }
+  .qn-cell.d { background:var(--qn-d); }
+  .qn-cell.goal::before { content:""; position:absolute; inset:16%; border:2px solid #E8891B; border-radius:50%; }
+  .qn-cell.tgt { cursor:pointer; }
+  .qn-cell.tgt::after { content:""; position:absolute; inset:0; background:var(--qn-move); opacity:.32; }
+  .qn-cell.tgt:hover::after { opacity:.55; }
+  .qn-cell.from { box-shadow:inset 0 0 0 3px rgba(245,166,35,.5); }
+  .qn-cell.pick { cursor:pointer; }
+  .qn-cell.pick:hover::after { content:""; position:absolute; inset:0; background:#E8891B; opacity:.3; }
+  .qn-cell.botsel::after { content:""; position:absolute; inset:0; background:#E9533F; opacity:.35; }
+  .qn-cell .q { position:absolute; inset:0; display:grid; place-items:center; z-index:1; text-shadow:0 1px 2px rgba(0,0,0,.35); }
+  .qn-log-box { width:100%; font-size:.85rem; color:var(--text-sub); }
+  .qn-log-box summary { cursor:pointer; font-family:'Jua',sans-serif; }
+  .qn-log-box ol { margin:6px 0 0; padding-left:20px; max-height:120px; overflow:auto; }
+  @media (max-width:860px) { #qn-board { flex-direction:column; } .qn-frame { width:100%; min-height:auto; } .qn-frame .pp-stat-label { display:none; } }
+  @media (max-width:640px) {
+    .qn-frame { padding:8px 12px; flex-direction:row; justify-content:space-between; align-items:center; gap:10px; }
+    .qn-frame h2 { margin:0; font-size:1.05rem; } .qn-frame .player-stat { margin:0; font-size:1.6rem; } .qn-frame .player-record { margin:0; font-size:.8rem; }
+    .qn-boardWrap { width:100%; }
+    #qn-turn-indicator { font-size:1.3rem !important; margin:2px 0 !important; }
+  }
+  @media (max-height:760px) and (min-width:641px) { .qn-boardWrap { width:min(100%, 380px); } .qn-frame { min-height:200px; } }
+
   /* ================= 팝잇 섹션 ================= */
   :root { --neon-orange: #E8891B; }
   .game-card.orange-theme { border-top:3px solid transparent; }
@@ -1680,7 +1732,9 @@
   }
   /* ---- 크롬북 등 가로 화면: 카드 3개 한 줄 ---- */
   @media (min-width:1000px) {
-    .cards-container { grid-template-columns:repeat(3, minmax(0,1fr)); gap:22px; }
+    .cards-container { grid-template-columns:repeat(4, minmax(0,1fr)); gap:16px; }
+    .card-title { font-size:1.35rem !important; }
+    .card-eng { display:none; }
     .game-card { padding:22px 20px; }
     .preview-stage { min-height:120px !important; padding:12px !important; }
     .card-desc { font-size:.9rem; margin-bottom:12px; }
@@ -1861,8 +1915,8 @@
 
 
 
-<script src="../../common.js" data-num="🎮" data-name="메인 게임" data-sub="팝잇 · 돌 가져가기 · 노탁토" data-home="../../" data-extra="<button class=&quot;bk-btn bk-btn--ghost bk-btn--sm&quot; id=&quot;sound-toggle&quot; onclick=&quot;toggleMute()&quot;><span id=&quot;sound-icon&quot;>🔊</span> <span id=&quot;sound-text&quot;>소리</span></button><button class=&quot;bk-btn bk-btn--sm&quot; onclick=&quot;showRules(true)&quot;>📖 규칙</button>"></script>
-<script src="../online.js?v=3"></script>
+<script src="../../common.js" data-num="🎮" data-name="메인 게임" data-sub="팝잇 · 노탁토 · 돌 가져가기 · 황금비 퀸" data-home="../../" data-extra="<button class=&quot;bk-btn bk-btn--ghost bk-btn--sm&quot; id=&quot;sound-toggle&quot; onclick=&quot;toggleMute()&quot;><span id=&quot;sound-icon&quot;>🔊</span> <span id=&quot;sound-text&quot;>소리</span></button><button class=&quot;bk-btn bk-btn--sm&quot; onclick=&quot;showRules(true)&quot;>📖 규칙</button>"></script>
+<script src="../online.js?v=4"></script>
 
 <main>
   <!-- ================= 0. 초기 로비 화면 (1번 스타일) ================= -->
@@ -1983,6 +2037,101 @@
           </button>
         </div>
       </article>
+      <!-- Game 4: Queen -->
+      <article class="game-card gold-theme" onmousemove="tiltCard(event, this)" onmouseleave="resetTilt(this)" onclick="playSfx('click'); openGameSection('queen')">
+        <div>
+          <div class="card-header">
+            <div>
+              <span class="game-code">게임 4</span>
+              <h2 class="card-title">황금비 퀸 <span class="card-eng">WYTHOFF</span></h2>
+            </div>
+            <span class="difficulty-pill">난이도 ★★★★★</span>
+          </div>
+          <div class="preview-stage" onmouseenter="playSfx('hover_deep')">
+            <div class="qn-mini">
+              <i class="d"></i><i></i><i class="d"></i><i></i><i class="d q">♛</i>
+              <i></i><i class="d"></i><i></i><i class="d m"></i><i></i>
+              <i class="d"></i><i></i><i class="d m"></i><i></i><i class="d m"></i>
+              <i></i><i class="d m"></i><i></i><i class="d"></i><i class="m"></i>
+              <i class="d g"></i><i></i><i class="d"></i><i></i><i class="d m"></i>
+            </div>
+          </div>
+          <p class="card-desc">퀸을 <b>왼쪽·아래·대각선</b>으로 옮겨 <b>구석에 먼저 넣는 사람이 승리</b>. 지는 칸이 황금비 위에 놓여요!</p>
+          <div class="tags-row"><span class="tag">#위토프게임</span><span class="tag">#황금비</span><span class="tag">#필승전략확장</span></div>
+        </div>
+        <div class="card-actions">
+          <button class="btn-play-main" onmouseenter="playSfx('hover_btn')" onclick="event.stopPropagation(); playSfx('click'); openGameSection('queen')">
+            <span>게임 시작</span> <span>▶</span>
+          </button>
+        </div>
+      </article>
+    </div>
+  </div>
+
+  <!-- ================= 4. 황금비 퀸 섹션 ================= -->
+  <div id="queen-section" class="game-section">
+    <h1 class="section-title">황금비 퀸 (WYTHOFF)</h1>
+    <div class="rule-subtitle" id="qn-main-subtitle"></div>
+
+    <div id="qn-menu-screen" class="menu-screen-container fade-screen">
+      <div class="menu-buttons">
+        <div class="menu-row">
+          <button class="menu-btn" onmouseenter="playSfx('hover_btn')" onclick="playSfx('click'); openBotModal('queen')">🤖 AI 플레이</button>
+          <button class="help-btn" onmouseenter="playSfx('hover')" onclick="qnShowHelp('bot')" title="도움말">?</button>
+        </div>
+        <div class="menu-row">
+          <button class="menu-btn" onmouseenter="playSfx('hover_btn')" onclick="playSfx('click'); qnStartGame('solo')">👥 2인 플레이</button>
+          <button class="help-btn" onmouseenter="playSfx('hover')" onclick="qnShowHelp('solo')" title="도움말">?</button>
+        </div>
+        <div class="menu-row">
+          <button class="menu-btn online-btn" onmouseenter="playSfx('hover_btn')" onclick="playSfx('click'); openOnlineModal('queen')">🌐 온라인 대전</button>
+          <button class="help-btn" onmouseenter="playSfx('hover')" onclick="olHelp()" title="도움말">?</button>
+        </div>
+        <div class="menu-row">
+          <button class="menu-btn analysis-btn" onmouseenter="playSfx('hover_btn')" onclick="playSfx('click'); location.href='../queen/index.html#analysis'">📊 분석 모드 (지는 칸 · 황금비)</button>
+          <button class="help-btn" onmouseenter="playSfx('hover')" onclick="qnShowHelp('analysis')" title="도움말">?</button>
+        </div>
+        <div class="menu-row">
+          <button class="menu-btn records-btn" onmouseenter="playSfx('hover_btn')" onclick="playSfx('click'); openRecords('queen')">📜 전적 보기</button>
+        </div>
+      </div>
+      <div class="menu-footer-btns">
+        <button class="settings-gear-btn" onmouseenter="playSfx('hover')" onclick="playSfx('click'); openQnSettings()">⚙️ 게임 설정</button>
+        <button class="home-return-btn" onmouseenter="playSfx('hover')" onclick="playSfx('click'); returnToHome()">🏠 초기 화면으로</button>
+      </div>
+    </div>
+
+    <div id="qn-game-screen">
+      <div id="qn-turn-indicator">플레이어의 턴</div>
+      <div id="qn-timer-display"></div>
+      <div id="qn-board">
+        <div class="st-frame qn-frame" id="qn-frame-p1">
+          <h2 id="qn-p1-name">플레이어</h2>
+          <div class="player-stat" id="qn-p1-count">0</div>
+          <div class="pp-stat-label">옮긴 횟수</div>
+          <div class="player-record" id="qn-p1-record">전적: 0승 0패</div>
+        </div>
+        <div class="qn-center">
+          <div class="qn-boardWrap" id="qn-boardWrap">
+            <div class="qn-ylab" id="qn-ylab"></div>
+            <div class="qn-grid" id="qn-grid" role="grid" aria-label="체스판"></div>
+            <div class="qn-xlab" id="qn-xlab"></div>
+          </div>
+          <div class="pp-hint" id="qn-hint"></div>
+          <details class="qn-log-box"><summary>수 기록</summary><ol id="qn-log"></ol></details>
+        </div>
+        <div class="st-frame qn-frame" id="qn-frame-p2">
+          <h2 id="qn-p2-name">AI</h2>
+          <div class="player-stat" id="qn-p2-count">0</div>
+          <div class="pp-stat-label">옮긴 횟수</div>
+          <div class="player-record" id="qn-p2-record">전적: 0승 0패</div>
+        </div>
+      </div>
+      <div class="action-buttons">
+        <button class="restart-btn" id="qn-restart-btn" onmouseenter="playSfx('hover')" onclick="playSfx('click'); qnRestartGame()" style="display:none;">다시하기</button>
+        <button class="restart-btn" id="qn-restart-set-btn" onmouseenter="playSfx('hover')" onclick="playSfx('click'); openQnSettingsAndRestart()" style="display:none;">⚙️ 설정 바꿔 다시하기</button>
+        <button class="back-btn" onmouseenter="playSfx('hover')" onclick="playSfx('click'); qnGoBack()">메뉴로 돌아가기</button>
+      </div>
     </div>
   </div>
 
@@ -2259,6 +2408,45 @@
     <h2 class="victory-title" id="modal-winner-text">플레이어 승리!</h2>
     <div class="victory-desc" id="modal-reason-text">게임 결과가 여기에 표시됩니다.</div>
     <button class="victory-close-btn" onclick="playSfx('click'); closeVictoryModal()">확인</button>
+  </div>
+</div>
+
+<!-- ⚙️ 퀸 설정 모달 -->
+<div id="qn-settings-modal" class="modal-overlay" onclick="if(event.target === this) closeModal('qn-settings-modal', 'qn-modal-box')">
+  <div class="modal-content gold-modal" id="qn-modal-box" style="max-width: 450px;">
+    <h2 style="color:var(--neon-gold); margin-top:0; text-align:center;">⚙️ 게임 설정</h2>
+    <div class="settings-group">
+      <label>체스판 크기:
+        <select id="set-qn-size">
+          <option value="random">랜덤 (6×6 ~ 12×12)</option>
+          <option value="5">5×5</option><option value="6">6×6</option><option value="7">7×7</option><option value="8">8×8</option>
+          <option value="9">9×9</option><option value="10">10×10</option><option value="11">11×11</option><option value="12">12×12</option>
+          <option value="13">13×13</option><option value="14">14×14</option><option value="15">15×15</option>
+        </select>
+      </label>
+      <label>퀸 시작 위치:
+        <select id="set-qn-start">
+          <option value="rand">무작위</option>
+          <option value="pick">직접 놓기 (게임 화면에서 칸 고르기)</option>
+          <option value="cold">도전 위치 (지는 칸에서 시작 — 선공이 불리)</option>
+        </select>
+      </label>
+      <label>구석에 퀸을 넣으면:
+        <select id="set-qn-rule">
+          <option value="last">승리 (기본)</option>
+          <option value="misere">패배 (거꾸로 규칙)</option>
+        </select>
+      </label>
+      <label>한 턴 당 제한시간:
+        <select id="set-qn-time">
+          <option value="unlimited">무제한</option>
+          <option value="10">10초</option><option value="20">20초</option><option value="30">30초</option>
+        </select>
+      </label>
+    </div>
+    <div style="text-align:center; margin-top:26px;">
+      <button class="help-close-btn" onclick="playSfx('click'); saveQnSettings()">저장</button>
+    </div>
   </div>
 </div>
 
@@ -2818,6 +3006,7 @@
     const bsBox = document.getElementById('bs-modal-box');
     bsBox.classList.toggle('pink-modal', gameType === 'stone');
     bsBox.classList.toggle('orange-modal', gameType === 'popit');
+    bsBox.classList.toggle('gold-modal', gameType === 'queen');
     openModal('bot-setup-modal', 'bs-modal-box');
   }
   function startGameWithBot() {
@@ -2830,6 +3019,9 @@
     } else if (botPendingGame === 'popit') {
       ppScore = { p1Wins: 0, p2Wins: 0 };
       ppStartGame('bot');
+    } else if (botPendingGame === 'queen') {
+      qnScore = { p1Wins: 0, p2Wins: 0 };
+      qnStartGame('bot');
     } else {
       stScore = { p1Wins: 0, p2Wins: 0 };
       stStartGame('bot');
@@ -2857,6 +3049,7 @@
   const notaktoSection = document.getElementById('notakto-section');
   const stoneSection = document.getElementById('stone-section');
   const popitSection = document.getElementById('popit-section');
+  const queenSection = document.getElementById('queen-section');
 
   function switchScreen(el, displayType = 'flex') {
     el.classList.remove('fade-screen');
@@ -2889,8 +3082,14 @@
       ppGoBack();
       switchScreen(popitSection, 'flex');
       notaktoSection.style.display = 'none'; stoneSection.style.display = 'none';
+    } else if (game === 'queen') {
+      qnScore = { p1Wins: 0, p2Wins: 0 };
+      qnGoBack();
+      switchScreen(queenSection, 'flex');
+      notaktoSection.style.display = 'none'; stoneSection.style.display = 'none';
     }
     if (game !== 'popit') popitSection.style.display = 'none';
+    if (game !== 'queen') queenSection.style.display = 'none';
   }
 
   function returnToHome() {
@@ -2901,15 +3100,16 @@
     if (orb2) orb2.style.background = 'var(--neon-pink)';
     ntGoBack();
     stGoBack();
-    ppGoBack();
+    ppGoBack(); qnGoBack();
     notaktoSection.style.display = 'none';
     stoneSection.style.display = 'none';
     popitSection.style.display = 'none';
+    queenSection.style.display = 'none';
     switchScreen(homeScreen, 'flex');
   }
 
   function highlightWinner(winnerP1Num) {
-    ['nt-frame-p1','nt-frame-p2','st-frame-p1','st-frame-p2','pp-frame-p1','pp-frame-p2'].forEach(id => {
+    ['nt-frame-p1','nt-frame-p2','st-frame-p1','st-frame-p2','pp-frame-p1','pp-frame-p2','qn-frame-p1','qn-frame-p2'].forEach(id => {
       const el = document.getElementById(id);
       if (el) { el.classList.remove('winner-frame'); el.classList.remove('active-turn'); }
     });
@@ -2917,10 +3117,12 @@
       document.getElementById('nt-frame-p1')?.classList.add('winner-frame');
       document.getElementById('st-frame-p1')?.classList.add('winner-frame');
       document.getElementById('pp-frame-p1')?.classList.add('winner-frame');
+      document.getElementById('qn-frame-p1')?.classList.add('winner-frame');
     } else if (winnerP1Num === 2) {
       document.getElementById('nt-frame-p2')?.classList.add('winner-frame');
       document.getElementById('st-frame-p2')?.classList.add('winner-frame');
       document.getElementById('pp-frame-p2')?.classList.add('winner-frame');
+      document.getElementById('qn-frame-p2')?.classList.add('winner-frame');
     }
   }
 
@@ -2954,8 +3156,215 @@
     _updScore();
     const a = document.getElementById('pp-p1-record'), b = document.getElementById('pp-p2-record');
     if (a && b) { a.innerText = `전적: ${ppScore.p1Wins}승 ${ppScore.p2Wins}패`; b.innerText = `전적: ${ppScore.p2Wins}승 ${ppScore.p1Wins}패`; }
+    const c = document.getElementById('qn-p1-record'), d = document.getElementById('qn-p2-record');
+    if (c && d) { c.innerText = `전적: ${qnScore.p1Wins}승 ${qnScore.p2Wins}패`; d.innerText = `전적: ${qnScore.p2Wins}승 ${qnScore.p1Wins}패`; }
   };
 
+
+
+  /* ================= 4. 황금비 퀸(위토프) 게임 스크립트 ================= */
+  const qnMenuScreen = document.getElementById('qn-menu-screen');
+  const qnGameScreen = document.getElementById('qn-game-screen');
+  const QN_PHI = (1 + Math.sqrt(5)) / 2;
+  let qnSizeSetting = '8', qnStartSetting = 'rand', qnWinRule = 'last', qnTimeSetting = 'unlimited';
+  let qnMode = 'bot', qnN = 8, qnQ = null, qnStart = null, qnCur = 1, qnOver = false, qnPhase = 'play', qnLog = [], qnLast = null, qnBotSel = null, qnCold = new Set();
+  let qnBotTimeout = null, qnTimerInterval = null, qnTimeLeft = 0, qnScore = { p1Wins: 0, p2Wins: 0 };
+  function qnColdSet(N) { const s = new Set(); for (let n = 0; ; n++) { const a = Math.floor(n * QN_PHI), b = a + n; if (a >= N) break; if (b < N) { s.add(a + ',' + b); s.add(b + ',' + a); } } return s; }
+  function qnMoves(x, y) { const m = []; for (let k = 1; k <= x; k++) m.push([x - k, y]); for (let k = 1; k <= y; k++) m.push([x, y - k]); for (let k = 1; k <= Math.min(x, y); k++) m.push([x - k, y - k]); return m; }
+  function qnUpdateSubtitle(active) {
+    const size = active ? `${qnN}×${qnN}` : (qnSizeSetting === 'random' ? '랜덤' : `${qnSizeSetting}×${qnSizeSetting}`);
+    const st = { rand: '무작위 시작', pick: '직접 놓기', cold: '도전 위치' }[qnStartSetting];
+    const t = qnTimeSetting === 'unlimited' ? '무제한' : qnTimeSetting + '초';
+    document.getElementById('qn-main-subtitle').innerHTML = `<b>퀸을 구석에 넣으면 ${qnWinRule === 'misere' ? '패배' : '승리'}</b> (←·↓·↙ 원하는 만큼)<br><small>${size} · ${st} · 시간 ${t}</small>`;
+  }
+  let qnSettingsThenRestart = false;
+  function openQnSettingsAndRestart() { qnSettingsThenRestart = true; openQnSettings(); }
+  function openQnSettings() {
+    document.getElementById('set-qn-size').value = qnSizeSetting;
+    document.getElementById('set-qn-start').value = qnStartSetting;
+    document.getElementById('set-qn-rule').value = qnWinRule;
+    document.getElementById('set-qn-time').value = qnTimeSetting;
+    openModal('qn-settings-modal', 'qn-modal-box');
+  }
+  function saveQnSettings() {
+    qnSizeSetting = document.getElementById('set-qn-size').value;
+    qnStartSetting = document.getElementById('set-qn-start').value;
+    qnWinRule = document.getElementById('set-qn-rule').value;
+    qnTimeSetting = document.getElementById('set-qn-time').value;
+    qnScore = { p1Wins: 0, p2Wins: 0 };
+    qnUpdateSubtitle(false);
+    closeModal('qn-settings-modal', 'qn-modal-box');
+    if (qnSettingsThenRestart) { qnSettingsThenRestart = false; qnSettingsJustSaved = true; qnRestartGame(); qnSettingsJustSaved = false; }
+  }
+  let qnSettingsJustSaved = false;
+  function qnShowHelp(topic) {
+    playBtnSound('help');
+    const rule = "<b>[황금비 퀸 규칙]</b><br>1. 퀸은 <b>왼쪽, 아래, 왼쪽 아래 대각선</b>으로만, 한 번에 원하는 만큼 움직입니다(꼭 한 칸 이상).<br>2. 퀸을 <b>구석(0,0)에 넣는 사람이 승리</b>합니다.<br>3. 설정에서 판 크기·시작 위치(직접 놓기, 도전 위치)·거꾸로 규칙을 바꿀 수 있어요.";
+    const map = { bot: ['🤖 AI 플레이', 'AI와 번갈아 둡니다. 최상 난이도는 항상 <b>지는 칸(황금비 자리)</b>으로 퀸을 보냅니다.<br><br>' + rule],
+      solo: ['👥 2인 플레이', '하나의 기기에서 두 명이 번갈아 둡니다.<br><br>' + rule],
+      analysis: ['📊 분석 모드', '지는 칸을 하나씩 찾아보고(자동 재생·직접 칠하기), 지는 칸 (1,2), (3,5), (4,7)… 이 왜 <b>황금비 φ≈1.618</b> 직선 위에 놓이는지 그림으로 봅니다. 분석 전용 페이지로 이동해요.'] };
+    const [t, c] = map[topic];
+    document.getElementById('help-modal-box').classList.remove('pink-modal');
+    document.getElementById('help-title').innerText = t; document.getElementById('help-content').innerHTML = c;
+    openModal('help-modal', 'help-modal-box');
+  }
+  function qnStopTimer() { if (qnTimerInterval) { clearInterval(qnTimerInterval); qnTimerInterval = null; } document.getElementById('qn-timer-display').innerText = ''; }
+  function qnStartTimer() {
+    qnStopTimer();
+    if (qnTimeSetting === 'unlimited' || qnOver || qnPhase !== 'play') return;
+    if (qnMode === 'bot' && qnCur === 2) return;
+    if (qnMode === 'online' && qnCur !== Online.myNum) return;
+    qnTimeLeft = parseInt(qnTimeSetting);
+    const el = document.getElementById('qn-timer-display'); el.innerText = `⏳ 남은 시간: ${qnTimeLeft}초`;
+    qnTimerInterval = setInterval(() => {
+      qnTimeLeft--; el.innerText = `⏳ 남은 시간: ${qnTimeLeft}초`;
+      if (qnTimeLeft <= 0) { qnStopTimer(); const m = qnMoves(...qnQ); const mv = m[Math.floor(Math.random() * m.length)]; qnPlayerMove(mv[0], mv[1]); }
+    }, 1000);
+  }
+  function qnPickStart() {
+    const N = qnN;
+    if (qnStartSetting === 'cold') { const c = [...qnCold].map(s => s.split(',').map(Number)).filter(([a, b]) => a + b > 0); return c[Math.floor(Math.random() * c.length)]; }
+    const c = []; for (let x = 1; x < N; x++) for (let y = 1; y < N; y++) if (x !== y) c.push([x, y]);
+    return c[Math.floor(Math.random() * c.length)];
+  }
+  function qnStartGame(mode, preset) {
+    qnMode = mode; isBranchPlay = false;
+    qnN = preset && preset.size ? preset.size : (qnSizeSetting === 'random' ? 6 + Math.floor(Math.random() * 7) : parseInt(qnSizeSetting));
+    qnCold = qnColdSet(qnN);
+    document.getElementById('qn-p1-name').innerText = mode === 'bot' ? '플레이어' : '플레이어 1';
+    document.getElementById('qn-p2-name').innerText = mode === 'bot' ? `AI (${botDifficulty})` : '플레이어 2';
+    document.getElementById('qn-restart-btn').style.display = 'none';
+    document.getElementById('qn-restart-set-btn').style.display = 'none';
+    qnMenuScreen.style.display = 'none';
+    switchScreen(qnGameScreen, 'flex');
+    highlightWinner(0); updateScoreDisplay();
+    qnCur = (mode === 'bot' && botFirstTurn === 'bot') ? 2 : 1;
+    qnOver = false; qnLog = []; qnLast = null; qnBotSel = null;
+    if (qnBotTimeout) { clearTimeout(qnBotTimeout); qnBotTimeout = null; }
+    if (preset && preset.start) { qnQ = preset.start.slice(); qnPhase = 'play'; }
+    else if (qnStartSetting === 'pick') { qnQ = null; qnPhase = 'place'; }
+    else { qnQ = qnPickStart(); qnPhase = 'play'; }
+    qnStart = qnQ ? qnQ.slice() : null;
+    qnUpdateSubtitle(true);
+    qnBuildBoard(); qnRender(); qnUpdateUI();
+    if (qnPhase === 'play' && qnMode === 'bot' && qnCur === 2) qnScheduleBot();
+  }
+  function qnBuildBoard() {
+    const N = qnN; document.getElementById('qn-boardWrap').style.setProperty('--n', N);
+    const b = document.getElementById('qn-grid'); b.innerHTML = '';
+    for (let y = N - 1; y >= 0; y--) for (let x = 0; x < N; x++) {
+      const c = document.createElement('button'); c.type = 'button'; c.className = 'qn-cell' + ((x + y) % 2 === 0 ? ' d' : '');
+      c.dataset.x = x; c.dataset.y = y; if (!x && !y) c.classList.add('goal');
+      c.onclick = () => qnOnCell(x, y); b.appendChild(c);
+    }
+    document.getElementById('qn-ylab').innerHTML = Array.from({ length: N }, (_, i) => `<span>${N - 1 - i}</span>`).join('');
+    document.getElementById('qn-xlab').innerHTML = Array.from({ length: N }, (_, i) => `<span>${i}</span>`).join('');
+  }
+  function qnHumanTurn() { return qnPhase === 'play' && !qnOver && !(qnMode === 'bot' && qnCur === 2) && !(qnMode === 'online' && qnCur !== Online.myNum); }
+  function qnOnCell(x, y) {
+    if (qnPhase === 'place') {
+      if (!x && !y) return;
+      qnQ = [x, y]; qnStart = [x, y]; qnPhase = 'play';
+      if (qnMode === 'online') Online.sendMove({ place: [x, y] });
+      qnRender(); qnUpdateUI();
+      if (qnMode === 'bot' && qnCur === 2) qnScheduleBot();
+      return;
+    }
+    if (qnHumanTurn() && qnMoves(...qnQ).some(([a, b]) => a === x && b === y)) qnPlayerMove(x, y);
+  }
+  function qnPlayerMove(x, y) {
+    if (!qnHumanTurn()) return;
+    qnExecuteMove([x, y]);
+    if (qnMode === 'online') Online.sendMove({ to: [x, y] });
+  }
+  function qnName(n) { return document.getElementById(n === 1 ? 'qn-p1-name' : 'qn-p2-name').innerText; }
+  function qnExecuteMove(to) {
+    qnStopTimer(); playPlaceStone();
+    const [x, y] = to;
+    qnLog.push({ player: qnCur, from: qnQ.slice(), to: [x, y] });
+    qnLast = qnQ; qnQ = [x, y]; qnBotSel = null;
+    document.getElementById('qn-p1-count').innerText = qnLog.filter(h => h.player === 1).length;
+    document.getElementById('qn-p2-count').innerText = qnLog.filter(h => h.player === 2).length;
+    if (!x && !y) {
+      qnOver = true; qnPhase = 'over';
+      const wNum = qnWinRule === 'misere' ? (3 - qnCur) : qnCur;
+      const who = n => qnMode === 'bot' ? (n === 1 ? '플레이어' : 'AI') : `플레이어 ${n}`;
+      const subj = n => qnMode === 'bot' ? (n === 1 ? '플레이어가' : 'AI가') : (n === 1 ? '플레이어 1이' : '플레이어 2가');
+      const isLoss = qnMode === 'bot' && wNum === 2;
+      if (wNum === 1) qnScore.p1Wins++; else qnScore.p2Wins++;
+      qnRender(); updateScoreDisplay(); highlightWinner(wNum);
+      document.getElementById('qn-restart-btn').style.display = 'inline-block';
+      if (qnMode !== 'online' || Online.myNum === 1) document.getElementById('qn-restart-set-btn').style.display = 'inline-block';
+      document.getElementById('qn-turn-indicator').innerText = isLoss ? 'AI 승리!' : `🎉 ${who(wNum)} 승리! 🎉`;
+      showVictoryModal(who(wNum), `${subj(qnCur)} 퀸을 구석에 넣었습니다.${qnWinRule === 'misere' ? ' (거꾸로 규칙)' : ''}`, isLoss);
+    } else {
+      qnCur = qnCur === 1 ? 2 : 1;
+      qnRender(); qnUpdateUI();
+      if (qnMode === 'bot' && qnCur === 2) qnScheduleBot();
+    }
+  }
+  function qnUpdateUI() {
+    if (qnOver) { qnStopTimer(); return; }
+    const f1 = document.getElementById('qn-frame-p1'), f2 = document.getElementById('qn-frame-p2');
+    f1.classList.remove('active-turn'); f2.classList.remove('active-turn');
+    (qnCur === 1 ? f1 : f2).classList.add('active-turn');
+    const ti = document.getElementById('qn-turn-indicator');
+    if (qnPhase === 'place') ti.innerText = (qnMode === 'online' && Online.myNum === 2) ? '방장이 퀸을 놓는 중…' : '퀸 놓기';
+    else ti.innerText = `${qnName(qnCur)}의 턴`;
+    qnStartTimer();
+  }
+  function qnRender() {
+    const hint = document.getElementById('qn-hint');
+    if (qnPhase === 'place') hint.innerText = (qnMode === 'online' && Online.myNum === 2) ? '방장이 퀸을 놓으면 시작돼요' : '퀸을 놓을 칸을 누르세요 (구석만 빼고)';
+    else if (qnOver) hint.innerText = '구석에 도착했습니다!';
+    else hint.innerText = qnHumanTurn() ? '초록색 칸을 눌러 퀸을 옮기세요' : (qnMode === 'bot' ? 'AI가 생각 중…' : '상대 차례예요');
+    const canPlace = qnPhase === 'place' && !(qnMode === 'online' && Online.myNum === 2);
+    const tg = qnHumanTurn() && qnQ ? new Set(qnMoves(...qnQ).map(m => m + '')) : new Set();
+    document.querySelectorAll('#qn-grid .qn-cell').forEach(c => {
+      const x = +c.dataset.x, y = +c.dataset.y, k = x + ',' + y, isQ = qnQ && qnQ[0] === x && qnQ[1] === y;
+      c.innerHTML = isQ ? '<span class="q">♛</span>' : '';
+      c.classList.toggle('tgt', tg.has(k));
+      c.classList.toggle('from', !!(qnLast && qnLast[0] === x && qnLast[1] === y));
+      c.classList.toggle('pick', canPlace && k !== '0,0');
+      c.classList.toggle('botsel', !!(qnBotSel && qnBotSel[0] === x && qnBotSel[1] === y));
+      c.disabled = !(tg.has(k) || (canPlace && k !== '0,0'));
+    });
+    const nm = n => qnName(n);
+    document.getElementById('qn-log').innerHTML = qnLog.map(h => `<li>${nm(h.player)}: (${h.from[0]},${h.from[1]}) → (${h.to[0]},${h.to[1]})</li>`).join('') || '<li>아직 움직임이 없습니다.</li>';
+  }
+  function qnBestMove(x, y) {
+    const ms = qnMoves(x, y);
+    if (qnWinRule === 'misere') {
+      // 거꾸로: 구석에 넣으면 지므로 (0,0)은 피하고, 상대가 구석에 넣을 수밖에 없는 칸(=(0,1),(1,0),(1,1))을 노림
+      const bad = ([a, b]) => a === 0 && b === 0;
+      const forcing = ms.filter(([a, b]) => (a + b === 1) || (a === 1 && b === 1));
+      if (forcing.length) return forcing[0];
+      const safe = ms.filter(m => !bad(m) && !((m[0] === 0 || m[1] === 0 || m[0] === m[1]) && (m[0] + m[1] > 0)));
+      const w = safe.find(([a, b]) => qnCold.has(a + ',' + b)); if (w) return w;
+      const s2 = ms.filter(m => !bad(m)); return (safe.length ? safe : s2)[0] || ms[0];
+    }
+    const w = ms.find(([a, b]) => qnCold.has(a + ',' + b)); if (w) return w;
+    const small = ms.filter(([a, b]) => (x - a) + (y - b) <= 2); return small[Math.floor(Math.random() * small.length)];
+  }
+  function qnScheduleBot() { if (qnBotTimeout) clearTimeout(qnBotTimeout); qnBotTimeout = setTimeout(qnBotTurn, 550); }
+  function qnBotTurn() {
+    qnBotTimeout = null; if (qnOver || qnCur !== 2 || qnPhase !== 'play') return;
+    const ms = qnMoves(...qnQ);
+    const m = Math.random() < getWinMoveProbability(botDifficulty) ? qnBestMove(...qnQ) : ms[Math.floor(Math.random() * ms.length)];
+    qnBotSel = m; qnRender();
+    qnBotTimeout = setTimeout(() => { qnBotTimeout = null; qnExecuteMove(m); }, 600);
+  }
+  function qnRestartGame() { closeVictoryModal(); qnStopTimer(); qnStartGame(qnMode); }
+  function qnGoBack() {
+    closeVictoryModal(); qnStopTimer();
+    if (qnBotTimeout) { clearTimeout(qnBotTimeout); qnBotTimeout = null; }
+    qnGameScreen.style.display = 'none';
+    document.getElementById('qn-restart-btn').style.display = 'none';
+    document.getElementById('qn-restart-set-btn').style.display = 'none';
+    qnScore = { p1Wins: 0, p2Wins: 0 }; highlightWinner(0); updateScoreDisplay(); qnUpdateSubtitle(false);
+    switchScreen(qnMenuScreen, 'flex');
+  }
+  qnUpdateSubtitle(false);
 
   /* ================= 0. 팝잇 게임 스크립트 ================= */
   const ppMenuScreen = document.getElementById('pp-menu-screen');
@@ -4574,6 +4983,7 @@
   const RULES = {
     popit: ['팝잇 (POP IT)', `<b>목표</b>: 마지막 버블을 내가 누르기!<br>① 자기 차례에 <b>한 줄</b>을 골라 버블을 <b>1개 이상</b> 누릅니다(드래그로 여러 개 선택).<br>② 다른 줄의 버블을 같이 누를 수는 없어요.<br>③ <b>마지막 버블을 누르는 사람이 승리</b>합니다.<br><small>⚙️ 설정에서 ‘누르면 패배’, ‘한 번에 최대 n개’(심화)로 바꿀 수 있어요.</small>`],
     notakto: ['노탁토 (NOTAKTO)', `<b>목표</b>: 한 줄을 만들지 않고 버티기!<br>① 둘 다 <b>X만</b> 번갈아 빈 칸에 놓습니다.<br>② 가로·세로·대각선 <b>한 줄을 완성한 사람이 패배</b>!<br>③ 3×3이 기본, 설정에서 4×4도 할 수 있어요.`],
+    queen: ['황금비 퀸 (WYTHOFF)', `<b>목표</b>: 퀸을 구석(0,0)에 먼저 넣기!<br>① 퀸은 <b>왼쪽, 아래, 왼쪽 아래 대각선</b>으로만 움직여요.<br>② 한 번에 원하는 만큼, 꼭 한 칸 이상.<br>③ <b>구석에 퀸을 넣는 사람이 승리</b>합니다.<br><small>⚙️ 설정에서 판 크기·시작 위치(직접 놓기·도전 위치)·거꾸로 규칙을 바꿀 수 있어요. 지는 칸의 비밀은 📊 분석 모드에서!</small>`],
     stone: ['돌 가져가기 (STONE TAKING)', `<b>목표</b>: 마지막 폭탄 돌을 피하기! (책 ‘마지막 카드를 가져라’ 심화판)<br>① 번갈아 돌을 <b>1개~k개</b>씩 가져갑니다.<br>② <b>폭탄 모드</b>: 마지막 빨간 폭탄 돌을 가져가면 <b>패배</b>.<br>③ <b>보석 모드</b>: 마지막 초록 보석 돌을 가져가면 <b>승리</b>.`],
   };
   function showRules(force) {
@@ -4599,7 +5009,7 @@
 
   /* ===== 📜 전적 (기기에 저장) ===== */
   const REC_KEY = 'onchun_records';
-  const GAME_NAME = { popit: '팝잇', notakto: '노탁토', stone: '돌 가져가기' };
+  const GAME_NAME = { popit: '팝잇', notakto: '노탁토', stone: '돌 가져가기', queen: '황금비 퀸' };
   function recLoad() { try { return JSON.parse(localStorage.getItem(REC_KEY) || '{}') || {}; } catch (e) { return {}; } }
   function recSave(r) { try { localStorage.setItem(REC_KEY, JSON.stringify(r)); } catch (e) {} }
   function recAdd(game, key, win, opp) {
@@ -4643,11 +5053,15 @@
     notakto: { p: 'nt', mode: () => ntMode, over: () => ntGameOver, cur: () => ntCurrentPlayer, start: () => ntStartGame('online'), back: () => ntGoBack(),
                settings: () => ({ size: ntSize }), apply: s => { ntSize = s.size || 3; ntTimeSetting = 'unlimited'; },
                remote: m => { if (!ntGameOver && ntCurrentPlayer !== Online.myNum) ntExecuteGameMove(m); } },
+    queen:   { p: 'qn', mode: () => qnMode, over: () => qnOver, cur: () => qnCur, start: () => qnStartGame('online', olQnPreset), back: () => qnGoBack(),
+               settings: () => { const size = qnSizeSetting === 'random' ? 6 + Math.floor(Math.random() * 7) : parseInt(qnSizeSetting); qnN = size; qnCold = qnColdSet(size); const start = qnStartSetting === 'pick' ? null : qnPickStart(); return { size, start, rule: qnWinRule, startMode: qnStartSetting }; },
+               apply: s => { olQnPreset = { size: s.size, start: s.start }; qnStartSetting = s.startMode || 'rand'; qnWinRule = s.rule || 'last'; qnTimeSetting = 'unlimited'; },
+               remote: m => { if (m.place && qnPhase === 'place') { qnQ = m.place.slice(); qnStart = qnQ.slice(); qnPhase = 'play'; qnRender(); qnUpdateUI(); } else if (m.to && !qnOver && qnCur !== Online.myNum) qnExecuteMove(m.to); } },
     popit:   { p: 'pp', mode: () => ppMode, over: () => ppOver, cur: () => ppCur, start: () => ppStartGame('online'), back: () => ppGoBack(),
                settings: () => { ppApplyRules(); return { rows: ppInit.slice(), rule: ppWinRule, max: ppMaxTake }; }, apply: s => { ppRowsSetting = (s.rows || [3, 4, 3]).join(' '); ppWinRule = s.rule || 'last'; ppMaxTake = s.max || 0; ppTimeSetting = 'unlimited'; },
                remote: m => { if (!ppOver && ppCur !== Online.myNum) ppExecuteMove(m); } },
   };
-  let olGame = null, olOrig = null, olBusy = false, olCur = null, olStarted = false;
+  let olGame = null, olOrig = null, olBusy = false, olCur = null, olStarted = false, olQnPreset = null;
   const olMsg = t => { document.getElementById('ol-msg').innerText = t || ''; };
   function olHelp() {
     document.getElementById('help-modal-box').classList.remove('pink-modal');
@@ -4668,8 +5082,8 @@
     if (!n) { n = makeRandomName(); document.getElementById('ol-name').value = n; }
     setMyName(n); return n;
   }
-  function olSaveOrig() { olOrig = { n: stNSetting, limit: stLimitSetting, rows: ppRowsSetting, rule: ppWinRule, max: ppMaxTake, stT: stTimeSetting, ntT: ntTimeSetting, ppT: ppTimeSetting }; }
-  function olRestoreOrig() { if (!olOrig) return; stNSetting = olOrig.n; stLimitSetting = olOrig.limit; ppRowsSetting = olOrig.rows; ppWinRule = olOrig.rule; ppMaxTake = olOrig.max; stTimeSetting = olOrig.stT; ntTimeSetting = olOrig.ntT; ppTimeSetting = olOrig.ppT; olOrig = null; }
+  function olSaveOrig() { olOrig = { n: stNSetting, limit: stLimitSetting, rows: ppRowsSetting, rule: ppWinRule, max: ppMaxTake, qnSize: qnSizeSetting, qnStart: qnStartSetting, qnRule: qnWinRule, qnT: qnTimeSetting, stT: stTimeSetting, ntT: ntTimeSetting, ppT: ppTimeSetting }; }
+  function olRestoreOrig() { if (!olOrig) return; stNSetting = olOrig.n; stLimitSetting = olOrig.limit; ppRowsSetting = olOrig.rows; ppWinRule = olOrig.rule; ppMaxTake = olOrig.max; qnSizeSetting = olOrig.qnSize; qnStartSetting = olOrig.qnStart; qnWinRule = olOrig.qnRule; qnTimeSetting = olOrig.qnT; olQnPreset = null; stTimeSetting = olOrig.stT; ntTimeSetting = olOrig.ntT; ppTimeSetting = olOrig.ppT; olOrig = null; }
   async function olCreate() {
     if (olBusy) return; olBusy = true; olMsg('방을 만드는 중…');
     try {
@@ -4759,27 +5173,32 @@
     const t = myTurnLabel(stCurrentPlayer, stMode); if (t && !stGameOver) document.getElementById('st-turn-indicator').innerText = t;
     if (stMode === 'online' && stCurrentPlayer !== Online.myNum) for (let i = 1; i <= stLimit; i++) { const b = document.getElementById(`st-btn-${i}`); if (b) b.disabled = true; }
   };
+  const _qnUI = qnUpdateUI;
+  qnUpdateUI = function () { _qnUI(); if (qnPhase === 'play') { const t = myTurnLabel(qnCur, qnMode); if (t && !qnOver) document.getElementById('qn-turn-indicator').innerText = t; } };
   const _ppUI = ppUpdateUI;
   ppUpdateUI = function () { _ppUI(); const t = myTurnLabel(ppCur, ppMode); if (t && !ppOver) document.getElementById('pp-turn-indicator').innerText = t; };
   // AI 모드 이름 표시
-  const _ntStart = ntStartGame, _stStart = stStartGame, _ppStart = ppStartGame;
+  const _ntStart = ntStartGame, _stStart = stStartGame, _ppStart = ppStartGame, _qnStart = qnStartGame;
   function applyMyName(p, mode) { if (mode === 'bot' && getMyName()) document.getElementById(p + '-p1-name').innerText = getMyName(); }
   ntStartGame = function (m) { _ntStart(m); applyMyName('nt', m); ntUpdateGameUI(); };
   stStartGame = function (m) { _stStart(m); applyMyName('st', m); stUpdateUI(); };
   ppStartGame = function (m) { _ppStart(m); applyMyName('pp', m); ppUpdateUI(); };
+  qnStartGame = function (m, pre) { _qnStart(m, pre); applyMyName('qn', m); qnUpdateUI(); };
   // 다시하기
-  const _ntRestart = ntRestartGame, _stRestart = stRestartGame, _ppRestart = ppRestartGame;
-  function olRestart(g) { if (Online.myNum === 1) { if (ppSettingsJustSaved) { olOrig = null; ppSettingsJustSaved = false; } olRestoreOrig(); olSaveOrig(); olCur = OLG[g].settings(); Online.reset(olCur); olStart(olCur); } }
+  const _ntRestart = ntRestartGame, _stRestart = stRestartGame, _ppRestart = ppRestartGame, _qnRestart = qnRestartGame;
+  function olRestart(g) { if (Online.myNum === 1) { if (ppSettingsJustSaved || qnSettingsJustSaved) { olOrig = null; ppSettingsJustSaved = false; } olRestoreOrig(); olSaveOrig(); olCur = OLG[g].settings(); Online.reset(olCur); olStart(olCur); } }
   let ppSettingsJustSaved = false;
   ntRestartGame = function () { if (ntMode === 'online' && Online.active) return olRestart('notakto'); _ntRestart(); };
   stRestartGame = function () { if (stMode === 'online' && Online.active) return olRestart('stone'); _stRestart(); };
   ppRestartGame = function () { if (ppMode === 'online' && Online.active) return olRestart('popit'); _ppRestart(); };
+  qnRestartGame = function () { if (qnMode === 'online' && Online.active) return olRestart('queen'); _qnRestart(); };
   // 메뉴로
-  const _ntBack = ntGoBack, _stBack = stGoBack, _ppBack = ppGoBack;
+  const _ntBack = ntGoBack, _stBack = stGoBack, _ppBack = ppGoBack, _qnBack = qnGoBack;
   function olLeaveIfAny() { if (Online.active) { olStarted = false; Online.leave(); } olRestoreOrig(); }
   ntGoBack = function () { olLeaveIfAny(); _ntBack(); };
   stGoBack = function () { olLeaveIfAny(); _stBack(); };
   ppGoBack = function () { olLeaveIfAny(); _ppBack(); };
+  qnGoBack = function () { olLeaveIfAny(); _qnBack(); };
   // 승리 모달: 온라인 표기 + 전적 기록
   const _sv = showVictoryModal;
   showVictoryModal = function (w, r, l) {
@@ -4802,7 +5221,7 @@
   /* ===== 축전 허브 연동: ?game=notakto|stone 으로 바로 진입, 상단바 이름 동기화 ===== */
   function syncTopName(game) {
     const el = document.querySelector('.bk-top__name'); if (!el) return;
-    el.textContent = game === 'notakto' ? '노탁토' : game === 'stone' ? '돌 가져가기' : game === 'popit' ? '팝잇' : '메인 게임';
+    el.textContent = game === 'notakto' ? '노탁토' : game === 'stone' ? '돌 가져가기' : game === 'popit' ? '팝잇' : game === 'queen' ? '황금비 퀸' : '메인 게임';
     let up = document.getElementById('top-up-games');
     if (!up) {
       up = document.createElement('a'); up.id = 'top-up-games'; up.className = 'bk-top__home bk-top__up'; up.href = '#'; up.title = '게임 목록으로';
@@ -4816,7 +5235,7 @@
   openGameSection = function (g) { _openGameSection(g); syncTopName(g); currentGame = g; showRules(false); };
   returnToHome = function () { _returnToHome(); syncTopName(null); currentGame = null; };
   const entryGame = new URLSearchParams(location.search).get('game');
-  if (entryGame === 'notakto' || entryGame === 'stone' || entryGame === 'popit') openGameSection(entryGame);
+  if (['notakto', 'stone', 'popit', 'queen'].includes(entryGame)) openGameSection(entryGame);
 </script>
 </body>
 </html>

@@ -181,7 +181,7 @@ details summary{cursor:pointer;font-weight:700;font-size:.9rem}
 <style>*,*::before,*::after{box-sizing:border-box}body{margin:0}[hidden]{display:none!important}</style>
 </head>
 <body class="bk">
-<script src="../../common.js" data-num="♛" data-name="황금비 퀸" data-sub="필승 전략 · 확장" data-home="../../" data-up="../index.html" data-up-name="게임 목록"></script>
+<script src="../../common.js" data-num="♛" data-name="황금비 퀸" data-sub="필승 전략 · 확장" data-home="../../" data-up="../arcade/index.html?game=queen" data-up-name="퀸 게임"></script>
 <div class="wrap">
 
 <!-- 소개 -->
@@ -787,7 +787,8 @@ function setTab(t){
 $('#aTabs').addEventListener('click',e=>{const b=e.target.closest('.tab');if(b)setTab(+b.dataset.t);});
 $('#aNextTab').onclick=()=>setTab((A.tab+1)%3);
 $('#goAnalysis').onclick=openAnalysis;
-$('#aBack').onclick=()=>{stopAuto();show('scIntro');};
+$('#aBack').onclick=()=>{stopAuto();if(location.hash==='#analysis')location.href='../arcade/index.html?game=queen';else show('scIntro');};
+if(location.hash==='#analysis'){openAnalysis();$('#aBack').textContent='← 게임으로';}
 $('#aSize').addEventListener('input',e=>{stopAuto();A.paint=new Map();A.check=false;A.hint=null;A.msg='';A.N=+e.target.value;$('#aSizeVal').textContent=$('#aSizeSum').textContent=`${A.N} × ${A.N}`;A.sol=solve(A.N);A.q=null;buildABoard();setTab(A.tab);});
 $('#aView').addEventListener('click',e=>{const b=e.target.closest('button');if(!b)return;
   $('#aView').querySelectorAll('button').forEach(x=>x.setAttribute('aria-pressed',x===b));A.view=b.dataset.v;renderExplore();});

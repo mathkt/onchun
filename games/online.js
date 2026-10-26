@@ -36,7 +36,7 @@ window.Online = (function () {
     return db;
   }
   function emit(ev) { handlers.forEach(h => { try { h(ev); } catch (e) { console.error(e); } }); }
-  const PREFIX = { stone: 'S', notakto: 'N' };
+  const PREFIX = { stone: 'S', notakto: 'N', popit: 'P', queen: 'Q' };
   function base() { return db.ref('rooms'); }
   function key(c) { return (PREFIX[game] || game[0].toUpperCase()) + c; }
   function newCode() { return String(1000 + Math.floor(Math.random() * 9000)); }
