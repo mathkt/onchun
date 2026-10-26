@@ -1,0 +1,384 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+<title>01 수학 마술 · 부산의 활동수학</title>
+<link rel="stylesheet" href="../../common.css">
+<link rel="stylesheet" href="../book.css">
+</head>
+<body class="bk">
+<script src="../../common.js" data-num="01" data-name="수학 마술" data-sub="1단원 수학 놀이 활동" data-home="../../"></script>
+<div class="bk-wrap">
+
+  <!-- 단원 도입 -->
+  <section class="ch-intro">
+    <div class="ch-intro__text">
+      <div class="bk-ribbon">01</div>
+      <h1 class="bk-h-unit">수학 마술</h1>
+      <p class="ch-lead">마술사가 불가능해 보이는 일을 해내는 비밀은 <b>수학</b>! 마술을 직접 해 보고 숨은 원리를 밝혀 보세요.</p>
+      <p class="ch-goal">★ 이 단원에서는 — 수학 마술의 원리를 이해하고 설명할 수 있다.</p>
+    </div>
+    <div class="ch-intro__pic"><img src="../../img/ch01.jpg" alt="영화의전당 · 부산국제매직페스티벌"><span class="ch-place">📍 영화의전당</span></div>
+  </section>
+
+  <!-- 활동 탭 -->
+  <nav class="tabs" id="tabs">
+    <button class="tab on" data-t="t1"><span class="tab__n">1</span>수학 마술로 예언하기</button>
+    <button class="tab" data-t="t2"><span class="tab__n">2</span>합이 보이는 마술 막대</button>
+    <button class="tab" data-t="t3"><span class="tab__n">3</span>마음을 읽는 숫자 마술</button>
+    <button class="tab tab--pink" data-t="t4"><span class="tab__n">★</span>생일 알아맞히기</button>
+    <button class="tab tab--pink" data-t="t5"><span class="tab__n">★</span>곱셈표 속 피타고라스 수</button>
+  </nav>
+
+  <!-- ================= 활동 1: 예언하기 ================= -->
+  <section class="act-page" id="t1">
+    <div class="bk-panel">
+      <div class="bk-act"><span class="bk-act__n">1</span><span class="bk-act__t">수학 마술로 예언하기</span><span class="bk-tag">추론</span><span class="bk-tag">의사소통</span></div>
+      <p class="bk-muted">마술사가 관객을 한 명 불러내어 마술을 시작합니다. <b>당신이 관객</b>이에요.</p>
+
+      <div class="stage" id="s1">
+        <div class="magician">
+          <div class="magician__face">🎩</div>
+          <div class="bubble" id="s1-say">1에서 8까지의 숫자 중 4개를 이용하여 <b>네 자리 수</b>를 적어 주세요.</div>
+        </div>
+        <div class="box" id="s1-box"><div class="box__lid">📦 예언 상자</div><div class="box__note" id="s1-pred">?</div></div>
+      </div>
+
+      <div class="sheet" id="s1-sheet">
+        <div class="sheet__row" data-i="0"><span class="who">관객</span><input class="num" type="tel" maxlength="4" inputmode="numeric" placeholder="네 자리 수" id="s1-a1"></div>
+      </div>
+      <div class="bk-row" style="margin-top:12px">
+        <button class="bk-btn bk-btn--primary" id="s1-next">다음 ▶</button>
+        <button class="bk-btn bk-btn--ghost" id="s1-reset">처음부터</button>
+      </div>
+      <p class="hint" id="s1-hint"></p>
+    </div>
+
+    <div class="bk-panel bk-panel--pink secret" id="s1-secret" hidden>
+      <h3>🔍 비밀 밝히기</h3>
+      <div class="q"><b>1</b> 관객과 마술사가 적은 수를 순서대로 기록하고 어떤 관계가 있는지 찾아보자.</div>
+      <table class="tbl" id="s1-tbl"><thead><tr><th>관객이 적은 수</th><th>마술사가 적은 수</th><th>두 수의 합</th></tr></thead><tbody></tbody></table>
+      <div class="q"><b>2</b> 마술사는 관객이 처음 적은 수만 보고 합을 예언하여 적어두었다. 관객이 처음 적은 수와 예언한 수 사이의 관계를 찾아보자.</div>
+      <details class="reveal"><summary>힌트 보기</summary><p>마술사는 관객이 적은 수에 더하면 <b>9999</b>가 되는 수를 적어요. 그러니 (관객+마술사) 한 쌍은 항상 9999, 두 쌍이면 19998. 예언 = <b>처음 수 + 19998</b> = 처음 수 + 20000 − 2.</p></details>
+      <div class="q"><b>3</b> 이 마술의 비밀을 밝혀 보자.</div>
+      <div class="q"><b>4</b> 수를 적는 횟수를 더 늘리면, 마술사가 미리 적어두는 수는 어떻게 달라지는지 생각해 보자.</div>
+      <div class="bk-row"><label class="bk-muted">쌍의 개수 실험:</label><select id="s1-pairs" class="sel"><option>1</option><option selected>2</option><option>3</option><option>4</option></select><span id="s1-pairs-out" class="bk-muted"></span></div>
+    </div>
+  </section>
+
+  <!-- ================= 활동 2: 마술 막대 ================= -->
+  <section class="act-page" id="t2" hidden>
+    <div class="bk-panel">
+      <div class="bk-act"><span class="bk-act__n">2</span><span class="bk-act__t">합이 보이는 마술 막대</span><span class="bk-tag">문제 해결</span><span class="bk-tag">추론</span><span class="bk-tag">의사소통</span></div>
+      <p class="bk-muted">나는 수학 마술사, 계산기보다 빠르게 합을 계산합니다. <b>막대 8개 중 5개를 골라</b> 아래 칸에 놓으세요 (누르면 이동).</p>
+
+      <div class="rods" id="rods-pool"></div>
+      <div class="rods rods--slots" id="rods-slots"></div>
+
+      <div class="stage stage--sm">
+        <div class="magician"><div class="magician__face">🎩</div><div class="bubble" id="s2-say">막대 5개를 골라 주세요.</div></div>
+      </div>
+      <div class="bk-row">
+        <button class="bk-btn bk-btn--primary" id="s2-guess" disabled>마술사가 합 말하기</button>
+        <button class="bk-btn bk-btn--sky" id="s2-calc" disabled>계산기로 확인</button>
+        <button class="bk-btn bk-btn--ghost" id="s2-shuffle">막대 되돌리기</button>
+      </div>
+      <pre class="calc" id="s2-calcout" hidden></pre>
+    </div>
+
+    <div class="bk-panel bk-panel--pink secret">
+      <h3>🔍 비밀 밝히기</h3>
+      <div class="q"><b>1</b> 또 다른 막대 5개를 골라 배열하고, 가로로 읽은 4개의 수의 합을 구해 보자.</div>
+      <div class="q"><b>2</b> 1에서 구한 합과 가장 비슷하게 보이는 다섯 자리 수를 찾아보자.</div>
+      <details class="reveal"><summary>힌트 보기</summary><p>막대의 <b>위에서 두 번째 줄</b>을 가로로 읽어 보세요. 그 다섯 자리 수에 200000을 더하고 2를 빼면 합이 돼요. 각 막대의 네 숫자 합이 항상 <b>18 + (둘째 줄 숫자)</b>이기 때문이에요.</p></details>
+      <div class="q"><b>3</b> 마술 막대의 비밀을 밝혀 보자.</div>
+      <div class="q"><b>4</b> 마술 막대 3개를 더 만들어 보자.</div>
+      <div class="maker">
+        <p class="bk-muted">둘째 줄 숫자를 고르면 나머지 세 숫자의 합이 18 + 그 숫자가 되도록 막대를 만들어 보세요.</p>
+        <div class="bk-row">
+          <label>둘째 줄: <select id="mk-d" class="sel"><option>1</option><option>2</option><option>3</option><option>4</option><option>5</option><option>6</option><option>7</option><option>8</option><option>9</option></select></label>
+          <label>첫째 줄: <input class="num num--1" type="tel" maxlength="1" id="mk-a" inputmode="numeric"></label>
+          <label>셋째 줄: <input class="num num--1" type="tel" maxlength="1" id="mk-c" inputmode="numeric"></label>
+          <label>넷째 줄: <input class="num num--1" type="tel" maxlength="1" id="mk-e" inputmode="numeric"></label>
+          <button class="bk-btn bk-btn--mint bk-btn--sm" id="mk-check">확인</button>
+        </div>
+        <p class="hint" id="mk-out"></p>
+      </div>
+    </div>
+  </section>
+
+  <!-- ================= 활동 3: 마음을 읽는 숫자 마술 ================= -->
+  <section class="act-page" id="t3" hidden>
+    <div class="bk-panel">
+      <div class="bk-act"><span class="bk-act__n">3</span><span class="bk-act__t">마음을 읽는 숫자 마술</span><span class="bk-tag">추론</span><span class="bk-tag">의사소통</span></div>
+      <p class="bk-muted">나는 수학 마술사, 당신이 생각하는 수가 나타내는 <b>마법 문양</b>을 알 수 있습니다.</p>
+
+      <div class="steps3">
+        <div class="step3"><div class="bubble">서로 다른 4개의 숫자로 이루어진 네 자리 수를 생각해 보세요.</div>
+          <input class="num" type="tel" maxlength="5" inputmode="numeric" placeholder="예: 5279" id="s3-n"></div>
+        <div class="step3" id="s3-s2" hidden><div class="bubble">이 수의 각 자리 숫자를 역으로 배열한 수는?</div><div class="big" id="s3-rev"></div></div>
+        <div class="step3" id="s3-s3" hidden><div class="bubble">두 수 중 큰 수에서 작은 수를 빼면?</div><div class="big" id="s3-diff"></div></div>
+        <div class="step3" id="s3-s4" hidden><div class="bubble">자, 이제 나온 수의 각 자릿수를 더해 볼까요?</div><div class="big" id="s3-dsum"></div></div>
+      </div>
+      <div class="bk-row" style="margin:10px 0">
+        <button class="bk-btn bk-btn--primary" id="s3-go">다음 단계 ▶</button>
+        <button class="bk-btn bk-btn--ghost" id="s3-reset">처음부터</button>
+      </div>
+
+      <h4 class="sub">마법 문양표 <span class="bk-muted" style="font-weight:400">— 나온 수 옆의 문양을 찾아보세요</span></h4>
+      <div class="symtbl" id="symtbl"></div>
+      <div class="stage stage--sm" id="s3-stage" hidden>
+        <div class="magician"><div class="magician__face">🎩</div><div class="bubble">당신의 문양은 바로… <span class="sym-big" id="s3-sym"></span> 맞지요?</div></div>
+      </div>
+    </div>
+
+    <div class="bk-panel bk-panel--pink secret">
+      <h3>🔍 비밀 밝히기</h3>
+      <div class="q"><b>1</b> 다른 수를 선택하여 다시 시행해 보자. (위에서 '처음부터')</div>
+      <div class="q"><b>2</b> 나온 수의 각 자릿수의 합에는 어떤 특징이 있는지 말해 보자.</div>
+      <details class="reveal"><summary>힌트 보기</summary><p>어떤 수와 그 수를 뒤집은 수의 차는 항상 <b>9의 배수</b>예요. 9의 배수의 자릿수 합도 9의 배수(9, 18, 27…)이고, 문양표에서 9·18·27 자리에는 모두 같은 ♣가 있어요.</p></details>
+      <div class="q"><b>3</b> 세 자리 수나 다섯 자리 수로 바꾸어 위의 활동을 하면 어떤 결과가 나올지 예측해 보자.</div>
+      <div class="q"><b>4</b> 세 자리·다섯 자리 수로 직접 해 보자.</div>
+      <div class="bk-row"><input class="num" type="tel" maxlength="5" inputmode="numeric" placeholder="세 자리 또는 다섯 자리" id="s3-exp"><button class="bk-btn bk-btn--mint bk-btn--sm" id="s3-exp-go">계산</button><span id="s3-exp-out" class="hint"></span></div>
+    </div>
+  </section>
+
+  <!-- ================= 수학자 1: 생일 ================= -->
+  <section class="act-page" id="t4" hidden>
+    <div class="bk-panel bk-panel--pink">
+      <div class="bk-act"><span class="bk-act__n" style="background:var(--bk-red)">★</span><span class="bk-act__t">나도 수학자 — 생일 알아맞히기</span><span class="bk-tag">문제 해결</span><span class="bk-tag">추론</span><span class="bk-tag">의사소통</span></div>
+      <p class="bk-muted">나는 수학 마술사, 당신의 생일을 알아맞힐 수 있습니다. 계산 결과만 알려주세요!</p>
+
+      <div class="bday">
+        <div class="bday__secret">
+          <label>🤫 (마술사는 못 봐요) 내 생일: <input class="num num--2" type="tel" maxlength="2" id="bd-m" inputmode="numeric" placeholder="월"> 월 <input class="num num--2" type="tel" maxlength="2" id="bd-d" inputmode="numeric" placeholder="일"> 일</label>
+          <label class="bk-muted">곱하는 수 바꿔 보기: ×<select id="bd-k" class="sel"><option>1</option><option selected>2</option><option>3</option><option>4</option><option>5</option></select></label>
+        </div>
+        <ol class="bday__steps" id="bd-steps"></ol>
+        <div class="stage stage--sm">
+          <div class="magician"><div class="magician__face">🎩</div><div class="bubble" id="bd-say">먼저, 당신이 태어난 달에 2를 곱해 보세요.</div></div>
+        </div>
+        <div class="bk-row"><button class="bk-btn bk-btn--primary" id="bd-go">다음 ▶</button><button class="bk-btn bk-btn--ghost" id="bd-reset">처음부터</button></div>
+      </div>
+    </div>
+    <div class="bk-panel secret">
+      <h3>🔍 비밀 밝히기</h3>
+      <div class="q"><b>1</b> 마술사가 마지막에 나온 수에서 생일을 어떻게 찾았는지 생각해 보자.</div>
+      <div class="q"><b>2</b> 계산 과정을 식으로 나타내어 보자.</div>
+      <details class="reveal"><summary>식 보기</summary><p>달을 m, 날짜를 d라 하면 ((m×2)+5)×20+d−100 = 40m+100+d−100 = <b>40m + d</b>. 3월 15일이면 40×3+15 = 135.</p><p>날짜 d는 31 이하라 40보다 작으니, 마술사는 결과를 <b>40으로 나눈 몫이 달, 나머지가 날짜</b>라고 읽으면 돼요. 135 ÷ 40 = 3 … 15 → 3월 15일!</p><p>곱하는 수를 k로 바꾸면 결과는 20k·m + d. k=1이면 20m+d가 되어 날짜가 20 이상일 때 달이 헷갈려요. 위의 "곱하는 수 바꿔 보기"로 실험해 보세요.</p></details>
+      <div class="q"><b>3</b> 마술의 원리를 밝혀 보자.</div>
+      <div class="q"><b>4</b> 태어난 달에 2를 곱하지 않고 다른 수를 곱하면 어떻게 바뀌는지 이야기해 보자.</div>
+    </div>
+  </section>
+
+  <!-- ================= 수학자 2: 곱셈표 ================= -->
+  <section class="act-page" id="t5" hidden>
+    <div class="bk-panel bk-panel--pink">
+      <div class="bk-act"><span class="bk-act__n" style="background:var(--bk-red)">★</span><span class="bk-act__t">나도 수학자 — 곱셈표 속에 숨어있는 피타고라스 수</span><span class="bk-tag">추론</span><span class="bk-tag">의사소통</span><span class="bk-tag">연결</span></div>
+      <p class="bk-muted">곱셈표의 <b>노란색 대각선</b> 일부를 한 대각선으로 하는 정사각형을 생각해 보세요. 표에서 <b>왼쪽 위 꼭짓점</b>과 <b>오른쪽 아래 꼭짓점</b>을 차례로 누르면 정사각형이 생겨요.</p>
+      <div class="mult" id="mult"></div>
+      <div class="pyth" id="pyth" hidden>
+        <div class="pyth__corner">꼭짓점 4개: <b id="py-c"></b></div>
+        <div class="bubble">대각선 위의 두 수 <b id="py-two"></b>의 합과 차를 각각 구해 보세요.</div>
+        <div class="pyth__line">합 = <b id="py-sum"></b>, 차 = <b id="py-dif"></b></div>
+        <div class="bubble">방금 구한 두 값의 <b>합</b>은? 두 값의 <b>제곱의 차</b>는?</div>
+        <div class="pyth__line">합의 합 = <b id="py-ss"></b>, 제곱의 차 = <b id="py-sq"></b></div>
+        <div class="stage stage--sm"><div class="magician"><div class="magician__face">🎩</div><div class="bubble">당신이 고른 정사각형의 꼭짓점에 있는 4개의 수는 바로 <b id="py-ans"></b>입니다!</div></div></div>
+        <div class="pyth__tri">피타고라스 수: <b id="py-tri"></b> → <span id="py-check"></span></div>
+      </div>
+    </div>
+    <div class="bk-panel secret">
+      <h3>🔍 비밀 밝히기</h3>
+      <div class="q"><b>1</b> 정사각형의 꼭짓점에 있는 4개의 수를 찾는 방법을 생각해 보자.</div>
+      <details class="reveal"><summary>힌트 보기</summary><p>꼭짓점을 m², mn, n², mn이라 하면 합의 합 = (n²+m²)+(n²−m²) = <b>2n²</b>, 제곱의 차 = (n²+m²)² − (n²−m²)² = <b>(2mn)²</b>. 그래서 n²과 mn을 바로 알 수 있고, m² = (합) − n²이에요.</p><p>그리고 n²−m², 2mn, n²+m²은 피타고라스 정리 a²+b²=c²을 만족하는 <b>피타고라스 수</b>예요.</p></details>
+    </div>
+  </section>
+
+</div>
+
+<script>
+/* ---------- 탭 ---------- */
+document.querySelectorAll('#tabs .tab').forEach(b => b.onclick = () => {
+  document.querySelectorAll('#tabs .tab').forEach(x => x.classList.toggle('on', x === b));
+  document.querySelectorAll('.act-page').forEach(p => p.hidden = p.id !== b.dataset.t);
+  window.scrollTo({ top: document.getElementById('tabs').offsetTop - 70, behavior: 'smooth' });
+});
+const $ = s => document.querySelector(s);
+(function(){ const h=location.hash.slice(1); const b=h&&document.querySelector(`#tabs .tab[data-t="${h}"]`); if(b){ b.click(); } })();
+const ri = n => Math.floor(Math.random() * n);
+
+/* ================= 활동 1 ================= */
+(function () {
+  let stage = 0, pairs = 2, nums = [];
+  const say = t => $('#s1-say').innerHTML = t;
+  const sheet = $('#s1-sheet');
+  function addRow(who, val) {
+    const r = document.createElement('div'); r.className = 'sheet__row';
+    r.innerHTML = `<span class="who ${who === '마술사' ? 'who--m' : ''}">${who}</span>` + (val !== undefined ? `<span class="num num--ro">${val}</span>` : `<input class="num" type="tel" maxlength="4" inputmode="numeric" placeholder="네 자리 수">`);
+    sheet.appendChild(r); const i = r.querySelector('input'); if (i) i.focus(); return r;
+  }
+  function valid(v) { return /^[1-8]{4}$/.test(v); }
+  $('#s1-next').onclick = () => {
+    const inputs = sheet.querySelectorAll('input');
+    const last = inputs[inputs.length - 1];
+    if (last) {
+      const v = last.value.trim();
+      if (!valid(v)) { $('#s1-hint').textContent = '1~8 숫자 4개로 된 네 자리 수를 적어 주세요.'; last.focus(); return; }
+      $('#s1-hint').textContent = '';
+      last.replaceWith(Object.assign(document.createElement('span'), { className: 'num num--ro', textContent: v }));
+      nums.push(+v);
+      if (nums.length === 1) {
+        const pred = nums[0] + 9999 * pairs;
+        $('#s1-pred').textContent = '✉️'; $('#s1-pred').dataset.v = pred; $('#s1-box').classList.add('sealed');
+        say(`저도 수를 하나 적어 <b>상자에 넣어</b> 두겠습니다. 이제 제가 적은 수 아래에 또 한 번 네 자리 수를 적어 주세요.`);
+        addRow('마술사', 9999 - nums[0]); nums.push(9999 - nums[0]); addRow('관객');
+        return;
+      }
+      // 관객이 적음 → 마술사가 보수 적음
+      if (nums.length < 2 * pairs + 1) {
+        const m = 9999 - nums[nums.length - 1]; addRow('마술사', m); nums.push(m);
+        if (nums.length < 2 * pairs + 1) { say('아까 적었던 수 바로 아래에 또 한 번 네 자리 수를 적어 주세요.'); addRow('관객'); return; }
+      }
+      say(`이제 적은 ${nums.length}개의 수를 계산기로 모두 더해 주세요.`);
+      $('#s1-next').textContent = '합 계산하기 🧮'; stage = 1; return;
+    }
+    if (stage === 1) {
+      const sum = nums.reduce((a, b) => a + b, 0);
+      addRow('합', sum).querySelector('.num').classList.add('num--sum');
+      say('아까 제가 적어서 상자에 넣어둔 종이를 보여드리겠습니다.'); $('#s1-next').textContent = '상자 열기 📦'; stage = 2; return;
+    }
+    if (stage === 2) {
+      $('#s1-pred').textContent = $('#s1-pred').dataset.v; $('#s1-box').classList.add('open');
+      say('여기까지 신기한 수학 마술이었습니다! 🎉 아래에서 비밀을 밝혀 보세요.'); $('#s1-next').disabled = true;
+      const tb = $('#s1-tbl tbody');
+      tb.innerHTML = '';
+      for (let i = 0; i + 1 < nums.length; i += 2) tb.innerHTML += `<tr><td>${nums[i]}</td><td>${nums[i + 1]}</td><td>${nums[i] + nums[i + 1]}</td></tr>`;
+      tb.innerHTML += `<tr><td>${nums[nums.length - 1]} (마지막 관객 수)</td><td>—</td><td>예언 = ${nums[nums.length - 1]} + ${9999 * pairs}</td></tr>`;
+      $('#s1-secret').hidden = false;
+      return;
+    }
+  };
+  $('#s1-reset').onclick = () => {
+    stage = 0; nums = []; pairs = +$('#s1-pairs').value;
+    sheet.innerHTML = ''; addRow('관객'); $('#s1-next').disabled = false; $('#s1-next').textContent = '다음 ▶';
+    $('#s1-box').className = 'box'; $('#s1-pred').textContent = '?'; $('#s1-secret').hidden = true;
+    say(`1에서 8까지의 숫자 중 4개를 이용하여 <b>네 자리 수</b>를 적어 주세요.${pairs !== 2 ? ` (이번엔 ${pairs}쌍 적기)` : ''}`);
+  };
+  $('#s1-pairs').onchange = () => { pairs = +$('#s1-pairs').value; $('#s1-pairs-out').textContent = `→ 마술사가 미리 적어둘 수 = 처음 수 + ${9999 * pairs}`; $('#s1-reset').click(); };
+  // 마지막 관객 수에 대한 설명 정정: 예언은 '처음 수 + 9999×쌍'
+  $('#s1-pairs-out').textContent = '→ 마술사가 미리 적어둘 수 = 처음 수 + 19998';
+})();
+
+/* ================= 활동 2 ================= */
+(function () {
+  const RODS = [[6,8,4,8],[4,4,9,5],[1,8,8,9],[3,2,6,9],[2,6,7,9],[5,3,8,5],[9,7,2,7],[8,3,7,3]];
+  let pool = RODS.map((_, i) => i), slots = [];
+  const poolEl = $('#rods-pool'), slotEl = $('#rods-slots');
+  function rod(i, where) {
+    const d = document.createElement('button'); d.className = 'rod'; d.innerHTML = RODS[i].map(x => `<span>${x}</span>`).join('');
+    d.onclick = () => { if (where === 'pool') { if (slots.length >= 5) return; pool = pool.filter(x => x !== i); slots.push(i); } else { slots = slots.filter(x => x !== i); pool.push(i); pool.sort((a,b)=>a-b); } render(); };
+    return d;
+  }
+  function render() {
+    poolEl.innerHTML = ''; pool.forEach(i => poolEl.appendChild(rod(i, 'pool')));
+    slotEl.innerHTML = ''; slots.forEach(i => slotEl.appendChild(rod(i, 'slot')));
+    for (let k = slots.length; k < 5; k++) { const e = document.createElement('div'); e.className = 'rod rod--empty'; e.textContent = k + 1; slotEl.appendChild(e); }
+    const ok = slots.length === 5; $('#s2-guess').disabled = !ok; $('#s2-calc').disabled = !ok; $('#s2-calcout').hidden = true;
+    $('#s2-say').textContent = ok ? '좋아요. 제가 가로로 읽은 수의 합을 바로 말해 볼까요?' : `막대 5개를 골라 주세요. (${slots.length}/5)`;
+  }
+  function rows() { return [0,1,2,3].map(r => +slots.map(i => RODS[i][r]).join('')); }
+  $('#s2-guess').onclick = () => { const s = rows().reduce((a,b)=>a+b,0); $('#s2-say').innerHTML = `음~ 당신이 배열한 마술 막대의 수를 가로로 읽은 수의 합은 바로 <b class="big-inline">${s}</b>입니다!`; };
+  $('#s2-calc').onclick = () => { const r = rows(); const s = r.reduce((a,b)=>a+b,0); $('#s2-calcout').hidden = false; $('#s2-calcout').textContent = r.map((v,i)=> (i? '+ ':'  ') + String(v).padStart(6,' ')).join('\n') + '\n' + '─'.repeat(8) + '\n= ' + String(s).padStart(6,' '); };
+  $('#s2-shuffle').onclick = () => { pool = RODS.map((_, i) => i); slots = []; render(); };
+  render();
+  $('#mk-check').onclick = () => {
+    const d = +$('#mk-d').value, a = +$('#mk-a').value, c = +$('#mk-c').value, e = +$('#mk-e').value;
+    if ([a,c,e].some(isNaN) || !$('#mk-a').value || !$('#mk-c').value || !$('#mk-e').value) { $('#mk-out').textContent = '세 칸을 모두 채워 주세요.'; return; }
+    const ok = a + d + c + e === 18 + d;
+    $('#mk-out').textContent = ok ? `✅ ${a}${d}${c}${e} — 네 수의 합 ${a+d+c+e} = 18 + ${d}. 마술 막대 완성!` : `❌ 합이 ${a+d+c+e}예요. 첫째·셋째·넷째 줄의 합이 18이 되어야 해요.`;
+  };
+})();
+
+/* ================= 활동 3 ================= */
+(function () {
+  const SYM = { 1:'♠',2:'◐',3:'♡',4:'♡',5:'◈',6:'◐',7:'♡',8:'♠',9:'♣',10:'☜',11:'♠',12:'◈',13:'◐',14:'☜',15:'♠',16:'◐',17:'♡',18:'♣',19:'◈',20:'♡',21:'◈',22:'♠',23:'☜',24:'♡',25:'☜',26:'◈',27:'♣',28:'◈',29:'◐',30:'♠' };
+  const tbl = $('#symtbl');
+  for (let i = 1; i <= 30; i++) tbl.innerHTML += `<div class="symcell" data-n="${i}"><span>${i}</span><b>${SYM[i]}</b></div>`;
+  let step = 0, n, rev, diff, ds;
+  const rv = s => +[...String(s)].reverse().join('');
+  const dsum = x => [...String(x)].reduce((a,b)=>a+ +b,0);
+  $('#s3-go').onclick = () => {
+    if (step === 0) {
+      const v = $('#s3-n').value.trim();
+      if (!/^\d{4}$/.test(v) || new Set(v).size !== 4) { alert('서로 다른 4개의 숫자로 된 네 자리 수를 넣어 주세요.'); return; }
+      n = +v; rev = rv(v); $('#s3-rev').textContent = String(rev).padStart(4,'0'); $('#s3-s2').hidden = false; step = 1; return;
+    }
+    if (step === 1) { diff = Math.abs(n - rev); $('#s3-diff').textContent = `${Math.max(n,rev)} − ${Math.min(n,rev)} = ${diff}`; $('#s3-s3').hidden = false; step = 2; return; }
+    if (step === 2) { ds = dsum(diff); $('#s3-dsum').textContent = [...String(diff)].join(' + ') + ' = ' + ds; $('#s3-s4').hidden = false; step = 3; return; }
+    if (step === 3) {
+      document.querySelectorAll('.symcell').forEach(c => c.classList.toggle('hit', +c.dataset.n === ds));
+      $('#s3-sym').textContent = SYM[ds] || '?'; $('#s3-stage').hidden = false; $('#s3-go').disabled = true; step = 4;
+    }
+  };
+  $('#s3-reset').onclick = () => { step = 0; $('#s3-n').value = ''; ['#s3-s2','#s3-s3','#s3-s4','#s3-stage'].forEach(s => $(s).hidden = true); $('#s3-go').disabled = false; document.querySelectorAll('.symcell').forEach(c => c.classList.remove('hit')); };
+  $('#s3-exp-go').onclick = () => {
+    const v = $('#s3-exp').value.trim(); if (!/^\d{3}$|^\d{5}$/.test(v)) { $('#s3-exp-out').textContent = '세 자리 또는 다섯 자리 수를 넣어 주세요.'; return; }
+    const d = Math.abs(+v - rv(v)); const s = dsum(d);
+    $('#s3-exp-out').textContent = `${v} ↔ ${rv(v)} → 차 ${d} → 자릿수 합 ${s} (${s % 9 === 0 ? '9의 배수!' : '어?'})${d===0?' (뒤집어도 같은 수예요)':''}`;
+  };
+})();
+
+/* ================= 수학자 1: 생일 ================= */
+(function () {
+  let k = 2, m, d, step = 0, val;
+  const steps = $('#bd-steps'), say = t => $('#bd-say').innerHTML = t;
+  function plan() { return [
+    { s: `태어난 달에 ${k}를 곱해 보세요.`, f: v => m * k, show: v => `${m} × ${k} = ${v}` },
+    { s: `거기에 5를 더하고, 다시 20을 곱해 보세요.`, f: v => (v + 5) * 20, show: v => `(… + 5) × 20 = ${v}` },
+    { s: `이번에는 태어난 날짜를 더해 보세요.`, f: v => v + d, show: v => `… + ${d} = ${v}` },
+    { s: `마지막으로 거기서 100을 뺀 결과를 말해 주세요.`, f: v => v - 100, show: v => `… − 100 = ${v}` },
+  ]; }
+  $('#bd-go').onclick = () => {
+    if (step === 0) { m = +$('#bd-m').value; d = +$('#bd-d').value; k = +$('#bd-k').value;
+      if (!(m >= 1 && m <= 12 && d >= 1 && d <= 31)) { alert('생일을 먼저 넣어 주세요 (마술사는 몰라요!).'); return; } val = 0; steps.innerHTML = ''; }
+    const P = plan();
+    if (step < P.length) { val = P[step].f(val); const li = document.createElement('li'); li.innerHTML = `<span class="bk-muted">${P[step].s}</span><b>${P[step].show(val)}</b>`; steps.appendChild(li); step++;
+      say(step < P.length ? P[step].s : `${val}이라구요? 그럼 당신의 생일은… 🎩`); return; }
+    // 공개: 마술사는 "백의 자리=달, 나머지=날짜"로 읽는다
+    const div = 20 * k, guessM = Math.floor(val / div), guessD = val % div;
+    const right = guessM === m && guessD === d;
+    say(`${val}을 ${div}으로 나누면 몫 ${guessM}, 나머지 ${guessD}. 당신의 생일은 <b>${guessM}월 ${guessD}일</b>입니다! ${right ? '🎉 맞지요?' : '…어라? 틀렸네요. 곱하는 수가 작으면 날짜와 달이 섞여요. 왜 그럴까요? (비밀 밝히기)'}`);
+    $('#bd-go').disabled = true;
+  };
+  $('#bd-reset').onclick = () => { step = 0; steps.innerHTML = ''; $('#bd-go').disabled = false; say(`먼저, 당신이 태어난 달에 ${$('#bd-k').value}를 곱해 보세요.`); };
+  $('#bd-k').onchange = () => $('#bd-reset').click();
+})();
+
+/* ================= 수학자 2: 곱셈표 ================= */
+(function () {
+  const N = 9, el = $('#mult'); let first = null;
+  let h = '<div class="mcell mcell--h">×</div>'; for (let c = 1; c <= N; c++) h += `<div class="mcell mcell--h">${c}</div>`;
+  for (let r = 1; r <= N; r++) { h += `<div class="mcell mcell--h">${r}</div>`; for (let c = 1; c <= N; c++) h += `<div class="mcell ${r===c?'diag':''}" data-r="${r}" data-c="${c}">${r*c}</div>`; }
+  el.innerHTML = h;
+  el.querySelectorAll('.mcell[data-r]').forEach(c => c.onclick = () => {
+    const r = +c.dataset.r, col = +c.dataset.c;
+    if (r !== col) { alert('노란 대각선 위의 칸을 눌러 주세요.'); return; }
+    if (first === null) { clear(); first = r; c.classList.add('pick'); $('#pyth').hidden = true; return; }
+    if (r === first) return;
+    const m = Math.min(first, r), n = Math.max(first, r); first = null;
+    el.querySelectorAll('.mcell[data-r]').forEach(x => { const rr = +x.dataset.r, cc = +x.dataset.c; x.classList.toggle('sq', rr>=m&&rr<=n&&cc>=m&&cc<=n); x.classList.toggle('pick', (rr===m&&cc===m)||(rr===n&&cc===n)||(rr===m&&cc===n)||(rr===n&&cc===m)); });
+    const a = m*m, b = n*n, mn = m*n, sum = a+b, dif = b-a;
+    $('#py-c').textContent = `${a}, ${mn}, ${b}, ${mn}`; $('#py-two').textContent = `${a}, ${b}`;
+    $('#py-sum').textContent = sum; $('#py-dif').textContent = dif;
+    $('#py-ss').textContent = `${sum} + ${dif} = ${sum+dif}`; $('#py-sq').textContent = `${sum}² − ${dif}² = ${sum*sum - dif*dif}`;
+    $('#py-ans').textContent = `${a}, ${mn}, ${b}, ${mn}`;
+    const tri = [dif, 2*mn, sum]; $('#py-tri').textContent = `(${tri.join(', ')})`;
+    $('#py-check').textContent = `${dif}² + ${2*mn}² = ${dif*dif} + ${4*mn*mn} = ${dif*dif+4*mn*mn} = ${sum}² ✅`;
+    $('#pyth').hidden = false;
+  });
+  function clear() { el.querySelectorAll('.mcell').forEach(x => x.classList.remove('sq','pick')); }
+})();
+</script>
+</body>
+</html>

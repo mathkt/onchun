@@ -1,0 +1,94 @@
+/* ===== 책 활동 페이지 공통 (book/XX/) ===== */
+.ch-intro{display:grid;grid-template-columns:1.1fr .9fr;gap:0;border-radius:28px;overflow:hidden;background:var(--bk-cream);box-shadow:var(--bk-shadow);margin:14px 0 18px;min-height:240px}
+.ch-intro__text{padding:26px 28px 24px;display:flex;flex-direction:column;gap:10px}
+.ch-intro__text .bk-ribbon{align-self:flex-start;font-size:2rem;padding:10px 20px 8px}
+.ch-lead{font-family:var(--f-serif);margin:6px 0 0;color:var(--bk-ink-soft);max-width:46ch}
+.ch-goal{margin:4px 0 0;font-size:.85rem;background:#fff;border-radius:10px;padding:8px 12px;display:inline-block;border:1.5px solid var(--bk-line)}
+.ch-intro__pic{position:relative;clip-path:polygon(16% 0,100% 0,100% 100%,0 100%)}
+.ch-intro__pic img{width:100%;height:100%;object-fit:cover;object-position:center 35%}
+.ch-place{position:absolute;right:12px;bottom:10px;background:rgba(255,255,255,.9);padding:4px 10px;border-radius:999px;font-size:.78rem}
+@media(max-width:720px){.ch-intro{grid-template-columns:1fr}.ch-intro__pic{clip-path:polygon(0 14%,100% 0,100% 100%,0 100%);min-height:170px}}
+
+.tabs{display:flex;gap:8px;flex-wrap:wrap;margin:0 0 14px;position:sticky;top:60px;z-index:50;background:var(--bk-cream-2);padding:8px 0}
+.tab{font-family:var(--f-head);font-size:1rem;border:2px solid var(--bk-sky);background:#fff;color:var(--bk-ink);border-radius:999px;padding:8px 14px 8px 8px;display:inline-flex;align-items:center;gap:8px;cursor:pointer;min-height:44px;box-shadow:0 3px 0 #3a95c4;-webkit-tap-highlight-color:transparent}
+.tab__n{width:28px;height:28px;border-radius:50%;background:var(--bk-sky);color:#fff;display:grid;place-items:center;font-size:.9rem}
+.tab.on{background:var(--bk-sky);color:#fff}.tab.on .tab__n{background:#fff;color:var(--bk-sky)}
+.tab--pink{border-color:var(--bk-red);box-shadow:0 3px 0 #b53a2a}.tab--pink .tab__n{background:var(--bk-red)}
+.tab--pink.on{background:var(--bk-red)}.tab--pink.on .tab__n{color:var(--bk-red)}
+.act-page{display:flex;flex-direction:column;gap:14px}
+
+/* 마술사 무대 */
+.stage{display:flex;gap:14px;align-items:flex-start;margin:14px 0;flex-wrap:wrap}
+.stage--sm{margin:10px 0 4px}
+.magician{display:flex;gap:10px;align-items:flex-start;flex:1;min-width:240px}
+.magician__face{width:56px;height:56px;border-radius:50%;background:var(--bk-yellow);display:grid;place-items:center;font-size:1.8rem;flex:none;box-shadow:inset 0 -4px 0 rgba(0,0,0,.08)}
+.bubble{position:relative;background:#fff;border:2px solid var(--bk-sky);border-radius:18px;padding:12px 16px;font-size:1rem;line-height:1.5;flex:1;min-height:52px}
+.bubble::before{content:"";position:absolute;left:-12px;top:18px;border:6px solid transparent;border-right-color:var(--bk-sky)}
+.bk-panel--pink .bubble{border-color:var(--bk-red)}.bk-panel--pink .bubble::before{border-right-color:var(--bk-red)}
+.box{width:150px;border-radius:14px;border:3px dashed var(--bk-orange);padding:10px;text-align:center;background:#fff;transition:.3s}
+.box.sealed{border-style:solid;background:#FFF4DF}
+.box.open{background:var(--bk-yellow);transform:rotate(-2deg) scale(1.05)}
+.box__lid{font-family:var(--f-head);font-size:.95rem}
+.box__note{font-family:var(--f-head);font-size:1.6rem;color:var(--bk-red);margin-top:4px}
+
+.sheet{display:flex;flex-direction:column;gap:8px;max-width:420px}
+.sheet__row{display:flex;align-items:center;gap:10px}
+.who{width:58px;font-family:var(--f-head);color:var(--bk-sky);text-align:right;flex:none}
+.who--m{color:var(--bk-orange-deep)}
+.num{font-family:var(--f-head);font-size:1.5rem;letter-spacing:.1em;width:160px;padding:8px 12px;border:2px solid var(--bk-line);border-radius:12px;background:#fff;text-align:center;color:var(--bk-ink)}
+.num:focus{outline:none;border-color:var(--bk-sky)}
+.num--ro{display:inline-block;border-color:transparent;background:var(--bk-cream)}
+.num--sum{background:var(--bk-yellow);border-color:var(--bk-orange)}
+.num--1{width:56px;letter-spacing:0}.num--2{width:70px;letter-spacing:0}
+.sel{font:inherit;font-size:1rem;padding:8px 10px;border:2px solid var(--bk-line);border-radius:10px;background:#fff}
+.hint{min-height:1.4em;margin:6px 0 0;color:var(--bk-red);font-size:.92rem}
+
+.secret h3{font-family:var(--f-head);margin:0 0 10px;font-size:1.3rem}
+.q{display:flex;gap:10px;align-items:flex-start;margin:10px 0 6px;font-size:.95rem}
+.q b{width:26px;height:26px;border-radius:50%;background:var(--bk-sky);color:#fff;display:grid;place-items:center;flex:none;font-family:var(--f-head);font-weight:400}
+.reveal{background:#fff;border:1.5px solid var(--bk-line);border-radius:12px;padding:8px 14px;margin:4px 0 10px 36px;font-size:.92rem}
+.reveal summary{cursor:pointer;font-family:var(--f-head);color:var(--bk-orange-deep)}
+.reveal p{margin:8px 0 2px}
+.tbl{border-collapse:collapse;width:100%;max-width:520px;margin:4px 0 10px 36px;background:#fff;font-variant-numeric:tabular-nums}
+.tbl th,.tbl td{border:1px solid var(--bk-line);padding:6px 10px;text-align:center}
+.tbl th{background:var(--bk-sky-soft);font-weight:700;font-size:.85rem}
+
+/* 마술 막대 */
+.rods{display:flex;gap:8px;flex-wrap:wrap;margin:10px 0;min-height:120px}
+.rods--slots{background:var(--bk-yellow);border-radius:16px;padding:10px}
+.rod{display:flex;flex-direction:column;gap:2px;background:#fff;border:2px solid var(--bk-ink);border-radius:6px;padding:4px 6px;cursor:pointer;font-family:var(--f-head);font-size:1.35rem;line-height:1.1;min-width:40px;box-shadow:0 3px 0 #c9c3b0;-webkit-tap-highlight-color:transparent}
+.rod span{display:block;text-align:center}
+.rod:active{transform:translateY(2px)}
+.rod--empty{border-style:dashed;border-color:#c9b36a;color:#c9b36a;justify-content:center;align-items:center;background:transparent;box-shadow:none;cursor:default;min-height:118px}
+.calc{font-family:var(--f-mono,monospace);font-size:1.2rem;background:#fff;border:2px solid var(--bk-line);border-radius:12px;padding:12px 16px;display:inline-block;margin-top:10px}
+.big-inline{font-size:1.4rem;color:var(--bk-red)}
+.maker{background:#fff;border-radius:14px;padding:12px 14px;margin-left:36px}
+
+/* 숫자 마술 */
+.steps3{display:flex;flex-direction:column;gap:10px}
+.step3{display:flex;gap:12px;align-items:center;flex-wrap:wrap}
+.step3 .bubble{flex:1 1 240px}
+.big{font-family:var(--f-head);font-size:1.6rem;color:var(--bk-red);background:#fff;border-radius:12px;padding:6px 14px;border:2px solid var(--bk-line)}
+.sub{font-family:var(--f-head);font-size:1.1rem;margin:14px 0 8px;font-weight:400}
+.symtbl{display:grid;grid-template-columns:repeat(6,1fr);gap:4px;max-width:560px}
+.symcell{display:flex;justify-content:space-between;align-items:center;padding:6px 10px;background:#fff;border:1px solid var(--bk-line);border-radius:8px;font-size:.95rem}
+.symcell b{font-size:1.2rem}
+.symcell.hit{background:var(--bk-yellow);border-color:var(--bk-orange);transform:scale(1.08)}
+.sym-big{font-size:1.8rem;color:var(--bk-red)}
+@media(max-width:600px){.symtbl{grid-template-columns:repeat(3,1fr)}}
+
+/* 생일 */
+.bday__secret{display:flex;flex-direction:column;gap:6px;background:#fff;border-radius:14px;padding:12px 14px;margin-bottom:10px}
+.bday__steps{margin:0;padding-left:1.4em;display:flex;flex-direction:column;gap:6px}
+.bday__steps li b{display:block;font-family:var(--f-head);font-size:1.2rem;font-weight:400;color:var(--bk-ink)}
+
+/* 곱셈표 */
+.mult{display:grid;grid-template-columns:repeat(10,1fr);gap:3px;max-width:520px;margin:8px 0 12px}
+.mcell{aspect-ratio:1;display:grid;place-items:center;background:#fff;border:1px solid var(--bk-line);border-radius:6px;font-size:.95rem;cursor:pointer;user-select:none;-webkit-tap-highlight-color:transparent}
+.mcell--h{background:var(--bk-sky-soft);font-weight:700;cursor:default}
+.mcell.diag{background:var(--bk-yellow)}
+.mcell.sq{background:#FFE3B3}
+.mcell.pick{background:var(--bk-orange);color:#fff;font-weight:700}
+.pyth{display:flex;flex-direction:column;gap:8px}
+.pyth__line,.pyth__corner,.pyth__tri{background:#fff;border-radius:12px;padding:8px 14px;border:1.5px solid var(--bk-line)}
+.pyth__tri{background:var(--bk-mint);border-color:var(--bk-mint-line)}

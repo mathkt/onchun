@@ -146,42 +146,7 @@
     </a>
   </div>
 
-  <!-- ===== 추가 게임 ===== -->
-  <div class="sec-h"><h2>🎲 더 해볼 게임</h2><div class="line"></div></div>
-  <div class="extra-grid">
-    <a class="bk-card" href="games/queen/index.html">
-      <div class="bk-card__thumb" style="background:#FBF0C8">♛</div>
-      <div class="bk-card__body">
-        <h3 class="bk-card__title">황금비 퀸</h3>
-        <p class="bk-card__desc">퀸을 왼쪽·아래·대각선으로 움직여 구석에 먼저 닿으면 승리. 지는 칸에 황금비가 숨어 있어요.</p>
-        <div class="bk-card__meta"><span class="bk-tag bk-tag--purple">AI 대전</span><span class="bk-tag bk-tag--red">분석 모드</span></div>
-      </div>
-    </a>
-    <a class="bk-card" href="games/umulgonu/index.html" data-soon>
-      <div class="bk-card__thumb" style="background:#FCE4EC">⚪⚫</div>
-      <div class="bk-card__body">
-        <h3 class="bk-card__title">우물고누</h3>
-        <p class="bk-card__desc">상대 말이 못 움직이게 가두는 전통 놀이. (03 수학 퍼즐)</p>
-        <div class="bk-card__meta"><span class="soon">준비 중</span></div>
-      </div>
-    </a>
-    <a class="bk-card" href="games/onestroke/index.html" data-soon>
-      <div class="bk-card__thumb" style="background:#E6F5E3">✏️</div>
-      <div class="bk-card__body">
-        <h3 class="bk-card__title">한붓그리기</h3>
-        <p class="bk-card__desc">붓을 떼지 않고 모든 선을 한 번씩만! 홀수점의 비밀. (05 한붓그리기와 미로 찾기)</p>
-        <div class="bk-card__meta"><span class="soon">준비 중</span></div>
-      </div>
-    </a>
-    <a class="bk-card" href="games/magic/index.html" data-soon>
-      <div class="bk-card__thumb" style="background:#EFE6FA">🎩</div>
-      <div class="bk-card__body">
-        <h3 class="bk-card__title">수학 마술</h3>
-        <p class="bk-card__desc">합을 예언하고, 생일을 맞히는 수학 마술 4종. (01 수학 마술)</p>
-        <div class="bk-card__meta"><span class="soon">준비 중</span></div>
-      </div>
-    </a>
-  </div>
+  <p class="bk-muted" style="margin:10px 0 0;text-align:right">필승 전략 확장 게임 <a href="games/queen/index.html" style="color:var(--bk-orange-deep);font-family:var(--f-head)">♛ 황금비 퀸 ▶</a></p>
 
   <!-- ===== 책 목차 ===== -->
   <div class="sec-h" id="book"><h2>📖 『부산의 활동수학』 활동 한눈에</h2><div class="line"></div></div>
@@ -196,16 +161,17 @@
    web: 'games/..' 이면 "웹으로 하기" 버튼, soon:true 면 "준비 중", 없으면 책으로 */
 const UNITS = [
  {n:'1', t:'수학 놀이 활동', chapters:[
-   {n:'01', t:'수학 마술', place:'영화의전당 · 부산국제매직페스티벌', pic:'img/ch01.jpg', acts:[
-     {t:'수학 마술로 예언하기', soon:true},{t:'합이 보이는 마술 막대', soon:true},{t:'마음을 읽는 숫자 마술', soon:true},
-     {t:'나도 수학자 — 생일 알아맞히기 · 곱셈표 속 피타고라스 수', soon:true}]},
+   {n:'01', t:'수학 마술', place:'영화의전당 · 부산국제매직페스티벌', pic:'img/ch01.jpg', page:'book/01/index.html', acts:[
+     {t:'수학 마술로 예언하기', web:'book/01/index.html#t1'},{t:'합이 보이는 마술 막대', web:'book/01/index.html#t2'},{t:'마음을 읽는 숫자 마술', web:'book/01/index.html#t3'},
+     {t:'나도 수학자 — 생일 알아맞히기', web:'book/01/index.html#t4'},{t:'나도 수학자 — 곱셈표 속 피타고라스 수', web:'book/01/index.html#t5'}]},
    {n:'02', t:'필승 전략', place:'남산중학교 운동장 · 줄다리기', pic:'img/ch02.jpg', acts:[
      {t:'덧셈·뺄셈 게임', soon:true},{t:'약수 게임', soon:true},
-     {t:'마지막 카드를 가져라 (= 돌 가져가기)', web:'games/arcade/index.html?game=stone'},
-     {t:'나도 수학자 — 팝잇 게임 (이진법 필승 전략)', web:'games/popit/index.html'}]},
+     {t:'마지막 카드를 가져라', soon:true, extra:'심화: 돌 가져가기', extraWeb:'games/arcade/index.html?game=stone'},
+     {t:'나도 수학자 — 팝잇 게임 (이진법 필승 전략)', web:'games/popit/index.html'},
+     {t:'더 알아보기 — 황금비 퀸 (필승 전략 확장)', web:'games/queen/index.html'}]},
    {n:'03', t:'수학 퍼즐', place:'연제만화도서관', pic:'img/ch03.jpg', acts:[
      {t:'정삼각형 모양의 바둑돌 뒤집기', soon:true},{t:'최소 이동 횟수 (대칭인 경우)', soon:true},{t:'최소 이동 횟수 (대칭이 아닌 경우)', soon:true},
-     {t:'나도 수학자 — 정사각형 퍼즐 · 우물고누', soon:true}]},
+     {t:'나도 수학자 — 정사각형 퍼즐', soon:true},{t:'나도 수학자 — 우물고누', soon:true}]},
    {n:'04', t:'확률 놀이', place:'초량이바구길 168계단', pic:'img/ch04.jpg', acts:[
      {t:'상어 룰렛 게임', soon:true},{t:'확률 게임 만들기 (강 건너기 주사위)', soon:true},{t:'주사위 오목 게임', soon:true},{t:'행운의 고리 만들기', soon:true},
      {t:'나도 수학자 — 공평하게 배분하기'}]},
@@ -255,11 +221,12 @@ UNITS.forEach((u, ui) => {
       <div class="chap">
         <div class="chap__pic">${c.pic ? `<img src="${c.pic}" alt="">` : (c.emoji || '📘')}</div>
         <div>
-          <div class="chap__t"><span class="bk-top__num">${c.n}</span><b>${c.t}</b><span class="chap__place">📍 ${c.place}</span></div>
+          <div class="chap__t"><span class="bk-top__num">${c.n}</span><b>${c.t}</b><span class="chap__place">📍 ${c.place}</span>${c.page ? `<a class="bk-btn bk-btn--sky bk-btn--sm" href="${c.page}">이 장 열기 ▶</a>` : ''}</div>
           <div class="acts">${c.acts.map((a, i) => `
             <div class="act ${a.web ? '' : 'act--book'}">
               <span class="act__n">${i + 1}</span><span class="act__t">${a.t}</span>
               ${a.web ? `<a class="bk-btn bk-btn--mint" href="${a.web}">웹으로 하기 ▶</a>` : a.soon ? `<span class="soon">웹 준비 중</span>` : `<span class="soon" style="background:#f3f0e6;border-color:#e0d9c4;color:#8a8370">책으로</span>`}
+              ${a.extraWeb ? `<a class="bk-btn bk-btn--ghost bk-btn--sm" href="${a.extraWeb}">${a.extra} ▶</a>` : ''}
             </div>`).join('')}</div>
         </div>
       </div>`).join('')}</div>`;
@@ -267,8 +234,6 @@ UNITS.forEach((u, ui) => {
   host.appendChild(el);
 });
 
-// 준비 중 카드 클릭 막기
-document.querySelectorAll('a[data-soon]').forEach(a => a.addEventListener('click', e => { e.preventDefault(); alert('아직 준비 중이에요! 곧 추가됩니다.'); }));
 </script>
 </body>
 </html>
