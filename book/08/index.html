@@ -37,7 +37,8 @@
 </style>
 </head>
 <body class="bk">
-<script src="../../common.js" data-num="08" data-name="피타고라스 음계" data-sub="2단원 수학 역사 활동" data-home="../../"></script>
+<script src="../../common.js" data-num="08" data-name="피타고라스 음계" data-sub="2단원 수학 역사 활동" data-home="../../" data-up="../index.html#u2" data-up-name="책 목차"></script>
+<script src="../book.js"></script>
 <div class="bk-wrap">
   <section class="ch-intro">
     <div class="ch-intro__text">
@@ -50,10 +51,10 @@
   </section>
 
   <nav class="tabs" id="tabs">
-    <button class="tab on" data-t="t1"><span class="tab__n">1</span>관의 진동수</button>
-    <button class="tab" data-t="t2"><span class="tab__n">2</span>피타고라스 음계</button>
-    <button class="tab" data-t="t3"><span class="tab__n">3</span>음계의 변화 (순정률)</button>
-    <button class="tab" data-t="t4"><span class="tab__n">4</span>팬플루트 만들기</button>
+    <button class="tab on" data-t="t1"><span class="tab__n">1</span><span class="tab__l">관의 진동수</span><span class="tab__s">관의 진동수</span></button>
+    <button class="tab" data-t="t2"><span class="tab__n">2</span><span class="tab__l">피타고라스 음계</span><span class="tab__s">피타고라스 음계</span></button>
+    <button class="tab" data-t="t3"><span class="tab__n">3</span><span class="tab__l">음계의 변화 (순정률)</span><span class="tab__s">순정률</span></button>
+    <button class="tab" data-t="t4"><span class="tab__n">4</span><span class="tab__l">팬플루트 만들기</span><span class="tab__s">팬플루트</span></button>
   </nav>
 
   <!-- ===== 1 관 ===== -->
@@ -124,7 +125,7 @@
 
 <script>
 const $ = s => document.querySelector(s);
-document.querySelectorAll('#tabs .tab').forEach(b => b.onclick = () => { document.querySelectorAll('#tabs .tab').forEach(x => x.classList.toggle('on', x === b)); document.querySelectorAll('.act-page').forEach(p => { p.hidden = p.id !== b.dataset.t; p.style.display = p.hidden ? 'none' : ''; }); window.scrollTo({ top: $('#tabs').offsetTop - 70, behavior: 'smooth' }); });
+document.querySelectorAll('#tabs .tab').forEach(b => b.onclick = () => { document.querySelectorAll('#tabs .tab').forEach(x => x.classList.toggle('on', x === b)); document.querySelectorAll('.act-page').forEach(p => { p.hidden = p.id !== b.dataset.t; p.style.display = p.hidden ? 'none' : ''; }); window.scrollTo({ top: $('#tabs').offsetTop - (window.BK_TOP_H?.()||56) - 6, behavior: 'smooth' }); });
 (function(){ const h=location.hash.slice(1); const b=h&&document.querySelector(`#tabs .tab[data-t="${h}"]`); if(b) b.click(); })();
 
 /* ---- 소리 ---- */

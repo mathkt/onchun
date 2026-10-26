@@ -1,21 +1,46 @@
 /* ===== 책 활동 페이지 공통 (book/XX/) ===== */
 [hidden]{display:none!important}
-.ch-intro{display:grid;grid-template-columns:1.1fr .9fr;gap:0;border-radius:28px;overflow:hidden;background:var(--bk-cream);box-shadow:var(--bk-shadow);margin:14px 0 18px;min-height:240px}
-.ch-intro__text{padding:26px 28px 24px;display:flex;flex-direction:column;gap:10px}
-.ch-intro__text .bk-ribbon{align-self:flex-start;font-size:2rem;padding:10px 20px 8px}
-.ch-lead{font-family:var(--f-serif);margin:6px 0 0;color:var(--bk-ink-soft);max-width:46ch}
-.ch-goal{margin:4px 0 0;font-size:.85rem;background:#fff;border-radius:10px;padding:8px 12px;display:inline-block;border:1.5px solid var(--bk-line)}
-.ch-intro__pic{position:relative;clip-path:polygon(16% 0,100% 0,100% 100%,0 100%)}
-.ch-intro__pic img{width:100%;height:100%;object-fit:cover;object-position:center 35%}
-.ch-place{position:absolute;right:12px;bottom:10px;background:rgba(255,255,255,.9);padding:4px 10px;border-radius:999px;font-size:.78rem}
-@media(max-width:720px){.ch-intro{grid-template-columns:1fr}.ch-intro__pic{clip-path:polygon(0 14%,100% 0,100% 100%,0 100%);min-height:170px}}
+/* ---- 장 소개: 일러스트 위에 글이 겹친 한 화면 ---- */
+.ch-intro{position:relative;display:flex;flex-direction:column;justify-content:flex-end;border-radius:24px;overflow:hidden;background:var(--bk-cream);box-shadow:var(--bk-shadow);margin:10px 0 18px;min-height:calc(100dvh - var(--bk-top-h,56px) - 24px)}
+.ch-intro__pic{position:absolute;inset:0;z-index:0}
+.ch-intro__pic img{width:100%;height:100%;object-fit:cover;object-position:center 30%}
+.ch-intro__pic::after{content:"";position:absolute;inset:0;background:linear-gradient(180deg,rgba(251,240,200,.15) 0%,rgba(251,240,200,.55) 38%,rgba(251,240,200,.95) 62%,var(--bk-cream) 100%)}
+.ch-place{position:absolute;right:12px;top:10px;background:rgba(255,255,255,.9);padding:4px 10px;border-radius:999px;font-size:.78rem;z-index:1}
+.ch-intro__text{position:relative;z-index:1;padding:clamp(110px,30vh,320px) 22px 16px;display:flex;flex-direction:column;gap:8px}
+.ch-intro__text .bk-ribbon{align-self:flex-start;font-size:1.6rem;padding:8px 18px 6px}
+.ch-intro__text h1{margin:0;font-size:clamp(1.8rem,5vw,2.6rem);text-shadow:0 2px 0 #fff}
+.ch-lead{font-family:var(--f-serif);margin:2px 0 0;color:var(--bk-ink);max-width:52ch;font-size:clamp(.92rem,2.4vw,1.05rem);line-height:1.55}
+.ch-goal{margin:0;font-size:.82rem;background:rgba(255,255,255,.85);border-radius:10px;padding:7px 12px;display:inline-block;align-self:flex-start;border:1.5px solid var(--bk-line)}
+.ch-intro__tabs{margin-top:8px}
+.ch-intro__tabs-h{font-family:var(--f-head);font-size:.95rem;color:var(--bk-orange-deep);margin:0 0 6px}
+.ch-intro__tabs .tabs{position:static;display:grid;grid-template-columns:repeat(auto-fill,minmax(170px,1fr));gap:8px;background:transparent;padding:0;margin:0}
+.ch-intro__tabs .tab{justify-content:flex-start;font-size:1.02rem;min-height:48px;width:100%;box-sizing:border-box}
+.ch-intro__tabs .tab__s{display:none}
+.tabs-anchor{display:none}
+@media(max-height:760px){.ch-intro__text{padding-top:clamp(90px,20vh,200px)}}
+@media(max-height:620px){.ch-intro{min-height:0}}
+@media(max-width:640px){.ch-intro__text{padding:17vh 14px 12px;gap:5px}.ch-lead{font-size:.9rem;line-height:1.45}.ch-goal{font-size:.76rem;padding:5px 10px}.ch-intro__tabs .tabs{grid-template-columns:1fr;gap:5px}.ch-intro__tabs .tab{min-height:40px;font-size:.95rem!important;padding:3px 8px 3px 5px}.ch-intro__tabs-h{font-size:.85rem}}
 
-.tabs{display:flex;gap:8px;flex-wrap:wrap;margin:0 0 14px;position:sticky;top:60px;z-index:50;background:var(--bk-cream-2);padding:8px 0}
-.tab{font-family:var(--f-head);font-size:1rem;border:2px solid var(--bk-sky);background:#fff;color:var(--bk-ink);border-radius:999px;padding:8px 14px 8px 8px;display:inline-flex;align-items:center;gap:8px;cursor:pointer;min-height:44px;box-shadow:0 3px 0 #3a95c4;-webkit-tap-highlight-color:transparent}
-.tab__n{width:28px;height:28px;border-radius:50%;background:var(--bk-sky);color:#fff;display:grid;place-items:center;font-size:.9rem}
+/* ---- 활동 모드: 소개 숨기고 탭을 상단 고정 ---- */
+.act-mode .ch-intro{display:none}
+.act-mode .tabs-anchor{display:block}
+.tabs{display:flex;gap:6px;flex-wrap:wrap;margin:0 0 14px;position:sticky;top:var(--bk-top-h,56px);z-index:50;background:var(--bk-cream-2);padding:8px 0}
+.tab{font-family:var(--f-head);font-size:.98rem;border:2px solid var(--bk-sky);background:#fff;color:var(--bk-ink);border-radius:999px;padding:6px 14px 6px 7px;display:inline-flex;align-items:center;gap:7px;cursor:pointer;min-height:42px;box-shadow:0 3px 0 #3a95c4;-webkit-tap-highlight-color:transparent;white-space:nowrap;flex:1 1 auto;justify-content:center}
+.tab__n{width:26px;height:26px;border-radius:50%;background:var(--bk-sky);color:#fff;display:grid;place-items:center;font-size:.85rem;flex:none}
+.tab__s{display:none}
 .tab.on{background:var(--bk-sky);color:#fff}.tab.on .tab__n{background:#fff;color:var(--bk-sky)}
 .tab--pink{border-color:var(--bk-red);box-shadow:0 3px 0 #b53a2a}.tab--pink .tab__n{background:var(--bk-red)}
 .tab--pink.on{background:var(--bk-red)}.tab--pink.on .tab__n{color:var(--bk-red)}
+.tab--intro{border-color:var(--bk-orange);box-shadow:0 3px 0 var(--bk-orange-deep);flex:0 0 auto}.tab--intro .tab__n{background:var(--bk-orange)}
+@media(max-width:640px){
+  .tabs{gap:5px}
+  .tab{flex:1 1 29%;font-size:.84rem;padding:4px 8px 4px 5px;min-height:38px;gap:4px;overflow:hidden;box-shadow:0 2px 0 #3a95c4}
+  .tab--pink{box-shadow:0 2px 0 #b53a2a}.tab--intro{box-shadow:0 2px 0 var(--bk-orange-deep);flex:0 0 auto;padding-right:10px}
+  .tab__n{width:21px;height:21px;font-size:.74rem}
+  .tab__l{display:none}.tab__s{display:inline;overflow:hidden;text-overflow:ellipsis}
+  .ch-intro__tabs .tab{font-size:.98rem;flex:none;justify-content:flex-start}
+  .ch-intro__tabs .tab__l{display:inline}.ch-intro__tabs .tab__n{width:26px;height:26px;font-size:.85rem}
+}
 .act-page{display:flex;flex-direction:column;gap:14px}
 
 /* 마술사 무대 */

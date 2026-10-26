@@ -42,7 +42,8 @@
 </style>
 </head>
 <body class="bk">
-<script src="../../common.js" data-num="09" data-name="이진법" data-sub="3단원 수학 교과 활동" data-home="../../"></script>
+<script src="../../common.js" data-num="09" data-name="이진법" data-sub="3단원 수학 교과 활동" data-home="../../" data-up="../index.html#u3" data-up-name="책 목차"></script>
+<script src="../book.js"></script>
 <div class="bk-wrap">
   <section class="ch-intro">
     <div class="ch-intro__text">
@@ -55,10 +56,10 @@
   </section>
 
   <nav class="tabs" id="tabs">
-    <button class="tab on" data-t="t1"><span class="tab__n">1</span>마법 카드</button>
-    <button class="tab" data-t="t2"><span class="tab__n">2</span>특별한 막대로 길이 재기</button>
-    <button class="tab" data-t="t3"><span class="tab__n">3</span>전구 암호</button>
-    <button class="tab tab--pink" data-t="t4"><span class="tab__n">★</span>진법 이야기</button>
+    <button class="tab on" data-t="t1"><span class="tab__n">1</span><span class="tab__l">마법 카드</span><span class="tab__s">마법 카드</span></button>
+    <button class="tab" data-t="t2"><span class="tab__n">2</span><span class="tab__l">특별한 막대로 길이 재기</span><span class="tab__s">막대로 길이</span></button>
+    <button class="tab" data-t="t3"><span class="tab__n">3</span><span class="tab__l">전구 암호</span><span class="tab__s">전구 암호</span></button>
+    <button class="tab tab--pink" data-t="t4"><span class="tab__n">★</span><span class="tab__l">진법 이야기</span><span class="tab__s">진법 이야기</span></button>
   </nav>
 
   <!-- ===== 1 마법 카드 ===== -->
@@ -130,7 +131,7 @@
 
 <script>
 const $ = s => document.querySelector(s); const ri = n => Math.floor(Math.random() * n);
-document.querySelectorAll('#tabs .tab').forEach(b => b.onclick = () => { document.querySelectorAll('#tabs .tab').forEach(x => x.classList.toggle('on', x === b)); document.querySelectorAll('.act-page').forEach(p => { p.hidden = p.id !== b.dataset.t; p.style.display = p.hidden ? 'none' : ''; }); window.scrollTo({ top: $('#tabs').offsetTop - 70, behavior: 'smooth' }); });
+document.querySelectorAll('#tabs .tab').forEach(b => b.onclick = () => { document.querySelectorAll('#tabs .tab').forEach(x => x.classList.toggle('on', x === b)); document.querySelectorAll('.act-page').forEach(p => { p.hidden = p.id !== b.dataset.t; p.style.display = p.hidden ? 'none' : ''; }); window.scrollTo({ top: $('#tabs').offsetTop - (window.BK_TOP_H?.()||56) - 6, behavior: 'smooth' }); });
 (function(){ const h=location.hash.slice(1); const b=h&&document.querySelector(`#tabs .tab[data-t="${h}"]`); if(b) b.click(); })();
 
 /* ===== 1 마법 카드 ===== */

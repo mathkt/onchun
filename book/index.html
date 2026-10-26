@@ -1,0 +1,132 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+<title>책 목차 · 부산의 활동수학</title>
+<link rel="stylesheet" href="../common.css">
+<style>
+  .unit{margin:14px 0 24px;border-radius:24px;background:#fff;box-shadow:var(--bk-shadow);overflow:hidden}
+  .unit__head{display:flex;align-items:center;gap:14px;padding:16px 20px;background:var(--bk-cream);cursor:pointer;user-select:none}
+  .unit__head .bk-top__num{min-width:44px;height:44px;font-size:1.3rem}
+  .unit__head h3{font-family:var(--f-head);font-size:1.5rem;margin:0;flex:1}
+  .unit__head .arrow{transition:transform .2s;font-size:1.2rem;color:var(--bk-orange-deep)}
+  .unit.open .unit__head .arrow{transform:rotate(180deg)}
+  .unit__body{display:none;padding:10px 16px 18px}
+  .unit.open .unit__body{display:block}
+  .chap{display:grid;grid-template-columns:140px 1fr;gap:14px;padding:14px 6px;border-bottom:1px dashed var(--bk-line)}
+  .chap:last-child{border-bottom:0}
+  .chap__pic{border-radius:14px;overflow:hidden;aspect-ratio:1;background:var(--bk-cream);display:grid;place-items:center;font-size:2.2rem}
+  .chap__pic img{width:100%;height:100%;object-fit:cover}
+  .chap__t{display:flex;align-items:center;gap:10px;flex-wrap:wrap;margin-bottom:4px}
+  .chap__t b{font-family:var(--f-head);font-size:1.25rem;font-weight:400}
+  .chap__place{font-size:.8rem;color:var(--bk-ink-soft)}
+  .acts{display:flex;flex-direction:column;gap:6px;margin-top:6px}
+  .act{display:flex;align-items:center;gap:10px;padding:8px 10px;border-radius:12px;background:var(--bk-cream-2);font-size:.95rem}
+  .act__n{width:26px;height:26px;border-radius:50%;background:var(--bk-sky);color:#fff;display:grid;place-items:center;font-family:var(--f-head);font-size:.85rem;flex:none}
+  .act__t{flex:1}
+  .act .bk-btn{min-height:36px;padding:4px 12px;font-size:.9rem}
+  .act--book{opacity:.8}
+  .act--book .act__n{background:#c9c3b0}
+  .soon{font-size:.75rem;color:#9c8a55;background:#fff3c4;border:1px solid #f1dd8f;padding:3px 9px;border-radius:999px;white-space:nowrap}
+  @media(max-width:600px){.chap{grid-template-columns:90px 1fr}}
+
+  .toc-intro{display:flex;align-items:center;gap:12px;flex-wrap:wrap;margin:14px 0 6px}
+  .toc-intro h2{font-family:var(--f-head);font-size:1.5rem;margin:0;flex:1}
+  .unit__head{scroll-margin-top:70px}
+  footer{margin:40px 0 0;text-align:center;color:var(--bk-ink-soft);font-size:.85rem}
+</style>
+</head>
+<body class="bk">
+<script src="../common.js" data-num="📖" data-name="책 목차" data-sub="부산의 활동수학" data-home="../"></script>
+<div class="bk-wrap">
+  <div class="toc-intro"><h2>『부산의 활동수학』 활동 한눈에</h2>
+    <span class="bk-muted">단원을 누르면 장과 활동이 펼쳐져요. <span class="bk-tag bk-tag--green">웹으로 하기</span>는 바로 해 볼 수 있어요.</span></div>
+  <div id="units"></div>
+  <footer>부산의 활동수학 × 수학 축전 부스</footer>
+</div>
+
+<script>
+/* ---------- 책 목차 데이터 (★ 여기만 고치면 됨) ----------
+   경로는 저장소 루트 기준으로 쓰면 됩니다(아래 R()가 ../ 를 붙여 줌) */
+const R = p => p ? '../' + p : p;
+const UNITS = [
+ {n:'1', t:'수학 놀이 활동', chapters:[
+   {n:'01', t:'수학 마술', place:'영화의전당 · 부산국제매직페스티벌', pic:'img/ch01.jpg', page:'book/01/index.html', acts:[
+     {t:'수학 마술로 예언하기', web:'book/01/index.html#t1'},{t:'합이 보이는 마술 막대', web:'book/01/index.html#t2'},{t:'마음을 읽는 숫자 마술', web:'book/01/index.html#t3'},
+     {t:'나도 수학자 — 생일 알아맞히기', web:'book/01/index.html#t4'},{t:'나도 수학자 — 곱셈표 속 피타고라스 수', web:'book/01/index.html#t5'}]},
+   {n:'02', t:'필승 전략', place:'남산중학교 운동장 · 줄다리기', pic:'img/ch02.jpg', page:'book/02/index.html', acts:[
+     {t:'덧셈·뺄셈 게임', web:'book/02/index.html#t1'},{t:'약수 게임', web:'book/02/index.html#t2'},
+     {t:'마지막 카드를 가져라', web:'book/02/index.html#t3', extra:'심화: 돌 가져가기', extraWeb:'games/arcade/index.html?game=stone'},
+     {t:'나도 수학자 — 팝잇 게임 (이진법 필승 전략)', web:'games/popit/index.html'},
+     {t:'더 알아보기 — 황금비 퀸 (필승 전략 확장)', web:'games/queen/index.html'}]},
+   {n:'03', t:'수학 퍼즐', place:'연제만화도서관', pic:'img/ch03.jpg', page:'book/03/index.html', acts:[
+     {t:'정삼각형 모양의 바둑돌 뒤집기', web:'book/03/index.html#t1'},{t:'최소 이동 횟수 (대칭인 경우)', web:'book/03/index.html#t2'},{t:'최소 이동 횟수 (대칭이 아닌 경우)', web:'book/03/index.html#t3'},
+     {t:'나도 수학자 — 정사각형 퍼즐', web:'book/03/index.html#t4'},{t:'나도 수학자 — 우물고누', web:'book/03/index.html#t5'}]},
+   {n:'04', t:'확률 놀이', place:'초량이바구길 168계단', pic:'img/ch04.jpg', page:'book/04/index.html', acts:[
+     {t:'상어 룰렛 게임', web:'book/04/index.html#t1'},{t:'확률 게임 만들기 (강 건너기 주사위)', web:'book/04/index.html#t2'},{t:'주사위 오목 게임', web:'book/04/index.html#t3'},{t:'행운의 고리 만들기', web:'book/04/index.html#t4'},
+     {t:'나도 수학자 — 공평하게 배분하기', web:'book/04/index.html#t5'}]},
+   {n:'05', t:'한붓그리기와 미로 찾기', place:'부산시민공원 미로정원', pic:'img/ch05.jpg', page:'book/05/index.html', acts:[
+     {t:'홀수점과 짝수점', web:'book/05/index.html#t1'},{t:'한붓그리기가 가능한 도형', web:'book/05/index.html#t2'},{t:'조르당 곡선과 그 성질', web:'book/05/index.html#t3'},{t:'조르당 곡선과 미로', web:'book/05/index.html#t4'},
+     {t:'나도 수학자 — 부산시민공원 매스투어', web:'book/05/index.html#t5'}]},
+ ]},
+ {n:'2', t:'수학 역사 활동', chapters:[
+   {n:'06', t:'선조들의 셈법', place:'동래향교', pic:'img/ch06.jpg', page:'book/06/index.html', acts:[
+     {t:'손가락을 이용한 곱셈구구', web:'book/06/index.html#t1'},{t:'이집트 곱셈', web:'book/06/index.html#t2'},{t:'네이피어 막대 곱셈', web:'book/06/index.html#t3'},{t:'제나이유-뤼카 막대 곱셈', web:'book/06/index.html#t4'},{t:'나도 수학자 — 산가지 곱셈', web:'book/06/index.html#t5'}]},
+   {n:'07', t:'라틴방진', place:'광안대교', pic:'img/ch07.jpg', page:'book/07/index.html', acts:[
+     {t:'3차 마방진 완성하기', web:'book/07/index.html#t1'},{t:'라틴방진 (3차·4차, 대각선 조건)', web:'book/07/index.html#t2'},{t:'직교 라틴방진과 마방진', web:'book/07/index.html#t3'},{t:'9차 라틴방진 숫자 퍼즐', web:'book/07/index.html#t4'},{t:'라틴방진 열쇠고리 만들기'},{t:'읽을거리 — 최석정의 9차 직교 라틴방진', web:'book/07/index.html#t5'}]},
+   {n:'08', t:'피타고라스 음계', place:'부산콘서트홀', pic:'img/ch08.jpg', page:'book/08/index.html', acts:[
+     {t:'관의 진동수 측정하기', web:'book/08/index.html#t1'},{t:'피타고라스 음계 (현의 길이)', web:'book/08/index.html#t2'},{t:'음계의 변화 (순정률 4:5:6)', web:'book/08/index.html#t3'},{t:'팬플루트 만들기', web:'book/08/index.html#t4'}]},
+ ]},
+ {n:'3', t:'수학 교과 활동', chapters:[
+   {n:'09', t:'이진법', place:'엄궁농산물도매시장', pic:'img/ch09.jpg', page:'book/09/index.html', acts:[
+     {t:'마법 카드 만들기 (수 맞히기)', web:'book/09/index.html#t1'},{t:'특별한 막대로 길이 재기', web:'book/09/index.html#t2'},{t:'전구를 이용한 암호 만들기', web:'book/09/index.html#t3'},{t:'읽을거리 — 다양한 진법 이야기', web:'book/09/index.html#t4'}]},
+   {n:'10', t:'무게중심', place:'을숙도 철새 도래지', pic:'img/ch10.jpg', page:'book/10/index.html', acts:[
+     {t:'삼각형 면의 무게중심', web:'book/10/index.html#t1'},{t:'아르키메데스의 지렛대 원리 (시소·모빌)', web:'book/10/index.html#t2'},{t:'꼭짓점의 무게중심 1', web:'book/10/index.html#t3'},{t:'꼭짓점의 무게중심 2 (무게가 다를 때)', web:'book/10/index.html#t4'}]},
+   {n:'11', t:'정사면체의 전개도', place:'죽성드림세트장', pic:'img/ch11.jpg', page:'book/11/index.html', acts:[
+     {t:'정사면체 전개도 (모서리 자르기)', web:'book/11/index.html#t1'},{t:'직사각형 모양 전개도', web:'book/11/index.html#t2'},{t:'비밀 편지지 만들기', web:'book/11/index.html#t3'},{t:'나도 수학자 — 다양한 전개도', web:'book/11/index.html#t4'}]},
+   {n:'12', t:'아르키메데스 다면체', place:'부산수학문화관', pic:'img/ch12.jpg', page:'book/12/index.html', acts:[
+     {t:'정다면체 표 (V−E+F)', web:'book/12/index.html#t1'},{t:'아르키메데스 다면체 (깎기·부풀리기)', web:'book/12/index.html#t2'},{t:'꼭짓점 배열 붙임딱지 퀴즈', web:'book/12/index.html#t3'},{t:'육팔면체·십이이십면체의 관계', web:'book/12/index.html#t4'}]},
+   {n:'13', t:'정육면체·정팔면체의 전개도', place:'해운대수목원', pic:'img/ch13.jpg', page:'book/13/index.html', acts:[
+     {t:'모서리를 잘라 전개도 만들기 (11종 찾기)', web:'book/13/index.html#t1'},{t:'전개도 판별하기 (평행한 면 A·B·C)', web:'book/13/index.html#t2'},{t:'쌍대 다면체의 전개도', web:'book/13/index.html#t3'},{t:'나도 수학자 — 정다면체·카탈랑 다면체의 쌍대', web:'book/13/index.html#t4'}]},
+ ]},
+ {n:'4', t:'수학 진로 활동', chapters:[
+   {n:'14', t:'픽의 정리', place:'감천문화마을', pic:'img/ch14.jpg', page:'book/14/index.html', acts:[
+     {t:'격자 삼각형의 넓이', web:'book/14/index.html#t1'},{t:'격자 다각형의 넓이 (픽의 정리)', web:'book/14/index.html#t2'},{t:'손바닥 넓이 구하기', web:'book/14/index.html#t3'},{t:'구멍 있는 격자 다각형', web:'book/14/index.html#t4'},{t:'나도 수학자 — 지도로 면적 구하기', web:'book/14/index.html#t5'}]},
+   {n:'15', t:'프랙털', place:'해운대 해변열차', pic:'img/ch15.jpg', page:'book/15/index.html', acts:[
+     {t:'자연이 선택한 프랙털 구조', web:'book/15/index.html#t1'},{t:'코흐 곡선 그리기', web:'book/15/index.html#t2'},{t:'시어핀스키 카펫 그리기', web:'book/15/index.html#t3'},{t:'멩거 스펀지 만들기', web:'book/15/index.html#t4'},{t:'나도 수학자 — 프랙털 차원', web:'book/15/index.html#t5'}]},
+   {n:'16', t:'종이접기 나선', place:'태종대 영도등대', pic:'img/ch16.jpg', page:'book/16/index.html', acts:[
+     {t:'기본 종이접기 · 색종이로 나선 접기', web:'book/16/index.html#t1'},{t:'나선의 기하학적 성질', web:'book/16/index.html#t2'},{t:'최단 거리 (원기둥 펼치기)', web:'book/16/index.html#t3'},{t:'나도 수학자 — 일엽쌍곡면 · 피보나치 와선', web:'book/16/index.html#t4'}]},
+   {n:'17', t:'관찰 최적 위치', place:'정발 장군 동상', pic:'img/ch17.jpg', page:'book/17/index.html', acts:[
+     {t:'원의 할선 정리', web:'book/17/index.html#t1'},{t:'슈팅각', web:'book/17/index.html#t2'},{t:'슈팅각이 최대인 지점', web:'book/17/index.html#t3'},{t:'동상의 관찰 최적 위치', web:'book/17/index.html#t4'}]},
+ ]},
+];
+
+const host = document.getElementById('units');
+const openUnit = (location.hash.match(/^#u(\d)/)||[])[1];
+UNITS.forEach((u, ui) => {
+  const el = document.createElement('section');
+  el.id = 'u' + u.n;
+  el.className = 'unit' + ((openUnit ? openUnit === u.n : ui === 0) ? ' open' : '');
+  el.innerHTML = `
+    <div class="unit__head"><span class="bk-top__num">${u.n}단원</span><h3>${u.t}</h3><span class="arrow">▼</span></div>
+    <div class="unit__body">${u.chapters.map(c => `
+      <div class="chap" id="c${c.n}">
+        <div class="chap__pic">${c.pic ? `<img src="${R(c.pic)}" alt="">` : (c.emoji || '📘')}</div>
+        <div>
+          <div class="chap__t"><span class="bk-top__num">${c.n}</span><b>${c.t}</b><span class="chap__place">📍 ${c.place}</span>${c.page ? `<a class="bk-btn bk-btn--sky bk-btn--sm" href="${R(c.page)}">이 장 열기 ▶</a>` : ''}</div>
+          <div class="acts">${c.acts.map((a, i) => `
+            <div class="act ${a.web ? '' : 'act--book'}">
+              <span class="act__n">${i + 1}</span><span class="act__t">${a.t}</span>
+              ${a.web ? `<a class="bk-btn bk-btn--mint" href="${R(a.web)}">웹으로 하기 ▶</a>` : a.soon ? `<span class="soon">웹 준비 중</span>` : `<span class="soon" style="background:#f3f0e6;border-color:#e0d9c4;color:#8a8370">책으로</span>`}
+              ${a.extraWeb ? `<a class="bk-btn bk-btn--ghost bk-btn--sm" href="${R(a.extraWeb)}">${a.extra} ▶</a>` : ''}
+            </div>`).join('')}</div>
+        </div>
+      </div>`).join('')}</div>`;
+  el.querySelector('.unit__head').addEventListener('click', () => el.classList.toggle('open'));
+  host.appendChild(el);
+});
+if (openUnit) document.getElementById('u'+openUnit)?.scrollIntoView();
+</script>
+</body>
+</html>

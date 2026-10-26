@@ -23,7 +23,8 @@
 </style>
 </head>
 <body class="bk">
-<script src="../../common.js" data-num="14" data-name="픽의 정리" data-sub="4단원 수학 진로 활동" data-home="../../"></script>
+<script src="../../common.js" data-num="14" data-name="픽의 정리" data-sub="4단원 수학 진로 활동" data-home="../../" data-up="../index.html#u4" data-up-name="책 목차"></script>
+<script src="../book.js"></script>
 <div class="bk-wrap">
   <section class="ch-intro">
     <div class="ch-intro__text">
@@ -36,11 +37,11 @@
   </section>
 
   <nav class="tabs" id="tabs">
-    <button class="tab on" data-t="t1"><span class="tab__n">1</span>격자 삼각형</button>
-    <button class="tab" data-t="t2"><span class="tab__n">2</span>격자 다각형 — 픽의 정리</button>
-    <button class="tab" data-t="t3"><span class="tab__n">3</span>손바닥 넓이</button>
-    <button class="tab" data-t="t4"><span class="tab__n">4</span>구멍 있는 다각형</button>
-    <button class="tab tab--pink" data-t="t5"><span class="tab__n">★</span>지도 면적 구하기</button>
+    <button class="tab on" data-t="t1"><span class="tab__n">1</span><span class="tab__l">격자 삼각형</span><span class="tab__s">격자 삼각형</span></button>
+    <button class="tab" data-t="t2"><span class="tab__n">2</span><span class="tab__l">격자 다각형 — 픽의 정리</span><span class="tab__s">픽의 정리</span></button>
+    <button class="tab" data-t="t3"><span class="tab__n">3</span><span class="tab__l">손바닥 넓이</span><span class="tab__s">손바닥 넓이</span></button>
+    <button class="tab" data-t="t4"><span class="tab__n">4</span><span class="tab__l">구멍 있는 다각형</span><span class="tab__s">구멍 다각형</span></button>
+    <button class="tab tab--pink" data-t="t5"><span class="tab__n">★</span><span class="tab__l">지도 면적 구하기</span><span class="tab__s">지도 면적</span></button>
   </nav>
 
   <!-- ===== 1·2·4 공용 격자 ===== -->
@@ -119,7 +120,7 @@
 
 <script>
 const $ = s => document.querySelector(s);
-document.querySelectorAll('#tabs .tab').forEach(b => b.onclick = () => { document.querySelectorAll('#tabs .tab').forEach(x => x.classList.toggle('on', x === b)); document.querySelectorAll('.act-page').forEach(p => { p.hidden = p.id !== b.dataset.t; p.style.display = p.hidden ? 'none' : ''; }); window.scrollTo({ top: $('#tabs').offsetTop - 70, behavior: 'smooth' }); });
+document.querySelectorAll('#tabs .tab').forEach(b => b.onclick = () => { document.querySelectorAll('#tabs .tab').forEach(x => x.classList.toggle('on', x === b)); document.querySelectorAll('.act-page').forEach(p => { p.hidden = p.id !== b.dataset.t; p.style.display = p.hidden ? 'none' : ''; }); window.scrollTo({ top: $('#tabs').offsetTop - (window.BK_TOP_H?.()||56) - 6, behavior: 'smooth' }); });
 (function(){ const h=location.hash.slice(1); const b=h&&document.querySelector(`#tabs .tab[data-t="${h}"]`); if(b) b.click(); })();
 const gcd = (a, b) => b ? gcd(b, a % b) : a;
 function shoelace(P) { let s = 0; for (let i = 0; i < P.length; i++) { const [x1, y1] = P[i], [x2, y2] = P[(i + 1) % P.length]; s += x1 * y2 - x2 * y1; } return Math.abs(s) / 2; }

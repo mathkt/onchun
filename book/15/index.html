@@ -21,7 +21,8 @@
 </style>
 </head>
 <body class="bk">
-<script src="../../common.js" data-num="15" data-name="프랙털" data-sub="4단원 수학 진로 활동" data-home="../../"></script>
+<script src="../../common.js" data-num="15" data-name="프랙털" data-sub="4단원 수학 진로 활동" data-home="../../" data-up="../index.html#u4" data-up-name="책 목차"></script>
+<script src="../book.js"></script>
 <div class="bk-wrap">
   <section class="ch-intro">
     <div class="ch-intro__text">
@@ -34,11 +35,11 @@
   </section>
 
   <nav class="tabs" id="tabs">
-    <button class="tab on" data-t="t1"><span class="tab__n">1</span>자연이 선택한 프랙털</button>
-    <button class="tab" data-t="t2"><span class="tab__n">2</span>코흐 곡선</button>
-    <button class="tab" data-t="t3"><span class="tab__n">3</span>시어핀스키 카펫</button>
-    <button class="tab" data-t="t4"><span class="tab__n">4</span>멩거 스펀지</button>
-    <button class="tab tab--pink" data-t="t5"><span class="tab__n">★</span>프랙털 차원</button>
+    <button class="tab on" data-t="t1"><span class="tab__n">1</span><span class="tab__l">자연이 선택한 프랙털</span><span class="tab__s">자연의 프랙털</span></button>
+    <button class="tab" data-t="t2"><span class="tab__n">2</span><span class="tab__l">코흐 곡선</span><span class="tab__s">코흐 곡선</span></button>
+    <button class="tab" data-t="t3"><span class="tab__n">3</span><span class="tab__l">시어핀스키 카펫</span><span class="tab__s">시어핀스키</span></button>
+    <button class="tab" data-t="t4"><span class="tab__n">4</span><span class="tab__l">멩거 스펀지</span><span class="tab__s">멩거 스펀지</span></button>
+    <button class="tab tab--pink" data-t="t5"><span class="tab__n">★</span><span class="tab__l">프랙털 차원</span><span class="tab__s">프랙털 차원</span></button>
   </nav>
 
   <!-- ===== 1 ===== -->
@@ -126,7 +127,7 @@
 <script src="../poly3d.js"></script>
 <script>
 const $ = s => document.querySelector(s);
-document.querySelectorAll('#tabs .tab').forEach(b => b.onclick = () => { document.querySelectorAll('#tabs .tab').forEach(x => x.classList.toggle('on', x === b)); document.querySelectorAll('.act-page').forEach(p => { p.hidden = p.id !== b.dataset.t; p.style.display = p.hidden ? 'none' : ''; }); window.scrollTo({ top: $('#tabs').offsetTop - 70, behavior: 'smooth' }); });
+document.querySelectorAll('#tabs .tab').forEach(b => b.onclick = () => { document.querySelectorAll('#tabs .tab').forEach(x => x.classList.toggle('on', x === b)); document.querySelectorAll('.act-page').forEach(p => { p.hidden = p.id !== b.dataset.t; p.style.display = p.hidden ? 'none' : ''; }); window.scrollTo({ top: $('#tabs').offsetTop - (window.BK_TOP_H?.()||56) - 6, behavior: 'smooth' }); });
 (function(){ const h=location.hash.slice(1); const b=h&&document.querySelector(`#tabs .tab[data-t="${h}"]`); if(b) b.click(); })();
 
 /* ===== 1 정육면체 & 나무 ===== */

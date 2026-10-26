@@ -20,7 +20,8 @@
 </style>
 </head>
 <body class="bk">
-<script src="../../common.js" data-num="16" data-name="종이접기 나선" data-sub="4단원 수학 진로 활동" data-home="../../"></script>
+<script src="../../common.js" data-num="16" data-name="종이접기 나선" data-sub="4단원 수학 진로 활동" data-home="../../" data-up="../index.html#u4" data-up-name="책 목차"></script>
+<script src="../book.js"></script>
 <div class="bk-wrap">
   <section class="ch-intro">
     <div class="ch-intro__text">
@@ -33,10 +34,10 @@
   </section>
 
   <nav class="tabs" id="tabs">
-    <button class="tab on" data-t="t1"><span class="tab__n">1·2</span>종이접기와 나선 접기</button>
-    <button class="tab" data-t="t2"><span class="tab__n">3</span>나선의 기하학적 성질</button>
-    <button class="tab" data-t="t3"><span class="tab__n">4</span>최단 거리</button>
-    <button class="tab tab--pink" data-t="t4"><span class="tab__n">★</span>일엽쌍곡면 · 와선</button>
+    <button class="tab on" data-t="t1"><span class="tab__n">1·2</span><span class="tab__l">종이접기와 나선 접기</span><span class="tab__s">나선 접기</span></button>
+    <button class="tab" data-t="t2"><span class="tab__n">3</span><span class="tab__l">나선의 기하학적 성질</span><span class="tab__s">나선의 성질</span></button>
+    <button class="tab" data-t="t3"><span class="tab__n">4</span><span class="tab__l">최단 거리</span><span class="tab__s">최단 거리</span></button>
+    <button class="tab tab--pink" data-t="t4"><span class="tab__n">★</span><span class="tab__l">일엽쌍곡면 · 와선</span><span class="tab__s">쌍곡면·와선</span></button>
   </nav>
 
   <!-- ===== 1·2 ===== -->
@@ -103,7 +104,7 @@
 
 <script>
 const $ = s => document.querySelector(s);
-document.querySelectorAll('#tabs .tab').forEach(b => b.onclick = () => { document.querySelectorAll('#tabs .tab').forEach(x => x.classList.toggle('on', x === b)); document.querySelectorAll('.act-page').forEach(p => { p.hidden = p.id !== b.dataset.t; p.style.display = p.hidden ? 'none' : ''; }); window.scrollTo({ top: $('#tabs').offsetTop - 70, behavior: 'smooth' }); });
+document.querySelectorAll('#tabs .tab').forEach(b => b.onclick = () => { document.querySelectorAll('#tabs .tab').forEach(x => x.classList.toggle('on', x === b)); document.querySelectorAll('.act-page').forEach(p => { p.hidden = p.id !== b.dataset.t; p.style.display = p.hidden ? 'none' : ''; }); window.scrollTo({ top: $('#tabs').offsetTop - (window.BK_TOP_H?.()||56) - 6, behavior: 'smooth' }); });
 (function(){ const h=location.hash.slice(1); const b=h&&document.querySelector(`#tabs .tab[data-t="${h}"]`); if(b) b.click(); })();
 
 /* ===== 1·2 ===== */

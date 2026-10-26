@@ -16,7 +16,8 @@
 </style>
 </head>
 <body class="bk">
-<script src="../../common.js" data-num="10" data-name="무게중심" data-sub="3단원 수학 교과 활동" data-home="../../"></script>
+<script src="../../common.js" data-num="10" data-name="무게중심" data-sub="3단원 수학 교과 활동" data-home="../../" data-up="../index.html#u3" data-up-name="책 목차"></script>
+<script src="../book.js"></script>
 <div class="bk-wrap">
   <section class="ch-intro">
     <div class="ch-intro__text">
@@ -29,10 +30,10 @@
   </section>
 
   <nav class="tabs" id="tabs">
-    <button class="tab on" data-t="t1"><span class="tab__n">1</span>삼각형 면의 무게중심</button>
-    <button class="tab" data-t="t2"><span class="tab__n">2</span>지렛대 원리</button>
-    <button class="tab" data-t="t3"><span class="tab__n">3</span>꼭짓점의 무게중심 1</button>
-    <button class="tab" data-t="t4"><span class="tab__n">4</span>꼭짓점의 무게중심 2</button>
+    <button class="tab on" data-t="t1"><span class="tab__n">1</span><span class="tab__l">삼각형 면의 무게중심</span><span class="tab__s">면의 무게중심</span></button>
+    <button class="tab" data-t="t2"><span class="tab__n">2</span><span class="tab__l">지렛대 원리</span><span class="tab__s">지렛대 원리</span></button>
+    <button class="tab" data-t="t3"><span class="tab__n">3</span><span class="tab__l">꼭짓점의 무게중심 1</span><span class="tab__s">꼭짓점 1</span></button>
+    <button class="tab" data-t="t4"><span class="tab__n">4</span><span class="tab__l">꼭짓점의 무게중심 2</span><span class="tab__s">꼭짓점 2</span></button>
   </nav>
 
   <!-- ===== 1 면의 무게중심 ===== -->
@@ -106,7 +107,7 @@
 
 <script>
 const $ = s => document.querySelector(s);
-document.querySelectorAll('#tabs .tab').forEach(b => b.onclick = () => { document.querySelectorAll('#tabs .tab').forEach(x => x.classList.toggle('on', x === b)); document.querySelectorAll('.act-page').forEach(p => { p.hidden = p.id !== b.dataset.t; p.style.display = p.hidden ? 'none' : ''; }); window.scrollTo({ top: $('#tabs').offsetTop - 70, behavior: 'smooth' }); });
+document.querySelectorAll('#tabs .tab').forEach(b => b.onclick = () => { document.querySelectorAll('#tabs .tab').forEach(x => x.classList.toggle('on', x === b)); document.querySelectorAll('.act-page').forEach(p => { p.hidden = p.id !== b.dataset.t; p.style.display = p.hidden ? 'none' : ''; }); window.scrollTo({ top: $('#tabs').offsetTop - (window.BK_TOP_H?.()||56) - 6, behavior: 'smooth' }); });
 (function(){ const h=location.hash.slice(1); const b=h&&document.querySelector(`#tabs .tab[data-t="${h}"]`); if(b) b.click(); })();
 function svgPt(svg, e) { const p = svg.createSVGPoint(); p.x = e.clientX; p.y = e.clientY; return p.matrixTransform(svg.getScreenCTM().inverse()); }
 function draggable(svg, pts, onMove) { let cur = null; svg.addEventListener('pointerdown', e => { const p = svgPt(svg, e); let best = null, bd = 30; pts().forEach((q, i) => { const d = Math.hypot(q[0] - p.x, q[1] - p.y); if (d < bd) { bd = d; best = i; } }); if (best !== null) { cur = best; svg.setPointerCapture(e.pointerId); } }); svg.addEventListener('pointermove', e => { if (cur === null) return; const p = svgPt(svg, e); onMove(cur, [Math.max(10, Math.min(550, p.x)), Math.max(10, Math.min(350, p.y))]); }); svg.addEventListener('pointerup', () => cur = null); svg.addEventListener('pointercancel', () => cur = null); }

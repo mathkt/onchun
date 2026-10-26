@@ -54,7 +54,8 @@
 </style>
 </head>
 <body class="bk">
-<script src="../../common.js" data-num="06" data-name="선조들의 셈법" data-sub="2단원 수학 역사 활동" data-home="../../"></script>
+<script src="../../common.js" data-num="06" data-name="선조들의 셈법" data-sub="2단원 수학 역사 활동" data-home="../../" data-up="../index.html#u2" data-up-name="책 목차"></script>
+<script src="../book.js"></script>
 <div class="bk-wrap">
   <section class="ch-intro">
     <div class="ch-intro__text">
@@ -67,11 +68,11 @@
   </section>
 
   <nav class="tabs" id="tabs">
-    <button class="tab on" data-t="t1"><span class="tab__n">1</span>손가락 곱셈구구</button>
-    <button class="tab" data-t="t2"><span class="tab__n">2</span>이집트 곱셈</button>
-    <button class="tab" data-t="t3"><span class="tab__n">3</span>네이피어 막대</button>
-    <button class="tab" data-t="t4"><span class="tab__n">4</span>제나이유-뤼카 막대</button>
-    <button class="tab tab--pink" data-t="t5"><span class="tab__n">★</span>산가지 곱셈</button>
+    <button class="tab on" data-t="t1"><span class="tab__n">1</span><span class="tab__l">손가락 곱셈구구</span><span class="tab__s">손가락 곱셈</span></button>
+    <button class="tab" data-t="t2"><span class="tab__n">2</span><span class="tab__l">이집트 곱셈</span><span class="tab__s">이집트 곱셈</span></button>
+    <button class="tab" data-t="t3"><span class="tab__n">3</span><span class="tab__l">네이피어 막대</span><span class="tab__s">네이피어 막대</span></button>
+    <button class="tab" data-t="t4"><span class="tab__n">4</span><span class="tab__l">제나이유-뤼카 막대</span><span class="tab__s">제나이유 막대</span></button>
+    <button class="tab tab--pink" data-t="t5"><span class="tab__n">★</span><span class="tab__l">산가지 곱셈</span><span class="tab__s">산가지 곱셈</span></button>
   </nav>
 
   <!-- ===== 1 손가락 ===== -->
@@ -167,7 +168,7 @@
 
 <script>
 const $ = s => document.querySelector(s);
-document.querySelectorAll('#tabs .tab').forEach(b => b.onclick = () => { document.querySelectorAll('#tabs .tab').forEach(x => x.classList.toggle('on', x === b)); document.querySelectorAll('.act-page').forEach(p => { p.hidden = p.id !== b.dataset.t; p.style.display = p.hidden ? 'none' : ''; }); window.scrollTo({ top: $('#tabs').offsetTop - 70, behavior: 'smooth' }); });
+document.querySelectorAll('#tabs .tab').forEach(b => b.onclick = () => { document.querySelectorAll('#tabs .tab').forEach(x => x.classList.toggle('on', x === b)); document.querySelectorAll('.act-page').forEach(p => { p.hidden = p.id !== b.dataset.t; p.style.display = p.hidden ? 'none' : ''; }); window.scrollTo({ top: $('#tabs').offsetTop - (window.BK_TOP_H?.()||56) - 6, behavior: 'smooth' }); });
 (function(){ const h=location.hash.slice(1); const b=h&&document.querySelector(`#tabs .tab[data-t="${h}"]`); if(b) b.click(); })();
 
 /* ===== 1 손가락 ===== */

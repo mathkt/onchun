@@ -8,7 +8,8 @@
 <link rel="stylesheet" href="../book.css">
 </head>
 <body class="bk">
-<script src="../../common.js" data-num="01" data-name="수학 마술" data-sub="1단원 수학 놀이 활동" data-home="../../"></script>
+<script src="../../common.js" data-num="01" data-name="수학 마술" data-sub="1단원 수학 놀이 활동" data-home="../../" data-up="../index.html#u1" data-up-name="책 목차"></script>
+<script src="../book.js"></script>
 <div class="bk-wrap">
 
   <!-- 단원 도입 -->
@@ -24,11 +25,11 @@
 
   <!-- 활동 탭 -->
   <nav class="tabs" id="tabs">
-    <button class="tab on" data-t="t1"><span class="tab__n">1</span>수학 마술로 예언하기</button>
-    <button class="tab" data-t="t2"><span class="tab__n">2</span>합이 보이는 마술 막대</button>
-    <button class="tab" data-t="t3"><span class="tab__n">3</span>마음을 읽는 숫자 마술</button>
-    <button class="tab tab--pink" data-t="t4"><span class="tab__n">★</span>생일 알아맞히기</button>
-    <button class="tab tab--pink" data-t="t5"><span class="tab__n">★</span>곱셈표 속 피타고라스 수</button>
+    <button class="tab on" data-t="t1"><span class="tab__n">1</span><span class="tab__l">수학 마술로 예언하기</span><span class="tab__s">예언 마술</span></button>
+    <button class="tab" data-t="t2"><span class="tab__n">2</span><span class="tab__l">합이 보이는 마술 막대</span><span class="tab__s">마술 막대</span></button>
+    <button class="tab" data-t="t3"><span class="tab__n">3</span><span class="tab__l">마음을 읽는 숫자 마술</span><span class="tab__s">숫자 마술</span></button>
+    <button class="tab tab--pink" data-t="t4"><span class="tab__n">★</span><span class="tab__l">생일 알아맞히기</span><span class="tab__s">생일 맞히기</span></button>
+    <button class="tab tab--pink" data-t="t5"><span class="tab__n">★</span><span class="tab__l">곱셈표 속 피타고라스 수</span><span class="tab__s">피타고라스 수</span></button>
   </nav>
 
   <!-- ================= 활동 1: 예언하기 ================= -->
@@ -202,7 +203,7 @@
 document.querySelectorAll('#tabs .tab').forEach(b => b.onclick = () => {
   document.querySelectorAll('#tabs .tab').forEach(x => x.classList.toggle('on', x === b));
   document.querySelectorAll('.act-page').forEach(p => { p.hidden = p.id !== b.dataset.t; p.style.display = p.hidden ? 'none' : ''; });
-  window.scrollTo({ top: document.getElementById('tabs').offsetTop - 70, behavior: 'smooth' });
+  window.scrollTo({ top: document.getElementById('tabs').offsetTop - (window.BK_TOP_H?.()||56) - 6, behavior: 'smooth' });
 });
 const $ = s => document.querySelector(s);
 (function(){ const h=location.hash.slice(1); const b=h&&document.querySelector(`#tabs .tab[data-t="${h}"]`); if(b){ b.click(); } })();
