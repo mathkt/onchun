@@ -1,5 +1,5 @@
 /* 부산의 활동수학 축전 · 공용 온라인 대전 모듈 (Firebase Realtime DB, compat SDK)
-   - 팝잇이 쓰는 Firebase 프로젝트를 그대로 쓰고 경로만 onchun/rooms/<game>/<code> 로 분리
+   - 팝잇이 쓰는 Firebase 프로젝트·DB 규칙을 그대로 씀: rooms/<S|N><4자리> (팝잇 방은 6자리라 겹치지 않음)
    - 2인 턴제 게임이면 어떤 게임이든 붙일 수 있음
 
    사용법:
@@ -36,8 +36,11 @@ window.Online = (function () {
     return db;
   }
   function emit(ev) { handlers.forEach(h => { try { h(ev); } catch (e) { console.error(e); } }); }
-  function base() { return db.ref('onchun/rooms/' + game); }
+  const PREFIX = { stone: 'S', notakto: 'N' };
+  function base() { return db.ref('rooms'); }
+  function key(c) { return (PREFIX[game] || game[0].toUpperCase()) + c; }
   function newCode() { return String(1000 + Math.floor(Math.random() * 9000)); }
+  const TS = () => firebase.database.ServerValue.TIMESTAMP;
 
   function listen() {
     let lastGuest = null, lastGameNo = null;
@@ -49,8 +52,9 @@ window.Online = (function () {
         lastGameNo = r.gameNo; gameNo = r.gameNo; applied = 0;
         if (!first) emit({ type: 'reset', settings: r.settings || {} });
       }
-      if (myNum === 1 && r.guest && r.guest !== lastGuest) { lastGuest = r.guest; emit({ type: 'joined' }); }
-      if (myNum === 2 && lastGuest === null) lastGuest = r.guest;
+      const gid = r.guest && r.guest.id;
+      if (myNum === 1 && gid && gid !== lastGuest) { lastGuest = gid; emit({ type: 'joined' }); }
+      if (myNum === 2 && lastGuest === null) lastGuest = gid;
       if (r.left && r.left !== myId) { active = false; emit({ type: 'left', reason: 'opponent' }); return; }
       const moves = (r.moves && r.moves[gameNo]) || {};
       const keys = Object.keys(moves).map(Number).sort((a, b) => a - b);
@@ -71,12 +75,13 @@ window.Online = (function () {
       await ensureDb();
       // 비어 있는 코드 찾기
       for (let i = 0; i < 8; i++) {
-        const c = newCode(); const ref = base().child(c);
+        const c = newCode(); const ref = base().child(key(c));
         const s = await ref.get();
         if (!s.exists() || (Date.now() - (s.val().createdAt || 0)) > 3 * 3600 * 1000) {
           code = c; roomRef = ref; myNum = 1; applied = 0; active = true;
-          await ref.set({ host: myId, guest: null, settings: settings || {}, gameNo: 1, moves: null, left: null, createdAt: Date.now() });
-          ref.onDisconnect().update({ left: myId });
+          await ref.set({ createdAt: TS(), updatedAt: TS(), lobby: null, host: { name: '방장', online: true, id: myId }, guest: null });
+          await ref.update({ kind: game, settings: settings || {}, gameNo: 1, updatedAt: TS() });
+          ref.onDisconnect().update({ left: myId, 'host/online': false, updatedAt: TS() });
           listen();
           return code;
         }
@@ -86,28 +91,28 @@ window.Online = (function () {
     async join(c) {
       await ensureDb();
       c = String(c || '').trim();
-      const ref = base().child(c); const s = await ref.get();
-      if (!s.exists()) throw new Error('그 번호의 방이 없어요.');
+      const ref = base().child(key(c)); const s = await ref.get();
+      if (!s.exists() || !s.val().gameNo) throw new Error('그 번호의 방이 없어요.');
       const r = s.val();
       if (r.guest || r.left) throw new Error('이미 꽉 찼거나 끝난 방이에요.');
       code = c; roomRef = ref; myNum = 2; applied = 0; active = true;
-      await ref.update({ guest: myId });
-      ref.onDisconnect().update({ left: myId });
+      await ref.update({ guest: { name: '손님', online: true, id: myId }, updatedAt: TS() });
+      ref.onDisconnect().update({ left: myId, 'guest/online': false, updatedAt: TS() });
       listen();
       return r.settings || {};
     },
     sendMove(move) {
       if (!active || !roomRef) return;
       const idx = applied; applied = idx + 1;
-      roomRef.child('moves/' + gameNo + '/' + idx).set({ by: myNum, move, t: Date.now() });
+      roomRef.update({ ['moves/' + gameNo + '/' + idx]: { by: myNum, move, t: Date.now() }, updatedAt: TS() });
     },
     async reset(settings) {
       if (!active || !roomRef || myNum !== 1) return;
       const no = gameNo + 1;
-      await roomRef.update({ gameNo: no, settings: settings || {}, ['moves/' + no]: null });
+      await roomRef.update({ gameNo: no, settings: settings || {}, ['moves/' + no]: null, updatedAt: TS() });
     },
     leave() {
-      if (roomRef) { try { roomRef.off('value', sub); roomRef.onDisconnect().cancel(); if (active) roomRef.update({ left: myId }); } catch (e) { } }
+      if (roomRef) { try { roomRef.off('value', sub); roomRef.onDisconnect().cancel(); if (active) roomRef.update({ left: myId, updatedAt: TS() }); } catch (e) { } }
       roomRef = null; code = ''; myNum = 0; active = false; applied = 0; gameNo = 0;
     },
   };
