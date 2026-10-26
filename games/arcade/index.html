@@ -532,6 +532,7 @@
     color: var(--neon-cyan);
     font-weight: 700;
     font-size: 1.08rem;
+    line-height: 1.4;
     text-align: center;
     padding: 8px 20px;
     border-radius: 999px;
@@ -1688,7 +1689,7 @@
   }
   @media (max-height:760px) and (min-width:641px) {
     .section-title { font-size:1.7rem; margin:2px 0 6px; }
-    .rule-subtitle { font-size:.85rem; padding:6px 14px; }
+    .rule-subtitle { font-size:.95rem; padding:6px 14px; }
     #st-center-stones { height:250px; margin-bottom:10px; }
     .st-frame { min-height:300px; }
     .pp-frame { min-height:200px; }
@@ -1700,7 +1701,8 @@
   @media (max-width:640px) {
     #sound-text { display:none; }
     .section-title { font-size:1.35rem !important; margin:4px 0 6px !important; }
-    .rule-subtitle { font-size:.85rem !important; line-height:1.35; }
+    .rule-subtitle { font-size:.95rem !important; line-height:1.35; white-space:nowrap; overflow:hidden; text-overflow:ellipsis; }
+    .rule-subtitle small { font-size:.72rem; font-weight:500; }
     .st-frame h2, .nt-frame h2, .pp-frame h2 { white-space:nowrap; flex:none; }
     #records-box button { white-space:nowrap; padding:10px 14px; font-size:.95rem; }
     #st-center-stones { height:190px; margin-bottom:10px; }
@@ -2276,6 +2278,12 @@
         </label>
         <div id="set-pp-rows-preview" style="font-size:.9rem; color:var(--text-sub); margin-top:4px;"></div>
       </div>
+      <label>마지막 버블을 누르면:
+        <select id="set-pp-rule">
+          <option value="last">승리 (기본)</option>
+          <option value="misere">패배 (거꾸로 규칙)</option>
+        </select>
+      </label>
       <label>한 턴 당 제한시간:
         <select id="set-pp-time">
           <option value="unlimited">무제한</option>
@@ -2942,7 +2950,7 @@
   /* ================= 0. 팝잇 게임 스크립트 ================= */
   const ppMenuScreen = document.getElementById('pp-menu-screen');
   const ppGameScreen = document.getElementById('pp-game-screen');
-  let ppRowsSetting = 'random', ppTimeSetting = 'unlimited';
+  let ppRowsSetting = 'random', ppTimeSetting = 'unlimited', ppWinRule = 'last'; // last: 마지막 누르면 승리, misere: 패배
   let ppMode = 'bot', ppInit = [2, 5, 6], ppRows = [], ppCur = 1, ppOver = false, ppHist = [], ppSelRow = null, ppSel = [];
   let ppBotTimeout = null, ppTimerInterval = null, ppTimeLeft = 0, ppScore = { p1Wins: 0, p2Wins: 0 };
   const PP_COLORS = ['#F28B9B', '#F5A623', '#3A9E82', '#5BB8E8', '#9B6BD6', '#E9533F', '#2F8FC9'];
@@ -2953,13 +2961,14 @@
     const sub = document.getElementById('pp-main-subtitle');
     const rows = active ? ppInit.join('·') : (ppRowsSetting === 'random' ? '랜덤' : ppParseRows(ppRowsSetting).join('·'));
     const t = ppTimeSetting === 'unlimited' ? '무제한' : ppTimeSetting + '초';
-    sub.innerHTML = `규칙: 한 줄에서 원하는 만큼 누르기 · <b>마지막 버블을 누르는 사람이 승리</b><br><small>줄 ${rows} · 시간 ${t}</small>`;
+    sub.innerHTML = `<b>마지막 버블 누르면 ${ppWinRule === 'misere' ? '패배' : '승리'}</b> (한 줄에서 원하는 만큼)<br><small>줄 ${rows} · 시간 ${t}</small>`;
   }
   function openPpSettings() {
     document.getElementById('set-pp-rows-mode').value = ppRowsSetting === 'random' ? 'random' : 'custom';
     document.getElementById('set-pp-rows-wrap').style.display = ppRowsSetting === 'random' ? 'none' : '';
     document.getElementById('set-pp-rows').value = ppRowsSetting === 'random' ? '' : ppRowsSetting;
     document.getElementById('set-pp-time').value = ppTimeSetting;
+    document.getElementById('set-pp-rule').value = ppWinRule;
     openModal('pp-settings-modal', 'pp-modal-box');
   }
   function savePpSettings() {
@@ -2967,6 +2976,7 @@
     const rows = ppParseRows(document.getElementById('set-pp-rows').value);
     ppRowsSetting = (mode === 'random' || !rows.length) ? 'random' : rows.join(' ');
     ppTimeSetting = document.getElementById('set-pp-time').value;
+    ppWinRule = document.getElementById('set-pp-rule').value;
     ppScore = { p1Wins: 0, p2Wins: 0 };
     ppUpdateSubtitle(false);
     closeModal('pp-settings-modal', 'pp-modal-box');
@@ -3089,18 +3099,16 @@
     ppRows[mv.row] = Math.max(0, ppRows[mv.row] - mv.count);
     if (ppRows.reduce((a, b) => a + b, 0) === 0) {
       ppOver = true;
-      let winner = '', loserSubject = '', isLoss = false, winnerP1Num = ppCur;
-      if (ppMode === 'bot') {
-        if (ppCur === 1) { winner = '플레이어'; loserSubject = '플레이어가'; ppScore.p1Wins++; }
-        else { winner = 'AI'; loserSubject = 'AI가'; isLoss = true; ppScore.p2Wins++; }
-      } else {
-        winner = `플레이어 ${ppCur}`; loserSubject = ppCur === 1 ? '플레이어 1이' : '플레이어 2가';
-        if (ppCur === 1) ppScore.p1Wins++; else ppScore.p2Wins++;
-      }
+      const wNum = ppWinRule === 'misere' ? (3 - ppCur) : ppCur; // 마지막을 누른 사람(ppCur)이 이기는지
+      let winner = '', loserSubject = '', isLoss = false, winnerP1Num = wNum;
+      const who = n => ppMode === 'bot' ? (n === 1 ? '플레이어' : 'AI') : `플레이어 ${n}`;
+      const subj = n => ppMode === 'bot' ? (n === 1 ? '플레이어가' : 'AI가') : (n === 1 ? '플레이어 1이' : '플레이어 2가');
+      winner = who(wNum); loserSubject = subj(ppCur); isLoss = ppMode === 'bot' && wNum === 2;
+      if (wNum === 1) ppScore.p1Wins++; else ppScore.p2Wins++;
       ppRender(); updateScoreDisplay(); highlightWinner(winnerP1Num);
       document.getElementById('pp-restart-btn').style.display = 'inline-block';
       document.getElementById('pp-turn-indicator').innerText = isLoss ? 'AI 승리!' : `🎉 ${winner} 승리! 🎉`;
-      showVictoryModal(winner, `${loserSubject} 마지막 버블을 눌렀습니다.`, isLoss);
+      showVictoryModal(winner, `${loserSubject} 마지막 버블을 눌렀습니다.${ppWinRule === 'misere' ? ' (거꾸로 규칙)' : ''}`, isLoss);
     } else {
       ppCur = ppCur === 1 ? 2 : 1;
       ppRender(); ppUpdateUI();
@@ -3114,8 +3122,14 @@
     const nim = rows.reduce((a, v) => a ^ v, 0), remaining = rows.reduce((a, b) => a + b, 0);
     let mv;
     const randomMove = () => { const r = avail[Math.floor(Math.random() * avail.length)]; return { row: r.i, count: 1 + Math.floor(Math.random() * r.c) }; };
+    const big = avail.filter(r => r.c >= 2);
     if (remaining === 1) mv = { row: avail[0].i, count: 1 };
     else if (Math.random() >= getWinMoveProbability(botDifficulty)) mv = randomMove();
+    else if (ppWinRule === 'misere' && big.length <= 1) {
+      // 거꾸로 규칙 끝내기: 1개짜리 줄이 홀수 개 남도록
+      if (big.length === 0) mv = { row: avail[0].i, count: 1 };
+      else { const ones = avail.length - 1; mv = { row: big[0].i, count: ones % 2 === 0 ? big[0].c - 1 : big[0].c }; if (mv.count < 1) mv = { row: big[0].i, count: 1 }; }
+    }
     else if (nim !== 0) { const wins = []; rows.forEach((c, i) => { const t = c ^ nim; if (t < c) wins.push({ row: i, count: c - t }); }); mv = wins[Math.floor(Math.random() * wins.length)]; }
     else { const fin = avail.find(r => r.c === remaining); mv = fin ? { row: fin.i, count: fin.c } : { row: avail.reduce((a, b) => b.c > a.c ? b : a).i, count: 1 }; }
     ppExecuteMove(mv);
@@ -3197,7 +3211,7 @@
 
   function ntUpdateSubtitle() {
     let timeText = ntTimeSetting === 'unlimited' ? '무제한' : ntTimeSetting + '초';
-    document.getElementById('nt-main-subtitle').innerText = `규칙: 가로·세로·대각선 한 줄을 먼저 완성하는 사람이 패배합니다! (${ntSize}×${ntSize} 판 | 시간: ${timeText})`;
+    document.getElementById('nt-main-subtitle').innerHTML = `<b>한 줄 완성하면 패배</b> (둘 다 X)<br><small>${ntSize}×${ntSize} 판 · 시간 ${timeText}</small>`;
   }
 
   function ntStopTimer() {
@@ -3778,8 +3792,8 @@
     let modeName = stModeType === 'gem' ? '보석 모드' : '폭탄 모드';
 
     sub.innerHTML = stModeType === 'gem'
-      ? `규칙: 번갈아 1~${limitText}개씩 가져가기 · <b>마지막 보석 돌을 가져가면 승리</b><br><small>돌 ${nText}개 · 시간 ${timeText}</small>`
-      : `규칙: 번갈아 1~${limitText}개씩 가져가기 · <b>마지막 폭탄 돌을 가져가면 패배</b><br><small>돌 ${nText}개 · 시간 ${timeText}</small>`;
+      ? `<b>마지막 보석 돌 가져가면 승리</b><br><small>돌 ${nText}개 · 한 번에 1~${limitText}개 · 시간 ${timeText}</small>`
+      : `<b>마지막 폭탄 돌 가져가면 패배</b><br><small>돌 ${nText}개 · 한 번에 1~${limitText}개 · 시간 ${timeText}</small>`;
   }
 
   function stStopTimer() {
@@ -4528,7 +4542,7 @@
   /* ===== 📖 게임 설명 먼저 보여 주기 ===== */
   let currentGame = null;
   const RULES = {
-    popit: ['팝잇 (POP IT)', `<b>목표</b>: 마지막 버블을 내가 누르기!<br>① 자기 차례에 <b>한 줄</b>을 골라 버블을 <b>1개 이상</b> 누릅니다(드래그로 여러 개 선택).<br>② 다른 줄의 버블을 같이 누를 수는 없어요.<br>③ <b>마지막 버블을 누르는 사람이 승리</b>합니다.`],
+    popit: ['팝잇 (POP IT)', `<b>목표</b>: 마지막 버블을 내가 누르기! (설정에서 ‘누르면 패배’로 바꿀 수 있어요)<br>① 자기 차례에 <b>한 줄</b>을 골라 버블을 <b>1개 이상</b> 누릅니다(드래그로 여러 개 선택).<br>② 다른 줄의 버블을 같이 누를 수는 없어요.<br>③ <b>마지막 버블을 누르는 사람이 승리</b>합니다.`],
     notakto: ['노탁토 (NOTAKTO)', `<b>목표</b>: 한 줄을 만들지 않고 버티기!<br>① 둘 다 <b>X만</b> 번갈아 빈 칸에 놓습니다.<br>② 가로·세로·대각선 <b>한 줄을 완성한 사람이 패배</b>!<br>③ 3×3이 기본, 설정에서 4×4도 할 수 있어요.`],
     stone: ['돌 가져가기 (STONE TAKING)', `<b>목표</b>: 마지막 폭탄 돌을 피하기! (책 ‘마지막 카드를 가져라’ 심화판)<br>① 번갈아 돌을 <b>1개~k개</b>씩 가져갑니다.<br>② <b>폭탄 모드</b>: 마지막 빨간 폭탄 돌을 가져가면 <b>패배</b>.<br>③ <b>보석 모드</b>: 마지막 초록 보석 돌을 가져가면 <b>승리</b>.`],
   };
@@ -4600,7 +4614,7 @@
                settings: () => ({ size: ntSize }), apply: s => { ntSize = s.size || 3; ntTimeSetting = 'unlimited'; },
                remote: m => { if (!ntGameOver && ntCurrentPlayer !== Online.myNum) ntExecuteGameMove(m); } },
     popit:   { p: 'pp', mode: () => ppMode, over: () => ppOver, cur: () => ppCur, start: () => ppStartGame('online'), back: () => ppGoBack(),
-               settings: () => { ppApplyRules(); return { rows: ppInit.slice() }; }, apply: s => { ppRowsSetting = (s.rows || [2, 5, 6]).join(' '); ppTimeSetting = 'unlimited'; },
+               settings: () => { ppApplyRules(); return { rows: ppInit.slice(), rule: ppWinRule }; }, apply: s => { ppRowsSetting = (s.rows || [2, 5, 6]).join(' '); ppWinRule = s.rule || 'last'; ppTimeSetting = 'unlimited'; },
                remote: m => { if (!ppOver && ppCur !== Online.myNum) ppExecuteMove(m); } },
   };
   let olGame = null, olOrig = null, olBusy = false, olCur = null, olStarted = false;
@@ -4624,8 +4638,8 @@
     if (!n) { n = makeRandomName(); document.getElementById('ol-name').value = n; }
     setMyName(n); return n;
   }
-  function olSaveOrig() { olOrig = { n: stNSetting, limit: stLimitSetting, rows: ppRowsSetting, stT: stTimeSetting, ntT: ntTimeSetting, ppT: ppTimeSetting }; }
-  function olRestoreOrig() { if (!olOrig) return; stNSetting = olOrig.n; stLimitSetting = olOrig.limit; ppRowsSetting = olOrig.rows; stTimeSetting = olOrig.stT; ntTimeSetting = olOrig.ntT; ppTimeSetting = olOrig.ppT; olOrig = null; }
+  function olSaveOrig() { olOrig = { n: stNSetting, limit: stLimitSetting, rows: ppRowsSetting, rule: ppWinRule, stT: stTimeSetting, ntT: ntTimeSetting, ppT: ppTimeSetting }; }
+  function olRestoreOrig() { if (!olOrig) return; stNSetting = olOrig.n; stLimitSetting = olOrig.limit; ppRowsSetting = olOrig.rows; ppWinRule = olOrig.rule; stTimeSetting = olOrig.stT; ntTimeSetting = olOrig.ntT; ppTimeSetting = olOrig.ppT; olOrig = null; }
   async function olCreate() {
     if (olBusy) return; olBusy = true; olMsg('방을 만드는 중…');
     try {
@@ -4758,6 +4772,14 @@
   function syncTopName(game) {
     const el = document.querySelector('.bk-top__name'); if (!el) return;
     el.textContent = game === 'notakto' ? '노탁토' : game === 'stone' ? '돌 가져가기' : game === 'popit' ? '팝잇' : '메인 게임';
+    let up = document.getElementById('top-up-games');
+    if (!up) {
+      up = document.createElement('a'); up.id = 'top-up-games'; up.className = 'bk-top__home bk-top__up'; up.href = '#'; up.title = '게임 목록으로';
+      up.innerHTML = '⬆ <span>게임 목록</span>';
+      up.addEventListener('click', e => { e.preventDefault(); playSfx('click'); returnToHome(); window.scrollTo(0, 0); });
+      document.querySelector('.bk-top__home')?.after(up);
+    }
+    up.style.display = game ? '' : 'none';
   }
   const _openGameSection = openGameSection, _returnToHome = returnToHome;
   openGameSection = function (g) { _openGameSection(g); syncTopName(g); currentGame = g; showRules(false); };
