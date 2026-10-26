@@ -2347,7 +2347,9 @@
         </div>
       </div>
       <div class="action-buttons">
+        <button class="undo-btn" id="st-undo-btn" onmouseenter="playSfx('hover')" onclick="playSfx('click'); stUndo()" style="display:none;">무르기</button>
         <button class="restart-btn" id="st-restart-btn" onmouseenter="playSfx('hover')" onclick="playSfx('click'); stRestartGame()" style="display:none;">다시하기</button>
+        <button class="restart-btn" id="st-restart-set-btn" onmouseenter="playSfx('hover')" onclick="playSfx('click'); openStSettingsAndRestart()" style="display:none;">⚙️ 설정 바꿔 다시하기</button>
         <button class="resume-analysis-btn" id="st-resume-analysis-btn" onmouseenter="playSfx('hover')" onclick="playSfx('click'); stResumeAnalysis()" style="display:none;">분석 모드로 복귀</button>
         <button class="back-btn" onmouseenter="playSfx('hover')" onclick="playSfx('click'); stGoBack()">메뉴로 돌아가기</button>
       </div>
@@ -2983,6 +2985,8 @@
     closeModal('nt-settings-modal', 'nt-modal-box');
   }
 
+  let stSettingsThenRestart = false, stSettingsJustSaved = false;
+  function openStSettingsAndRestart() { stSettingsThenRestart = true; openStSettings(); }
   function openStSettings() {
     document.getElementById('set-st-n').value = stNSetting;
     document.getElementById('set-st-limit').value = stLimitSetting;
@@ -2998,6 +3002,7 @@
     stScore = { p1Wins: 0, p2Wins: 0 };
     stUpdateSubtitle(false);
     closeModal('st-settings-modal', 'st-modal-box');
+    if (stSettingsThenRestart) { stSettingsThenRestart = false; stSettingsJustSaved = true; stRestartGame(); stSettingsJustSaved = false; }
   }
 
   function openBotModal(gameType) {
@@ -4302,6 +4307,37 @@
     }
   }
 
+  function stUndo() {
+    if (stGameOver || stIsAnimating || isBranchPlay || stMode === 'online' || !stGameHistory.length) return;
+    if (stBotTimeout) { clearTimeout(stBotTimeout); stBotTimeout = null; }
+    stStopTimer();
+    if (stMode === 'bot') { while (stGameHistory.length && stGameHistory[stGameHistory.length - 1].player === 2) stGameHistory.pop(); if (stGameHistory.length) stGameHistory.pop(); stCurrentPlayer = 1; }
+    else { const last = stGameHistory.pop(); stCurrentPlayer = last.player; }
+    // 판 다시 그리기
+    const taken1 = stGameHistory.filter(h => h.player === 1).reduce((a, h) => a + h.count, 0);
+    const taken2 = stGameHistory.filter(h => h.player === 2).reduce((a, h) => a + h.count, 0);
+    const remain = stN - taken1 - taken2;
+    const cs = document.getElementById('st-center-stones');
+    cs.innerHTML = '<div id="st-stone-count-badge" class="st-stone-count-badge"></div>';
+    const cRect = cs.getBoundingClientRect(); stStonesArr = [];
+    for (let i = 0; i < remain; i++) {
+      const stone = document.createElement('div');
+      stone.className = 'stone ' + ((i === 0) ? (stModeType === 'bomb' ? 'st-bomb-stone' : 'st-gem-stone') : 'st-normal-stone');
+      stone.style.left = (20 + Math.random() * Math.max(40, cRect.width - 70)) + 'px';
+      stone.style.top = (20 + Math.random() * Math.max(40, cRect.height - 80)) + 'px';
+      cs.appendChild(stone); stStonesArr.push(stone);
+    }
+    [[1, taken1], [2, taken2]].forEach(([p, n]) => {
+      const box = document.getElementById('st-p' + p + '-stones'); box.innerHTML = '';
+      const r = box.getBoundingClientRect();
+      for (let i = 0; i < n; i++) {
+        const st = document.createElement('div'); st.className = 'stone st-normal-stone'; st.style.position = 'absolute';
+        st.style.left = (10 + Math.random() * Math.max(10, r.width - 45)) + 'px'; st.style.top = (10 + Math.random() * Math.max(10, r.height - 45)) + 'px';
+        box.appendChild(st);
+      }
+    });
+    highlightWinner(0); stUpdateUI();
+  }
   function stRestartGame() {
     closeVictoryModal();
     stStopTimer();
@@ -4329,6 +4365,8 @@
 
     stBuildTakeButtons();
     document.getElementById('st-restart-btn').style.display = 'none';
+    document.getElementById('st-restart-set-btn').style.display = 'none';
+    document.getElementById('st-undo-btn').style.display = (selectedMode === 'bot' || selectedMode === 'solo') ? 'inline-block' : 'none';
     document.getElementById('st-resume-analysis-btn').style.display = 'none';
 
     stMenuScreen.style.display = 'none';
@@ -4562,6 +4600,8 @@
       stUpdateUI();
       highlightWinner(winnerP1Num);
       document.getElementById('st-restart-btn').style.display = 'inline-block';
+      if (!isBranchPlay && (stMode !== 'online' || Online.myNum === 1)) document.getElementById('st-restart-set-btn').style.display = 'inline-block';
+      document.getElementById('st-undo-btn').style.display = 'none';
 
       let actionText = stModeType === 'gem' ? "마지막 초록색 보석 돌을 가져갔습니다." : "마지막 빨간색 폭탄 돌을 가져갔습니다.";
       showVictoryModal(winner, `${loserSubject} ${actionText}`, isLoss);
@@ -4603,6 +4643,8 @@
     stTooltip.style.display = 'none';
     stGameScreen.style.display = 'none'; stAnalysisScreen.style.display = 'none';
     document.getElementById('st-restart-btn').style.display = 'none';
+    document.getElementById('st-restart-set-btn').style.display = 'none';
+    document.getElementById('st-undo-btn').style.display = 'none';
     document.getElementById('st-resume-analysis-btn').style.display = 'none';
     isBranchPlay = false;
     stScore = { p1Wins: 0, p2Wins: 0 };
@@ -5186,7 +5228,7 @@
   qnStartGame = function (m, pre) { _qnStart(m, pre); applyMyName('qn', m); qnUpdateUI(); };
   // 다시하기
   const _ntRestart = ntRestartGame, _stRestart = stRestartGame, _ppRestart = ppRestartGame, _qnRestart = qnRestartGame;
-  function olRestart(g) { if (Online.myNum === 1) { if (ppSettingsJustSaved || qnSettingsJustSaved) { olOrig = null; ppSettingsJustSaved = false; } olRestoreOrig(); olSaveOrig(); olCur = OLG[g].settings(); Online.reset(olCur); olStart(olCur); } }
+  function olRestart(g) { if (Online.myNum === 1) { if (ppSettingsJustSaved || qnSettingsJustSaved || stSettingsJustSaved) { olOrig = null; ppSettingsJustSaved = false; } olRestoreOrig(); olSaveOrig(); olCur = OLG[g].settings(); Online.reset(olCur); olStart(olCur); } }
   let ppSettingsJustSaved = false;
   ntRestartGame = function () { if (ntMode === 'online' && Online.active) return olRestart('notakto'); _ntRestart(); };
   stRestartGame = function () { if (stMode === 'online' && Online.active) return olRestart('stone'); _stRestart(); };
