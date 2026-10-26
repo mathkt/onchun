@@ -26,6 +26,20 @@
   .quiz .q2.bad{border-color:var(--bk-red);background:#FDEEF2}
   .quiz .q2 svg{width:100%;height:110px;background:transparent;border:0;cursor:pointer}
   table.tbl input{width:52px;text-align:center}
+  .duo>div{min-width:0}
+  .tblwrap{overflow-x:auto;-webkit-overflow-scrolling:touch;max-width:100%}
+  .tblwrap .tbl{margin:4px 0 10px}
+  .pick button{min-height:40px}
+  .pick-h{font-family:var(--f-head);font-size:.95rem;color:var(--bk-orange-deep);margin:10px 0 6px}
+  .pick-h:first-child{margin-top:0}
+  .stat .hid b{color:var(--bk-ink-soft)}
+  .qz-q{font-family:var(--f-head);font-size:1.15rem;margin:0 0 8px}
+  .quiz .q2{min-height:44px;display:grid;place-items:center;font-size:1.1rem}
+  .fill{font-family:var(--f-head);font-size:1.05rem;line-height:2.3;flex:1}
+  .fill .nw{white-space:nowrap}
+  .fill input{width:70px;height:34px;box-sizing:border-box;vertical-align:middle;text-align:center;font:inherit;border:2px solid var(--bk-line);border-radius:8px;padding:0 4px;min-height:0}
+  svg.board{box-sizing:border-box}
+  .fill input.ok{border-color:var(--bk-green);background:#EDF9F4}.fill input.bad{border-color:var(--bk-red)}
 </style>
 </head>
 <body class="bk">
@@ -58,8 +72,8 @@
         <div><svg class="board" id="pl-svg"></svg><div class="pick" id="pl-pick" style="margin-top:8px"></div></div>
         <div>
           <div class="stat" id="pl-stat"></div>
-          <table class="tbl" style="margin-left:0"><thead><tr><th></th><th>정사면체</th><th>정육면체</th><th>정팔면체</th><th>정십이면체</th><th>정이십면체</th></tr></thead>
-            <tbody id="pl-tbl"><tr><td>면의 모양</td><td>정삼각형</td><td>정사각형</td><td>정삼각형</td><td>정오각형</td><td>정삼각형</td></tr><tr><td>V</td></tr><tr><td>E</td></tr><tr><td>F</td></tr><tr><td>V−E+F</td></tr></tbody></table>
+          <div class="tblwrap"><table class="tbl" style="margin-left:0"><thead><tr><th></th><th>정사면체</th><th>정육면체</th><th>정팔면체</th><th>정십이면체</th><th>정이십면체</th></tr></thead>
+            <tbody id="pl-tbl"><tr><td>면의 모양</td><td>정삼각형</td><td>정사각형</td><td>정삼각형</td><td>정오각형</td><td>정삼각형</td></tr><tr><td>V</td></tr><tr><td>E</td></tr><tr><td>F</td></tr><tr><td>V−E+F</td></tr></tbody></table></div>
           <div class="setup"><button class="bk-btn bk-btn--mint bk-btn--sm" id="pl-check">표 확인</button><span class="result" id="pl-res" style="margin:0"></span></div>
         </div>
       </div>
@@ -79,9 +93,9 @@
       <div class="duo">
         <div><svg class="board" id="ar-svg"></svg><div class="cap" id="ar-cap"></div></div>
         <div>
-          <div class="pick" id="ar-pick"></div>
+          <div class="setup"><label style="white-space:nowrap">깎는 깊이 <input type="range" id="ar-t" min="0" max="50" value="0" style="width:170px;max-width:48vw"></label><span class="bk-muted" id="ar-tv">0% (정다면체 그대로)</span></div>
           <div class="stat" id="ar-stat"></div>
-          <div class="setup"><label>정다면체 깎는 깊이 <input type="range" id="ar-t" min="0" max="50" value="0" style="width:180px"></label><span class="bk-muted" id="ar-tv">0% (정다면체 그대로)</span></div>
+          <div id="ar-pick"></div>
         </div>
       </div>
     </div>
@@ -99,7 +113,7 @@
       <p class="bk-muted">다면체를 돌려 보고 한 꼭짓점에 모인 면의 배열을 고르세요. 13종 중 3D로 볼 수 있는 11종이 나와요.</p>
       <div class="duo">
         <div><svg class="board" id="qz-svg"></svg><div class="setup"><button class="bk-btn bk-btn--primary bk-btn--sm" id="qz-next">다음 문제</button><span id="qz-score" class="bk-muted"></span></div></div>
-        <div><div class="quiz" id="qz-opts"></div><div class="result" id="qz-res"></div></div>
+        <div><p class="qz-q">❓ 한 꼭짓점에 모인 면의 배열은?</p><div class="quiz" id="qz-opts"></div><div class="result" id="qz-res"></div></div>
       </div>
     </div>
   </section>
@@ -121,8 +135,10 @@
     </div>
     <div class="bk-panel bk-panel--pink secret">
       <h3>🔍 문장 완성하기</h3>
-      <div class="q"><b>➋</b> 정육면체의 모서리의 수(12)가 육팔면체의 (꼭짓점)의 수와 같다. 육팔면체의 정삼각형 수는 정육면체의 (꼭짓점)의 수인 (8), 정사각형 수는 정육면체의 (면)의 수인 (6)이다.</div>
-      <div class="q"><b>5</b> 십이이십면체: 꼭짓점 30(= 정십이면체의 모서리), 정오각형 12(= 면), 정삼각형 20(= 꼭짓점). 정이십면체로 보면 정삼각형 20은 면, 정오각형 12는 꼭짓점!</div>
+      <div class="q"><b>2</b><div class="fill">정육면체의 모서리의 수(12)가 육팔면체의 <span class="nw"><input id="f1" data-v="꼭짓점|꼭지점">의</span> 수와 같다. 육팔면체의 정삼각형 수는 정육면체의 <span class="nw"><input id="f2" data-v="꼭짓점|꼭지점">의</span> 수인 <span class="nw"><input id="f3" data-v="8" inputmode="numeric" style="width:52px">,</span> 정사각형 수는 정육면체의 <span class="nw"><input id="f4" data-v="면">의</span> 수인 <span class="nw"><input id="f5" data-v="6" inputmode="numeric" style="width:52px">이다.</span></div></div>
+      <div class="q"><b>5</b><div class="fill">십이이십면체의 꼭짓점 수는 정십이면체의 <span class="nw"><input id="f6" data-v="모서리">의</span> 수인 <span class="nw"><input id="f7" data-v="30" inputmode="numeric" style="width:52px">,</span> 정오각형 수는 정십이면체의 <span class="nw"><input id="f8" data-v="면">의</span> 수인 <span class="nw"><input id="f9" data-v="12" inputmode="numeric" style="width:52px">,</span> 정삼각형 수는 정십이면체의 <span class="nw"><input id="f10" data-v="꼭짓점|꼭지점">의</span> 수인 <span class="nw"><input id="f11" data-v="20" inputmode="numeric" style="width:52px">이다.</span></div></div>
+      <div class="setup"><button class="bk-btn bk-btn--mint bk-btn--sm" id="f-check">확인</button><span class="result" id="f-res" style="margin:0"></span></div>
+      <details class="reveal"><summary>더 알아보기</summary><p>정이십면체로 보면 반대로, 십이이십면체의 정삼각형 20개는 정이십면체의 <b>면</b>, 정오각형 12개는 정이십면체의 <b>꼭짓점</b>과 같아요.</p></details>
     </div>
   </section>
 </div>
@@ -133,25 +149,28 @@ const $ = s => document.querySelector(s); const ri = n => Math.floor(Math.random
 document.querySelectorAll('#tabs .tab').forEach(b => b.onclick = () => { document.querySelectorAll('#tabs .tab').forEach(x => x.classList.toggle('on', x === b)); document.querySelectorAll('.act-page').forEach(p => { p.hidden = p.id !== b.dataset.t; p.style.display = p.hidden ? 'none' : ''; }); });
 (function(){ const h=location.hash.slice(1); const b=h&&document.querySelector(`#tabs .tab[data-t="${h}"]`); if(b) b.click(); })();
 const COLOR = n => ({ 3: [.36, .72, .91], 4: [.98, .66, .14], 5: [.61, .42, .84], 6: [.23, .62, .51], 8: [.91, .33, .25], 10: [.79, .26, .42] }[n] || [.6, .6, .6]);
-const statHtml = p => { const s = Poly3D.stats(p); return `<div>꼭짓점 V<b>${s.V}</b></div><div>모서리 E<b>${s.E}</b></div><div>면 F<b>${s.F}</b></div><div>V−E+F<b>${s.V - s.E + s.F}</b></div><div>면의 종류<b>${Object.entries(s.faces).map(([k, v]) => `${k}각형 ${v}`).join(', ')}</b></div>`; };
+const statHtml = (p, hide) => { const s = Poly3D.stats(p); const h = x => hide ? '?' : x; const c = hide ? ' class="hid"' : ''; return `<div${c}>꼭짓점 V<b>${h(s.V)}</b></div><div${c}>모서리 E<b>${h(s.E)}</b></div><div${c}>면 F<b>${h(s.F)}</b></div><div${c}>V−E+F<b>${h(s.V - s.E + s.F)}</b></div><div>면의 종류<b>${Object.entries(s.faces).map(([k, v]) => `${k}각형 ${v}`).join(', ')}</b></div>`; };
 const PLAT = ['정사면체', '정육면체', '정팔면체', '정십이면체', '정이십면체'];
 
 /* ===== 1 정다면체 ===== */
 (function () {
-  const v = Poly3D.viewer($('#pl-svg'), { size: 320, color: COLOR }); const pick = $('#pl-pick');
-  pick.innerHTML = PLAT.map(n => `<button>${n}</button>`).join(''); pick.querySelectorAll('button').forEach((b, i) => b.onclick = () => { pick.querySelectorAll('button').forEach(x => x.classList.toggle('on', x === b)); v.set(Poly3D.get(b.textContent)); $('#pl-stat').innerHTML = statHtml(v.poly); });
+  const v = Poly3D.viewer($('#pl-svg'), { size: 320, color: COLOR }); const pick = $('#pl-pick'); let revealed = false; // 표를 확인하기 전에는 V·E·F를 숨김
+  const stat = () => $('#pl-stat').innerHTML = statHtml(v.poly, !revealed) + (revealed ? '' : '<div class="hid" style="align-self:center">세어서 표에 쓰고<br>\'표 확인\'을 누르면 공개</div>');
+  pick.innerHTML = PLAT.map(n => `<button>${n}</button>`).join(''); pick.querySelectorAll('button').forEach((b, i) => b.onclick = () => { pick.querySelectorAll('button').forEach(x => x.classList.toggle('on', x === b)); v.set(Poly3D.get(b.textContent)); stat(); });
   pick.querySelector('button').click(); v.spin(true); setTimeout(() => v.spin(false), 2500);
-  const rows = ['V', 'E', 'F', 'V−E+F']; const tb = $('#pl-tbl'); [...tb.rows].slice(1).forEach((r, k) => { r.innerHTML = `<td>${rows[k]}</td>` + PLAT.map(() => `<td><input class="num num--1" style="font-size:1rem;letter-spacing:0"></td>`).join(''); });
-  $('#pl-check').onclick = () => { let ok = 0, tot = 0; [...tb.rows].slice(1).forEach((r, k) => { [...r.querySelectorAll('input')].forEach((inp, i) => { const s = Poly3D.stats(Poly3D.get(PLAT[i])); const truth = [s.V, s.E, s.F, s.V - s.E + s.F][k]; tot++; const good = +inp.value === truth; inp.style.background = inp.value === '' ? '' : good ? '#EDF9F4' : '#FDEEF2'; if (good) ok++; }); }); $('#pl-res').textContent = ok === tot ? '🎉 모두 맞았어요! V−E+F는 항상 2.' : `${ok}/${tot} 맞음`; };
+  const rows = ['V', 'E', 'F', 'V−E+F']; const tb = $('#pl-tbl'); [...tb.rows].slice(1).forEach((r, k) => { r.innerHTML = `<td>${rows[k]}</td>` + PLAT.map(() => `<td><input class="num num--1" inputmode="numeric" style="font-size:1rem;letter-spacing:0"></td>`).join(''); });
+  $('#pl-check').onclick = () => { let ok = 0, tot = 0; [...tb.rows].slice(1).forEach((r, k) => { [...r.querySelectorAll('input')].forEach((inp, i) => { const s = Poly3D.stats(Poly3D.get(PLAT[i])); const truth = [s.V, s.E, s.F, s.V - s.E + s.F][k]; tot++; const good = +inp.value === truth; inp.style.background = inp.value === '' ? '' : good ? '#EDF9F4' : '#FDEEF2'; if (good) ok++; }); }); $('#pl-res').textContent = ok === tot ? '🎉 모두 맞았어요! V−E+F는 항상 2.' : `${ok}/${tot} 맞음 — 왼쪽 개수와 비교해 보세요`; revealed = true; stat(); };
 })();
 
 /* ===== 2 아르키메데스 ===== */
 (function () {
   const v = Poly3D.viewer($('#ar-svg'), { size: 320, color: COLOR }); const names = Object.keys(Poly3D.CAT).filter(n => !PLAT.includes(n)); const pick = $('#ar-pick'); let base = null;
-  pick.innerHTML = PLAT.map(n => `<button data-b="1">${n}</button>`).join('') + names.map(n => `<button>${n}</button>`).join('');
+  pick.innerHTML = `<div class="pick-h">정다면체 5종 — 골라서 깎아 보세요</div><div class="pick">${PLAT.map(n => `<button data-b="1">${n}</button>`).join('')}</div><div class="pick-h">아르키메데스 다면체 ${names.length}종 (13종 중)</div><div class="pick">${names.map(n => `<button>${n}</button>`).join('')}</div>`;
+  const MID = { 정사면체: '정팔면체가 돼요 (정다면체!)', 정육면체: '육팔면체', 정팔면체: '육팔면체', 정십이면체: '십이이십면체', 정이십면체: '십이이십면체' };
+  const TR = { 정사면체: 1 / 3, 정육면체: 1 / (2 + Math.SQRT2), 정팔면체: 1 / 3, 정십이면체: 1 / (2 + (1 + Math.sqrt(5)) / 2), 정이십면체: 1 / 3 };
   pick.querySelectorAll('button').forEach(b => b.onclick = () => { pick.querySelectorAll('button').forEach(x => x.classList.toggle('on', x === b)); base = b.dataset.b ? b.textContent : null; $('#ar-t').value = 0; $('#ar-tv').textContent = '0% (정다면체 그대로)'; show(Poly3D.get(b.textContent), b.textContent); });
   function show(p, name) { v.set(p); $('#ar-stat').innerHTML = statHtml(p); $('#ar-cap').textContent = name; }
-  $('#ar-t').oninput = () => { if (!base) { $('#ar-tv').textContent = '정다면체를 먼저 고르세요'; return; } const t = +$('#ar-t').value / 100; $('#ar-tv').textContent = `${Math.round(t * 100)}% ${t === .5 ? '(모서리 중점까지 → 육팔면체/십이이십면체 종류)' : t > 0 ? '(깎는 중)' : '(정다면체 그대로)'}`; show(t === 0 ? Poly3D.get(base) : Poly3D.truncate(Poly3D.get(base), t), `${base} 깎기 ${Math.round(t * 100)}%`); };
+  $('#ar-t').oninput = () => { if (!base) { $('#ar-tv').textContent = '정다면체를 먼저 고르세요'; return; } const t = +$('#ar-t').value / 100; $('#ar-tv').textContent = `${Math.round(t * 100)}% ${t === .5 ? `(모서리 중점까지 → ${MID[base]})` : Math.abs(t - TR[base]) < .012 ? `(→ 깎은 ${base}: 아르키메데스 다면체!)` : t > 0 ? '(깎는 중)' : '(정다면체 그대로)'}`; show(t === 0 ? Poly3D.get(base) : Poly3D.truncate(Poly3D.get(base), t), `${base} 깎기 ${Math.round(t * 100)}%`); };
   pick.querySelectorAll('button')[6].click();
 })();
 
@@ -160,7 +179,7 @@ const PLAT = ['정사면체', '정육면체', '정팔면체', '정십이면체',
   const v = Poly3D.viewer($('#qz-svg'), { size: 320, color: COLOR }); const names = Object.keys(Poly3D.CAT).filter(n => !PLAT.includes(n)); let cur, score = 0, n = 0;
   const cfg = s => s.match(/\(([^)]+)\)/)[1]; const ALL = ['3,6,6','3,8,8','4,6,6','3,10,10','5,6,6','3,4,3,4','3,5,3,5','4,6,8','4,6,10','3,4,4,4','3,4,5,4','3,3,3,3,4','3,3,3,3,5'];
   function next() { cur = names[ri(names.length)]; v.set(Poly3D.get(cur)); v.spin(true); const ans = cfg(cur); const opts = new Set([ans]); while (opts.size < 4) opts.add(ALL[ri(ALL.length)]); const arr = [...opts].sort(() => Math.random() - .5);
-    $('#qz-opts').innerHTML = arr.map(o => `<div class="q2" data-o="${o}">(${o})</div>`).join(''); $('#qz-res').textContent = '한 꼭짓점에 모인 면의 배열은?';
+    $('#qz-opts').innerHTML = arr.map(o => `<div class="q2" data-o="${o}">(${o})</div>`).join(''); $('#qz-res').textContent = '';
     $('#qz-opts').querySelectorAll('.q2').forEach(d => d.onclick = () => { if (d.classList.contains('ok') || d.classList.contains('bad')) return; n++; const good = d.dataset.o === ans; d.classList.add(good ? 'ok' : 'bad'); if (good) { score++; $('#qz-res').textContent = `🎉 정답! ${cur}`; } else $('#qz-res').textContent = `아쉬워요. 정답은 (${ans}) — ${cur}`; $('#qz-score').textContent = `${score}/${n} 정답`; }); }
   $('#qz-next').onclick = next; next();
 })();
@@ -170,18 +189,23 @@ const PLAT = ['정사면체', '정육면체', '정팔면체', '정십이면체',
   const v = Poly3D.viewer($('#co-svg'), { size: 320, color: COLOR }); let k = 'cube';
   const TXT = { cube: '정육면체(모서리 12)의 중점 12개 → 육팔면체의 꼭짓점 12개. 정삼각형 8 = 정육면체 꼭짓점 8, 정사각형 6 = 정육면체 면 6.', octa: '정팔면체(모서리 12)의 중점 → 역시 육팔면체! 정삼각형 8 = 정팔면체의 면 8, 정사각형 6 = 정팔면체의 꼭짓점 6.', dodeca: '정십이면체(모서리 30)의 중점 → 십이이십면체. 정오각형 12 = 면, 정삼각형 20 = 꼭짓점.', ico: '정이십면체(모서리 30)의 중점 → 십이이십면체. 정삼각형 20 = 면, 정오각형 12 = 꼭짓점.' };
   function show() { const base = Poly3D.P[k]; const mid = Poly3D.truncate(base, .5); const ghost = $('#co-ghost').checked, showMid = $('#co-mid').checked;
-    if (showMid) v.set(mid);
-    else v.set(base);
-    // 원래 다면체 선을 겹쳐 그리기: 뷰어의 extra로 base 모서리 투영 (같은 회전을 쓰기 위해 mid 꼭짓점 기준 보간 불가 → 간단히 base를 축척 맞춰 extra에서 그림)
-    if (showMid && ghost) { const s = 1 / Math.max(...mid.V.map(p => Math.hypot(...p))); v.set(mid, (RV, proj) => { // RV는 회전된 mid 꼭짓점. base 꼭짓점의 회전은 알 수 없으므로 mid 모서리 중점에서 base를 복원할 수 없음 → 대신 base의 각 모서리 = mid의 두 '정점 면' 중심 연결. 간단히: base의 꼭짓점 = 각 '꼭짓점 면'의 중심을 중심에서 바깥으로 늘린 점
-        const E = Poly3D.edgesOf(base.F); const ratio = Math.hypot(...base.V[0]) / (Math.hypot(...mid.V[0]) * 1); let h = '';
-        // 꼭짓점면: base 꼭짓점 i에 대응하는 mid 면 = 중심이 base.V[i] 방향. mid.F 중 면 중심 방향이 base.V[i]와 가장 가까운 것
-        const centers = mid.F.map(f => f.reduce((a, i) => Poly3D.add(a, RV[i]), [0, 0, 0]).map(x => x / f.length)); const baseRot = base.V.map(bv => { const dir = Poly3D.norm(bv); // RV 공간에서 bv의 회전본을 찾기: mid 면 중 (회전 전) 중심 방향이 dir인 면
-          let best = 0, bd = -2; mid.F.forEach((f, j) => { const c = f.reduce((a, i) => Poly3D.add(a, mid.V[i]), [0, 0, 0]).map(x => x / f.length); const d = Poly3D.dot(Poly3D.norm(c), dir); if (d > bd) { bd = d; best = j; } }); const c = centers[best]; const len = Math.hypot(...c); return Poly3D.mul(c, (Math.hypot(...bv) * s * 1.0) / len); });
-        E.forEach(([a, b]) => { const p = proj(baseRot[a]), q = proj(baseRot[b]); h += `<line x1="${p[0]}" y1="${p[1]}" x2="${q[0]}" y2="${q[1]}" stroke="#E9533F" stroke-width="2" stroke-dasharray="5 4" opacity=".8"/>`; }); baseRot.forEach(p => { const q = proj(p); h += `<circle cx="${q[0]}" cy="${q[1]}" r="4" fill="#E9533F"/>`; }); return h; }); }
+    if (!showMid) v.set(base);
+    else if (!ghost) v.set(mid);
+    else { // 원래 다면체(빨간 점선)를 같은 축척으로 겹치기: 중점 다면체의 꼭짓점 = 원래 다면체 모서리의 중점
+      const rb = Math.hypot(...base.V[0]); const [e0, e1] = Poly3D.edgesOf(base.F)[0]; const em = Math.hypot(...Poly3D.mul(Poly3D.add(base.V[e0], base.V[e1]), .5));
+      const midS = { V: mid.V.map(p => Poly3D.mul(p, em)), F: mid.F }; // mid는 반지름 1로 정규화돼 있으므로 em배 하면 실제 모서리 중점 위치
+      const fc = (V, f) => f.reduce((a, i) => Poly3D.add(a, V[i]), [0, 0, 0]).map(x => x / f.length);
+      // 원래 꼭짓점 i ↔ 그 꼭짓점을 깎아 생긴 면(중심 방향이 같은 면)
+      const idx = base.V.map(bv => { let best = 0, bd = -2; mid.F.forEach((f, j) => { const d = Poly3D.dot(Poly3D.norm(fc(mid.V, f)), Poly3D.norm(bv)); if (d > bd) { bd = d; best = j; } }); return best; });
+      const E = Poly3D.edgesOf(base.F);
+      v.set(midS, (RV, proj) => { const BR = idx.map(j => Poly3D.mul(Poly3D.norm(fc(RV, midS.F[j])), rb)); let h = '';
+        E.forEach(([a, b]) => { const p = proj(BR[a]), q = proj(BR[b]); h += `<line x1="${p[0]}" y1="${p[1]}" x2="${q[0]}" y2="${q[1]}" stroke="#E9533F" stroke-width="2" stroke-dasharray="5 4" opacity=".85"/>`; });
+        BR.forEach(p => { const q = proj(p); h += `<circle cx="${q[0]}" cy="${q[1]}" r="4" fill="#E9533F"/>`; }); return h; }); }
     $('#co-stat').innerHTML = statHtml(showMid ? mid : base); $('#co-txt').textContent = TXT[k]; }
   $('#co-pick').querySelectorAll('button').forEach(b => b.onclick = () => { $('#co-pick').querySelectorAll('button').forEach(x => x.classList.toggle('on', x === b)); k = b.dataset.k; show(); });
   $('#co-mid').onchange = show; $('#co-ghost').onchange = show; show();
+  // 문장 완성하기
+  $('#f-check').onclick = () => { const ids = ['f1', 'f2', 'f3', 'f4', 'f5', 'f6', 'f7', 'f8', 'f9', 'f10', 'f11']; let ok = 0; ids.forEach(id => { const i = $('#' + id); const val = i.value.replace(/\s+/g, ''); const good = i.dataset.v.split('|').includes(val); i.classList.toggle('ok', good); i.classList.toggle('bad', !good && !!val); if (good) ok++; }); $('#f-res').textContent = ok === ids.length ? '🎉 모두 맞았어요!' : `${ok}/${ids.length} 맞음`; };
 })();
 </script>
 </body>

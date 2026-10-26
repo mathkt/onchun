@@ -19,9 +19,12 @@
   .spot:hover{opacity:1}
   .result{font-family:var(--f-head);font-size:1.3rem;color:var(--bk-red);min-height:1.5em;margin:6px 0}
   /* 1차원 바둑돌 */
-  .line{display:flex;gap:6px;justify-content:center;flex-wrap:wrap;margin:10px 0}
-  .cell1{width:52px;height:52px;border-radius:10px;border:2px solid var(--bk-line);background:#FFF9E8;display:grid;place-items:center;cursor:pointer;-webkit-tap-highlight-color:transparent}
-  .cell1 .st{width:38px;height:38px;border-radius:50%;box-shadow:inset -4px -4px 6px rgba(0,0,0,.25),0 3px 4px rgba(0,0,0,.2)}
+  .line{display:flex;gap:5px;justify-content:center;flex-wrap:nowrap;margin:10px 0}
+  .cell1{flex:1 1 0;min-width:0;max-width:52px;height:52px;border-radius:10px;border:2px solid var(--bk-line);background:#FFF9E8;display:grid;place-items:center;cursor:pointer;-webkit-tap-highlight-color:transparent;box-sizing:border-box}
+  .cell1 .st{width:72%;aspect-ratio:1;border-radius:50%;box-shadow:inset -4px -4px 6px rgba(0,0,0,.25),0 3px 4px rgba(0,0,0,.2)}
+  @media(max-width:480px){.line{gap:3px;margin:10px -12px}.cell1{border-radius:7px;height:46px}.cell1 .st{width:76%}}
+  .counter .hidden-best b{color:var(--bk-ink-soft)}
+  .mini-row{justify-content:center;align-items:center;margin:4px 0 8px}
   .st.w{background:#f8f8f8}.st.b{background:#222}
   .cell1.can{border-color:var(--bk-orange);background:var(--bk-yellow)}
   .cell1.sel{border-color:var(--bk-sky);background:var(--bk-sky-soft)}
@@ -67,7 +70,7 @@
       <div class="bk-act"><span class="bk-act__n">1</span><span class="bk-act__t">정삼각형 모양의 바둑돌 뒤집기</span><span class="bk-tag">문제 해결</span><span class="bk-tag">추론</span></div>
       <p class="bk-muted">바둑돌을 옮겨 삼각형을 <b>위아래로 뒤집은 모양</b>으로 만들어 보세요. 돌을 누른 뒤 빈 자리(노란 점)를 누르면 옮겨져요. 최소 몇 번에 될까요?</p>
       <div class="setup"><label>단계: <select id="tr-n" class="sel"><option>2</option><option selected>3</option><option>4</option><option>5</option><option>6</option><option>7</option></select></label><button class="bk-btn bk-btn--primary bk-btn--sm" id="tr-reset">다시 놓기</button><button class="bk-btn bk-btn--ghost bk-btn--sm" id="tr-undo">무르기</button></div>
-      <div class="counter"><div>돌 개수 <b id="tr-cnt">6</b></div><div>옮긴 횟수 <b id="tr-mv">0</b></div><div id="tr-best">최소 횟수 <b>?</b></div></div>
+      <div class="counter"><div>돌 개수 <b id="tr-cnt">6</b></div><div>옮긴 횟수 <b id="tr-mv">0</b></div><div id="tr-best">최소 횟수 <b>?</b></div><button class="bk-btn bk-btn--ghost bk-btn--sm" id="tr-ans">정답 보기</button></div>
       <svg class="board" id="tr-svg" viewBox="0 0 520 360"></svg>
       <div class="result" id="tr-res"></div>
     </div>
@@ -88,7 +91,7 @@
       <div class="bk-rule"><ol><li>한 칸에 한 개의 바둑돌을 놓을 수 있다.</li><li>옆 칸이 비어 있을 때는 빈칸으로 옮길 수 있다. (슬라이드 <b>S</b>)</li><li>옆 칸에 다른 색의 바둑돌이 1개 있고, 그다음 칸이 비어 있을 때는 그 빈칸으로 옮길 수 있다. (점프 <b>J</b>)</li></ol></div>
       <div class="setup"><label>흰 돌 = 검은 돌 = <select id="sl-n" class="sel"><option>1</option><option selected>2</option><option>3</option><option>4</option><option>5</option></select>개</label><button class="bk-btn bk-btn--primary bk-btn--sm" id="sl-reset">다시 놓기</button><button class="bk-btn bk-btn--ghost bk-btn--sm" id="sl-undo">무르기</button></div>
       <div class="line" id="sl-line"></div>
-      <div class="counter"><div>슬라이드 S <b id="sl-s">0</b></div><div>점프 J <b id="sl-j">0</b></div><div>총 이동 <b id="sl-t">0</b></div><div id="sl-best">최소 <b>?</b></div></div>
+      <div class="counter"><div>슬라이드 S <b id="sl-s">0</b></div><div>점프 J <b id="sl-j">0</b></div><div>총 이동 <b id="sl-t">0</b></div><div id="sl-best">최소 <b>?</b></div><button class="bk-btn bk-btn--ghost bk-btn--sm" id="sl-ans">정답 보기</button></div>
       <div>이동 과정: <span class="seq" id="sl-seq"></span></div>
       <div class="result" id="sl-res"></div>
     </div>
@@ -108,7 +111,7 @@
       <p class="bk-muted">양쪽에 놓인 바둑돌의 개수가 다른 경우는 어떻게 될지 탐구해 보세요. 규칙은 활동 2와 같아요.</p>
       <div class="setup"><label>흰 돌 <select id="as-m" class="sel"><option selected>1</option><option>2</option><option>3</option><option>4</option></select></label><label>검은 돌 <select id="as-n" class="sel"><option>2</option><option>3</option><option>4</option><option>5</option><option selected>6</option></select></label><button class="bk-btn bk-btn--primary bk-btn--sm" id="as-reset">다시 놓기</button><button class="bk-btn bk-btn--ghost bk-btn--sm" id="as-undo">무르기</button></div>
       <div class="line" id="as-line"></div>
-      <div class="counter"><div>슬라이드 S <b id="as-s">0</b></div><div>점프 J <b id="as-j">0</b></div><div>총 이동 <b id="as-t">0</b></div><div id="as-best">최소 <b>?</b></div></div>
+      <div class="counter"><div>슬라이드 S <b id="as-s">0</b></div><div>점프 J <b id="as-j">0</b></div><div>총 이동 <b id="as-t">0</b></div><div id="as-best">최소 <b>?</b></div><button class="bk-btn bk-btn--ghost bk-btn--sm" id="as-ans">정답 보기</button></div>
       <div>이동 과정: <span class="seq" id="as-seq"></span></div>
       <div class="result" id="as-res"></div>
     </div>
@@ -128,7 +131,8 @@
     <div class="bk-panel bk-panel--pink">
       <div class="bk-act"><span class="bk-act__n" style="background:var(--bk-red)">★</span><span class="bk-act__t">나도 수학자 — 정사각형 퍼즐</span><span class="bk-tag">추론</span><span class="bk-tag">정보 처리</span></div>
       <div class="bk-rule"><ol><li>한 칸에 한 개의 바둑돌을 놓을 수 있다.</li><li>상하좌우의 칸이 비어 있을 때는 빈칸으로 바둑돌을 옮길 수 있다.</li><li>상하좌우에 다른 색의 바둑돌이 1개 있고, 다음 칸이 비어 있을 때는 그 빈칸으로 옮길 수 있다. (대각선으로는 옮길 수 없다.)</li></ol></div>
-      <p class="bk-muted" style="margin:10px 0">[그림 1]의 돌을 [그림 2]처럼 흑백이 바뀐 모양으로 옮겨 보세요. <span class="mini5" id="mini-from"></span>→<span class="mini5" id="mini-to"></span></p>
+      <p class="bk-muted" style="margin:10px 0 4px">[그림 1]의 돌을 [그림 2]처럼 흑백이 바뀐 모양으로 옮겨 보세요.</p>
+      <div class="bk-row mini-row"><span class="mini5" id="mini-from"></span><span>→</span><span class="mini5" id="mini-to"></span></div>
       <div class="setup"><button class="bk-btn bk-btn--primary bk-btn--sm" id="sq-reset">다시 놓기</button><button class="bk-btn bk-btn--ghost bk-btn--sm" id="sq-undo">무르기</button><span class="counter" style="margin:0"><div>이동 <b id="sq-mv">0</b></div></span></div>
       <div class="grid5" id="sq-grid"></div>
       <div class="result" id="sq-res"></div>
@@ -165,21 +169,25 @@ document.querySelectorAll('#tabs .tab').forEach(b => b.onclick = () => { documen
 (function () {
   let n = 3, stones = new Set(), sel = null, moves = 0, hist = [];
   const svg = $('#tr-svg'), key = (X, y) => X + ',' + y;
-  function init() { n = +$('#tr-n').value; stones = new Set(); for (let r = 0; r < n; r++) for (let c = 0; c <= r; c++) stones.add(key(2 * c - r, r)); sel = null; moves = 0; hist = []; $('#tr-cnt').textContent = n * (n + 1) / 2; $('#tr-best').innerHTML = `최소 횟수 <b>${Math.floor(n * (n + 1) / 6)}</b>`; $('#tr-res').textContent = ''; draw(); }
+  function init() { n = +$('#tr-n').value; stones = new Set(); for (let r = 0; r < n; r++) for (let c = 0; c <= r; c++) stones.add(key(2 * c - r, r)); sel = null; moves = 0; hist = []; $('#tr-cnt').textContent = n * (n + 1) / 2; $('#tr-best').innerHTML = `최소 횟수 <b>?</b>`; $('#tr-res').textContent = ''; draw(); }
+  const showBest = () => $('#tr-best').innerHTML = `최소 횟수 <b>${Math.floor(n * (n + 1) / 6)}</b>`; $('#tr-ans').onclick = showBest;
   function isDown() { // 어떤 꼭짓점(X0,y0)에 대해 아래로 뾰족한 삼각형인지
     for (const k of stones) { const [X0, y0] = k.split(',').map(Number); let ok = true; for (let j = 0; j < n && ok; j++) for (let c = 0; c <= j; c++) if (!stones.has(key(X0 - j + 2 * c, y0 - j))) { ok = false; break; } if (ok) return true; } return false;
   }
   function draw() {
-    const pts = [...stones].map(k => k.split(',').map(Number)); const sp = 46, cx = 260, cy = 60;
-    const P = (X, y) => [cx + X * sp / 2, cy + y * sp * 0.88];
+    const pts = [...stones].map(k => k.split(',').map(Number)); const sp = 46;
+    // 돌 범위에 맞춰 viewBox 조절 (빈 자리 1칸 여유)
+    const Xs = pts.map(p => p[0]), Ys = pts.map(p => p[1]); const minX = Math.min(...Xs) - 2, maxX = Math.max(...Xs) + 2, minY = Math.min(...Ys) - 1, maxY = Math.max(...Ys) + 1;
+    const P = (X, y) => [(X - minX) * sp / 2 + 30, (y - minY) * sp * 0.88 + 30];
+    const vw = (maxX - minX) * sp / 2 + 60, vh = (maxY - minY) * sp * 0.88 + 60; svg.setAttribute('viewBox', `0 0 ${vw} ${vh}`); svg.style.maxWidth = Math.min(520, vw * 1.1) + 'px';
     // 후보 빈 자리: 돌 주변 6방향
     const spots = new Set(); pts.forEach(([X, y]) => [[2, 0], [-2, 0], [1, 1], [-1, 1], [1, -1], [-1, -1]].forEach(([dx, dy]) => { const k = key(X + dx, y + dy); if (!stones.has(k)) spots.add(k); }));
     let h = '';
-    if (sel) spots.forEach(k => { const [X, y] = k.split(',').map(Number); const [px, py] = P(X, y); h += `<circle class="spot" cx="${px}" cy="${py}" r="14" data-k="${k}"/>`; });
+    if (sel) spots.forEach(k => { const [X, y] = k.split(',').map(Number); const [px, py] = P(X, y); h += `<circle class="spot" cx="${px}" cy="${py}" r="17" data-k="${k}"/>`; });
     pts.forEach(([X, y]) => { const [px, py] = P(X, y); const k = key(X, y); h += `<circle class="stone ${sel === k ? 'sel' : ''}" cx="${px}" cy="${py}" r="18" fill="#2a2a2a" stroke="#000" data-k="${k}"/>`; });
     svg.innerHTML = h; $('#tr-mv').textContent = moves;
     svg.querySelectorAll('.stone').forEach(e => e.onclick = () => { sel = sel === e.dataset.k ? null : e.dataset.k; draw(); });
-    svg.querySelectorAll('.spot').forEach(e => e.onclick = () => { hist.push([sel, e.dataset.k]); stones.delete(sel); stones.add(e.dataset.k); sel = null; moves++; draw(); if (isDown()) { const best = Math.floor(n * (n + 1) / 6); $('#tr-res').textContent = moves <= best ? `🎉 ${moves}번! 최소 횟수로 뒤집었어요.` : `뒤집었어요! (${moves}번) 최소는 ${best}번 — 더 줄여 볼까요?`; } });
+    svg.querySelectorAll('.spot').forEach(e => e.onclick = () => { hist.push([sel, e.dataset.k]); stones.delete(sel); stones.add(e.dataset.k); sel = null; moves++; draw(); if (isDown()) { const best = Math.floor(n * (n + 1) / 6); showBest(); $('#tr-res').textContent = moves <= best ? `🎉 ${moves}번! 최소 횟수로 뒤집었어요.` : `뒤집었어요! (${moves}번) 최소는 ${best}번 — 더 줄여 볼까요?`; } });
   }
   $('#tr-reset').onclick = init; $('#tr-n').onchange = init; $('#tr-undo').onclick = () => { const m = hist.pop(); if (!m) return; stones.delete(m[1]); stones.add(m[0]); moves--; sel = null; $('#tr-res').textContent = ''; draw(); };
   $('#tr-show').onclick = () => [2,3,4,5,6,7,10].forEach(k => $('#tb' + k).textContent = Math.floor(k * (k + 1) / 6));
@@ -190,14 +198,15 @@ document.querySelectorAll('#tabs .tab').forEach(b => b.onclick = () => { documen
 function linePuzzle(pre, getMN, onSolve) {
   let cells = [], sel = null, S = 0, J = 0, seq = [], hist = [], m, n;
   const line = $('#' + pre + '-line');
-  function init() { [m, n] = getMN(); cells = [...Array(m).fill('w'), '', ...Array(n).fill('b')]; sel = null; S = J = 0; seq = []; hist = []; $('#' + pre + '-best').innerHTML = `최소 <b>${m * n + m + n}</b>`; $('#' + pre + '-res').textContent = ''; draw(); }
+  function init() { [m, n] = getMN(); cells = [...Array(m).fill('w'), '', ...Array(n).fill('b')]; sel = null; S = J = 0; seq = []; hist = []; $('#' + pre + '-best').innerHTML = `최소 <b>?</b>`; $('#' + pre + '-res').textContent = ''; draw(); }
+  const showBest = () => $('#' + pre + '-best').innerHTML = `최소 <b>${m * n + m + n}</b>`; $('#' + pre + '-ans').onclick = showBest;
   function moveable(i) { const e = cells.indexOf(''); if (!cells[i]) return null; const d = cells[i] === 'w' ? 1 : -1; if (e === i + d) return 'S'; if (e === i + 2 * d && cells[i + d] && cells[i + d] !== cells[i]) return 'J'; return null; }
   function draw() {
     line.innerHTML = ''; cells.forEach((c, i) => { const d = document.createElement('div'); d.className = 'cell1' + (sel === i ? ' sel' : '') + (moveable(i) ? ' can' : ''); if (c) d.innerHTML = `<div class="st ${c}"></div>`; d.onclick = () => click(i); line.appendChild(d); });
     $('#' + pre + '-s').textContent = S; $('#' + pre + '-j').textContent = J; $('#' + pre + '-t').textContent = S + J; $('#' + pre + '-seq').textContent = seq.join(' ');
   }
   function click(i) { const t = moveable(i); if (!t) return; const e = cells.indexOf(''); hist.push([i, e]); cells[e] = cells[i]; cells[i] = ''; if (t === 'S') S++; else J++; seq.push(t); draw();
-    const goal = [...Array(n).fill('b'), '', ...Array(m).fill('w')].join(); if (cells.join() === goal) { const best = m * n + m + n; $('#' + pre + '-res').textContent = (S + J) === best ? `🎉 최소 ${best}번으로 성공!` : `성공! ${S + J}번 (최소 ${best}번)`; if (onSolve) onSolve(m, n, S, J, seq); }
+    const goal = [...Array(n).fill('b'), '', ...Array(m).fill('w')].join(); if (cells.join() === goal) { const best = m * n + m + n; showBest(); $('#' + pre + '-res').textContent = (S + J) === best ? `🎉 최소 ${best}번으로 성공!` : `성공! ${S + J}번 (최소 ${best}번)`; if (onSolve) onSolve(m, n, S, J, seq); }
     else if (!cells.some((_, k) => moveable(k))) $('#' + pre + '-res').textContent = '움직일 수 없어요. 무르기로 되돌려 보세요.'; }
   $('#' + pre + '-reset').onclick = init; $('#' + pre + '-undo').onclick = () => { const h = hist.pop(); if (!h) return; const t = seq.pop(); cells[h[0]] = cells[h[1]]; cells[h[1]] = ''; if (t === 'S') S--; else J--; $('#' + pre + '-res').textContent = ''; draw(); };
   init(); return init;
@@ -238,9 +247,9 @@ $('#as-show').onclick = () => { [[2,5],[3,4]].forEach(([m,n]) => { const id = 'a
   // 노드: 1(오른쪽) 2(위) 3(왼쪽) 4(아래) C(가운데). 4-1 사이에는 길(우물)이 없음
   const POS = { 1: [270, 160], 2: [160, 50], 3: [50, 160], 4: [160, 270], C: [160, 160] };
   const ADJ = { 1: ['C', '2'], 2: ['C', '1', '3'], 3: ['C', '2', '4'], 4: ['C', '3'], C: ['1', '2', '3', '4'] };
-  let pos, turn, sel, first = true, mode = 'pvp', over = false;
+  let pos, turn, sel, first = true, mode = 'pvp', over = false, moves = 0, seen = {};
   const svg = $('#go-svg');
-  function init() { pos = { 1: 'w', 2: 'w', 3: 'b', 4: 'b', C: '' }; turn = $('#go-first').value; mode = $('#go-mode').value; sel = null; first = true; over = false; $('#go-res').textContent = ''; draw(); if (isBot()) setTimeout(botMove, 600); }
+  function init() { pos = { 1: 'w', 2: 'w', 3: 'b', 4: 'b', C: '' }; turn = $('#go-first').value; mode = $('#go-mode').value; sel = null; first = true; over = false; moves = 0; seen = {}; $('#go-res').textContent = ''; draw(); if (isBot()) setTimeout(botMove, 600); }
   const isBot = () => mode === 'bot' && turn === 'b';
   function movesOf(col) { const out = []; for (const k in pos) if (pos[k] === col && !(first && (k === '1' || k === '4'))) ADJ[k].forEach(t => { if (!pos[t]) out.push([k, t]); }); return out; }
   function draw() {
@@ -255,7 +264,9 @@ $('#as-show').onclick = () => { [[2,5],[3,4]].forEach(([m,n]) => { const id = 'a
     svg.querySelectorAll('.stone').forEach(e => e.onclick = () => { if (over || isBot() || pos[e.dataset.k] !== turn) return; sel = sel === e.dataset.k ? null : e.dataset.k; draw(); });
     svg.querySelectorAll('.spot').forEach(e => e.onclick = () => move(sel, e.dataset.k));
   }
-  function move(a, b) { pos[b] = pos[a]; pos[a] = ''; sel = null; first = false; turn = turn === 'w' ? 'b' : 'w';
+  function move(a, b) { pos[b] = pos[a]; pos[a] = ''; sel = null; first = false; turn = turn === 'w' ? 'b' : 'w'; moves++;
+    const key = turn + Object.keys(pos).sort().map(k => pos[k] || '.').join(''); seen[key] = (seen[key] || 0) + 1;
+    if (seen[key] >= 3 || moves >= 60) { over = true; draw(); $('#go-res').textContent = seen[key] >= 3 ? '같은 모양이 세 번 반복됐어요 → 무승부 🤝' : '60수가 지났어요 → 무승부 🤝'; return; }
     if (!movesOf(turn).length) { over = true; draw(); $('#go-res').textContent = `${turn === 'w' ? '흰 말' : '검은 말'}이 움직일 수 없어요 → ${turn === 'w' ? '⚫ 검은 말' : '⚪ 흰 말'} 승리! 🎉`; return; }
     draw(); if (isBot()) setTimeout(botMove, 600); }
   function botMove() { const ms = movesOf('b'); // 상대가 못 움직이게 하는 수 우선

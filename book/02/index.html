@@ -15,20 +15,25 @@
   .chip.last{background:var(--bk-yellow);border-color:var(--bk-orange)}
   .chip--card{width:46px;height:64px;border-radius:8px;border-width:2px}
   .chip--ghost{border-color:var(--bk-purple);box-shadow:0 4px 0 #6a3fb0}
-  .ops{display:flex;gap:10px;margin:6px 0}
+  .ops{display:flex;gap:10px;margin:6px 0;flex-wrap:wrap}
+  .ops .bk-btn{white-space:nowrap}
+  .ops label{flex-basis:100%}
   .turn{font-family:var(--f-head);font-size:1.25rem;display:flex;align-items:center;gap:10px;margin:8px 0}
   .turn .dot{width:14px;height:14px;border-radius:50%;background:var(--bk-sky)}
   .turn.p2 .dot{background:var(--bk-red)}
   .log{font-size:.9rem;color:var(--bk-ink-soft);max-height:8em;overflow:auto;margin:6px 0;padding-left:1.2em}
   .setup{display:flex;gap:10px;flex-wrap:wrap;align-items:center;background:#fff;border-radius:14px;padding:10px 14px;margin-bottom:8px}
   .score{display:flex;gap:12px;flex-wrap:wrap;margin:8px 0}
-  .score div{flex:1;min-width:140px;background:#fff;border-radius:14px;padding:10px 14px;border:2px solid var(--bk-line)}
-  .score div.on{border-color:var(--bk-orange)}
+  .score>div{flex:1;min-width:140px;background:#fff;border-radius:14px;padding:10px 14px;border:2px solid var(--bk-line)}
+  .score>div.on{border-color:var(--bk-orange)}
   .score b{font-family:var(--f-head);font-size:1.5rem;font-weight:400;display:block}
   .score .hand{display:flex;flex-wrap:wrap;gap:4px;margin-top:4px}
   .score .hand span{font-size:.8rem;background:var(--bk-cream);padding:2px 6px;border-radius:6px}
   .result{font-family:var(--f-head);font-size:1.4rem;color:var(--bk-red);margin:8px 0}
-  .exp-tbl td input{width:60px;text-align:center}
+  .tbl-scroll{overflow-x:auto;-webkit-overflow-scrolling:touch;margin:8px 0}
+  .tbl-scroll .tbl{margin:0}
+  .exp-tbl td:first-child,.exp-tbl th{white-space:nowrap}
+  .exp-tbl td input{width:44px;min-width:44px;padding:6px 2px;text-align:center;font-size:1.1rem}
   .cards-row{display:flex;flex-wrap:wrap;gap:6px;margin:10px 0}
   .card{width:48px;height:66px;border-radius:8px;background:#fff;border:2px solid var(--bk-ink);display:grid;place-items:center;font-family:var(--f-head);font-size:1.3rem;transition:.25s;position:relative}
   .card.taken-p1{background:var(--bk-sky);color:#fff;border-color:var(--bk-sky);transform:translateY(-6px)}
@@ -89,9 +94,9 @@
       <h3>🔍 필승 전략 찾기</h3>
       <div class="q"><b>1</b> n=6인 경우로 게임을 해 보자. 이 게임에서 이기기 위한 전략은 무엇인지 생각해 보자.</div>
       <div class="q"><b>2</b> n의 값을 바꾸어 가며 게임을 진행한 후 다음 표를 완성해 보자.</div>
-      <table class="tbl exp-tbl"><thead><tr><th>n</th><th>7</th><th>8</th><th>9</th><th>10</th><th>11</th></tr></thead>
-        <tbody><tr><td>마지막에 적힌 수</td><td><input class="num num--1" style="width:64px" data-n="7"></td><td><input class="num num--1" style="width:64px" data-n="8"></td><td><input class="num num--1" style="width:64px" data-n="9"></td><td><input class="num num--1" style="width:64px" data-n="10"></td><td><input class="num num--1" style="width:64px" data-n="11"></td></tr>
-        <tr><td>홀/짝</td><td id="pe7"></td><td id="pe8"></td><td id="pe9"></td><td id="pe10"></td><td id="pe11"></td></tr></tbody></table>
+      <div class="tbl-scroll"><table class="tbl exp-tbl"><thead><tr><th>n</th><th>7</th><th>8</th><th>9</th><th>10</th><th>11</th></tr></thead>
+        <tbody><tr><td>마지막에 적힌 수</td><td><input class="num num--1" type="tel" inputmode="numeric" maxlength="3" data-n="7"></td><td><input class="num num--1" type="tel" inputmode="numeric" maxlength="3" data-n="8"></td><td><input class="num num--1" type="tel" inputmode="numeric" maxlength="3" data-n="9"></td><td><input class="num num--1" type="tel" inputmode="numeric" maxlength="3" data-n="10"></td><td><input class="num num--1" type="tel" inputmode="numeric" maxlength="3" data-n="11"></td></tr>
+        <tr><td>홀/짝</td><td id="pe7"></td><td id="pe8"></td><td id="pe9"></td><td id="pe10"></td><td id="pe11"></td></tr></tbody></table></div>
       <div class="q"><b>3</b> 마지막에 적힐 수가 홀수인지 짝수인지 예상해 보고, 덧셈·뺄셈 게임의 필승 전략을 생각해 보자.</div>
       <details class="reveal"><summary>힌트 보기</summary><p>두 수를 지우고 합을 적든 차를 적든, 적힌 수 전체의 합의 <b>홀짝은 변하지 않아요</b>(a+b와 a−b는 홀짝이 같아요). 그러니 마지막 수의 홀짝 = 1+2+…+n = n(n+1)/2의 홀짝. n=6이면 21(홀수) → 어떻게 두어도 나중에 한 사람이 이겨요. 필승 전략은 "수를 어떻게 지우느냐"가 아니라 <b>먼저 할지 나중에 할지</b>를 고르는 거예요!</p></details>
     </div>
@@ -126,7 +131,7 @@
       <div class="q"><b>1</b> 1부터 6까지 카드 6장으로 게임을 해 보자.</div>
       <div class="q"><b>2</b> 1부터 8까지 카드로 게임을 해 보고, 공격수가 가장 큰 점수 차로 이기기 위한 전략을 생각해 보자.</div>
       <div class="q"><b>3</b> 1부터 15까지 카드로 게임을 해 보고, 전략을 생각해 보자.</div>
-      <details class="reveal"><summary>힌트 보기</summary><p>첫 수는 반드시 1을 귀신에게 주게 돼요. 1 다음엔 <b>가장 큰 소수</b>부터! 소수를 가져가면 귀신은 아무것도(1은 이미 없으니) 못 가져가요. 그다음엔 "남은 약수가 딱 하나뿐인 수"를 찾아 가져가면 손해가 가장 적어요. 가져갈 수 없는 카드가 없도록 순서를 잘 짜는 게 핵심이에요.</p></details>
+      <details class="reveal"><summary>힌트 보기</summary><p>첫 수로 <b>가장 큰 소수</b>를 가져가면 귀신은 1만 가져가요. 그 뒤로 소수를 가져가면 귀신은 아무것도(1은 이미 없으니) 못 가져가요. 그다음엔 "남은 약수가 딱 하나뿐인 수"를 찾아 가져가면 손해가 가장 적어요. 가져갈 수 없는 카드가 없도록 순서를 잘 짜는 게 핵심이에요.</p></details>
     </div>
   </section>
 
@@ -192,6 +197,7 @@
 
 <script>
 const $ = s => document.querySelector(s); const ri = n => Math.floor(Math.random() * n);
+const josaN = (w, p) => w + josa(String(w).replace(/\(.*?\)/g, '').trim() || w, p).slice(-1); // '봇(나중)' → '봇(나중)이'
 document.querySelectorAll('#tabs .tab').forEach(b => b.onclick = () => {
   document.querySelectorAll('#tabs .tab').forEach(x => x.classList.toggle('on', x === b));
   document.querySelectorAll('.act-page').forEach(p => { p.hidden = p.id !== b.dataset.t; p.style.display = p.hidden ? 'none' : ''; });
@@ -212,8 +218,8 @@ document.querySelectorAll('#tabs .tab').forEach(b => b.onclick = () => {
   function apply(op) {
     const [a, b] = sel.map(i => nums[i].v); const r = op === '+' ? a + b : Math.abs(a - b);
     nums = nums.filter((_, i) => !sel.includes(i)).map(x => ({ v: x.v })); nums.push({ v: r, fresh: true });
-    log.innerHTML += `<li>${names[turn]}: ${a}와 ${b}를 지우고 ${op === '+' ? '합' : '차'}인 <b>${r}</b>을 적었다.</li>`; sel = [];
-    if (nums.length === 1) { over = true; const even = r % 2 === 0; $('#as-result').textContent = `마지막 수 ${r} → ${even ? '짝수' : '홀수'} → ${even ? names[0] : names[1]}가 이겼다!`; chips.classList.add('done'); render(); setTimeout(() => chips.lastElementChild?.classList.add('last'), 0); return; }
+    log.innerHTML += `<li>${names[turn]}: ${josa(a, '과/와')} ${josa(b, '을/를')} 지우고 ${op === '+' ? '합' : '차'}인 <b>${r}</b>${josa(r, '을/를').slice(-1)} 적었다.</li>`; sel = [];
+    if (nums.length === 1) { over = true; const even = r % 2 === 0; $('#as-result').textContent = `마지막 수 ${r} → ${even ? '짝수' : '홀수'} → ${josaN(even ? names[0] : names[1], '이/가')} 이겼다!`; chips.classList.add('done'); render(); setTimeout(() => chips.lastElementChild?.classList.add('last'), 0); return; }
     turn = 1 - turn; render(); if (isBot()) setTimeout(botMove, 600);
   }
   function botMove() { // 결과는 홀짝으로 정해져 있으므로 아무 수나 (재미로 큰 수 피함)
@@ -239,7 +245,7 @@ document.querySelectorAll('#tabs .tab').forEach(b => b.onclick = () => {
     $('#dv-hint').textContent = over ? '' : '보라색 테두리 카드는 귀신이 가져갈 약수가 없어서 지금은 가져갈 수 없어요.';
     if (!over && !canMove) { over = true; p2.push(...cards); cards = []; render(); const a = p1.reduce((x, y) => x + y, 0), b = p2.reduce((x, y) => x + y, 0); $('#dv-result').textContent = `더 가져갈 카드가 없어요. 공격수 ${a} : 귀신 ${b} → ${a > b ? '공격수 승리! 🎉' : a < b ? '수학 귀신 승리 👻' : '무승부'}`; }
   }
-  function take(v) { if (over || !cards.includes(v)) return; const d = divisorsLeft(v); if (!d.length) { $('#dv-hint').textContent = `${v}은(는) 귀신이 가져갈 약수가 없어서 가져갈 수 없어요.`; return; } p1.push(v); p2.push(...d); cards = cards.filter(c => c !== v && !d.includes(c)); render(); }
+  function take(v) { if (over || !cards.includes(v)) return; const d = divisorsLeft(v); if (!d.length) { $('#dv-hint').textContent = `${josa(v, '은/는')} 귀신이 가져갈 약수가 없어서 가져갈 수 없어요.`; return; } p1.push(v); p2.push(...d); cards = cards.filter(c => c !== v && !d.includes(c)); render(); }
   $('#dv-start').onclick = () => { n = +$('#dv-n').value; cards = Array.from({ length: n }, (_, i) => i + 1); p1 = []; p2 = []; over = false; $('#dv-result').textContent = ''; render(); };
   $('#dv-start').click();
 })();
@@ -257,7 +263,7 @@ document.querySelectorAll('#tabs .tab').forEach(b => b.onclick = () => {
   }
   const owner = {};
   function take(c) { if (over) return; for (let i = 1; i <= c; i++) owner[taken + i] = 'p' + (turn + 1); const from = taken + 1; taken += c; log.innerHTML += `<li>${names[turn]}: ${c === 1 ? from : from + '·' + (taken)} 가져감</li>`;
-    if (taken === n) { over = true; $('#lc-result').textContent = `${names[turn]}가 마지막 카드 ${n}을 가져가 이겼다! 🎉`; render(); return; }
+    if (taken === n) { over = true; $('#lc-result').textContent = `${josaN(names[turn], '이/가')} 마지막 카드 ${josa(n, '을/를')} 가져가 이겼다! 🎉`; render(); return; }
     turn = 1 - turn; render(); if (isBot()) setTimeout(botMove, 650); }
   function botMove() { const rem = n - taken; const want = rem % (k + 1); let c; if (want > 0 && Math.random() < diff) c = want; else { c = 1 + ri(Math.min(k, rem)); if (want > 0 && c === want && Math.min(k, rem) > 1) c = (c % Math.min(k, rem)) + 1; } take(c); }
   $('#lc-take1').onclick = () => take(1); $('#lc-take2').onclick = () => take(2); $('#lc-take3').onclick = () => take(3);
@@ -271,9 +277,10 @@ $('#pp-go').onclick = () => {
   const rows = $('#pp-rows').value.trim().split(/\s+/).map(Number).filter(x => x > 0);
   if (rows.length < 2) { $('#pp-out').textContent = '줄별 버블 수를 띄어쓰기로 넣어 주세요.'; return; }
   const x = rows.reduce((a, b) => a ^ b, 0);
-  let h = '<table class="tbl" style="margin-left:0"><thead><tr><th>줄</th><th>버블</th><th>8</th><th>4</th><th>2</th><th>1</th></tr></thead><tbody>';
-  rows.forEach((r, i) => { h += `<tr><td>${i + 1}</td><td>${r}</td>${[8, 4, 2, 1].map(b => `<td>${r & b ? '●' : ''}</td>`).join('')}</tr>`; });
-  h += `<tr><th>묶음 개수</th><th></th>${[8, 4, 2, 1].map(b => { const c = rows.filter(r => r & b).length; return `<th style="color:${c % 2 ? 'var(--bk-red)' : 'var(--bk-green)'}">${c}</th>`; }).join('')}</tr></tbody></table>`;
+  const BITS = []; for (let b = 1; b <= Math.max(...rows); b *= 2) BITS.unshift(b);
+  let h = `<div class="tbl-scroll"><table class="tbl" style="margin-left:0"><thead><tr><th>줄</th><th>버블</th>${BITS.map(b => `<th>${b}</th>`).join('')}</tr></thead><tbody>`;
+  rows.forEach((r, i) => { h += `<tr><td>${i + 1}</td><td>${r}</td>${BITS.map(b => `<td>${r & b ? '●' : ''}</td>`).join('')}</tr>`; });
+  h += `<tr><th>묶음 개수</th><th></th>${BITS.map(b => { const c = rows.filter(r => r & b).length; return `<th style="color:${c % 2 ? 'var(--bk-red)' : 'var(--bk-green)'}">${c}</th>`; }).join('')}</tr></tbody></table></div>`;
   if (x === 0) h += '<p>모든 묶음이 짝수 개 → 지금 차례인 사람이 <b>불리</b>해요 (상대가 따라 하면 짐).</p>';
   else { let best = null; rows.forEach((r, i) => { const t = r ^ x; if (t < r && best === null) best = { i, from: r, to: t }; }); h += `<p>묶음이 홀수 개인 자리가 있어요 → 지금 차례인 사람이 <b>이길 수 있어요</b>. 예: ${best.i + 1}번 줄을 ${best.from}개에서 <b>${best.to}개</b>로 (${best.from - best.to}개 누르기).</p>`; }
   $('#pp-out').innerHTML = h;

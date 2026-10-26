@@ -110,17 +110,24 @@ document.querySelectorAll('#tabs .tab').forEach(b => b.onclick = () => { documen
 /* ===== 1·2 ===== */
 (function () {
   const sq = (extra) => `<svg viewBox="0 0 120 120"><rect x="10" y="10" width="100" height="100" fill="#FBD58E" stroke="#2C2A26"/>${extra}</svg>`;
+  /* 접은 띠가 감겨 올라가는 나선 (단순 그림) */
+  function coil() { let d = ''; for (let i = 0; i <= 120; i++) { const t = i / 120 * 3.6 * Math.PI; const r = 10 + 13 * t / Math.PI; d += `${i ? 'L' : 'M'}${(60 + r * Math.cos(t)).toFixed(1)} ${(60 + r * Math.sin(t) * .55 - t * 4 + 22).toFixed(1)} `; }
+    return `<svg viewBox="0 0 120 120"><path d="${d}" fill="none" stroke="#8B5A2B" stroke-width="13" stroke-linecap="round" stroke-linejoin="round"/><path d="${d}" fill="none" stroke="#F5A623" stroke-width="10" stroke-linecap="round" stroke-linejoin="round"/><path d="${d}" fill="none" stroke="#FBD58E" stroke-width="2" stroke-dasharray="3 9"/></svg>`; }
   $('#fold-steps').innerHTML = [
-    ['골 접기', sq('<line x1="60" y1="10" x2="60" y2="110" stroke="#2F8FC9" stroke-width="2" stroke-dasharray="6 4"/><text x="64" y="60" font-size="10">안쪽으로</text>')],
-    ['산 접기', sq('<line x1="60" y1="10" x2="60" y2="110" stroke="#E9533F" stroke-width="2" stroke-dasharray="8 3 2 3"/><text x="64" y="60" font-size="10">바깥쪽으로</text>')],
+    ['골 접기', sq('<line x1="60" y1="10" x2="60" y2="110" stroke="#2F8FC9" stroke-width="2" stroke-dasharray="6 4"/><text x="64" y="64" font-size="14">안쪽</text>')],
+    ['산 접기', sq('<line x1="60" y1="10" x2="60" y2="110" stroke="#E9533F" stroke-width="2" stroke-dasharray="8 3 2 3"/><text x="64" y="64" font-size="14">바깥쪽</text>')],
     ['① 대문 접기 후 펼치기', sq('<line x1="35" y1="10" x2="35" y2="110" stroke="#2F8FC9" stroke-width="2" stroke-dasharray="6 4"/><line x1="60" y1="10" x2="60" y2="110" stroke="#2F8FC9" stroke-width="2" stroke-dasharray="6 4"/><line x1="85" y1="10" x2="85" y2="110" stroke="#2F8FC9" stroke-width="2" stroke-dasharray="6 4"/>')],
     ['② 뒤집어 직사각형 4개의 대각선 접기', sq('<line x1="35" y1="10" x2="35" y2="110" stroke="#999" stroke-dasharray="4 4"/><line x1="60" y1="10" x2="60" y2="110" stroke="#999" stroke-dasharray="4 4"/><line x1="85" y1="10" x2="85" y2="110" stroke="#999" stroke-dasharray="4 4"/><line x1="10" y1="110" x2="35" y2="10" stroke="#E9533F" stroke-width="2" stroke-dasharray="8 3 2 3"/><line x1="35" y1="110" x2="60" y2="10" stroke="#E9533F" stroke-width="2" stroke-dasharray="8 3 2 3"/><line x1="60" y1="110" x2="85" y2="10" stroke="#E9533F" stroke-width="2" stroke-dasharray="8 3 2 3"/><line x1="85" y1="110" x2="110" y2="10" stroke="#E9533F" stroke-width="2" stroke-dasharray="8 3 2 3"/>')],
-    ['③ 산·골 기호대로 접어 나선 완성', sq('<path d="M20 100 Q40 20 60 60 T100 30" fill="none" stroke="#3A9E82" stroke-width="3"/>')],
+    ['③ 산·골 기호대로 접어 나선 완성', coil()],
   ].map(([t, s]) => `<div class="step">${s}<b>${t}</b></div>`).join('');
   function draw() { const n = +$('#sp-n').value; $('#sp-nv').textContent = n; const w = 240 / n; let h = `<rect x="40" y="30" width="240" height="240" fill="#FBD58E" stroke="#2C2A26"/>`; for (let i = 1; i < n; i++) h += `<line x1="${40 + i * w}" y1="30" x2="${40 + i * w}" y2="270" stroke="#2F8FC9" stroke-dasharray="6 4"/>`; for (let i = 0; i < n; i++) h += `<line x1="${40 + i * w}" y1="270" x2="${40 + (i + 1) * w}" y2="30" stroke="#E9533F" stroke-dasharray="8 3 2 3"/>`;
-    // 접은 나선 모습: 기울어진 평행사변형 띠를 비틀어 쌓은 그림
-    const a = Math.atan2(w, 240); for (let i = 0; i < n; i++) { const t = i / n * Math.PI * .9; const x = 440 + Math.cos(t) * 70, y = 150 + Math.sin(t) * 70 * .4 - i * (120 / n); h += `<polygon points="${x - 25},${y + 12} ${x + 25},${y + 12 - 18 * Math.tan(a) * 2} ${x + 25 + 6},${y - 10} ${x - 25 + 6},${y - 10 + 18 * Math.tan(a) * 2}" fill="#F5A623" stroke="#8B5A2B" opacity=".9"/>`; }
-    h += `<text x="160" y="295" text-anchor="middle" font-size="13" fill="#5F5B55">${n}등분 · 골(파랑)·산(빨강) 접기</text><text x="440" y="295" text-anchor="middle" font-size="13" fill="#5F5B55">접은 나선 (상상도)</text>`; $('#sp-svg').innerHTML = h; }
+    // 오른쪽: 띠 1개 확대 (가로 1/n, 세로 1) — 대각선이 산 접기, 각 a
+    const zw = 240 / n, zx = 440 - zw / 2, a = Math.atan(1 / n);
+    h += `<rect x="${zx}" y="30" width="${zw}" height="240" fill="#FBD58E" stroke="#2C2A26" stroke-width="2"/><line x1="${zx}" y1="270" x2="${zx + 240 / n}" y2="30" stroke="#E9533F" stroke-width="3" stroke-dasharray="10 4 3 4"/>`;
+    h += `<path d="M${zx} 210 A60 60 0 0 1 ${zx + 60 * Math.sin(a)} ${270 - 60 * Math.cos(a)}" fill="none" stroke="#1F6B50" stroke-width="2"/><text x="${zx - 8}" y="200" text-anchor="end" font-size="18" fill="#1F6B50">a</text>`;
+    h += `<text x="${zx + zw + 8}" y="155" font-size="16" fill="#2C2A26">세로 1</text><text x="440" y="22" text-anchor="middle" font-size="16" fill="#2C2A26">가로 1/${n}</text>`;
+    h += `<line x1="${40 + 240 / n}" y1="150" x2="${zx - 30}" y2="150" stroke="#9c8a55" stroke-dasharray="3 4"/>`;
+    h += `<text x="160" y="295" text-anchor="middle" font-size="16" fill="#5F5B55">${n}등분 · 골(파랑)·산(빨강) 접기</text><text x="440" y="295" text-anchor="middle" font-size="16" fill="#5F5B55">띠 1개 확대</text>`; $('#sp-svg').innerHTML = h; }
   $('#sp-n').oninput = draw; draw();
 })();
 
@@ -128,11 +135,16 @@ document.querySelectorAll('#tabs .tab').forEach(b => b.onclick = () => { documen
 (function () {
   function draw() { const n = +$('#ga-n').value; $('#ga-nv').textContent = n; const W = 260, w = W / n; let h = `<rect x="30" y="30" width="${W}" height="${W}" fill="#FBD58E" stroke="#2C2A26"/>`;
     for (let i = 0; i < n; i++) { h += `<line x1="${30 + i * w}" y1="30" x2="${30 + i * w}" y2="${30 + W}" stroke="#2F8FC9" stroke-opacity=".5"/><line x1="${30 + i * w}" y1="${30 + W}" x2="${30 + (i + 1) * w}" y2="30" stroke="#E9533F"/>`; }
-    const a = Math.atan(1 / n) * 180 / Math.PI; h += `<path d="M30 ${30 + W} L30 ${30 + W - 60} A60 60 0 0 1 ${30 + 60 * Math.sin(a * Math.PI / 180)} ${30 + W - 60 * Math.cos(a * Math.PI / 180)} Z" fill="#3A9E82" fill-opacity=".4"/><text x="40" y="${30 + W - 70}" font-family="Jua" font-size="16" fill="#1F6B50">a = ${a.toFixed(1)}°</text>`;
-    // 나선을 부채꼴로 근사: 띠 n개의 긴 변이 호, 폭이 반지름 방향
-    const R = n * 30, cx = 330 + 0, cy = 290; const ang = Math.min(Math.PI * .9, W / R * 3); let path = `M${cx + R * Math.cos(Math.PI - ang)} ${cy - R * Math.sin(Math.PI - ang)}`; for (let k = 0; k <= n; k++) { const t = Math.PI - ang + ang * k / n; const r = R - (k % 2) * 0; path += ` L${cx + r * Math.cos(t)} ${cy - r * Math.sin(t)}`; }
-    const r2 = R - 28; let inner = `M${cx + r2 * Math.cos(Math.PI)} ${cy - r2 * Math.sin(Math.PI)}`; for (let k = 0; k <= n; k++) { const t = Math.PI - ang + ang * k / n; inner += ` L${cx + r2 * Math.cos(t)} ${cy - r2 * Math.sin(t)}`; }
-    const Rv = Math.min(R, 2000); h += `<g transform="translate(${-(cx - 330)},0)">${(() => { const Rc = Math.min(R, 260), ang2 = W / Rc; const sx = 450, sy = 280; let p = ''; for (let k = 0; k <= n; k++) { const t = Math.PI / 2 + ang2 / 2 - ang2 * k / n; p += `${k ? 'L' : 'M'}${sx + Rc * Math.cos(t)} ${sy - Rc * Math.sin(t) + Rc - 20} `; } let q = ''; for (let k = 0; k <= n; k++) { const t = Math.PI / 2 + ang2 / 2 - ang2 * k / n; const rr = Rc - 30; q += `${k ? 'L' : 'M'}${sx + rr * Math.cos(t)} ${sy - rr * Math.sin(t) + Rc - 20} `; } return `<path d="${p}" fill="none" stroke="#F5A623" stroke-width="4" stroke-linejoin="round"/><path d="${q}" fill="none" stroke="#F5A623" stroke-width="2" stroke-dasharray="4 3"/><text x="450" y="300" text-anchor="middle" font-size="12" fill="#5F5B55">n=${n}: 반지름 ≈ ${(n / (2 * Math.PI) * 1).toFixed(2)} (변 1 기준)</text>`; })()}</g>`;
+    const a = Math.atan(1 / n) * 180 / Math.PI; h += `<path d="M30 ${30 + W} L30 ${30 + W - 60} A60 60 0 0 1 ${30 + 60 * Math.sin(a * Math.PI / 180)} ${30 + W - 60 * Math.cos(a * Math.PI / 180)} Z" fill="#3A9E82" fill-opacity=".4"/><text x="40" y="${30 + W - 70}" font-size="18" fill="#1F6B50">a = ${a.toFixed(1)}°</text>`;
+    // 오른쪽: 띠 n개를 이어 붙인 모양이 부채꼴에 가까워지는 개념도 (바깥 길이 일정, 등분이 많을수록 덜 휘어짐)
+    { const Rc = n * 30, ang2 = W / Rc, band = 30, pts = [], inn = [];
+      for (let k = 0; k <= n; k++) { const t = Math.PI / 2 + ang2 / 2 - ang2 * k / n; pts.push([Rc * Math.cos(t), -Rc * Math.sin(t)]); }
+      for (let k = 0; k <= 60; k++) { const t = Math.PI / 2 + ang2 / 2 - ang2 * k / 60; inn.push([(Rc - band) * Math.cos(t), -(Rc - band) * Math.sin(t)]); }
+      const all = pts.concat(inn), xs = all.map(q => q[0]), ys = all.map(q => q[1]); const mx = (Math.min(...xs) + Math.max(...xs)) / 2, my = (Math.min(...ys) + Math.max(...ys)) / 2; const tx = 455 - mx, ty = 160 - my;
+      const P = q => `${(q[0] + tx).toFixed(1)} ${(q[1] + ty).toFixed(1)}`;
+      h += `<path d="M${P(pts[0])} ${pts.slice(1).map(q => 'L' + P(q)).join(' ')} L${P(inn[inn.length - 1])} ${inn.slice().reverse().map(q => 'L' + P(q)).join(' ')} Z" fill="#FBD58E" stroke="#F5A623" stroke-width="3" stroke-linejoin="round"/>`;
+      for (let k = 1; k < n && n <= 32; k++) { const t = Math.PI / 2 + ang2 / 2 - ang2 * k / n; h += `<line x1="${(Rc * Math.cos(t) + tx).toFixed(1)}" y1="${(-Rc * Math.sin(t) + ty).toFixed(1)}" x2="${((Rc - band) * Math.cos(t) + tx).toFixed(1)}" y2="${(-(Rc - band) * Math.sin(t) + ty).toFixed(1)}" stroke="#E8891B" stroke-width="1"/>`; }
+      h += `<text x="455" y="300" text-anchor="middle" font-size="15" fill="#5F5B55">띠 ${n}개를 이은 모양 (개념도)</text>`; }
     $('#ga-svg').innerHTML = h; $('#ga-stat').innerHTML = `<div>띠의 폭<b>1/${n}</b></div><div>각 a = tan⁻¹(1/n)<b>${a.toFixed(2)}°</b></div><div>띠 긴 변의 합(호)<b>1 (일정)</b></div>`; $('#ga-res').textContent = n >= 32 ? '각 a가 0에 가까워지고 나선은 거의 곧은 띠(원기둥 위의 나선)에 가까워져요.' : ''; }
   $('#ga-n').oninput = draw; draw();
 })();
@@ -146,12 +158,11 @@ document.querySelectorAll('#tabs .tab').forEach(b => b.onclick = () => { documen
     // 간단한 사인 곡선 나선: 뒤쪽은 점선
     let front = '', back = ''; for (let i = 0; i <= 400; i++) { const s = i / 400; const th = s * k * 2 * Math.PI; const x = 150 + Rr * Math.sin(th), y = 280 - s * Hh + 18 * Math.cos(th) * -1 * 0; const pt = `${x} ${y}`; if (Math.cos(th) >= 0) front += (front ? 'L' : 'M') + pt + ' '; else back += (back ? 'L' : 'M') + pt + ' '; if (i % 400 === 0) {} }
     h += `<path d="${back}" fill="none" stroke="#E9533F" stroke-width="2" stroke-dasharray="4 4"/><path d="${front}" fill="none" stroke="#E9533F" stroke-width="3"/><text x="150" y="305" text-anchor="middle" font-family="Jua">B (아래)</text><text x="150" y="60" text-anchor="middle" font-family="Jua">A (위)</text>`;
-    for (let j = 1; j < k; j++) { const y = 280 - Hh * j / k; h += `<circle cx="150" cy="${y}" r="4" fill="#2F8FC9"/><text x="${150 + Rr + 6}" y="${y + 4}" font-size="12" fill="#2F8FC9">${'CDE'[j - 1]}</text>`; }
+    for (let j = 1; j < k; j++) { const y = 280 - Hh * j / k; h += `<circle cx="150" cy="${y}" r="4" fill="#2F8FC9"/><text x="${150 + Rr + 6}" y="${y + 5}" font-size="15" fill="#2F8FC9">${'CDE'[j - 1]}</text>`; }
     // 오른쪽: 펼친 직사각형 (가로 = 둘레×k 를 축척), 대각선
     const Wd = Math.min(280, C * k * .5), x0 = 300, y0 = 80; const wNow = Wd * t;
-    h += `<rect x="${x0}" y="${y0}" width="${Math.max(2, wNow)}" height="${Hh}" fill="#DFF5EE" stroke="#2C2A26"/>`;
-    if (t > 0) { for (let j = 1; j < k; j++) h += `<line x1="${x0 + wNow * j / k}" y1="${y0}" x2="${x0 + wNow * j / k}" y2="${y0 + Hh}" stroke="#2C2A26" stroke-dasharray="4 4"/><circle cx="${x0 + wNow * j / k}" cy="${y0 + Hh - Hh * j / k}" r="4" fill="#2F8FC9"/>`; h += `<line x1="${x0}" y1="${y0 + Hh}" x2="${x0 + wNow}" y2="${y0}" stroke="#E9533F" stroke-width="3"/><text x="${x0}" y="${y0 + Hh + 20}" font-family="Jua">B</text><text x="${x0 + wNow - 8}" y="${y0 - 8}" font-family="Jua">A</text><text x="${x0 + wNow / 2}" y="${y0 + Hh + 20}" text-anchor="middle" font-size="12" fill="#5F5B55">둘레 × ${k}</text>`; }
-    $('#hx-svg').innerHTML = h; const L = Math.sqrt((C * k) ** 2 + Hh ** 2); $('#hx-res').textContent = t < .3 ? '펼치기 슬라이더를 오른쪽으로!' : `펼치면 나선은 직선 → 최단 거리 = √((둘레×${k})² + 높이²) ≈ ${(L / Hh).toFixed(2)} × 높이. ${k > 1 ? `중간 점 ${'C·D·E'.slice(0, 2 * (k - 1) - 1)}은 높이를 ${k}등분하는 위치.` : ''}`; }
+    if (t > .01) { h += `<rect x="${x0}" y="${y0}" width="${wNow}" height="${Hh}" fill="#DFF5EE" stroke="#2C2A26"/>`; for (let j = 1; j < k; j++) h += `<line x1="${x0 + wNow * j / k}" y1="${y0}" x2="${x0 + wNow * j / k}" y2="${y0 + Hh}" stroke="#2C2A26" stroke-dasharray="4 4"/><circle cx="${x0 + wNow * j / k}" cy="${y0 + Hh - Hh * j / k}" r="4" fill="#2F8FC9"/>`; h += `<line x1="${x0}" y1="${y0 + Hh}" x2="${x0 + wNow}" y2="${y0}" stroke="#E9533F" stroke-width="3"/><text x="${x0}" y="${y0 + Hh + 20}" font-family="Jua">B</text><text x="${x0 + wNow - 8}" y="${y0 - 8}" font-family="Jua">A</text><text x="${x0 + wNow / 2}" y="${y0 + Hh + 20}" text-anchor="middle" font-size="13" fill="#5F5B55">둘레 × ${k}</text><text x="590" y="${y0 + Hh + 34}" text-anchor="end" font-size="12" fill="#9c8a55">※ 펼친 그림은 축척이 아니에요</text>`; }
+    $('#hx-svg').innerHTML = h; const L = Math.sqrt((C * k) ** 2 + Hh ** 2); $('#hx-res').textContent = t < .3 ? '펼치기 슬라이더를 오른쪽으로!' : `펼치면 나선은 직선 → 최단 거리 = √((둘레×${k})² + 높이²) ≈ ${(L / Hh).toFixed(2)} × 높이. ${k > 1 ? `중간 점 ${'CDE'.slice(0, k - 1).split('').join(', ')}는 높이를 ${k}등분하는 위치.` : ''}`; }
   $('#hx-k').oninput = draw; $('#hx-t').oninput = draw; draw();
 })();
 
@@ -165,15 +176,29 @@ document.querySelectorAll('#tabs .tab').forEach(b => b.onclick = () => { documen
     h += lines.map(l => `<line x1="${l.a[0]}" y1="${l.a[1]}" x2="${l.b[0]}" y2="${l.b[1]}" stroke="${l.c}" stroke-width="${1.2 + (l.z + 1)}" stroke-opacity="${.5 + l.z * .25}"/>`).join(''); svg.innerHTML = h; }
   svg.addEventListener('pointerdown', e => { drag = [e.clientX, e.clientY]; svg.setPointerCapture(e.pointerId); }); svg.addEventListener('pointermove', e => { if (!drag) return; ry += (e.clientX - drag[0]) * .01; rx += (e.clientY - drag[1]) * .01; drag = [e.clientX, e.clientY]; draw(); }); svg.addEventListener('pointerup', () => drag = null); $('#hy-tw').oninput = draw; draw();
   // 와선
-  function fib() { const F = [1, 1, 2, 3, 5, 8, 13, 21, 34]; let h = '', x = 0, y = 0, dir = 0; const sc = 7; // 정사각형을 반시계로 돌며 배치
-    let minx = 0, maxx = 0, miny = 0, maxy = 0; const sq = []; let cx = 0, cy = 0; const pos = [[0, 0]]; // 간단 배치 알고리즘
-    let bx = 0, by = 0, bw = 1, bh = 1; sq.push([0, 0, 1]); for (let i = 1; i < F.length; i++) { const s = F[i]; const d = i % 4; if (d === 1) { sq.push([bx + bw, by, s]); bw += s; } else if (d === 2) { sq.push([bx, by - s, s]); by -= s; bh += s; } else if (d === 3) { sq.push([bx - s, by, s]); bx -= s; bw += s; } else { sq.push([bx, by + bh, s]); bh += s; } }
-    const xs = sq.map(q => q[0]), ys = sq.map(q => q[1]); minx = Math.min(...xs); maxx = Math.max(...sq.map(q => q[0] + q[2])); miny = Math.min(...ys); maxy = Math.max(...sq.map(q => q[1] + q[2])); const S = Math.min(560 / (maxx - minx), 360 / (maxy - miny)); const X = v => 20 + (v - minx) * S, Y = v => 20 + (v - miny) * S;
-    sq.forEach(([qx, qy, s], i) => { h += `<rect x="${X(qx)}" y="${Y(qy)}" width="${s * S}" height="${s * S}" fill="#FBD58E" stroke="#2C2A26"/><text x="${X(qx) + s * S / 2}" y="${Y(qy) + s * S / 2 + 5}" text-anchor="middle" font-family="Jua" font-size="${Math.min(18, s * S / 2)}">${s}</text>`;
-      const d = i % 4; const c = d === 0 ? [qx + s, qy + s] : d === 1 ? [qx, qy + s] : d === 2 ? [qx, qy] : [qx + s, qy]; const start = d === 0 ? [qx, qy + s] : d === 1 ? [qx, qy] : d === 2 ? [qx + s, qy] : [qx + s, qy + s]; const end = d === 0 ? [qx + s, qy] : d === 1 ? [qx + s, qy + s] : d === 2 ? [qx, qy + s] : [qx, qy];
-      h += `<path d="M${X(start[0])} ${Y(start[1])} A${s * S} ${s * S} 0 0 1 ${X(end[0])} ${Y(end[1])}" fill="none" stroke="#E9533F" stroke-width="3"/>`; });
+  function fib() { const F = [1, 1, 2, 3, 5, 8, 13, 21, 34]; let h = '';
+    // 정사각형 배치: 오른쪽 → 위 → 왼쪽 → 아래 순서로 돌며 붙인다 (화면 좌표, y는 아래로 +)
+    const sq = [[0, 0, 1, -1]]; let bx = 0, by = 0, bw = 1, bh = 1;
+    for (let i = 1; i < F.length; i++) { const s = F[i], d = i % 4; if (d === 1) { sq.push([bx + bw, by, s, d]); bw += s; } else if (d === 2) { sq.push([bx, by - s, s, d]); by -= s; bh += s; } else if (d === 3) { sq.push([bx - s, by, s, d]); bx -= s; bw += s; } else { sq.push([bx, by + bh, s, d]); bh += s; } }
+    // 새 정사각형이 이전 묶음과 맞닿는 변의 두 꼭짓점
+    const shared = ([x, y, s, d]) => d === 1 ? [[x, y], [x, y + s]] : d === 2 ? [[x, y + s], [x + s, y + s]] : d === 3 ? [[x + s, y], [x + s, y + s]] : [[x, y], [x + s, y]];
+    const opp = ([x, y, s], p) => [2 * x + s - p[0], 2 * y + s - p[1]]; // 정사각형에서 p의 대각선 반대 꼭짓점
+    const eq = (a, b) => a[0] === b[0] && a[1] === b[1];
+    // 호: 시작점 P → 대각선 반대 꼭짓점, 중심은 맞닿는 변 위의 다른 꼭짓점 → 호가 끊김 없이 이어짐
+    let arcs = null;
+    for (const P1 of shared(sq[1])) { let P = P1, ok = true; const A = [];
+      for (let i = 1; i < sq.length; i++) { const sh = shared(sq[i]); if (!sh.some(c => eq(c, P))) { ok = false; break; } const C = sh.find(c => !eq(c, P)), E = opp(sq[i], P); A.push([P, E, C, sq[i][2]]); P = E; }
+      if (ok) { const C1 = A[0][2]; arcs = [[opp(sq[0], P1), P1, C1, 1], ...A]; break; } }
+    // 세로로 긴 모양이면 가로로 눕힘 (x↔y 맞바꿈: 거울상이어도 같은 와선)
+    { const w0 = Math.max(...sq.map(q => q[0] + q[2])) - Math.min(...sq.map(q => q[0])), h0 = Math.max(...sq.map(q => q[1] + q[2])) - Math.min(...sq.map(q => q[1]));
+      if (h0 > w0) { sq.forEach(q => { const t = q[0]; q[0] = q[1]; q[1] = t; }); if (arcs) arcs = arcs.map(([P, E, C, r]) => [[P[1], P[0]], [E[1], E[0]], [C[1], C[0]], r]); } }
+    const xs = sq.map(q => q[0]), ys = sq.map(q => q[1]); const minx = Math.min(...xs), maxx = Math.max(...sq.map(q => q[0] + q[2])), miny = Math.min(...ys), maxy = Math.max(...sq.map(q => q[1] + q[2]));
+    const S = Math.min(560 / (maxx - minx), 360 / (maxy - miny)); const offX = (600 - (maxx - minx) * S) / 2, offY = (400 - (maxy - miny) * S) / 2;
+    const X = v => +(offX + (v - minx) * S).toFixed(2), Y = v => +(offY + (v - miny) * S).toFixed(2);
+    sq.forEach(([qx, qy, s]) => { h += `<rect x="${X(qx)}" y="${Y(qy)}" width="${s * S}" height="${s * S}" fill="#FBD58E" stroke="#2C2A26"/>`; if (s * S >= 16) h += `<text x="${X(qx) + s * S / 2}" y="${Y(qy) + s * S / 2 + 6}" text-anchor="middle" font-size="${Math.min(22, s * S / 2)}" fill="#8B5A2B">${s}</text>`; });
+    if (arcs) { let d = `M${X(arcs[0][0][0])} ${Y(arcs[0][0][1])}`; arcs.forEach(([P, E, C, r]) => { const cr = (P[0] - C[0]) * (E[1] - C[1]) - (P[1] - C[1]) * (E[0] - C[0]); d += ` A${r * S} ${r * S} 0 0 ${cr > 0 ? 1 : 0} ${X(E[0])} ${Y(E[1])}`; }); h += `<path id="fib-path" d="${d}" fill="none" stroke="#E9533F" stroke-width="3.5" stroke-linecap="round"/>`; }
     $('#wh-svg').innerHTML = h; $('#wh-res').textContent = '정사각형 1, 1, 2, 3, 5, 8, 13, 21, 34 — 이웃한 수의 비가 황금비에 가까워져요.'; }
-  function sqrtSpiral() { let h = ''; const cx = 300, cy = 220, S = 55; let ang = 0, r = 1, n = 1; const pts = []; while (ang < 2 * Math.PI && n < 17) { const a2 = Math.atan(1 / r); const p1 = [cx + r * S * Math.cos(ang), cy - r * S * Math.sin(ang)]; const ang2 = ang + a2; const r2 = Math.sqrt(r * r + 1); const p2 = [cx + r2 * S * Math.cos(ang2), cy - r2 * S * Math.sin(ang2)]; h += `<polygon points="${cx},${cy} ${p1.join(',')} ${p2.join(',')}" fill="#AEDBF2" fill-opacity=".6" stroke="#2C2A26"/><text x="${(cx + p1[0] + p2[0]) / 3}" y="${(cy + p1[1] + p2[1]) / 3 + 4}" font-size="10" text-anchor="middle">√${n + 1}</text>`; ang = ang2; r = r2; n++; }
+  function sqrtSpiral() { let h = ''; const cx = 300, cy = 220, S = 55; let ang = 0, r = 1, n = 1; const pts = []; while (ang < 2 * Math.PI && n < 17) { const a2 = Math.atan(1 / r); const p1 = [cx + r * S * Math.cos(ang), cy - r * S * Math.sin(ang)]; const ang2 = ang + a2; const r2 = Math.sqrt(r * r + 1); const p2 = [cx + r2 * S * Math.cos(ang2), cy - r2 * S * Math.sin(ang2)]; h += `<polygon points="${cx},${cy} ${p1.join(',')} ${p2.join(',')}" fill="#AEDBF2" fill-opacity=".6" stroke="#2C2A26"/><text x="${(cx + p1[0] + p2[0]) / 3}" y="${(cy + p1[1] + p2[1]) / 3 + 4}" font-size="13" text-anchor="middle">√${n + 1}</text>`; ang = ang2; r = r2; n++; }
     $('#wh-svg').innerHTML = h; $('#wh-res').textContent = `높이 1인 직각삼각형을 겹치지 않게 ${n - 1}개 그릴 수 있고, 마지막 빗변의 길이는 √${n} ≈ ${Math.sqrt(n).toFixed(3)}`; }
   $('#wh-fib').onclick = () => { $('#wh-fib').classList.remove('bk-btn--ghost'); $('#wh-sqrt').classList.add('bk-btn--ghost'); fib(); }; $('#wh-sqrt').onclick = () => { $('#wh-sqrt').classList.remove('bk-btn--ghost'); $('#wh-fib').classList.add('bk-btn--ghost'); sqrtSpiral(); }; fib();
 })();

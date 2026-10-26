@@ -9,9 +9,11 @@
 <style>
   .setup{display:flex;gap:10px;flex-wrap:wrap;align-items:center;background:#fff;border-radius:14px;padding:10px 14px;margin:8px 0}
   .result{font-family:var(--f-head);font-size:1.2rem;color:var(--bk-red);min-height:1.5em;margin:6px 0}
-  .pipes{display:flex;gap:14px;align-items:flex-end;justify-content:center;min-height:240px;background:#fff;border-radius:16px;border:2px solid var(--bk-line);padding:14px}
-  .pipe{display:flex;flex-direction:column;align-items:center;gap:6px;cursor:pointer}
-  .pipe .tube{width:34px;background:linear-gradient(90deg,#cfe9f6,#eaf6fc 40%,#b9dcee);border:2px solid #7aaec9;border-radius:6px 6px 3px 3px;transition:height .3s}
+  .pipes{display:flex;gap:clamp(6px,2vw,14px);align-items:flex-end;justify-content:safe center;min-height:240px;background:#fff;border-radius:16px;border:2px solid var(--bk-line);padding:14px 8px;overflow-x:auto;-webkit-overflow-scrolling:touch}
+  .pipe{display:flex;flex-direction:column;align-items:center;gap:6px;cursor:pointer;flex:0 0 auto;min-width:34px;-webkit-tap-highlight-color:transparent}
+  .pipe b,.pipe small{white-space:nowrap}
+  @media(max-width:480px){.pipes{gap:4px;padding:12px 4px}.pipe{min-width:24px}.pipe b{font-size:.8rem}.pipe small{font-size:.62rem}}
+  .pipe .tube{width:clamp(22px,6vw,34px);background:linear-gradient(90deg,#cfe9f6,#eaf6fc 40%,#b9dcee);border:2px solid #7aaec9;border-radius:6px 6px 3px 3px;transition:height .3s}
   .pipe.on .tube{box-shadow:0 0 0 4px var(--bk-yellow)}
   .pipe b{font-family:var(--f-head);font-weight:400}
   .pipe small{color:var(--bk-ink-soft)}
@@ -29,6 +31,10 @@
   .cmp div{background:#fff;border:2px solid var(--bk-line);border-radius:10px;padding:6px 2px;text-align:center;font-size:.8rem;cursor:pointer}
   .cmp div b{display:block;font-family:var(--f-head);font-weight:400;font-size:1rem}
   .cmp div.on{border-color:var(--bk-orange);background:var(--bk-yellow)}
+  @media(max-width:480px){.cmp{grid-template-columns:repeat(4,1fr)}}
+  .tbl tr.mode-on td{background:var(--bk-yellow);font-weight:700}
+  .tbl td.rh{text-align:left;font-size:.85rem}
+  .nw{white-space:nowrap}
   .strings{display:flex;flex-direction:column;gap:6px;background:#fff;border-radius:14px;padding:12px;border:2px solid var(--bk-line)}
   .string{display:flex;align-items:center;gap:10px}
   .string .lab{width:60px;font-family:var(--f-head)}
@@ -63,7 +69,7 @@
       <div class="bk-act"><span class="bk-act__n">1</span><span class="bk-act__t">관의 진동수 측정하기</span><span class="bk-tag">연결</span><span class="bk-tag">정보 처리</span></div>
       <p class="bk-muted">한쪽이 막힌 관을 불면 길이에 따라 다른 높이의 소리가 나요. 관을 눌러 소리를 듣고 진동수를 기록해 보세요. (시뮬레이션: 진동수 ≈ 343 m/s ÷ (4 × 길이))</p>
       <div class="pipes" id="pp-pipes"></div>
-      <div class="setup"><label>관 길이 추가: <input type="range" id="pp-len" min="5" max="50" value="20" style="width:160px"> <b id="pp-lenv">20</b> cm</label><button class="bk-btn bk-btn--sky bk-btn--sm" id="pp-add">관 만들기</button><button class="bk-btn bk-btn--ghost bk-btn--sm" id="pp-reset">기본 4개</button></div>
+      <div class="setup"><label>관 길이 추가: <input type="range" id="pp-len" min="5" max="50" value="20" style="width:160px"> <span class="nw"><b id="pp-lenv">20</b> cm</span></label><button class="bk-btn bk-btn--sky bk-btn--sm" id="pp-add">관 만들기</button><button class="bk-btn bk-btn--ghost bk-btn--sm" id="pp-reset">기본 4개</button></div>
       <table class="tbl" style="margin-left:0"><thead><tr><th>관의 길이(cm)</th><th>진동수(Hz)</th><th>음 높이</th></tr></thead><tbody id="pp-tbl"></tbody></table>
     </div>
     <div class="bk-panel bk-panel--pink secret">
@@ -100,7 +106,12 @@
       <div class="setup"><div class="seg"><button class="bk-btn bk-btn--sm on" id="js-mode-p">피타고라스</button><button class="bk-btn bk-btn--sm bk-btn--ghost" id="js-mode-j">순정률 (4:5:6)</button></div><button class="bk-btn bk-btn--primary bk-btn--sm" id="js-chord">🎵 도·미·솔 화음 듣기</button><button class="bk-btn bk-btn--sky bk-btn--sm" id="js-cmp">두 음계의 '미' 비교</button></div>
       <div class="cmp" id="js-keys"></div>
       <table class="tbl" style="margin-left:0;margin-top:10px"><thead><tr><th></th><th>도</th><th>레</th><th>미</th><th>파</th><th>솔</th><th>라</th><th>시</th><th>높은 도</th></tr></thead>
-        <tbody><tr><td>진동수(도=1)</td><td>1</td><td>9/8</td><td>5/4</td><td>4/3</td><td>3/2</td><td>5/3</td><td>15/8</td><td>2</td></tr><tr><td>현의 길이(반비례)</td><td>1</td><td>8/9</td><td>4/5</td><td>3/4</td><td>2/3</td><td>3/5</td><td>8/15</td><td>1/2</td></tr></tbody></table>
+        <tbody>
+          <tr class="row-p"><td class="rh">피타고라스 진동수(도=1)</td><td>1</td><td>9/8</td><td>81/64</td><td>4/3</td><td>3/2</td><td>27/16</td><td>243/128</td><td>2</td></tr>
+          <tr class="row-p"><td class="rh">피타고라스 현의 길이</td><td>1</td><td>8/9</td><td>64/81</td><td>3/4</td><td>2/3</td><td>16/27</td><td>128/243</td><td>1/2</td></tr>
+          <tr class="row-j"><td class="rh">순정률 진동수(도=1)</td><td>1</td><td>9/8</td><td>5/4</td><td>4/3</td><td>3/2</td><td>5/3</td><td>15/8</td><td>2</td></tr>
+          <tr class="row-j"><td class="rh">순정률 현의 길이</td><td>1</td><td>8/9</td><td>4/5</td><td>3/4</td><td>2/3</td><td>3/5</td><td>8/15</td><td>1/2</td></tr>
+        </tbody></table>
       <div class="result" id="js-res"></div>
     </div>
     <div class="bk-panel bk-panel--pink secret">
@@ -115,7 +126,7 @@
     <div class="bk-panel">
       <div class="bk-act"><span class="bk-act__n">4</span><span class="bk-act__t">팬플루트 만들기</span><span class="bk-tag">연결</span><span class="bk-tag">정보 처리</span></div>
       <p class="bk-muted">'도' 관의 길이를 정하면 순정률 비(현의 길이 비)로 나머지 관의 길이가 나와요. 관을 눌러 연주해 보고, 실제 투명 관을 그 길이로 잘라 팬플루트를 만들어 보세요.</p>
-      <div class="setup"><label>'도' 관 길이 <input type="range" id="pf-base" min="15" max="40" value="25" style="width:160px"> <b id="pf-basev">25</b> cm</label><button class="bk-btn bk-btn--mint bk-btn--sm" id="pf-song">🎵 '비행기' 자동 연주</button></div>
+      <div class="setup"><label>'도' 관 길이 <input type="range" id="pf-base" min="15" max="40" value="25" style="width:160px"> <span class="nw"><b id="pf-basev">25</b> cm</span></label><button class="bk-btn bk-btn--mint bk-btn--sm" id="pf-song">🎵 '비행기' 자동 연주</button></div>
       <div class="pipes" id="pf-pipes"></div>
       <table class="tbl" style="margin-left:0"><thead><tr><th>음</th><th>도</th><th>레</th><th>미</th><th>파</th><th>솔</th><th>라</th><th>시</th><th>높은 도</th></tr></thead><tbody><tr><td>현의 길이 비</td><td>1</td><td>8/9</td><td>4/5</td><td>3/4</td><td>2/3</td><td>3/5</td><td>8/15</td><td>1/2</td></tr><tr id="pf-row"><td>관 길이(cm)</td></tr></tbody></table>
       <details class="reveal" style="margin-left:0"><summary>만드는 순서</summary><ol style="margin:6px 0 0;padding-left:1.2em"><li>표를 참고해 투명 관 위에 길이를 표시한다.</li><li>표시한 곳을 자르고 한쪽 끝을 마개로 막는다.</li><li>마개의 막힌 부분을 잘라 다른 쪽 끝에 끼운다.</li><li>긴 것부터 짧은 것까지 나란히 배열한다.</li><li>테이프로 끝부분과 중간을 감는다.</li><li>음계 스티커를 붙이고 동요를 연주해 본다.</li></ol></details>
@@ -145,7 +156,7 @@ const noteName = f => { const n = Math.round(12 * Math.log2(f / 261.63)); const 
     $('#pp-pipes').querySelectorAll('.pipe').forEach(p => p.onclick = () => { const L = lens[+p.dataset.i]; tone(f(L), .8, 0, 'sawtooth', .12); p.classList.add('on'); setTimeout(() => p.classList.remove('on'), 600); });
     $('#pp-tbl').innerHTML = lens.map(L => `<tr><td>${L}</td><td>${f(L)}</td><td>${noteName(f(L))}</td></tr>`).join(''); }
   $('#pp-len').oninput = () => $('#pp-lenv').textContent = $('#pp-len').value;
-  $('#pp-add').onclick = () => { if (lens.length >= 7) lens.shift(); lens.push(+$('#pp-len').value); lens.sort((a, b) => a - b); render(); };
+  $('#pp-add').onclick = () => { const v = +$('#pp-len').value; if (lens.includes(v)) { const p = $('#pp-pipes').querySelectorAll('.pipe')[lens.indexOf(v)]; if (p) { p.classList.add('on'); setTimeout(() => p.classList.remove('on'), 600); } return; } if (lens.length >= 7) lens.shift(); lens.push(v); lens.sort((a, b) => a - b); render(); };
   $('#pp-reset').onclick = () => { lens = [12.5, 25, 37.5, 50]; render(); }; render();
 })();
 
@@ -175,7 +186,8 @@ const noteName = f => { const n = Math.round(12 * Math.log2(f / 261.63)); const 
 /* ===== 3 순정률 ===== */
 (function () {
   let mode = 'p'; const ratio = () => mode === 'p' ? PYTH : JUST;
-  function render() { $('#js-keys').innerHTML = NAMES.map((n, i) => { const r = ratio()[i]; return `<div data-i="${i}">${n}<b>${(BASE * r).toFixed(1)}</b>Hz</div>`; }).join(''); $('#js-keys').querySelectorAll('div').forEach(d => d.onclick = () => { tone(BASE * ratio()[+d.dataset.i], .6); d.classList.add('on'); setTimeout(() => d.classList.remove('on'), 400); }); }
+  function render() { document.querySelectorAll('#t3 .tbl tr.row-p').forEach(r => r.classList.toggle('mode-on', mode === 'p')); document.querySelectorAll('#t3 .tbl tr.row-j').forEach(r => r.classList.toggle('mode-on', mode === 'j'));
+    $('#js-keys').innerHTML = NAMES.map((n, i) => { const r = ratio()[i]; return `<div data-i="${i}">${n}<b>${(BASE * r).toFixed(1)}</b>Hz</div>`; }).join(''); $('#js-keys').querySelectorAll('div').forEach(d => d.onclick = () => { tone(BASE * ratio()[+d.dataset.i], .6); d.classList.add('on'); setTimeout(() => d.classList.remove('on'), 400); }); }
   $('#js-mode-p').onclick = () => { mode = 'p'; $('#js-mode-p').classList.remove('bk-btn--ghost'); $('#js-mode-j').classList.add('bk-btn--ghost'); render(); };
   $('#js-mode-j').onclick = () => { mode = 'j'; $('#js-mode-j').classList.remove('bk-btn--ghost'); $('#js-mode-p').classList.add('bk-btn--ghost'); render(); };
   $('#js-chord').onclick = () => { const r = ratio(); [0, 2, 4].forEach(i => tone(BASE * r[i], 1.6, 0, 'triangle', .18)); $('#js-res').textContent = mode === 'p' ? `피타고라스 도:미:솔 = 1 : 1.2656 : 1.5 (미 = 81/64)` : `순정률 도:미:솔 = 1 : 1.25 : 1.5 = 4 : 5 : 6`; };
@@ -192,8 +204,8 @@ const noteName = f => { const n = Math.round(12 * Math.log2(f / 261.63)); const 
     $('#pf-row').innerHTML = '<td>관 길이(cm)</td>' + L.map(x => `<td>${x}</td>`).join(''); }
   function play(i, when = 0, dur = .5) { tone(BASE / RATIO[i], dur, when, 'sine', .3); const p = $('#pf-pipes').children[i]; setTimeout(() => { p.classList.add('on'); setTimeout(() => p.classList.remove('on'), 300); }, when * 1000); }
   $('#pf-base').oninput = render;
-  $('#pf-song').onclick = () => { // 비행기: 미레도레 미미미 레레레 미미미 …
-    const s = [2,1,0,1,2,2,2,1,1,1,2,2,2,2,1,0,1,2,2,2,1,1,2,1,0]; const d = [.4,.4,.4,.4,.4,.4,.8,.4,.4,.8,.4,.4,.8,.4,.4,.4,.4,.4,.4,.4,.4,.4,.4,.4,1]; let t = 0; s.forEach((n, i) => { play(n, t, d[i]); t += d[i]; }); };
+  $('#pf-song').onclick = () => { // 비행기: 미레도레 미미미 / 레레레 미솔솔 / 미레도레 미미미 / 레레미레도
+    const s = [2,1,0,1,2,2,2,1,1,1,2,4,4,2,1,0,1,2,2,2,1,1,2,1,0]; const d = [.4,.4,.4,.4,.4,.4,.8,.4,.4,.8,.4,.4,.8,.4,.4,.4,.4,.4,.4,.4,.4,.4,.4,.4,1]; let t = 0; s.forEach((n, i) => { play(n, t, d[i]); t += d[i]; }); };
   render();
 })();
 </script>

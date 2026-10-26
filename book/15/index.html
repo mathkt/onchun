@@ -18,6 +18,10 @@
   .dim{display:flex;gap:8px;flex-wrap:wrap;justify-content:center;font-family:var(--f-head)}
   .dim div{background:#fff;border:2px solid var(--bk-line);border-radius:12px;padding:8px 12px;text-align:center;min-width:110px}
   .dim small{display:block;font-family:var(--f-body);color:var(--bk-ink-soft);font-weight:400}
+  .tbl-wrap{overflow-x:auto;-webkit-overflow-scrolling:touch;max-width:100%}
+  .tbl-wrap .tbl{display:table;margin-left:0;width:auto}
+  .tbl-wrap .tbl td:first-child,.tbl-wrap .tbl th:first-child{white-space:nowrap;text-align:left}
+  .stat div.hl{border-color:var(--bk-orange);background:var(--bk-yellow)}
 </style>
 </head>
 <body class="bk">
@@ -48,16 +52,18 @@
       <div class="bk-act"><span class="bk-act__n">1</span><span class="bk-act__t">자연이 선택한 프랙털 구조</span><span class="bk-tag">연결</span><span class="bk-tag">문제 해결</span></div>
       <p class="bk-muted">나뭇가지, 눈송이, 브로콜리, 고사리… 작은 부분을 확대하면 전체와 비슷해요. 생명체는 영양과 산소를 받아들이기 위해 <b>단위 부피당 겉넓이</b>를 최대로 하는 구조를 택합니다. 정육면체를 쪼개면서 확인해 봐요.</p>
       <div class="setup"><label>모서리 길이 <input type="range" id="cb-n" min="1" max="6" value="2"> <b id="cb-nv">2</b></label></div>
-      <svg class="board" id="cb-svg" viewBox="0 0 600 260"></svg>
+      <svg class="board" id="cb-svg" viewBox="0 0 300 260" style="max-width:300px" role="img" aria-label="한 변이 n칸인 정육면체"></svg>
+      <div class="stat" id="cb-stat"></div>
       <table class="tbl" style="margin-left:0"><thead><tr><th>모서리 길이</th><th>1</th><th>2</th><th>3</th><th>4</th><th>n</th></tr></thead><tbody><tr><td>겉넓이</td><td>6</td><td id="cb-a2"></td><td id="cb-a3"></td><td id="cb-a4"></td><td>6n²</td></tr><tr><td>부피</td><td>1</td><td id="cb-v2"></td><td id="cb-v3"></td><td id="cb-v4"></td><td>n³</td></tr><tr><td>겉넓이 ÷ 부피</td><td>6</td><td id="cb-r2"></td><td id="cb-r3"></td><td id="cb-r4"></td><td>6/n</td></tr></tbody></table>
       <div class="setup"><button class="bk-btn bk-btn--mint bk-btn--sm" id="cb-fill">표 채우기</button><span class="result" id="cb-res" style="margin:0"></span></div>
       <h4 class="sub">나뭇가지 프랙털 — 단계 슬라이더</h4>
-      <div class="setup"><input type="range" id="tr-n" min="1" max="9" value="6"><label>각도 <input type="range" id="tr-a" min="10" max="60" value="28"></label></div>
+      <div class="setup"><label>단계 <input type="range" id="tr-n" min="1" max="9" value="6"> <b id="tr-nv">6</b></label><label>각도 <input type="range" id="tr-a" min="10" max="60" value="28"> <b id="tr-av">28°</b></label></div>
       <svg class="board" id="tr-svg" viewBox="0 0 600 360"></svg>
     </div>
     <div class="bk-panel bk-panel--pink secret">
       <h3>🔍 빈칸 채우기</h3>
-      <div class="q"><b>➋</b> 정육면체의 크기가 작을수록 단위 부피당 겉넓이가 (<b>커진다</b>). 큰 정육면체를 작은 것으로 잘게 쪼개면 전체 부피는 그대로지만 단위 부피당 겉넓이는 (<b>커진다</b>). 폐와 소화관이 그런 구조예요.</div>
+      <div class="q"><b>➋</b> 정육면체의 크기가 작을수록 단위 부피당 겉넓이가 ( &nbsp;?&nbsp; ). 큰 정육면체를 작은 것으로 잘게 쪼개면 전체 부피는 그대로지만 단위 부피당 겉넓이는 ( &nbsp;?&nbsp; ).</div>
+      <details class="reveal"><summary>정답 보기</summary><p>둘 다 <b>커진다</b>. 폐(허파꽈리)와 소화관(융털)이 이렇게 잘게 나뉜 구조라서 산소와 영양분을 잘 받아들여요.</p></details>
     </div>
   </section>
 
@@ -67,7 +73,7 @@
       <div class="bk-act"><span class="bk-act__n">2</span><span class="bk-act__t">코흐 곡선 그리기</span><span class="bk-tag">연결</span><span class="bk-tag">추론</span></div>
       <div class="bk-rule"><ol><li>0단계: 선분이 주어져 있다.</li><li>1단계: 선분을 삼등분하여 가운데 선분을 한 변으로 하는 정삼각형을 그린 후 가운데 선분을 제거한다.</li><li>2단계: 남아 있는 모든 선분에 1단계 과정을 각각 적용한다. 3단계부터 반복한다.</li></ol></div>
       <div class="setup"><label>단계 <input type="range" id="kc-n" min="0" max="6" value="2"> <b id="kc-nv">2</b></label><label><input type="checkbox" id="kc-snow"> 눈송이(삼각형 3변)</label></div>
-      <svg class="board" id="kc-svg" viewBox="0 0 600 260"></svg>
+      <svg class="board" id="kc-svg" viewBox="0 30 600 190"></svg>
       <div class="stat" id="kc-stat"></div>
       <table class="tbl" style="margin-left:0"><thead><tr><th>단계</th><th>한 선분의 길이</th><th>선분의 개수</th><th>길이의 합</th></tr></thead><tbody id="kc-tbl"></tbody></table>
     </div>
@@ -99,7 +105,8 @@
       <div class="bk-rule"><ol><li>0단계: 정육면체.</li><li>1단계: 각 모서리를 삼등분하여 27개로 나눈 후, 가운데 1개와 각 면 중앙의 6개를 제거한다 (20개 남음).</li><li>2단계: 남은 모든 정육면체에 1단계를 적용. 반복.</li></ol></div>
       <div class="setup"><label>단계 <input type="range" id="mg-n" min="0" max="2" value="1"> <b id="mg-nv">1</b></label><span class="bk-muted">(드래그해서 돌려 보세요. 3단계부터는 블록이 8000개!)</span></div>
       <svg class="board" id="mg-svg" viewBox="0 0 400 400" style="max-width:400px;cursor:grab"></svg>
-      <table class="tbl" style="margin-left:0"><thead><tr><th>단계</th><th>0</th><th>1</th><th>2</th><th>3</th><th>4</th><th>n</th></tr></thead><tbody><tr><td>블록(정육면체) 개수</td><td>1</td><td>20</td><td>400</td><td>8,000</td><td>160,000</td><td>20ⁿ</td></tr><tr><td>부피 (0단계=1)</td><td>1</td><td>20/27</td><td>(20/27)²</td><td>(20/27)³</td><td>…</td><td>(20/27)ⁿ → 0</td></tr></tbody></table>
+      <div class="tbl-wrap"><table class="tbl"><thead><tr><th>단계</th><th>0</th><th>1</th><th>2</th><th>3</th><th>4</th><th>n</th></tr></thead><tbody><tr><td>블록 수</td><td>1</td><td>20</td><td>400</td><td>8,000</td><td>160,000</td><td>20ⁿ</td></tr><tr><td>부피</td><td>1</td><td>20/27</td><td>(20/27)²</td><td>(20/27)³</td><td>…</td><td>(20/27)ⁿ → 0</td></tr></tbody></table></div>
+      <p class="bk-muted" style="font-size:.85rem">부피는 0단계 정육면체를 1로 볼 때의 값이에요.</p>
     </div>
     <div class="bk-panel bk-panel--pink secret">
       <h3>🔍 생각해 보기</h3>
@@ -119,12 +126,12 @@
       <div class="dim" style="margin-top:10px">
         <div>코흐 곡선<small>1/3 → 4개 · D = log4/log3 = <b id="d1"></b></small></div><div>시어핀스키 카펫<small>1/3 → 8개 · D = log8/log3 = <b id="d2"></b></small></div><div>멩거 스펀지<small>1/3 → 20개 · D = log20/log3 = <b id="d3"></b></small></div>
       </div>
-      <div class="setup"><label>축소 비율 1/<input class="num num--1" id="dm-r" value="3" style="font-size:1rem;letter-spacing:0"></label><label>조각 개수 <input class="num num--2" id="dm-n" value="4" style="font-size:1rem;letter-spacing:0"></label><span class="result" id="dm-res" style="margin:0"></span></div>
+      <div class="setup"><button class="bk-btn bk-btn--sky bk-btn--sm" data-rn="3,4">코흐 곡선</button><button class="bk-btn bk-btn--sky bk-btn--sm" data-rn="3,8">시어핀스키 카펫</button><button class="bk-btn bk-btn--sky bk-btn--sm" data-rn="3,20">멩거 스펀지</button><button class="bk-btn bk-btn--ghost bk-btn--sm" data-rn="2,4">정사각형</button></div>
+      <div class="setup"><label>축소 비율 1/<input class="num num--1" id="dm-r" value="3" inputmode="decimal" style="font-size:1rem;letter-spacing:0"></label><label>조각 개수 <input class="num num--2" id="dm-n" value="4" inputmode="numeric" style="font-size:1rem;letter-spacing:0"></label><span class="result" id="dm-res" style="margin:0"></span></div>
     </div>
   </section>
 </div>
 
-<script src="../poly3d.js"></script>
 <script>
 const $ = s => document.querySelector(s);
 document.querySelectorAll('#tabs .tab').forEach(b => b.onclick = () => { document.querySelectorAll('#tabs .tab').forEach(x => x.classList.toggle('on', x === b)); document.querySelectorAll('.act-page').forEach(p => { p.hidden = p.id !== b.dataset.t; p.style.display = p.hidden ? 'none' : ''; }); });
@@ -132,14 +139,21 @@ document.querySelectorAll('#tabs .tab').forEach(b => b.onclick = () => { documen
 
 /* ===== 1 정육면체 & 나무 ===== */
 (function () {
-  function iso(x, y, z, s) { return [x * s * .87 - y * s * .87, (x + y) * s * .5 - z * s]; }
-  function cubeSVG(n, ox, oy, s) { let h = ''; const col = ['#FBD58E', '#F5A623', '#E8891B']; // 바깥 면만: 위(z=n), 앞(y=0 쪽? ) 간단히 전체 큐브를 쌓기 표현
-    for (let z = 0; z < n; z++) for (let y = n - 1; y >= 0; y--) for (let x = 0; x < n; x++) { if (!(x === n - 1 || y === 0 || z === n - 1)) continue; const P = (a, b, c) => { const p = iso(a, b, c, s); return (ox + p[0]) + ',' + (oy - p[1]); };
-      h += `<polygon points="${P(x, y, z + 1)} ${P(x + 1, y, z + 1)} ${P(x + 1, y + 1, z + 1)} ${P(x, y + 1, z + 1)}" fill="${col[0]}" stroke="#8B5A2B" stroke-width=".8"/><polygon points="${P(x, y, z)} ${P(x + 1, y, z)} ${P(x + 1, y, z + 1)} ${P(x, y, z + 1)}" fill="${col[1]}" stroke="#8B5A2B" stroke-width=".8"/><polygon points="${P(x + 1, y, z)} ${P(x + 1, y + 1, z)} ${P(x + 1, y + 1, z + 1)} ${P(x + 1, y, z + 1)}" fill="${col[2]}" stroke="#8B5A2B" stroke-width=".8"/>`; } return h; }
-  function draw() { const n = +$('#cb-n').value; $('#cb-nv').textContent = n; const s = 110 / n; $('#cb-svg').innerHTML = cubeSVG(n, 170, 230, s) + `<text x="330" y="80" font-family="Jua" font-size="18">모서리 ${n}</text><text x="330" y="115" font-size="15">겉넓이 = 6 × ${n}² = ${6 * n * n}</text><text x="330" y="140" font-size="15">부피 = ${n}³ = ${n ** 3}</text><text x="330" y="170" font-size="15" fill="#E9533F">겉넓이 ÷ 부피 = ${(6 / n).toFixed(2)}</text><text x="330" y="205" font-size="13" fill="#5F5B55">1짜리 ${n ** 3}개로 쪼개면 겉넓이 합 = ${6 * n ** 3}</text>`; }
+  /* 등각 투영: x(오른쪽 앞), y(왼쪽 앞), z(위) → 화면 */
+  const L = 110, CX = 150, CY = 130, P = (x, y, z) => [(CX + (x - y) * L * .866).toFixed(1), (CY + (x + y) * L * .5 - z * L).toFixed(1)].join(',');
+  function cubeSVG(n) { const face = (pts, fill) => `<polygon points="${pts.map(q => P(...q)).join(' ')}" fill="${fill}" stroke="#8B5A2B" stroke-width="2" stroke-linejoin="round"/>`;
+    let h = face([[0, 0, 1], [1, 0, 1], [1, 1, 1], [0, 1, 1]], '#FBD58E') + face([[1, 0, 0], [1, 1, 0], [1, 1, 1], [1, 0, 1]], '#E8891B') + face([[0, 1, 0], [1, 1, 0], [1, 1, 1], [0, 1, 1]], '#F5A623');
+    let g = ''; const ln = (a, b) => g += `<line x1="${P(...a).split(',')[0]}" y1="${P(...a).split(',')[1]}" x2="${P(...b).split(',')[0]}" y2="${P(...b).split(',')[1]}"/>`;
+    for (let i = 1; i < n; i++) { const t = i / n;
+      ln([t, 0, 1], [t, 1, 1]); ln([0, t, 1], [1, t, 1]); // 윗면
+      ln([1, t, 0], [1, t, 1]); ln([1, 0, t], [1, 1, t]); // 오른쪽 앞면 (x=1)
+      ln([t, 1, 0], [t, 1, 1]); ln([0, 1, t], [1, 1, t]); } // 왼쪽 앞면 (y=1)
+    return h + `<g stroke="#8B5A2B" stroke-width="1" stroke-opacity=".75">${g}</g>`; }
+  function draw() { const n = +$('#cb-n').value; $('#cb-nv').textContent = n; $('#cb-svg').innerHTML = cubeSVG(n);
+    $('#cb-stat').innerHTML = `<div>모서리<b>${n}</b></div><div>겉넓이<b>6 × ${n}² = ${6 * n * n}</b></div><div>부피<b>${n}³ = ${n ** 3}</b></div><div class="hl">겉넓이 ÷ 부피<b>${(6 / n).toFixed(2)}</b></div><div>1짜리 ${n ** 3}개로 쪼개면<b>겉넓이 합 ${6 * n ** 3}</b></div>`; }
   $('#cb-n').oninput = draw; draw();
   $('#cb-fill').onclick = () => { [2, 3, 4].forEach(n => { $('#cb-a' + n).textContent = 6 * n * n; $('#cb-v' + n).textContent = n ** 3; $('#cb-r' + n).textContent = (6 / n).toFixed(2); }); $('#cb-res').textContent = '모서리가 커질수록 겉넓이÷부피는 작아져요 → 작을수록 단위 부피당 겉넓이가 커요.'; };
-  function tree() { const n = +$('#tr-n').value, a = +$('#tr-a').value * Math.PI / 180; let h = ''; (function br(x, y, len, ang, d) { const x2 = x + Math.cos(ang) * len, y2 = y - Math.sin(ang) * len; h += `<line x1="${x}" y1="${y}" x2="${x2}" y2="${y2}" stroke="${d > n - 3 ? '#3A9E82' : '#8B5A2B'}" stroke-width="${Math.max(1, (n - d) * 1.3)}" stroke-linecap="round"/>`; if (d >= n) return; br(x2, y2, len * .7, ang + a, d + 1); br(x2, y2, len * .7, ang - a, d + 1); })(300, 350, 95, Math.PI / 2, 1); $('#tr-svg').innerHTML = h; }
+  function tree() { const n = +$('#tr-n').value, a = +$('#tr-a').value * Math.PI / 180; $('#tr-nv').textContent = n; $('#tr-av').textContent = $('#tr-a').value + '°'; let h = ''; (function br(x, y, len, ang, d) { const x2 = x + Math.cos(ang) * len, y2 = y - Math.sin(ang) * len; h += `<line x1="${x}" y1="${y}" x2="${x2}" y2="${y2}" stroke="${d > n - 3 ? '#3A9E82' : '#8B5A2B'}" stroke-width="${Math.max(1, (n - d) * 1.3)}" stroke-linecap="round"/>`; if (d >= n) return; br(x2, y2, len * .7, ang + a, d + 1); br(x2, y2, len * .7, ang - a, d + 1); })(300, 350, 95, Math.PI / 2, 1); $('#tr-svg').innerHTML = h; }
   $('#tr-n').oninput = tree; $('#tr-a').oninput = tree; tree();
 })();
 
@@ -148,9 +162,10 @@ document.querySelectorAll('#tabs .tab').forEach(b => b.onclick = () => { documen
   function koch(p, q, n) { if (n === 0) return [p]; const d = [(q[0] - p[0]) / 3, (q[1] - p[1]) / 3]; const a = [p[0] + d[0], p[1] + d[1]], b = [p[0] + 2 * d[0], p[1] + 2 * d[1]]; const ang = -Math.PI / 3; const c = [a[0] + d[0] * Math.cos(ang) - d[1] * Math.sin(ang), a[1] + d[0] * Math.sin(ang) + d[1] * Math.cos(ang)]; return [...koch(p, a, n - 1), ...koch(a, c, n - 1), ...koch(c, b, n - 1), ...koch(b, q, n - 1)]; }
   function draw() { const n = +$('#kc-n').value; $('#kc-nv').textContent = n; const snow = $('#kc-snow').checked; let pts;
     if (snow) { const A = [300, 30], B = [100, 230], C = [500, 230]; pts = [...koch(A, C, n), ...koch(C, B, n), ...koch(B, A, n), A]; } else pts = [...koch([40, 200], [560, 200], n), [560, 200]];
+    $('#kc-svg').setAttribute('viewBox', snow ? '0 0 600 360' : '0 30 600 190');
     $('#kc-svg').innerHTML = `<polyline points="${pts.map(p => p.join(',')).join(' ')}" fill="${snow ? '#EAF6FC' : 'none'}" stroke="#2F8FC9" stroke-width="${n > 4 ? 1 : 2}" stroke-linejoin="round"/>`;
     const seg = 4 ** n, len = (1 / 3) ** n, tot = (4 / 3) ** n; $('#kc-stat').innerHTML = `<div>한 선분<b>(1/3)<sup>${n}</sup> = ${len.toFixed(4)}</b></div><div>선분 개수<b>4<sup>${n}</sup> = ${seg}</b></div><div>길이의 합<b>(4/3)<sup>${n}</sup> ≈ ${tot.toFixed(3)}</b></div>`;
-    $('#kc-tbl').innerHTML = [0, 1, 2, 3, 4, 5].map(k => `<tr ${k === n ? 'style="background:var(--bk-yellow)"' : ''}><td>${k}</td><td>(1/3)<sup>${k}</sup></td><td>4<sup>${k}</sup> = ${4 ** k}</td><td>(4/3)<sup>${k}</sup> ≈ ${((4 / 3) ** k).toFixed(3)}</td></tr>`).join('') + '<tr><td>n</td><td>(1/3)ⁿ</td><td>4ⁿ</td><td>(4/3)ⁿ</td></tr>'; }
+    $('#kc-tbl').innerHTML = [0, 1, 2, 3, 4, 5, 6].map(k => `<tr ${k === n ? 'style="background:var(--bk-yellow)"' : ''}><td>${k}</td><td>(1/3)<sup>${k}</sup></td><td>4<sup>${k}</sup> = ${4 ** k}</td><td>(4/3)<sup>${k}</sup> ≈ ${((4 / 3) ** k).toFixed(3)}</td></tr>`).join('') + '<tr><td>n</td><td>(1/3)ⁿ</td><td>4ⁿ</td><td>(4/3)ⁿ</td></tr>'; }
   $('#kc-n').oninput = draw; $('#kc-snow').onchange = draw; draw();
 })();
 
@@ -163,20 +178,32 @@ document.querySelectorAll('#tabs .tab').forEach(b => b.onclick = () => { documen
 
 /* ===== 4 멩거 ===== */
 (function () {
-  const svg = $('#mg-svg'); let rx = -.6, ry = .7, drag = null, cubes = [];
-  function build(n) { cubes = []; (function rec(x, y, z, s, d) { if (d === 0) { cubes.push([x, y, z, s]); return; } const t = s / 3; for (let i = 0; i < 3; i++) for (let j = 0; j < 3; j++) for (let k = 0; k < 3; k++) { const mid = (i === 1) + (j === 1) + (k === 1); if (mid >= 2) continue; rec(x + i * t, y + j * t, z + k * t, t, d - 1); } })(-1, -1, -1, 2, n); }
+  const svg = $('#mg-svg'); let rx = .55, ry = .65, drag = null, cubes = [], occ = new Set();
+  const key = (x, y, z) => [x, y, z].map(v => Math.round(v * 1000)).join(',');
+  function build(n) { cubes = []; (function rec(x, y, z, s, d) { if (d === 0) { cubes.push([x, y, z, s]); return; } const t = s / 3; for (let i = 0; i < 3; i++) for (let j = 0; j < 3; j++) for (let k = 0; k < 3; k++) { const mid = (i === 1) + (j === 1) + (k === 1); if (mid >= 2) continue; rec(x + i * t, y + j * t, z + k * t, t, d - 1); } })(-1, -1, -1, 2, n); occ = new Set(cubes.map(([x, y, z]) => key(x, y, z))); }
   const rot = ([x, y, z]) => { const cy = Math.cos(ry), sy = Math.sin(ry), cx = Math.cos(rx), sx = Math.sin(rx); const x1 = x * cy + z * sy, z1 = -x * sy + z * cy; return [x1, y * cx - z1 * sx, y * sx + z1 * cx]; };
-  const proj = v => [200 + v[0] * 95, 200 - v[1] * 95];
-  function draw() { const faces = []; cubes.forEach(([x, y, z, s]) => { const c = [[x, y, z], [x + s, y, z], [x + s, y + s, z], [x, y + s, z], [x, y, z + s], [x + s, y, z + s], [x + s, y + s, z + s], [x, y + s, z + s]].map(rot); const F = [[0, 1, 2, 3, [0, 0, -1]], [4, 5, 6, 7, [0, 0, 1]], [0, 1, 5, 4, [0, -1, 0]], [2, 3, 7, 6, [0, 1, 0]], [1, 2, 6, 5, [1, 0, 0]], [0, 3, 7, 4, [-1, 0, 0]]];
-      F.forEach(f => { const n = rot(f[4]); if (n[2] <= 0) return; const pts = f.slice(0, 4).map(i => c[i]); faces.push({ z: pts.reduce((a, p) => a + p[2], 0) / 4, pts: pts.map(proj), k: .5 + .5 * Math.max(0, n[0] * .3 + n[1] * .6 + n[2] * .74) }); }); });
-    faces.sort((a, b) => a.z - b.z); svg.innerHTML = faces.map(f => `<polygon points="${f.pts.map(p => p.join(',')).join(' ')}" fill="rgb(${Math.round(245 * f.k)},${Math.round(166 * f.k)},${Math.round(35 * f.k)})" stroke="#5a3a10" stroke-width=".4"/>`).join(''); }
+  const proj = v => [(200 + v[0] * 95).toFixed(1), (200 - v[1] * 95).toFixed(1)];
+  const F = [[0, 1, 2, 3, [0, 0, -1]], [4, 5, 6, 7, [0, 0, 1]], [0, 1, 5, 4, [0, -1, 0]], [2, 3, 7, 6, [0, 1, 0]], [1, 2, 6, 5, [1, 0, 0]], [0, 3, 7, 4, [-1, 0, 0]]];
+  function draw() { const faces = []; const N = F.map(f => rot(f[4]));
+    cubes.forEach(([x, y, z, s]) => { let c = null;
+      F.forEach((f, fi) => { const n = N[fi]; if (n[2] <= 1e-6) return; const d = f[4]; if (occ.has(key(x + d[0] * s, y + d[1] * s, z + d[2] * s))) return; // 이웃 블록과 맞닿은 면은 안 보임
+        if (!c) c = [[x, y, z], [x + s, y, z], [x + s, y + s, z], [x, y + s, z], [x, y, z + s], [x + s, y, z + s], [x + s, y + s, z + s], [x, y + s, z + s]].map(rot);
+        const pts = f.slice(0, 4).map(i => c[i]); faces.push({ z: pts.reduce((a, p) => a + p[2], 0) / 4, pts: pts.map(proj), k: .5 + .5 * Math.max(0, n[0] * .3 + n[1] * .6 + n[2] * .74) }); }); });
+    faces.sort((a, b) => a.z - b.z); svg.innerHTML = faces.map(f => `<polygon points="${f.pts.map(p => p.join(',')).join(' ')}" fill="rgb(${Math.round(245 * f.k)},${Math.round(166 * f.k)},${Math.round(35 * f.k)})" stroke="#5a3a10" stroke-width=".4" stroke-linejoin="round"/>`).join(''); }
   svg.addEventListener('pointerdown', e => { drag = [e.clientX, e.clientY]; svg.setPointerCapture(e.pointerId); }); svg.addEventListener('pointermove', e => { if (!drag) return; ry += (e.clientX - drag[0]) * .01; rx += (e.clientY - drag[1]) * .01; drag = [e.clientX, e.clientY]; draw(); }); svg.addEventListener('pointerup', () => drag = null);
   $('#mg-n').oninput = () => { const n = +$('#mg-n').value; $('#mg-nv').textContent = n; build(n); draw(); }; build(1); draw();
 })();
 
 /* ===== ★ 차원 ===== */
 (function () { $('#d1').textContent = (Math.log(4) / Math.log(3)).toFixed(3); $('#d2').textContent = (Math.log(8) / Math.log(3)).toFixed(3); $('#d3').textContent = (Math.log(20) / Math.log(3)).toFixed(3);
-  const run = () => { const r = +$('#dm-r').value, n = +$('#dm-n').value; if (r > 1 && n > 0) $('#dm-res').textContent = `D = log ${n} / log ${r} = ${(Math.log(n) / Math.log(r)).toFixed(3)}차원`; }; $('#dm-r').oninput = run; $('#dm-n').oninput = run; run(); })();
+  const num = id => { const v = $(id).value.trim().replace(',', '.'); return v === '' ? NaN : Number(v); };
+  const run = () => { const r = num('#dm-r'), n = num('#dm-n'); const res = $('#dm-res');
+    if (!(r > 1)) { res.textContent = '축소 비율 1/□ 의 □에는 1보다 큰 수를 넣어요.'; return; }
+    if (!(n >= 1) || !Number.isInteger(n)) { res.textContent = '조각 개수는 1 이상의 자연수로 넣어요.'; return; }
+    res.textContent = `D = log ${n} / log ${r} = ${(Math.log(n) / Math.log(r)).toFixed(3)}차원`; };
+  $('#dm-r').oninput = run; $('#dm-n').oninput = run;
+  document.querySelectorAll('[data-rn]').forEach(b => b.onclick = () => { const [r, n] = b.dataset.rn.split(','); $('#dm-r').value = r; $('#dm-n').value = n; run(); });
+  run(); })();
 </script>
 </body>
 </html>

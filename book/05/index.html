@@ -11,7 +11,11 @@
   .result{font-family:var(--f-head);font-size:1.25rem;color:var(--bk-red);min-height:1.5em;margin:6px 0}
   svg.board{width:100%;max-width:560px;height:auto;display:block;margin:6px auto;background:#fff;border-radius:16px;border:2px solid var(--bk-line);touch-action:none;user-select:none}
   .node{cursor:pointer}
-  .node.sel{stroke:var(--bk-orange);stroke-width:5}
+  .nd.sel{stroke:var(--bk-orange);stroke-width:6}
+  .hit{fill:transparent;cursor:pointer}
+  .mz-cell{fill:transparent;cursor:pointer}
+  .jbtn{display:flex;gap:8px;flex-wrap:wrap;margin:6px 0}
+  .jbtn .bk-btn{min-height:44px}
   .edge{stroke:#2C2A26;stroke-width:4;stroke-linecap:round}
   .edge.used{stroke:var(--bk-green);stroke-width:6}
   .deg{display:flex;gap:6px;flex-wrap:wrap;margin:6px 0}
@@ -23,7 +27,7 @@
   .tasks{display:grid;grid-template-columns:repeat(auto-fit,minmax(180px,1fr));gap:6px;margin:6px 0 6px 36px}
   .task{background:#fff;border:2px solid var(--bk-line);border-radius:10px;padding:6px 10px;font-size:.9rem}
   .task.ok{border-color:var(--bk-green);background:#EDF9F4}
-  .maze{display:block;width:100%;max-width:520px;margin:6px auto;background:#fff;border-radius:12px}
+  .maze{display:block;width:100%;max-width:520px;margin:6px auto;background:#fff;border-radius:12px;touch-action:manipulation;user-select:none}
   .legend{display:flex;gap:14px;flex-wrap:wrap;font-size:.85rem;color:var(--bk-ink-soft)}
   .legend i{display:inline-block;width:14px;height:14px;border-radius:3px;vertical-align:middle;margin-right:4px}
   .tour{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:8px}
@@ -65,9 +69,9 @@
     </div>
     <div class="bk-panel bk-panel--pink secret">
       <h3>🔍 생각해 보기</h3>
-      <div class="q"><b>2</b> 점의 차수가 다음과 같은 도형을 위에서 그려 보자. (그리면 자동으로 확인돼요)</div>
+      <div class="q"><b>1</b> 점의 차수가 다음과 같은 도형을 위에서 그려 보자. (그리면 자동으로 확인돼요)</div>
       <div class="tasks" id="g1-tasks"></div>
-      <div class="q"><b>3</b> 홀수점이 1개, 3개, 5개 … 홀수 개인 도형은 존재하지 않는다. 그 이유를 말해 보자.</div>
+      <div class="q"><b>2</b> 홀수점이 1개, 3개, 5개 … 홀수 개인 도형은 존재하지 않는다. 그 이유를 말해 보자.</div>
       <details class="reveal"><summary>힌트 보기</summary><p>선 하나는 양 끝 두 점의 차수를 1씩 올려요. 그래서 모든 점의 차수를 더하면 항상 (선의 개수)×2 = <b>짝수</b>. 짝수점들의 차수 합은 짝수이니, 홀수점들의 차수 합도 짝수여야 하고 → 홀수점은 짝수 개!</p></details>
     </div>
   </section>
@@ -84,9 +88,9 @@
     </div>
     <div class="bk-panel bk-panel--pink secret">
       <h3>🔍 정리하기</h3>
-      <div class="q"><b>2</b> 한붓그리기가 가능한 도형의 특징을 정리해 보자.</div>
+      <div class="q"><b>1</b> 한붓그리기가 가능한 도형의 특징을 정리해 보자.</div>
       <details class="reveal"><summary>힌트 보기</summary><p>한붓그리기가 가능한 도형은 홀수점이 <b>0개 또는 2개</b>인 경우예요. 홀수점이 0개이면 출발점과 도착점이 <b>같고</b>, 2개이면 <b>한 홀수점에서 출발하여 다른 홀수점으로</b> 도착해요.</p></details>
-      <div class="q"><b>3</b> 정사면체, 정육면체, 정팔면체 중 한붓그리기가 가능한 것을 찾아보자. (위 도형 목록에서 골라 보세요)</div>
+      <div class="q"><b>2</b> 정사면체, 정육면체, 정팔면체 중 한붓그리기가 가능한 것을 찾아보자. (위 도형 목록에서 골라 보세요)</div>
       <details class="reveal"><summary>힌트 보기</summary><p>정사면체·정육면체는 모든 꼭짓점의 차수가 3(홀수점 4개·8개) → 불가능. 정팔면체는 모두 4 → <b>가능</b>!</p></details>
     </div>
   </section>
@@ -95,10 +99,11 @@
   <section class="act-page" id="t3" hidden>
     <div class="bk-panel">
       <div class="bk-act"><span class="bk-act__n">3</span><span class="bk-act__t">조르당 곡선과 그 성질</span><span class="bk-tag">추론</span></div>
-      <p class="bk-muted">한 점에서 출발해 지나간 점을 다시 지나지 않고 돌아오는 곡선을 <b>조르당 곡선</b>이라고 해요. 조르당 곡선은 평면을 내부와 외부로 나눠요. 괴물이 안에 갇혔는지 알아보려면? 두 점을 눌러 선분을 그어 보세요.</p>
-      <div class="setup"><button class="bk-btn bk-btn--sky bk-btn--sm" id="j-new">새 곡선</button><button class="bk-btn bk-btn--ghost bk-btn--sm" id="j-clear">선분 지우기</button><label class="bk-muted"><input type="checkbox" id="j-fill"> 내부 색칠 (정답 보기)</label></div>
+      <p class="bk-muted">한 점에서 출발해 지나간 점을 다시 지나지 않고 돌아오는 곡선을 <b>조르당 곡선</b>이라고 해요. 조르당 곡선은 평면을 내부와 외부로 나눠요. 괴물 👾은 곡선의 <b>안</b>에 갇혔을까요, <b>밖</b>에 있을까요? 먼저 답을 고른 뒤, 두 점을 눌러 선분을 그어 교점의 수로 확인해 보세요.</p>
+      <div class="jbtn"><button class="bk-btn bk-btn--primary" id="j-in">👾 안에 있다</button><button class="bk-btn bk-btn--sky" id="j-out">👾 밖에 있다</button><button class="bk-btn bk-btn--ghost" id="j-new">새 곡선</button></div>
+      <div class="setup"><button class="bk-btn bk-btn--ghost bk-btn--sm" id="j-clear">선분 지우기</button><label class="bk-muted"><input type="checkbox" id="j-fill"> 내부 색칠 (정답 보기)</label></div>
       <svg class="board" id="j-svg" viewBox="0 0 560 340"></svg>
-      <div class="result" id="j-res">두 점을 눌러 보세요.</div>
+      <div class="result" id="j-res">괴물은 안에 있을까요, 밖에 있을까요?</div>
     </div>
     <div class="bk-panel bk-panel--pink secret">
       <h3>🔍 생각해 보기</h3>
@@ -112,10 +117,10 @@
   <section class="act-page" id="t4" hidden>
     <div class="bk-panel">
       <div class="bk-act"><span class="bk-act__n">4</span><span class="bk-act__t">조르당 곡선과 미로</span><span class="bk-tag">문제 해결</span><span class="bk-tag">추론</span><span class="bk-tag">연결</span></div>
-      <p class="bk-muted">A에서 B로 가는 길을 찾아보세요. 오른쪽 벽을 짚고 따라가는 방법과, 막다른 길을 지우는 방법을 비교해 봐요.</p>
-      <div class="setup"><label>크기 <select id="mz-n" class="sel"><option>8</option><option selected>12</option><option>16</option></select></label><button class="bk-btn bk-btn--primary bk-btn--sm" id="mz-new">새 미로</button><button class="bk-btn bk-btn--sky bk-btn--sm" id="mz-right">🖐 오른쪽 벽 짚고 가기</button><button class="bk-btn bk-btn--mint bk-btn--sm" id="mz-dead">🧹 막다른 길 지우기</button><button class="bk-btn bk-btn--ghost bk-btn--sm" id="mz-stop">멈춤/지우기</button></div>
+      <p class="bk-muted">A에서 B로 가는 길을 찾아보세요. 🚶 옆의 빈 칸을 누르면 직접 걸을 수 있어요. 자동 시연으로 오른쪽 벽을 짚고 따라가는 방법과, 막다른 길을 지우는 방법을 비교해 봐요.</p>
+      <div class="setup"><label>크기 <select id="mz-n" class="sel"><option>8</option><option selected>12</option><option>16</option></select></label><button class="bk-btn bk-btn--primary bk-btn--sm" id="mz-new">새 미로</button><span class="bk-muted">자동 시연:</span><button class="bk-btn bk-btn--sky bk-btn--sm" id="mz-right">🖐 오른쪽 벽 짚기</button><button class="bk-btn bk-btn--mint bk-btn--sm" id="mz-dead">🧹 막다른 길 지우기</button><button class="bk-btn bk-btn--ghost bk-btn--sm" id="mz-stop">지우기</button></div>
       <svg class="maze" id="mz-svg" viewBox="0 0 520 520"></svg>
-      <div class="legend"><span><i style="background:#F5A623"></i>오른쪽 벽 따라간 길</span><span><i style="background:#d9cfae"></i>막다른 길(지움)</span><span><i style="background:#3A9E82"></i>탈출 경로</span></div>
+      <div class="legend"><span><i style="background:#9ED9C6"></i>내가 걸은 길</span><span><i style="background:#F5A623"></i>오른쪽 벽 따라간 길</span><span><i style="background:#d9cfae"></i>막다른 길(지움)</span><span><i style="background:#3A9E82"></i>탈출 경로</span></div>
       <div class="result" id="mz-res"></div>
     </div>
     <div class="bk-panel bk-panel--pink secret">
@@ -162,7 +167,7 @@ function svgPt(svg, e) { const p = svg.createSVGPoint(); p.x = e.clientX; p.y = 
   const PARK = { nodes: [[90,70,'A'],[90,250,'B'],[250,160,'C'],[400,70,'D'],[400,250,'E'],[500,160,'F']], edges: [[0,1],[0,2],[1,2],[2,3],[2,4],[3,4],[3,5],[4,5],[0,3]] };
   function draw() {
     let h = ''; edges.forEach(([a, b]) => h += `<line class="edge" x1="${nodes[a][0]}" y1="${nodes[a][1]}" x2="${nodes[b][0]}" y2="${nodes[b][1]}"/>`);
-    nodes.forEach((n, i) => { const d = deg(i); h += `<circle class="node ${sel === i ? 'sel' : ''}" cx="${n[0]}" cy="${n[1]}" r="16" fill="${d % 2 ? '#E9533F' : '#5BB8E8'}" stroke="#2C2A26" stroke-width="2" data-i="${i}"/><text x="${n[0]}" y="${n[1] + 5}" text-anchor="middle" font-size="14" fill="#fff" font-family="Jua" pointer-events="none">${n[2] || String.fromCharCode(65 + i)}</text>`; });
+    nodes.forEach((n, i) => { const d = deg(i); h += `<circle class="nd ${sel === i ? 'sel' : ''}" cx="${n[0]}" cy="${n[1]}" r="22" fill="${d % 2 ? '#E9533F' : '#5BB8E8'}" stroke="#2C2A26" stroke-width="2" pointer-events="none"/><text x="${n[0]}" y="${n[1] + 6}" text-anchor="middle" font-size="17" fill="#fff" font-family="Jua" pointer-events="none">${n[2] || String.fromCharCode(65 + i)}</text><circle class="node hit" cx="${n[0]}" cy="${n[1]}" r="30" data-i="${i}"/>`; });
     svg.innerHTML = h;
     const ds = nodes.map((_, i) => deg(i)); $('#g1-deg').innerHTML = ds.map((d, i) => `<span class="${d % 2 ? 'odd' : ''}">${nodes[i][2] || String.fromCharCode(65 + i)}: 차수 ${d} (${d % 2 ? '홀수점' : '짝수점'})</span>`).join('');
     const odd = ds.filter(d => d % 2).length; $('#g1-res').textContent = nodes.length ? `홀수점 ${odd}개, 짝수점 ${ds.length - odd}개 — 차수의 합 ${ds.reduce((a, b) => a + b, 0)} = 선 ${edges.length}개 × 2` : '';
@@ -185,23 +190,23 @@ function svgPt(svg, e) { const p = svg.createSVGPoint(); p.x = e.clientX; p.y = 
     '사각형+대각선': { n: [[160,70],[400,70],[400,270],[160,270]], e: [[0,1],[1,2],[2,3],[3,0],[0,2],[1,3]] },
     '봉투': { n: [[160,120],[400,120],[400,280],[160,280],[280,40]], e: [[0,1],[1,2],[2,3],[3,0],[0,2],[1,3],[0,4],[1,4]] },
     '별': { n: [[280,40],[420,300],[150,140],[410,140],[140,300]], e: [[0,1],[1,2],[2,3],[3,4],[4,0]] },
-    '다리 7개': { n: [[120,170],[280,60],[280,280],[460,170]], e: [[0,1],[0,1],[0,2],[0,2],[1,3],[2,3],[1,2]] },
+    '다리 7개': { n: [[120,170],[280,60],[280,280],[460,170]], e: [[0,1],[0,1],[0,2],[0,2],[0,3],[1,3],[2,3]] },
     '정사면체': { n: [[280,50],[120,290],[440,290],[280,190]], e: [[0,1],[1,2],[2,0],[0,3],[1,3],[2,3]] },
     '정육면체': { n: [[150,80],[410,80],[410,300],[150,300],[220,140],[340,140],[340,240],[220,240]], e: [[0,1],[1,2],[2,3],[3,0],[4,5],[5,6],[6,7],[7,4],[0,4],[1,5],[2,6],[3,7]] },
-    '정팔면체': { n: [[280,40],[120,170],[440,170],[280,300],[220,170],[340,170]], e: [[0,1],[0,2],[0,4],[0,5],[3,1],[3,2],[3,4],[3,5],[1,4],[4,5],[5,2],[1,2]] },
+    '정팔면체': { n: [[280,40],[120,170],[440,170],[280,300],[215,215],[345,215]], e: [[0,1],[0,2],[0,4],[0,5],[3,1],[3,2],[3,4],[3,5],[1,4],[4,5],[5,2],[1,2]] },
   };
   let cur, used, path;
   const svg = $('#g2-svg');
   function load(name) { cur = P[name]; used = new Set(); path = []; document.querySelectorAll('#g2-presets button').forEach(b => b.classList.toggle('on', b.textContent === name)); draw(); }
   function draw() {
     let h = ''; const g = cur;
-    g.e.forEach(([a, b], k) => { const dup = g.e.filter((x, j) => j < k && ((x[0] === a && x[1] === b) || (x[0] === b && x[1] === a))).length; const [x1, y1] = g.n[a], [x2, y2] = g.n[b]; const mx = (x1 + x2) / 2 + (dup ? 40 : 0), my = (y1 + y2) / 2 + (dup ? 40 : 0);
+    g.e.forEach(([a, b], k) => { const dup = g.e.filter((x, j) => j < k && ((x[0] === a && x[1] === b) || (x[0] === b && x[1] === a))).length; const [x1, y1] = g.n[a], [x2, y2] = g.n[b]; const L = Math.hypot(x2 - x1, y2 - y1) || 1, nx = -(y2 - y1) / L, ny = (x2 - x1) / L, off = dup ? (dup % 2 ? 1 : -1) * Math.ceil(dup / 2) * 90 : 0; const mx = (x1 + x2) / 2 + nx * off, my = (y1 + y2) / 2 + ny * off;
       h += dup ? `<path class="edge ${used.has(k) ? 'used' : ''}" d="M${x1} ${y1} Q${mx} ${my} ${x2} ${y2}" fill="none"/>` : `<line class="edge ${used.has(k) ? 'used' : ''}" x1="${x1}" y1="${y1}" x2="${x2}" y2="${y2}"/>`; });
-    g.n.forEach((n, i) => { const d = g.e.filter(e => e[0] === i || e[1] === i).length; const last = path[path.length - 1] === i; h += `<circle class="node ${last ? 'sel' : ''}" cx="${n[0]}" cy="${n[1]}" r="16" fill="${d % 2 ? '#E9533F' : '#5BB8E8'}" stroke="#2C2A26" stroke-width="2" data-i="${i}"/>`; });
+    g.n.forEach((n, i) => { const d = g.e.filter(e => e[0] === i || e[1] === i).length; const last = path[path.length - 1] === i; h += `<circle class="nd ${last ? 'sel' : ''}" cx="${n[0]}" cy="${n[1]}" r="22" fill="${d % 2 ? '#E9533F' : '#5BB8E8'}" stroke="#2C2A26" stroke-width="2" pointer-events="none"/><circle class="node hit" cx="${n[0]}" cy="${n[1]}" r="30" data-i="${i}"/>`; });
     svg.innerHTML = h; const odd = g.n.filter((_, i) => g.e.filter(e => e[0] === i || e[1] === i).length % 2).length;
     $('#g2-odd').textContent = odd; $('#g2-used').textContent = used.size; $('#g2-total').textContent = g.e.length;
     if (used.size === g.e.length) $('#g2-res').textContent = '🎉 한붓그리기 성공!'; else if (path.length && !nextEdges(path[path.length - 1]).length) $('#g2-res').textContent = '막혔어요. 다시 그려 보세요. 출발점을 바꿔 볼까요?'; else $('#g2-res').textContent = odd === 0 || odd === 2 ? (path.length ? '다음 점을 누르세요' : `홀수점 ${odd}개 — 출발점을 누르세요${odd === 2 ? ' (빨간 점에서 출발!)' : ''}`) : `홀수점 ${odd}개 — 이 도형은 한붓그리기가 불가능해요. 그래도 해 볼까요?`;
-    svg.querySelectorAll('.node').forEach(e => e.onclick = () => click(+e.dataset.i));
+    svg.querySelectorAll('.node').forEach(e => e.onpointerdown = ev => { ev.preventDefault(); click(+e.dataset.i); });
   }
   const nextEdges = i => cur.e.map((e, k) => [e, k]).filter(([e, k]) => !used.has(k) && (e[0] === i || e[1] === i));
   function click(i) { if (!path.length) { path.push(i); draw(); return; } const last = path[path.length - 1]; if (i === last) return; const cand = nextEdges(last).find(([e]) => (e[0] === last && e[1] === i) || (e[1] === last && e[0] === i)); if (!cand) return; used.add(cand[1]); path.push(i); draw(); }
@@ -212,50 +217,81 @@ function svgPt(svg, e) { const p = svg.createSVGPoint(); p.x = e.clientX; p.y = 
 
 /* ===== 3 조르당 곡선 ===== */
 (function () {
-  let poly = [], pts = [];
+  let poly = [], pts = [], mon = null, monIn = false, answered = false;
   const svg = $('#j-svg');
-  function newCurve() { // 울퉁불퉁한 닫힌 곡선 (별 모양 다각형)
-    poly = []; const cx = 280, cy = 170, N = 40; let r = 110; for (let i = 0; i < N; i++) { const a = i / N * Math.PI * 2; r += (Math.random() - .5) * 40; r = Math.max(60, Math.min(150, r)); poly.push([cx + Math.cos(a) * r * (1 + .3 * Math.sin(3 * a)), cy + Math.sin(a) * r * .8]); } pts = []; draw(); $('#j-res').textContent = '두 점을 눌러 보세요.'; }
+  const CW = 36, GC = 15, GR = 9, X0 = (560 - GC * CW) / 2, Y0 = (340 - GR * CW) / 2;
+  function segInt(p, q, r, s) { const cr = (a, b, c) => (b[0] - a[0]) * (c[1] - a[1]) - (b[1] - a[1]) * (c[0] - a[0]); const d1 = cr(r, s, p), d2 = cr(r, s, q), d3 = cr(p, q, r), d4 = cr(p, q, s); return (d1 > 0) !== (d2 > 0) && (d3 > 0) !== (d4 > 0); }
+  function simple(P) { const n = P.length; for (let i = 0; i < n; i++) for (let j = i + 2; j < n; j++) { if (i === 0 && j === n - 1) continue; if (segInt(P[i], P[(i + 1) % n], P[j], P[(j + 1) % n])) return false; } return true; }
+  function build() { // 격자 위 랜덤 신장 트리 → 폭 1 복도의 테두리 = 단순 닫힌 곡선
+    const nc = (GC - 1) / 2, nr = (GR - 1) / 2; const fill = Array.from({ length: GR }, () => Array(GC).fill(false));
+    const seen = Array.from({ length: nr }, () => Array(nc).fill(false)); const st = [[ri(nr), ri(nc)]]; seen[st[0][0]][st[0][1]] = true; fill[st[0][0] * 2 + 1][st[0][1] * 2 + 1] = true;
+    while (st.length) { const [r, c] = st[st.length - 1]; const nb = [[r - 1, c], [r + 1, c], [r, c - 1], [r, c + 1]].filter(([a, b]) => a >= 0 && b >= 0 && a < nr && b < nc && !seen[a][b]); if (!nb.length) { st.pop(); continue; } const [a, b] = nb[ri(nb.length)]; seen[a][b] = true; fill[a * 2 + 1][b * 2 + 1] = true; fill[r + a + 1][c + b + 1] = true; st.push([a, b]); }
+    // 테두리 변(채워진 칸이 왼쪽) 모으기 → 연결
+    const next = new Map(); const key = (x, y) => x + ',' + y; const F = (r, c) => r >= 0 && c >= 0 && r < GR && c < GC && fill[r][c];
+    for (let r = 0; r < GR; r++) for (let c = 0; c < GC; c++) if (fill[r][c]) { if (!F(r - 1, c)) next.set(key(c, r), [c + 1, r]); if (!F(r, c + 1)) next.set(key(c + 1, r), [c + 1, r + 1]); if (!F(r + 1, c)) next.set(key(c + 1, r + 1), [c, r + 1]); if (!F(r, c - 1)) next.set(key(c, r + 1), [c, r]); }
+    const start = next.keys().next().value.split(',').map(Number); let P = []; let cur = start; const used = new Set();
+    while (!used.has(key(...cur))) { used.add(key(...cur)); P.push(cur); cur = next.get(key(...cur)); }
+    if (P.length !== next.size) return null;
+    // 일직선 점 합치기 → 모서리 둥글리기(Chaikin) 2회
+    P = P.filter((p, i) => { const a = P[(i - 1 + P.length) % P.length], b = P[(i + 1) % P.length]; return !((a[0] === p[0] && p[0] === b[0]) || (a[1] === p[1] && p[1] === b[1])); });
+    P = P.map(([x, y]) => [X0 + x * CW, Y0 + y * CW]);
+    for (let k = 0; k < 2; k++) { const Q = []; for (let i = 0; i < P.length; i++) { const p = P[i], q = P[(i + 1) % P.length]; Q.push([p[0] * .75 + q[0] * .25, p[1] * .75 + q[1] * .25]); Q.push([p[0] * .25 + q[0] * .75, p[1] * .25 + q[1] * .75]); } P = Q; }
+    if (!simple(P)) return null;
+    // 괴물 위치: 채워진 칸(안) 또는 빈 칸(밖) 중 하나 — 가장자리 줄은 제외
+    const cands = []; for (let r = 1; r < GR - 1; r++) for (let c = 1; c < GC - 1; c++) cands.push([r, c]);
+    const wantIn = Math.random() < .5; const pick = cands.filter(([r, c]) => fill[r][c] === wantIn); const [mr, mc] = pick[ri(pick.length)];
+    return { P, mon: [X0 + mc * CW + CW / 2, Y0 + mr * CW + CW / 2], monIn: wantIn };
+  }
+  function newCurve() { let g = null; for (let t = 0; t < 30 && !g; t++) g = build(); poly = g.P; mon = g.mon; monIn = g.monIn; pts = []; answered = false; $('#j-fill').checked = false; $('#j-in').disabled = $('#j-out').disabled = false; draw(); $('#j-res').textContent = '괴물은 안에 있을까요, 밖에 있을까요?'; }
   const inside = ([x, y]) => { let c = false; for (let i = 0, j = poly.length - 1; i < poly.length; j = i++) { const [xi, yi] = poly[i], [xj, yj] = poly[j]; if ((yi > y) !== (yj > y) && x < (xj - xi) * (y - yi) / (yj - yi) + xi) c = !c; } return c; };
   function crossings(a, b) { let n = 0; for (let i = 0, j = poly.length - 1; i < poly.length; j = i++) if (segInt(a, b, poly[i], poly[j])) n++; return n; }
-  function segInt(p, q, r, s) { const cr = (a, b, c) => (b[0] - a[0]) * (c[1] - a[1]) - (b[1] - a[1]) * (c[0] - a[0]); const d1 = cr(r, s, p), d2 = cr(r, s, q), d3 = cr(p, q, r), d4 = cr(p, q, s); return (d1 > 0) !== (d2 > 0) && (d3 > 0) !== (d4 > 0); }
-  function draw() { let h = `<path d="M${poly.map(p => p.join(' ')).join(' L')} Z" fill="${$('#j-fill').checked ? '#FFE8BF' : 'none'}" stroke="#2C2A26" stroke-width="3"/>`;
+  function draw() { let h = `<path d="M${poly.map(p => p.map(v => v.toFixed(1)).join(' ')).join(' L')} Z" fill="${$('#j-fill').checked ? '#FFE8BF' : 'none'}" stroke="#2C2A26" stroke-width="3" stroke-linejoin="round"/>`;
     if (pts.length === 2) h += `<line x1="${pts[0][0]}" y1="${pts[0][1]}" x2="${pts[1][0]}" y2="${pts[1][1]}" stroke="#2F8FC9" stroke-width="3" stroke-dasharray="6 4"/>`;
     pts.forEach((p, i) => h += `<circle cx="${p[0]}" cy="${p[1]}" r="9" fill="${i ? '#E9533F' : '#F5A623'}" stroke="#fff" stroke-width="2"/><text x="${p[0] + 12}" y="${p[1] - 8}" font-family="Jua" font-size="16">${i ? 'Q' : 'P'}</text>`);
+    if (mon) h += `<text x="${mon[0]}" y="${mon[1] + 9}" text-anchor="middle" font-size="26" pointer-events="none">👾</text>`;
     svg.innerHTML = h; }
+  function answer(sayIn) { if (answered) return; answered = true; $('#j-in').disabled = $('#j-out').disabled = true;
+    const corner = [X0 - 4, Y0 - 3]; pts = [corner, mon]; draw(); const n = crossings(corner, mon);
+    const ok = sayIn === monIn; $('#j-res').textContent = `${ok ? '🎉 정답!' : '❌ 아쉬워요.'} 괴물은 ${monIn ? '안' : '밖'}에 있어요. 확실히 바깥인 P에서 괴물까지 선을 그으면 교점이 ${n}개(${n % 2 ? '홀수' : '짝수'})${(n % 2 === 1) === monIn ? '' : ' — 꼭짓점을 스쳤네요. 다른 점에서 다시 그어 보세요'}.`; }
   svg.addEventListener('pointerdown', e => { if (e.target.closest('text')) return; const p = svgPt(svg, e); if (pts.length >= 2) pts = []; pts.push([p.x, p.y]); draw(); if (pts.length === 2) { const n = crossings(pts[0], pts[1]); const same = inside(pts[0]) === inside(pts[1]); $('#j-res').textContent = `교점 ${n}개 (${n % 2 ? '홀수' : '짝수'}) → 두 점은 ${same ? '같은 쪽' : '서로 다른 쪽'}에 있어요. P는 ${inside(pts[0]) ? '내부' : '외부'}, Q는 ${inside(pts[1]) ? '내부' : '외부'}.`; } });
-  $('#j-new').onclick = newCurve; $('#j-clear').onclick = () => { pts = []; draw(); $('#j-res').textContent = '두 점을 눌러 보세요.'; }; $('#j-fill').onchange = draw;
+  $('#j-in').onclick = () => answer(true); $('#j-out').onclick = () => answer(false);
+  $('#j-new').onclick = newCurve; $('#j-clear').onclick = () => { pts = []; draw(); $('#j-res').textContent = answered ? `괴물은 ${monIn ? '안' : '밖'}에 있어요.` : '괴물은 안에 있을까요, 밖에 있을까요?'; }; $('#j-fill').onchange = draw;
   newCurve();
 })();
 
 /* ===== 4 미로 ===== */
 (function () {
-  let N = 12, W, timer = null;
-  const svg = $('#mz-svg');
+  let N = 12, W, timer = null, walk = [], done = false, extra = [];
+  const svg = $('#mz-svg'); const O = 24, SZ = 520 - O * 2;
   // W[r][c] = {t,r,b,l} 벽 여부
   function gen() { N = +$('#mz-n').value; W = Array.from({ length: N }, () => Array.from({ length: N }, () => ({ t: 1, r: 1, b: 1, l: 1 }))); const seen = Array.from({ length: N }, () => Array(N).fill(false)); const st = [[0, 0]]; seen[0][0] = true;
     while (st.length) { const [r, c] = st[st.length - 1]; const nb = [[r - 1, c, 't', 'b'], [r + 1, c, 'b', 't'], [r, c - 1, 'l', 'r'], [r, c + 1, 'r', 'l']].filter(([a, b]) => a >= 0 && b >= 0 && a < N && b < N && !seen[a][b]); if (!nb.length) { st.pop(); continue; } const [a, b, w1, w2] = nb[ri(nb.length)]; W[r][c][w1] = 0; W[a][b][w2] = 0; seen[a][b] = true; st.push([a, b]); }
     W[0][0].l = 0; W[N - 1][N - 1].r = 0; // 입구 A(왼쪽 위), 출구 B(오른쪽 아래)
-    draw([]); $('#mz-res').textContent = ''; }
-  function draw(paths) { const s = 500 / N, o = 10; let h = '';
-    paths.forEach(({ cells, color, width }) => { if (!cells.length) return; h += `<polyline fill="none" stroke="${color}" stroke-width="${width || s * .45}" stroke-linejoin="round" stroke-linecap="round" points="${cells.map(([r, c]) => `${o + c * s + s / 2},${o + r * s + s / 2}`).join(' ')}"/>`; });
+    walk = [[0, 0]]; done = false; extra = []; draw(); $('#mz-res').textContent = '🚶 옆의 빈 칸을 눌러 B까지 가 보세요.'; }
+  function draw(paths) { if (paths) extra = paths; const s = SZ / N, o = O; let h = '';
+    const all = [...extra, { cells: walk, color: '#9ED9C6' }];
+    all.forEach(({ cells, color, width }) => { if (!cells.length) return; h += `<polyline fill="none" stroke="${color}" stroke-width="${width || s * .45}" stroke-linejoin="round" stroke-linecap="round" points="${cells.map(([r, c]) => `${o + c * s + s / 2},${o + r * s + s / 2}`).join(' ')}"/>`; });
     for (let r = 0; r < N; r++) for (let c = 0; c < N; c++) { const x = o + c * s, y = o + r * s, w = W[r][c]; if (w.t) h += `<line x1="${x}" y1="${y}" x2="${x + s}" y2="${y}"/>`; if (w.l) h += `<line x1="${x}" y1="${y}" x2="${x}" y2="${y + s}"/>`; if (w.b) h += `<line x1="${x}" y1="${y + s}" x2="${x + s}" y2="${y + s}"/>`; if (w.r) h += `<line x1="${x + s}" y1="${y}" x2="${x + s}" y2="${y + s}"/>`; }
-    h += `<text x="${o - 8}" y="${o + s / 2 + 6}" font-family="Jua" font-size="16" fill="#E9533F" text-anchor="end">A</text><text x="${o + N * s + 4}" y="${o + (N - 1) * s + s / 2 + 6}" font-family="Jua" font-size="16" fill="#E9533F">B</text>`;
+    const [wr, wc] = walk[walk.length - 1]; h += `<text x="${o + wc * s + s / 2}" y="${o + wr * s + s / 2 + s * .3}" text-anchor="middle" font-size="${Math.max(12, s * .8)}" stroke="none" pointer-events="none">${done ? '🎉' : '🚶'}</text>`;
+    h += `<text x="${o - 6}" y="${o + s / 2 + 6}" font-family="Jua" font-size="17" fill="#E9533F" stroke="none" text-anchor="end">A</text><text x="${o + N * s + 6}" y="${o + (N - 1) * s + s / 2 + 6}" font-family="Jua" font-size="17" fill="#E9533F" stroke="none">B</text>`;
     svg.innerHTML = `<g stroke="#2C2A26" stroke-width="3" stroke-linecap="round">${h}</g>`; }
+  svg.addEventListener('pointerdown', e => { if (done || timer) return; const p = svgPt(svg, e); const s = SZ / N; const c = Math.floor((p.x - O) / s), r = Math.floor((p.y - O) / s); if (r < 0 || c < 0 || r >= N || c >= N) return;
+    const [wr, wc] = walk[walk.length - 1]; const dr = r - wr, dc = c - wc; if (Math.abs(dr) + Math.abs(dc) !== 1) return; const w = W[wr][wc]; if ((dr === -1 && w.t) || (dr === 1 && w.b) || (dc === -1 && w.l) || (dc === 1 && w.r)) return;
+    const prev = walk[walk.length - 2]; if (prev && prev[0] === r && prev[1] === c) walk.pop(); else walk.push([r, c]);
+    if (r === N - 1 && c === N - 1) { done = true; $('#mz-res').textContent = `🎉 탈출 성공! ${walk.length - 1}칸 걸었어요.`; } else $('#mz-res').textContent = `${walk.length - 1}칸 걸었어요. (왔던 칸을 누르면 되돌아가요)`; draw(); });
   function rightHand() { // 오른손 벽 따라가기: 방향 0=위 1=오른 2=아래 3=왼
     const dirs = [[-1, 0, 't'], [0, 1, 'r'], [1, 0, 'b'], [0, -1, 'l']]; let r = 0, c = 0, d = 1; const cells = [[0, 0]]; let guard = 0;
     while (!(r === N - 1 && c === N - 1) && guard++ < N * N * 4) { for (const dd of [(d + 1) % 4, d, (d + 3) % 4, (d + 2) % 4]) { const [dr, dc, w] = dirs[dd]; if (!W[r][c][w]) { const nr = r + dr, nc = c + dc; if (nr < 0 || nc < 0 || nr >= N || nc >= N) continue; r = nr; c = nc; d = dd; cells.push([r, c]); break; } } }
     return cells; }
   function deadEnds() { const open = W.map(row => row.map(w => true)); const dead = []; let changed = true; const exits = (r, c) => { const w = W[r][c]; let n = 0; if (!w.t && r > 0 && open[r - 1][c]) n++; if (!w.b && r < N - 1 && open[r + 1][c]) n++; if (!w.l && c > 0 && open[r][c - 1]) n++; if (!w.r && c < N - 1 && open[r][c + 1]) n++; if ((r === 0 && c === 0) || (r === N - 1 && c === N - 1)) n++; return n; };
     while (changed) { changed = false; for (let r = 0; r < N; r++) for (let c = 0; c < N; c++) if (open[r][c] && exits(r, c) <= 1) { open[r][c] = false; dead.push([r, c]); changed = true; } }
-    const sol = []; for (let r = 0; r < N; r++) for (let c = 0; c < N; c++) if (open[r][c]) sol.push([r, c]); // 경로 순서로 정렬: BFS
     const order = []; const q = [[0, 0]]; const seen = new Set(['0,0']); while (q.length) { const [r, c] = q.shift(); order.push([r, c]); const w = W[r][c]; [[-1, 0, 't'], [1, 0, 'b'], [0, -1, 'l'], [0, 1, 'r']].forEach(([dr, dc, ww]) => { const a = r + dr, b = c + dc; if (!w[ww] && a >= 0 && b >= 0 && a < N && b < N && open[a][b] && !seen.has(a + ',' + b)) { seen.add(a + ',' + b); q.push([a, b]); } }); }
     return { dead, sol: order }; }
-  function animate(frames, done) { clearInterval(timer); let i = 0; timer = setInterval(() => { if (i >= frames.length) { clearInterval(timer); done && done(); return; } frames[i++](); }, 60); }
-  $('#mz-new').onclick = () => { clearInterval(timer); gen(); };
+  function animate(frames, done) { clearInterval(timer); let i = 0; timer = setInterval(() => { if (i >= frames.length) { clearInterval(timer); timer = null; done && done(); return; } frames[i++](); }, 60); }
+  $('#mz-new').onclick = () => { clearInterval(timer); timer = null; gen(); };
   $('#mz-right').onclick = () => { const cells = rightHand(); animate(cells.map((_, i) => () => draw([{ cells: cells.slice(0, i + 1), color: '#F5A623' }])), () => $('#mz-res').textContent = `오른쪽 벽을 짚고 ${cells.length - 1}칸 걸어서 탈출! (왔다 갔다 한 칸이 많지요?)`); };
-  $('#mz-dead').onclick = () => { const { dead, sol } = deadEnds(); const deadPts = []; animate(dead.map(cell => () => { deadPts.push(cell); draw(deadPts.map(c => ({ cells: [c, c], color: '#d9cfae', width: 500 / N * .7 }))); }), () => { draw([...deadPts.map(c => ({ cells: [c, c], color: '#d9cfae', width: 500 / N * .7 })), { cells: sol, color: '#3A9E82' }]); $('#mz-res').textContent = `막다른 길 ${dead.length}칸을 지우니 탈출 경로(${sol.length - 1}칸)만 남았어요!`; }); };
-  $('#mz-stop').onclick = () => { clearInterval(timer); draw([]); $('#mz-res').textContent = ''; };
+  $('#mz-dead').onclick = () => { const { dead, sol } = deadEnds(); const deadPts = []; animate(dead.map(cell => () => { deadPts.push(cell); draw(deadPts.map(c => ({ cells: [c, c], color: '#d9cfae', width: SZ / N * .7 }))); }), () => { draw([...deadPts.map(c => ({ cells: [c, c], color: '#d9cfae', width: SZ / N * .7 })), { cells: sol, color: '#3A9E82' }]); $('#mz-res').textContent = `막다른 길 ${dead.length}칸을 지우니 탈출 경로(${sol.length - 1}칸)만 남았어요!`; }); };
+  $('#mz-stop').onclick = () => { clearInterval(timer); timer = null; walk = [[0, 0]]; done = false; draw([]); $('#mz-res').textContent = ''; };
   gen();
 })();
 </script>

@@ -16,11 +16,19 @@
   .sq .c.bad{color:var(--bk-red);background:#FDEEF2}
   .sq .c.ok{background:#EDF9F4}
   .sq .c.diag::after{content:"";position:absolute;inset:0;background:rgba(245,166,35,.15);pointer-events:none}
-  .sq.s9 .c{width:36px;height:36px;font-size:1.1rem}
+  .sq:empty{display:none}
+  .sq.s9{width:100%;max-width:372px;box-sizing:border-box}
+  .sq.s9 .c{width:auto;height:auto;aspect-ratio:1;font-size:1.1rem}
   .sq.s9 .c.bl{border-right:3px solid var(--bk-ink)}
   .sq.s9 .c.bb{border-bottom:3px solid var(--bk-ink)}
+  @media(max-width:480px){.sq.s9{gap:2px;padding:3px;margin-left:-14px;margin-right:-14px;width:auto;max-width:none}}
   .sq.pair .c{width:60px;font-size:1rem;font-family:var(--f-mono,monospace)}
   .sq.pair .c.dup{background:#FDEEF2;color:var(--bk-red)}
+  .twin .sq .c{width:48px;height:48px;font-size:1.3rem}
+  .twin .sq.pair .c{width:60px;font-size:1rem}
+  .sq.mini{margin:6px 0 6px 36px;gap:2px;padding:2px}
+  .sq.mini .c{width:30px;height:30px;font-size:1rem;cursor:default}
+  .formula .nw{white-space:nowrap;display:inline-flex;align-items:center;gap:4px}
   .numpad{display:flex;gap:6px;flex-wrap:wrap;justify-content:center;margin:6px 0}
   .numpad button{width:44px;height:44px;border-radius:10px;border:2px solid var(--bk-sky);background:#fff;font-family:var(--f-head);font-size:1.2rem;cursor:pointer}
   .numpad button.del{border-color:var(--bk-line);color:var(--bk-ink-soft)}
@@ -88,6 +96,8 @@
     <div class="bk-panel bk-panel--pink secret">
       <h3>🔍 생각해 보기</h3>
       <div class="q"><b>1</b> [표 1]과 다른 3차 라틴방진을 만들어 보자.</div>
+      <div class="bk-muted" style="margin-left:36px;font-size:.85rem">[표 1]</div>
+      <div class="sq mini" style="grid-template-columns:repeat(3,30px)"><div class="c">1</div><div class="c">2</div><div class="c">3</div><div class="c">2</div><div class="c">3</div><div class="c">1</div><div class="c">3</div><div class="c">1</div><div class="c">2</div></div>
       <div class="q"><b>2</b> 1, 2, 3으로 대각선까지 중복 없는 3차 라틴방진을 만들 수 있을까?</div>
       <details class="reveal"><summary>힌트 보기</summary><p>가운데 칸은 두 대각선과 가로·세로 모두에 들어가요. 3차에서는 가운데 수가 어느 줄에서든 다른 두 수와 달라야 하는데, 모든 줄이 1·2·3을 다 써야 하니 모순이 생겨요 → <b>불가능</b>. 4차는 가능해요!</p></details>
       <div class="q"><b>3</b> 1, 2, 3, 4로 대각선까지 중복 없는 4차 라틴방진을 만들어 보자.</div>
@@ -103,7 +113,7 @@
       <div class="twin"><div><div class="bk-muted bk-center">[표 2]</div><div class="sq" id="or-a"></div></div><span class="plus">+</span><div><div class="bk-muted bk-center">[표 3]</div><div class="sq" id="or-b"></div></div><span class="plus">=</span><div><div class="bk-muted bk-center">[표 4] 순서쌍</div><div class="sq pair" id="or-p"></div></div></div>
       <div class="numpad" id="or-pad"></div>
       <div class="result" id="or-res"></div>
-      <div class="formula">(a, b) → <input class="num num--1" id="or-k" placeholder="□"> × (a − <input class="num num--1" id="or-d" placeholder="△">) + b <button class="bk-btn bk-btn--primary bk-btn--sm" id="or-make">마방진 만들기</button></div>
+      <div class="formula"><span class="nw">(a, b) →</span> <span class="nw"><input class="num num--1" id="or-k" placeholder="□"> × (a −</span> <span class="nw"><input class="num num--1" id="or-d" placeholder="△">) + b</span> <button class="bk-btn bk-btn--primary bk-btn--sm" id="or-make">마방진 만들기</button></div>
       <div class="sq" id="or-m"></div>
       <div class="sums" id="or-sums"></div>
     </div>
@@ -119,7 +129,7 @@
     <div class="bk-panel">
       <div class="bk-act"><span class="bk-act__n">4</span><span class="bk-act__t">9차 라틴방진 숫자 퍼즐</span><span class="bk-tag">추론</span><span class="bk-tag">연결</span></div>
       <div class="bk-rule"><ol><li>가로줄, 세로줄에 1부터 9까지가 한 번씩 들어간다. (9차 라틴방진)</li><li>굵은 선으로 구분된 3×3칸에도 1부터 9까지가 한 번씩 들어가야 한다.</li></ol></div>
-      <div class="sq s9" id="sd-sq" style="grid-template-columns:repeat(9,36px)"></div>
+      <div class="sq s9" id="sd-sq" style="grid-template-columns:repeat(9,1fr)"></div>
       <div class="numpad" id="sd-pad"></div>
       <div class="result" id="sd-res"></div>
       <div class="setup"><button class="bk-btn bk-btn--mint bk-btn--sm" id="sd-check">틀린 곳 확인</button><button class="bk-btn bk-btn--ghost bk-btn--sm" id="sd-clear">내가 쓴 것 지우기</button><label class="bk-muted"><input type="checkbox" id="sd-live" checked> 입력할 때 바로 검사</label></div>
@@ -127,7 +137,7 @@
     <div class="bk-panel bk-panel--pink secret">
       <h3>🔍 생각해 보기</h3>
       <div class="q"><b>1</b> 숫자 하나가 들어갈 자리를 정할 때 어떤 줄과 상자를 함께 보아야 할까?</div>
-      <div class="q"><b>5</b> 라틴방진 열쇠고리(디폼 블록)는 책의 활동으로 직접 만들어 보세요. 2차·3차 라틴방진 색 배열을 블록으로 만들면 돼요.</div>
+      <div class="q"><b>2</b> 라틴방진 열쇠고리(디폼 블록)는 책의 활동으로 직접 만들어 보세요. 2차·3차 라틴방진 색 배열을 블록으로 만들면 돼요.</div>
     </div>
   </section>
 
@@ -152,7 +162,7 @@ document.querySelectorAll('#tabs .tab').forEach(b => b.onclick = () => { documen
 function gridEditor(sqEl, padEl, n, opts) {
   let g = Array.from({ length: n }, () => Array(n).fill(0)), sel = null;
   const fixed = opts.fixed || (() => false);
-  sqEl.style.gridTemplateColumns = `repeat(${n},${opts.cell || 54}px)`;
+  sqEl.style.gridTemplateColumns = opts.cell === 'fr' ? `repeat(${n},1fr)` : `repeat(${n},${opts.cell || 54}px)`;
   padEl.innerHTML = ''; for (let v = 1; v <= (opts.max || n); v++) { const b = document.createElement('button'); b.textContent = v; b.onclick = () => set(v); padEl.appendChild(b); } const d = document.createElement('button'); d.className = 'del'; d.textContent = '⌫'; d.onclick = () => set(0); padEl.appendChild(d);
   function set(v) { if (!sel || fixed(sel[0], sel[1])) return; g[sel[0]][sel[1]] = v; if (opts.unique && v) g.forEach((row, r) => row.forEach((x, c) => { if (x === v && (r !== sel[0] || c !== sel[1])) g[r][c] = 0; })); render(); opts.onChange && opts.onChange(g); }
   function render() { sqEl.innerHTML = ''; g.forEach((row, r) => row.forEach((v, c) => { const d = document.createElement('div'); d.className = 'c' + (fixed(r, c) ? ' fixed' : '') + (sel && sel[0] === r && sel[1] === c ? ' sel' : '') + (opts.cls ? ' ' + opts.cls(r, c, v) : ''); d.textContent = v || ''; d.onclick = () => { sel = [r, c]; render(); }; sqEl.appendChild(d); })); }
@@ -195,8 +205,9 @@ const lineOK = arr => { const f = arr.filter(Boolean); return f.length === arr.l
   $('#or-make').onclick = () => { const k = +$('#or-k').value, d = +$('#or-d').value; const a = A.get(), b = B.get(); const M = $('#or-m'); M.style.gridTemplateColumns = `repeat(${n},54px)`; const vals = a.map((row, r) => row.map((x, c) => k * (x - d) + b[r][c])); M.innerHTML = vals.map(row => row.map(v => `<div class="c">${isNaN(v) ? '' : v}</div>`).join('')).join('');
     const target = n * (n * n + 1) / 2; const lines = []; vals.forEach(r => lines.push(r)); for (let c = 0; c < n; c++) lines.push(vals.map(r => r[c])); lines.push(vals.map((r, i) => r[i])); lines.push(vals.map((r, i) => r[n - 1 - i]));
     const names = [...vals.map((_, i) => '가로' + (i + 1)), ...vals.map((_, i) => '세로' + (i + 1)), '대각↘', '대각↙']; let all = true;
-    $('#or-sums').innerHTML = lines.map((L, i) => { const s = L.reduce((x, y) => x + y, 0); const ok = s === target; if (!ok) all = false; return `<span class="${ok ? 'ok' : ''}">${names[i]}: ${s}</span>`; }).join('') + (all ? `<span class="ok">🎉 ${n}차 마방진! (합 ${target})</span>` : `<span>마방진이 되려면 모든 합이 ${target}</span>`); };
-  $('#or-ex').onclick = () => { if (n === 3) { A.set([[2,3,1],[1,2,3],[3,1,2]]); B.set([[1,3,2],[3,2,1],[2,1,3]]); $('#or-k').value = 3; $('#or-d').value = 1; } else { A.set([[1,4,3,2],[2,3,4,1],[4,1,2,3],[3,2,1,4]]); B.set([[0,0,0,0],[0,0,0,0],[0,0,0,0],[0,0,0,0]]); $('#or-k').value = 4; $('#or-d').value = 1; $('#or-res').textContent = '[표 5]가 왼쪽에 들어갔어요. 오른쪽에 직교가 되는 라틴방진을 완성해 보세요. (예: 1 2 3 4 / 3 4 1 2 / 2 1 4 3 / 4 3 2 1)'; } };
+    const flat = vals.flat(); const distinct = flat.every(v => Number.isInteger(v) && v >= 1 && v <= n * n) && new Set(flat).size === n * n;
+    $('#or-sums').innerHTML = lines.map((L, i) => { const s = L.reduce((x, y) => x + y, 0); const ok = s === target; if (!ok) all = false; return `<span class="${ok ? 'ok' : ''}">${names[i]}: ${s}</span>`; }).join('') + `<span class="${distinct ? 'ok' : ''}">1~${n * n} 한 번씩: ${distinct ? '✓' : '✗'}</span>` + (all && distinct ? `<span class="ok">🎉 ${n}차 마방진! (합 ${target})</span>` : `<span>마방진이 되려면 1~${n * n}가 한 번씩, 모든 합이 ${target}</span>`); };
+  $('#or-ex').onclick = () => { if (n === 3) { A.set([[2,3,1],[1,2,3],[3,1,2]]); B.set([[1,3,2],[3,2,1],[2,1,3]]); $('#or-k').value = 3; $('#or-d').value = 1; } else { A.set([[1,4,3,2],[2,3,4,1],[4,1,2,3],[3,2,1,4]]); B.set([[1,2,3,4],[3,4,1,2],[4,3,2,1],[2,1,4,3]]); $('#or-k').value = 4; $('#or-d').value = 1; } $('#or-make').click(); };
   $('#or-clear').onclick = () => { A.clear(); B.clear(); }; $('#or-n').onchange = build; build();
 })();
 
@@ -204,7 +215,7 @@ const lineOK = arr => { const f = arr.filter(Boolean); return f.length === arr.l
 (function () {
   const GIVEN = ["1.4..7..5",".23..6.4.","...45..6.","68....17.","..913.8..","..5....92",".5..41...",".9.7..38.","4...2..1."];
   const fixed = (r, c) => GIVEN[r][c] !== '.';
-  const ed = gridEditor($('#sd-sq'), $('#sd-pad'), 9, { cell: 36, max: 9, fixed, cls: (r, c) => ((c % 3 === 2 && c < 8) ? 'bl ' : '') + ((r % 3 === 2 && r < 8) ? 'bb' : ''), onChange: g => { if ($('#sd-live').checked) check(g, false); } });
+  const ed = gridEditor($('#sd-sq'), $('#sd-pad'), 9, { cell: 'fr', max: 9, fixed, cls: (r, c) => ((c % 3 === 2 && c < 8) ? 'bl ' : '') + ((r % 3 === 2 && r < 8) ? 'bb' : ''), onChange: g => { if ($('#sd-live').checked) check(g, false); } });
   ed.set(GIVEN.map(r => [...r].map(ch => ch === '.' ? 0 : +ch)));
   function conflicts(g) { const bad = new Set(); for (let r = 0; r < 9; r++) for (let c = 0; c < 9; c++) { const v = g[r][c]; if (!v) continue; for (let k = 0; k < 9; k++) { if (k !== c && g[r][k] === v) bad.add(r + ',' + c); if (k !== r && g[k][c] === v) bad.add(r + ',' + c); } const br = r - r % 3, bc = c - c % 3; for (let i = br; i < br + 3; i++) for (let j = bc; j < bc + 3; j++) if ((i !== r || j !== c) && g[i][j] === v) bad.add(r + ',' + c); } return bad; }
   function check(g, loud) { const bad = conflicts(g); [...$('#sd-sq').children].forEach((d, i) => { const r = Math.floor(i / 9), c = i % 9; d.classList.toggle('bad', bad.has(r + ',' + c)); }); const full = g.flat().every(Boolean);
@@ -216,8 +227,9 @@ const lineOK = arr => { const f = arr.filter(Boolean); return f.length === arr.l
 (function () {
   const T = `5,1 6,3 4,2 8,7 9,9 7,8 2,4 3,6 1,5|4,3 5,2 6,1 7,9 8,8 9,7 1,6 2,5 3,4|6,2 4,1 5,3 9,8 7,7 8,9 3,5 1,4 2,6|2,7 3,9 1,8 5,4 6,6 4,5 8,1 9,3 7,2|1,9 2,8 3,7 4,6 5,5 6,4 7,3 8,2 9,1|3,8 1,7 2,9 6,5 4,4 5,6 9,2 7,1 8,3|8,4 9,6 7,5 2,1 3,3 1,2 5,7 6,9 4,8|7,6 8,5 9,4 1,3 2,2 3,1 4,9 5,8 6,7|9,5 7,4 8,6 3,2 1,1 2,3 6,8 4,7 5,9`.split('|').map(r => r.split(' ').map(p => p.split(',').map(Number)));
   const COL = ['#E9533F','#F5A623','#F3D98B','#3A9E82','#5BB8E8','#2F8FC9','#9B6BD6','#C9436B','#5F5B55'];
+  const TXT = ['#fff','#2C2A26','#2C2A26','#fff','#2C2A26','#fff','#fff','#fff','#fff']; // 밝은 배경은 어두운 글자
   let mode = 'a';
-  function draw() { const g = $('#cs-grid'); g.innerHTML = T.map(row => row.map(([a, b]) => { const v = mode === 'a' ? a : mode === 'b' ? b : 9 * (a - 1) + b; const col = mode === 's' ? '#2C2A26' : COL[v - 1]; return `<div style="background:${col}">${v}</div>`; }).join('')).join('');
+  function draw() { const g = $('#cs-grid'); g.innerHTML = T.map(row => row.map(([a, b]) => { const v = mode === 'a' ? a : mode === 'b' ? b : 9 * (a - 1) + b; const col = mode === 's' ? '#2C2A26' : COL[v - 1]; const tc = mode === 's' ? '#fff' : TXT[v - 1]; return `<div style="background:${col};color:${tc}">${v}</div>`; }).join('')).join('');
     if (mode === 's') { const vals = T.map(r => r.map(([a, b]) => 9 * (a - 1) + b)); const rs = vals.map(r => r.reduce((x, y) => x + y, 0)); const cs = vals[0].map((_, c) => vals.reduce((s, r) => s + r[c], 0)); $('#cs-res').textContent = `9×(a−1)+b로 바꾸면 가로 합 ${[...new Set(rs)].join('/')}, 세로 합 ${[...new Set(cs)].join('/')} — 모두 ${9 * 82 / 2}! (대각선: ${vals.reduce((s, r, i) => s + r[i], 0)}, ${vals.reduce((s, r, i) => s + r[8 - i], 0)})`; }
     else $('#cs-res').textContent = mode === 'a' ? '첫째 수만 보면 가로·세로에 1~9가 한 번씩 → 9차 라틴방진' : '둘째 수도 9차 라틴방진. 두 수의 순서쌍 81개가 모두 달라서 직교!'; }
   ['a','b','s'].forEach(m => $('#cs-' + m).onclick = () => { mode = m; ['a','b','s'].forEach(k => { $('#cs-' + k).classList.toggle('bk-btn--ghost', k !== m); $('#cs-' + k).classList.toggle('on', k === m); }); draw(); });

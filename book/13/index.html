@@ -30,6 +30,16 @@
   .fill{font-family:var(--f-head);font-size:1.05rem;line-height:2.2}
   .fill input{width:60px;text-align:center;font:inherit;border:2px solid var(--bk-line);border-radius:8px;padding:2px}
   .fill input.ok{border-color:var(--bk-green);background:#EDF9F4}.fill input.bad{border-color:var(--bk-red)}
+  .fill input{height:34px;box-sizing:border-box;vertical-align:middle;padding:0 4px;min-height:0}
+  .fill .nw{white-space:nowrap}
+  .duo>div{min-width:0}
+  svg.board{box-sizing:border-box}
+  .pick button{min-height:40px}
+  .net{cursor:default}
+  .net:not(.found) svg{filter:blur(5px);opacity:.45}
+  .net.found{cursor:pointer}
+  .net.found:hover{border-color:var(--bk-orange)}
+  .stat .hid b{color:var(--bk-ink-soft)}
 </style>
 </head>
 <body class="bk">
@@ -57,7 +67,7 @@
   <section class="act-page" id="t1">
     <div class="bk-panel">
       <div class="bk-act"><span class="bk-act__n">1</span><span class="bk-act__t">모서리를 잘라 만든 전개도</span><span class="bk-tag">의사소통</span><span class="bk-tag">추론</span></div>
-      <p class="bk-muted">격자에 정사각형 6개를 색칠해 전개도를 만들어 보세요. 접어서 정육면체가 되면 아래 11가지 중 하나에 ✓가 붙어요. 11가지를 모두 찾아보세요!</p>
+      <p class="bk-muted">격자에 정사각형 6개를 색칠해 전개도를 만들어 보세요. 접어서 정육면체가 되면 아래 흐릿한 11칸 중 하나가 선명해지며 ✓가 붙어요. 11가지를 모두 찾아보세요! (찾은 모양을 누르면 격자에 다시 놓여요)</p>
       <div class="grid" id="cn-grid"></div>
       <div class="setup"><button class="bk-btn bk-btn--ghost bk-btn--sm" id="cn-clear">지우기</button><span class="result" id="cn-res" style="margin:0"></span><span class="bk-muted" id="cn-found"></span></div>
       <div class="nets" id="cn-nets"></div>
@@ -72,9 +82,9 @@
   <!-- ===== 2 ===== -->
   <section class="act-page" id="t2" hidden>
     <div class="bk-panel">
-      <div class="bk-act"><span class="bk-act__n">2</span><span class="bk-act__t">정육면체와 정팔면체의 전개도 판별</span><span class="bk-tag">의사소통</span><span class="bk-tag">문제 해결</span></div>
+      <div class="bk-act"><span class="bk-act__n">2</span><span class="bk-act__t">정육면체의 전개도 판별</span><span class="bk-tag">의사소통</span><span class="bk-tag">문제 해결</span></div>
       <p class="bk-muted">접어 보지 않고도 알 수 있어요. 정육면체는 평행한 면이 세 쌍. 꼭짓점을 공유하는 면은 이웃하는 면이니 서로 다른 글자, 접었을 때 평행한 면은 같은 글자! 같은 글자가 3개면 전개도가 아니에요.</p>
-      <div class="setup"><div class="pick" id="pf-pick"><button class="on" data-k="0">[그림 1] 책의 예</button><button data-k="1">[그림 2]</button><button data-k="2">T자</button><button data-k="3">직접 만들기</button></div><button class="bk-btn bk-btn--mint bk-btn--sm" id="pf-label">A·B·C 표시하기</button></div>
+      <div class="setup"><div class="pick" id="pf-pick"><button class="on" data-k="0">[그림 1] 책의 예</button><button data-k="1">[그림 2]</button><button data-k="2">T자</button><button data-k="4">[반례] 2×3</button><button data-k="5">[반례] 1·5</button><button data-k="3">직접 만들기</button></div><button class="bk-btn bk-btn--mint bk-btn--sm" id="pf-label">A·B·C 표시하기</button></div>
       <div class="grid" id="pf-grid"></div>
       <div class="result" id="pf-res"></div>
     </div>
@@ -93,14 +103,14 @@
         <div><svg class="board" id="du-svg"></svg><div class="pick" id="du-pick" style="margin-top:8px"><button class="on" data-k="cube">정육면체 → 정팔면체</button><button data-k="octa">정팔면체 → 정육면체</button><button data-k="dodeca">정십이면체 → ?</button><button data-k="ico">정이십면체 → ?</button><button data-k="tetra">정사면체 → ?</button></div></div>
         <div>
           <div class="stat" id="du-stat"></div>
-          <div class="fill">정육면체: 꼭짓점 <input id="d1" data-v="8"> 모서리 <input id="d2" data-v="12"> 면 <input id="d3" data-v="6"><br>정팔면체: 꼭짓점 <input id="d4" data-v="6"> 모서리 <input id="d5" data-v="12"> 면 <input id="d6" data-v="8"><br>쌍대 다면체는 서로 면의 수가 <input id="d7" data-v="꼭짓점" style="width:80px">의 수가 되고, <input id="d8" data-v="모서리" style="width:80px">의 수는 같다.</div>
+          <div class="fill">정육면체: <span class="nw">꼭짓점 <input id="d1" data-v="8" inputmode="numeric"></span> <span class="nw">모서리 <input id="d2" data-v="12" inputmode="numeric"></span> <span class="nw">면 <input id="d3" data-v="6" inputmode="numeric"></span><br>정팔면체: <span class="nw">꼭짓점 <input id="d4" data-v="6" inputmode="numeric"></span> <span class="nw">모서리 <input id="d5" data-v="12" inputmode="numeric"></span> <span class="nw">면 <input id="d6" data-v="8" inputmode="numeric"></span><br>쌍대 다면체는 서로 면의 수가 <span class="nw"><input id="d7" data-v="꼭짓점|꼭지점" style="width:80px">의</span> 수가 되고, <span class="nw"><input id="d8" data-v="모서리" style="width:80px">의</span> 수는 같다.</div>
           <div class="setup"><button class="bk-btn bk-btn--mint bk-btn--sm" id="du-check">확인</button><span class="result" id="du-res" style="margin:0"></span></div>
         </div>
       </div>
     </div>
     <div class="bk-panel bk-panel--pink secret">
       <h3>🔍 전개도 개수가 같은 이유</h3>
-      <div class="q"><b>2</b> 정육면체 전개도에서 맞닿은 두 정사각형의 중심을 이은 선분 5개 → 쌍대인 정팔면체의 모서리 5개. 그 5개를 <b>자르면</b> 정팔면체의 전개도! 정육면체 전개도가 다르면 자르는 모서리도 달라지니, 전개도의 개수는 둘 다 <b>11</b>.</div>
+      <div class="q"><b>2</b><span>정육면체 전개도에서 맞닿은 두 정사각형의 중심을 이은 선분 5개 → 쌍대인 정팔면체의 모서리 5개. 그 5개를 <b>자르면</b> 정팔면체의 전개도! 정육면체 전개도가 다르면 자르는 모서리도 달라지니, 전개도의 개수는 둘 다 <b>11</b>.</span></div>
     </div>
   </section>
 
@@ -108,10 +118,10 @@
   <section class="act-page" id="t4" hidden>
     <div class="bk-panel bk-panel--pink">
       <div class="bk-act"><span class="bk-act__n" style="background:var(--bk-red)">★</span><span class="bk-act__t">나도 수학자 — 정다면체·아르키메데스 다면체의 쌍대</span><span class="bk-tag">의사소통</span><span class="bk-tag">문제 해결</span></div>
-      <div class="fill">정십이면체의 쌍대 다면체의 면의 모양은 합동인 <input id="e1" data-v="정삼각형" style="width:90px">이고, 한 꼭짓점에 모인 면의 수는 <input id="e2" data-v="5">이다. 쌍대 다면체의 면의 수는 정십이면체의 꼭짓점의 수와 같으므로 <input id="e3" data-v="20">이다. 따라서 정십이면체의 쌍대 다면체는 <input id="e4" data-v="정이십면체" style="width:100px">이다.<br>정이십면체의 쌍대는 <input id="e5" data-v="정십이면체" style="width:100px">, 정사면체의 쌍대는 <input id="e6" data-v="정사면체" style="width:100px">이다.</div>
+      <div class="fill">정십이면체의 쌍대 다면체의 면의 모양은 합동인 <span class="nw"><input id="e1" data-v="정삼각형|삼각형" style="width:90px">이고,</span> 한 꼭짓점에 모인 면의 수는 <span class="nw"><input id="e2" data-v="5" inputmode="numeric">이다.</span> 쌍대 다면체의 면의 수는 정십이면체의 꼭짓점의 수와 같으므로 <span class="nw"><input id="e3" data-v="20" inputmode="numeric">이다.</span> 따라서 정십이면체의 쌍대 다면체는 <span class="nw"><input id="e4" data-v="정이십면체" style="width:100px">이다.</span><br>정이십면체의 쌍대는 <span class="nw"><input id="e5" data-v="정십이면체" style="width:100px">,</span> 정사면체의 쌍대는 <span class="nw"><input id="e6" data-v="정사면체" style="width:100px">이다.</span></div>
       <div class="setup"><button class="bk-btn bk-btn--mint bk-btn--sm" id="ca-check">확인</button><span class="result" id="ca-res" style="margin:0"></span></div>
       <p class="bk-muted">아르키메데스 다면체의 쌍대를 <b>카탈랑 다면체</b>라고 해요. 십이이십면체(꼭짓점 30, 면이 정삼각형·정오각형)의 쌍대는 합동인 마름모 30개로 된 <b>마름모삼십면체</b>. 마름모의 네 꼭짓점에 모인 면이 3, 5, 3, 5개인 것이 (3,5,3,5) 배열과 대응돼요. 부산수학문화관 포토존에서 13종의 쌍대를 모두 볼 수 있어요.</p>
-      <div class="duo"><div><svg class="board" id="ca-svg"></svg></div><div class="pick" id="ca-pick"><button class="on">십이이십면체 (3,5,3,5)</button><button>육팔면체 (3,4,3,4)</button><button>깎은 정이십면체 (5,6,6)</button></div></div>
+      <div class="duo"><div><svg class="board" id="ca-svg"></svg><div class="stat" id="ca-stat"></div></div><div class="pick" id="ca-pick"><button class="on">십이이십면체 (3,5,3,5)</button><button>육팔면체 (3,4,3,4)</button><button>깎은 정이십면체 (5,6,6)</button></div></div>
     </div>
   </section>
 </div>
@@ -146,7 +156,9 @@ const netSVG = (cells, size = 14) => { const mr = Math.min(...cells.map(c => c[0
 (function () {
   const G = $('#cn-grid'); let on = new Set(); const found = new Set(JSON.parse(localStorage.getItem('nets11') || '[]'));
   const keys = NETS11.map(shapeKey);
-  function renderNets() { $('#cn-nets').innerHTML = NETS11.map((n, i) => `<div class="net ${found.has(keys[i]) ? 'found' : ''}">${netSVG(n)}<div style="text-align:center;font-size:.8rem">${found.has(keys[i]) ? '✓ 찾음' : '?'}</div></div>`).join(''); $('#cn-found').textContent = `${found.size}/11 찾음`; }
+  function renderNets() { $('#cn-nets').innerHTML = NETS11.map((n, i) => `<div class="net ${found.has(keys[i]) ? 'found' : ''}" data-i="${i}"${found.has(keys[i]) ? ' title="눌러서 격자에 놓기"' : ''}>${netSVG(n)}<div style="text-align:center;font-size:.8rem">${found.has(keys[i]) ? `✓ ${i + 1}번` : '?'}</div></div>`).join(''); $('#cn-found').textContent = `${found.size}/11 찾음`;
+    // 찾은 모양을 누르면 격자 가운데에 다시 놓기
+    $('#cn-nets').querySelectorAll('.net.found').forEach(d => d.onclick = () => { const cells = NETS11[+d.dataset.i]; const h = Math.max(...cells.map(c => c[0])) + 1, w = Math.max(...cells.map(c => c[1])) + 1; const r0 = Math.floor((5 - h) / 2), c0 = Math.floor((7 - w) / 2); on = new Set(cells.map(([r, c]) => (r + r0) + ',' + (c + c0))); render(); G.scrollIntoView({ block: 'center', behavior: 'smooth' }); }); }
   function render() { G.innerHTML = ''; for (let r = 0; r < 5; r++) for (let c = 0; c < 7; c++) { const d = document.createElement('div'); const k = r + ',' + c; d.className = on.has(k) ? 'on' : ''; d.onclick = () => { on.has(k) ? on.delete(k) : (on.size < 6 && on.add(k)); render(); }; G.appendChild(d); }
     const cells = [...on].map(k => k.split(',').map(Number)); if (cells.length < 6) { $('#cn-res').textContent = `정사각형 ${cells.length}/6`; return; }
     const f = foldCube(cells); if (f.ok) { const sk = shapeKey(cells); const idx = keys.indexOf(sk); $('#cn-res').textContent = idx >= 0 ? `🎉 정육면체 전개도! (${idx + 1}번 모양)` : '🎉 정육면체 전개도!'; if (idx >= 0) { found.add(sk); localStorage.setItem('nets11', JSON.stringify([...found])); renderNets(); } } else $('#cn-res').textContent = '❌ ' + f.why; }
@@ -155,7 +167,7 @@ const netSVG = (cells, size = 14) => { const mr = Math.min(...cells.map(c => c[0
 
 /* ===== 2 판별 ===== */
 (function () {
-  const PRE = [[[1,0],[1,1],[1,2],[0,2],[0,3],[2,1]], [[0,0],[0,1],[0,2],[1,2],[1,3],[1,4]], [[0,0],[0,1],[0,2],[1,1],[2,1],[3,1]], []];
+  const PRE = [[[1,0],[1,1],[1,2],[0,2],[0,3],[2,1]], [[0,0],[0,1],[0,2],[1,2],[1,3],[1,4]], [[0,0],[0,1],[0,2],[1,1],[2,1],[3,1]], [], [[1,1],[1,2],[1,3],[2,1],[2,2],[2,3]], [[1,1],[1,2],[1,3],[1,4],[1,5],[2,1]]]; // 4·5: 전개도가 아닌 예
   const G = $('#pf-grid'); let on = new Set(), labels = null;
   function load(k) { on = new Set(PRE[k].map(c => c.join(','))); labels = null; render(); }
   function render() { G.innerHTML = ''; for (let r = 0; r < 5; r++) for (let c = 0; c < 7; c++) { const d = document.createElement('div'); const k = r + ',' + c; d.className = (on.has(k) ? 'on' : '') + (labels && labels[k] ? ' ' + labels[k].toLowerCase() : ''); if (labels && labels[k]) d.textContent = labels[k]; d.onclick = () => { on.has(k) ? on.delete(k) : (on.size < 6 && on.add(k)); labels = null; render(); }; G.appendChild(d); }
@@ -163,28 +175,28 @@ const netSVG = (cells, size = 14) => { const mr = Math.min(...cells.map(c => c[0
   $('#pf-label').onclick = () => { const cells = [...on].map(k => k.split(',').map(Number)); if (cells.length !== 6) { $('#pf-res').textContent = '정사각형 6개를 먼저 놓으세요.'; return; } const f = foldCube(cells); if (!f.frames) { $('#pf-res').textContent = f.why; return; }
     // 법선의 축(x/y/z)으로 글자: 평행한 면 = 같은 축 → 같은 글자
     labels = {}; const cnt = { A: 0, B: 0, C: 0 }; Object.entries(f.frames).forEach(([k, fr]) => { const ax = fr.n.findIndex(x => x !== 0); const L = 'ABC'[ax]; labels[k] = L; cnt[L]++; }); render();
-    const bad = Object.entries(cnt).find(([L, n]) => n > 2); $('#pf-res').textContent = bad ? `${bad[0]}로 표시되는 면이 ${bad[1]}개 → 정육면체의 전개도가 될 수 없어요.` : '🎉 A·B·C가 2개씩 → 정육면체의 전개도!'; };
+    const bad = Object.entries(cnt).find(([L, n]) => n > 2); $('#pf-res').textContent = bad ? `${bad[0]}로 표시되는 면이 ${bad[1]}개 → 정육면체의 전개도가 될 수 없어요.` : f.ok ? '🎉 A·B·C가 2개씩 → 정육면체의 전개도!' : '글자는 2개씩이지만 접으면 같은 쪽 면이 겹쳐요 → 전개도가 아니에요.'; };
   $('#pf-pick').querySelectorAll('button').forEach(b => b.onclick = () => { $('#pf-pick').querySelectorAll('button').forEach(x => x.classList.toggle('on', x === b)); load(+b.dataset.k); }); load(0);
 })();
 
 /* ===== 3 쌍대 ===== */
 (function () {
-  const v = Poly3D.viewer($('#du-svg'), { size: 320, color: () => [.98, .66, .14] }); let k = 'cube';
+  const v = Poly3D.viewer($('#du-svg'), { size: 320, color: () => [.98, .66, .14] }); let k = 'cube', revealed = false;
   const DUAL = { cube: 'octa', octa: 'cube', dodeca: 'ico', ico: 'dodeca', tetra: 'tetra' }, NAME = { cube: '정육면체', octa: '정팔면체', dodeca: '정십이면체', ico: '정이십면체', tetra: '정사면체' };
   function show() { const base = Poly3D.P[k]; const centers = base.F.map(f => f.reduce((a, i) => Poly3D.add(a, base.V[i]), [0,0,0]).map(x => x / f.length)); const dual = { V: centers, F: Poly3D.hullFaces(centers) };
     v.set(base, (RV, proj) => { // 쌍대: 면 중심들을 같은 회전으로 — RV는 회전된 base 꼭짓점이므로 면 중심 = 회전된 꼭짓점 평균
       const RC = base.F.map(f => f.reduce((a, i) => Poly3D.add(a, RV[i]), [0,0,0]).map(x => x / f.length)); let h = '';
       dual.F.forEach(f => { const pts = f.map(i => proj(RC[i]).join(',')).join(' '); h += `<polygon points="${pts}" fill="#5BB8E8" fill-opacity=".55" stroke="#2F8FC9" stroke-width="2"/>`; }); RC.forEach(c => { const q = proj(c); h += `<circle cx="${q[0]}" cy="${q[1]}" r="4" fill="#2F8FC9"/>`; }); return h; });
-    const s1 = Poly3D.stats(base), s2 = Poly3D.stats(dual); $('#du-stat').innerHTML = `<div>${NAME[k]}<b>V${s1.V} E${s1.E} F${s1.F}</b></div><div>면 중심을 이으면 → ${NAME[DUAL[k]]}<b>V${s2.V} E${s2.E} F${s2.F}</b></div>`; }
+    const s1 = Poly3D.stats(base), s2 = Poly3D.stats(dual); $('#du-stat').innerHTML = revealed ? `<div>${NAME[k]}<b>V${s1.V} E${s1.E} F${s1.F}</b></div><div>면 중심을 이으면 → ${NAME[DUAL[k]]}<b>V${s2.V} E${s2.E} F${s2.F}</b></div>` : `<div class="hid">${NAME[k]}<b>V? E? F?</b></div><div class="hid">면 중심을 이으면 → ?<b>'확인'을 누르면 공개</b></div>`; }
   $('#du-pick').querySelectorAll('button').forEach(b => b.onclick = () => { $('#du-pick').querySelectorAll('button').forEach(x => x.classList.toggle('on', x === b)); k = b.dataset.k; show(); }); show();
   // 바깥 면을 반투명하게: 뷰어 color에 알파 없음 → polygon 뒤에 쌍대가 보이도록 CSS로 투명도
   $('#du-svg').style.setProperty('--x', 1); const st = document.createElement('style'); st.textContent = '#du-svg polygon:not([fill="#5BB8E8"]){fill-opacity:.35!important}'; document.head.appendChild(st);
-  const check = (ids, resEl) => { let ok = 0; ids.forEach(id => { const i = $('#' + id); const good = i.value.trim() === i.dataset.v; i.classList.toggle('ok', good); i.classList.toggle('bad', !good && i.value); if (good) ok++; }); $(resEl).textContent = ok === ids.length ? '🎉 모두 맞았어요!' : `${ok}/${ids.length} 맞음`; };
-  $('#du-check').onclick = () => check(['d1','d2','d3','d4','d5','d6','d7','d8'], '#du-res'); $('#ca-check').onclick = () => check(['e1','e2','e3','e4','e5','e6'], '#ca-res');
+  const check = (ids, resEl) => { let ok = 0; ids.forEach(id => { const i = $('#' + id); const good = i.dataset.v.split('|').includes(i.value.replace(/\s+/g, '')); i.classList.toggle('ok', good); i.classList.toggle('bad', !good && i.value); if (good) ok++; }); $(resEl).textContent = ok === ids.length ? '🎉 모두 맞았어요!' : `${ok}/${ids.length} 맞음`; };
+  $('#du-check').onclick = () => { check(['d1','d2','d3','d4','d5','d6','d7','d8'], '#du-res'); revealed = true; show(); }; $('#ca-check').onclick = () => check(['e1','e2','e3','e4','e5','e6'], '#ca-res');
   // ★ 카탈랑
   const cv = Poly3D.viewer($('#ca-svg'), { size: 320, color: () => [.61, .42, .84] });
   function showCat(name) { const p = Poly3D.get(name); const centers = p.F.map(f => f.reduce((a, i) => Poly3D.add(a, p.V[i]), [0,0,0]).map(x => x / f.length)); // 쌍대: 면 중심을 반지름 1로 밀어 올려 볼록 껍질
-    const DV = p.F.map(f => { const n = Poly3D.norm(Poly3D.cross(Poly3D.sub(p.V[f[1]], p.V[f[0]]), Poly3D.sub(p.V[f[2]], p.V[f[0]]))); const d = Poly3D.dot(n, p.V[f[0]]); return Poly3D.mul(n, 1 / d); }); const sc = 1 / Math.max(...DV.map(v => Math.hypot(...v))); const VV = DV.map(v => Poly3D.mul(v, sc)); const dual = { V: VV, F: Poly3D.hullFaces(VV) }; cv.set(dual); cv.spin(true); const st2 = Poly3D.stats(dual); $('#ca-res').textContent = `쌍대: 꼭짓점 ${st2.V}, 모서리 ${st2.E}, 면 ${st2.F} (${Object.entries(st2.faces).map(([k, v]) => k + '각형 ' + v).join(', ')})`; }
+    const DV = p.F.map(f => { const n = Poly3D.norm(Poly3D.cross(Poly3D.sub(p.V[f[1]], p.V[f[0]]), Poly3D.sub(p.V[f[2]], p.V[f[0]]))); const d = Poly3D.dot(n, p.V[f[0]]); return Poly3D.mul(n, 1 / d); }); const sc = 1 / Math.max(...DV.map(v => Math.hypot(...v))); const VV = DV.map(v => Poly3D.mul(v, sc)); const dual = { V: VV, F: Poly3D.hullFaces(VV) }; cv.set(dual); cv.spin(true); const st2 = Poly3D.stats(dual); $('#ca-stat').innerHTML = `<div>쌍대 꼭짓점<b>${st2.V}</b></div><div>모서리<b>${st2.E}</b></div><div>면<b>${st2.F}</b></div><div>면의 모양<b>${Object.entries(st2.faces).map(([k, v]) => k + '각형 ' + v).join(', ')}</b></div>`; }
   $('#ca-pick').querySelectorAll('button').forEach(b => b.onclick = () => { $('#ca-pick').querySelectorAll('button').forEach(x => x.classList.toggle('on', x === b)); showCat(b.textContent); }); showCat('십이이십면체 (3,5,3,5)');
 })();
 </script>

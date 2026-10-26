@@ -20,6 +20,11 @@
   .wrap-img{position:relative;max-width:600px;margin:6px auto;border-radius:16px;overflow:hidden;border:2px solid var(--bk-line);background:#fff}
   .wrap-img img{width:100%;display:block;opacity:.85}
   .wrap-img svg{position:absolute;inset:0;width:100%;height:100%;touch-action:none}
+  .wrap-img{aspect-ratio:600/420}
+  .wrap-img img{position:absolute;inset:0;width:100%;height:100%;object-fit:fill}
+  .thumb{display:block;margin:2px auto 0;width:64px;height:40px}
+  .file-btn{position:relative;overflow:hidden;display:inline-flex;align-items:center}
+  .file-btn input{position:absolute;opacity:0;width:1px;height:1px;pointer-events:none}
 </style>
 </head>
 <body class="bk">
@@ -64,11 +69,11 @@
   <section class="act-page" id="t2" hidden>
     <div class="bk-panel">
       <div class="bk-act"><span class="bk-act__n">2</span><span class="bk-act__t">격자 다각형의 넓이 구하기</span><span class="bk-tag">의사소통</span><span class="bk-tag">문제 해결</span></div>
-      <p class="bk-muted">격자점을 차례로 눌러 다각형을 그리고 '닫기'. 여러 다각형을 그려 표를 채우고 S = □ + □ − □ 를 찾아보세요.</p>
+      <p class="bk-muted">격자점을 차례로 눌러 다각형을 그리고 '닫기'(또는 첫 점 다시 누르기). 여러 다각형을 그려 표를 채우고 S = □ + □ − □ 를 찾아보세요.</p>
       <svg class="board" id="g2-svg" viewBox="0 0 600 420"></svg>
       <div class="stat" id="g2-stat"></div>
       <div class="setup"><button class="bk-btn bk-btn--primary bk-btn--sm" id="g2-close">닫기 (다각형 완성)</button><button class="bk-btn bk-btn--mint bk-btn--sm" id="g2-add">표에 기록</button><button class="bk-btn bk-btn--ghost bk-btn--sm" id="g2-clear">지우기</button><label><input type="checkbox" id="g2-show" checked> 넓이 보이기</label></div>
-      <table class="tbl" style="margin-left:0"><thead><tr><th>다각형</th><th>넓이 S</th><th>내부 점 i</th><th>둘레 점 b</th><th>i + b/2 − 1</th></tr></thead><tbody id="g2-tbl"></tbody></table>
+      <table class="tbl" style="margin-left:0"><thead><tr><th>다각형</th><th>꼭짓점</th><th>넓이 S</th><th>내부 점 i</th><th>둘레 점 b</th><th>i + b/2 − 1</th></tr></thead><tbody id="g2-tbl"></tbody></table>
       <div class="result" id="g2-res"></div>
     </div>
     <div class="bk-panel bk-panel--pink secret">
@@ -80,7 +85,7 @@
   <section class="act-page" id="t3" hidden>
     <div class="bk-panel">
       <div class="bk-act"><span class="bk-act__n">3</span><span class="bk-act__t">손바닥의 넓이 구하기</span><span class="bk-tag">의사소통</span><span class="bk-tag">정보 처리</span></div>
-      <p class="bk-muted">한 칸이 1cm인 격자에 손바닥을 대고(화면에 손을 대 보세요!) 손 모양에 가장 가까운 격자 다각형을 그린 뒤 픽의 정리로 넓이를 구해요. 격자점을 눌러 따라 그리고 '닫기'.</p>
+      <p class="bk-muted">책에서는 한 칸이 1cm인 모눈종이에 손바닥을 대고 따라 그려요. 여기서는 <b>한 칸 = 1cm로 가정</b>하고(화면 속 칸은 실제 1cm가 아니에요), 손 모양에 가까운 격자 다각형을 그린 뒤 픽의 정리로 넓이를 구해요. 격자점을 눌러 따라 그리고 '닫기' (첫 점을 다시 눌러도 닫혀요).</p>
       <svg class="board" id="g3-svg" viewBox="0 0 600 500"></svg>
       <div class="stat" id="g3-stat"></div>
       <div class="setup"><button class="bk-btn bk-btn--primary bk-btn--sm" id="g3-close">닫기</button><button class="bk-btn bk-btn--ghost bk-btn--sm" id="g3-undo">한 점 무르기</button><button class="bk-btn bk-btn--ghost bk-btn--sm" id="g3-clear">지우기</button><label><input type="checkbox" id="g3-show" checked> 넓이 보이기</label></div>
@@ -108,8 +113,8 @@
   <section class="act-page" id="t5" hidden>
     <div class="bk-panel bk-panel--pink">
       <div class="bk-act"><span class="bk-act__n" style="background:var(--bk-red)">★</span><span class="bk-act__t">나도 수학자 — 부산의 면적 구하기</span><span class="bk-tag">연결</span><span class="bk-tag">정보 처리</span></div>
-      <p class="bk-muted">지도 이미지를 올리고(캡처한 부산 지도 등) 한 칸의 실제 길이를 정하면, 격자점을 눌러 경계를 따라 그릴 수 있어요. 픽의 정리로 면적이 나옵니다. 부산광역시 실제 면적은 약 <b>770 km²</b>.</p>
-      <div class="setup"><input type="file" id="mp-file" accept="image/*"><label>한 칸 = <input class="num num--2" id="mp-scale" value="2" style="font-size:1rem;letter-spacing:0"> km</label><label>칸 수(가로) <input type="range" id="mp-n" min="8" max="40" value="20"></label><button class="bk-btn bk-btn--primary bk-btn--sm" id="mp-close">닫기</button><button class="bk-btn bk-btn--ghost bk-btn--sm" id="mp-undo">무르기</button><button class="bk-btn bk-btn--ghost bk-btn--sm" id="mp-clear">지우기</button></div>
+      <p class="bk-muted">지도 이미지를 올리고(캡처한 부산 지도 등) 한 칸의 실제 길이를 정하면, 격자점을 눌러 경계를 따라 그릴 수 있어요. 픽의 정리로 면적이 나옵니다. 부산광역시 실제 면적은 약 <b>770 km²</b>. 지도 파일이 없으면 <b>예시 지도</b>로 해 보세요.</p>
+      <div class="setup"><label class="bk-btn bk-btn--sky bk-btn--sm file-btn">🗺️ 지도 이미지 올리기<input type="file" id="mp-file" accept="image/*"></label><button class="bk-btn bk-btn--mint bk-btn--sm" id="mp-demo">예시 지도 불러오기</button><label>한 칸 = <input class="num num--2" id="mp-scale" value="2" inputmode="decimal" style="font-size:1rem;letter-spacing:0"> km</label><label>칸 수(가로) <input type="range" id="mp-n" min="8" max="40" value="20"> <b id="mp-nv">20</b></label><button class="bk-btn bk-btn--primary bk-btn--sm" id="mp-close">닫기</button><button class="bk-btn bk-btn--ghost bk-btn--sm" id="mp-undo">무르기</button><button class="bk-btn bk-btn--ghost bk-btn--sm" id="mp-clear">지우기</button></div>
       <div class="wrap-img" id="mp-wrap"><img id="mp-img" alt="" src="" hidden><svg id="mp-svg" viewBox="0 0 600 420"></svg></div>
       <div class="stat" id="mp-stat"></div>
       <div class="result" id="mp-res"></div>
@@ -129,25 +134,28 @@ function simple(P) { // 변이 서로 교차하지 않는지
   const n = P.length; const cr = (a, b, c) => (b[0] - a[0]) * (c[1] - a[1]) - (b[1] - a[1]) * (c[0] - a[0]); const inter = (p, q, r, s) => { const d1 = cr(r, s, p), d2 = cr(r, s, q), d3 = cr(p, q, r), d4 = cr(p, q, s); return (d1 > 0) !== (d2 > 0) && (d3 > 0) !== (d4 > 0); };
   for (let i = 0; i < n; i++) for (let j = i + 2; j < n; j++) { if (i === 0 && j === n - 1) continue; if (inter(P[i], P[(i + 1) % n], P[j], P[(j + 1) % n])) return false; } return true; }
 
+/* 화면 좌표 → svg 좌표 (가장 가까운 격자점으로 스냅) */
+function svgPt(svg, e) { const p = svg.createSVGPoint(); p.x = e.clientX; p.y = e.clientY; return p.matrixTransform(svg.getScreenCTM().inverse()); }
 /* 격자 편집기 */
 function gridTool(svgId, opts) {
   const svg = $('#' + svgId); const W = +svg.getAttribute('viewBox').split(' ')[2], H = +svg.getAttribute('viewBox').split(' ')[3]; const cell = opts.cell || 40; const ox = 30, oy = H - 30; const cols = Math.floor((W - 60) / cell), rows = Math.floor((H - 60) / cell);
   let polys = [], cur = []; const X = x => ox + x * cell, Y = y => oy - y * cell;
   function draw() { let h = `<g stroke="#E7DFC9" stroke-width="1">${Array.from({ length: cols + 1 }, (_, i) => `<line x1="${X(i)}" y1="${Y(0)}" x2="${X(i)}" y2="${Y(rows)}"/>`).join('')}${Array.from({ length: rows + 1 }, (_, j) => `<line x1="${X(0)}" y1="${Y(j)}" x2="${X(cols)}" y2="${Y(j)}"/>`).join('')}</g>`;
-    if (opts.axes) h += `<g font-size="11" fill="#9c8a55">${Array.from({ length: cols + 1 }, (_, i) => `<text x="${X(i)}" y="${Y(0) + 16}" text-anchor="middle">${i}</text>`).join('')}${Array.from({ length: rows + 1 }, (_, j) => `<text x="${X(0) - 10}" y="${Y(j) + 4}" text-anchor="end">${j}</text>`).join('')}</g>`;
+    if (opts.axes) h += `<g font-size="16" fill="#9c8a55">${Array.from({ length: cols + 1 }, (_, i) => `<text x="${X(i)}" y="${Y(0) + 21}" text-anchor="middle">${i}</text>`).join('')}${Array.from({ length: rows + 1 }, (_, j) => `<text x="${X(0) - 8}" y="${Y(j) + 6}" text-anchor="end">${j}</text>`).join('')}</g>`;
     const allP = [...polys]; const info = stats(); const inner = new Set(), bnd = new Set();
     if (polys.length && opts.showPts && opts.showPts()) { for (let x = 0; x <= cols; x++) for (let y = 0; y <= rows; y++) { const c = classify([x, y]); if (c === 'in') inner.add(x + ',' + y); else if (c === 'on') bnd.add(x + ',' + y); } }
     polys.forEach((P, k) => h += `<polygon points="${P.map(p => X(p[0]) + ',' + Y(p[1])).join(' ')}" fill="${k === 0 ? '#AEDBF2' : '#fff'}" fill-opacity="${k === 0 ? .6 : 1}" stroke="#2F8FC9" stroke-width="3" stroke-linejoin="round"/>`);
     if (cur.length) h += `<polyline points="${cur.map(p => X(p[0]) + ',' + Y(p[1])).join(' ')}" fill="none" stroke="#F5A623" stroke-width="3" stroke-dasharray="6 4"/>`;
-    for (let x = 0; x <= cols; x++) for (let y = 0; y <= rows; y++) { const k = x + ',' + y; const col = inner.has(k) ? '#E9533F' : bnd.has(k) ? '#3A9E82' : '#c9c3b0'; h += `<circle cx="${X(x)}" cy="${Y(y)}" r="${inner.has(k) || bnd.has(k) ? 5 : 3}" fill="${col}" data-x="${x}" data-y="${y}" style="cursor:pointer"/>`; }
-    cur.forEach((p, i) => h += `<circle cx="${X(p[0])}" cy="${Y(p[1])}" r="7" fill="#F5A623" stroke="#fff" stroke-width="2"/>`);
+    for (let x = 0; x <= cols; x++) for (let y = 0; y <= rows; y++) { const k = x + ',' + y; const col = inner.has(k) ? '#E9533F' : bnd.has(k) ? '#3A9E82' : '#c9c3b0'; h += `<circle cx="${X(x)}" cy="${Y(y)}" r="${inner.has(k) || bnd.has(k) ? 6 : 4.5}" fill="${col}" pointer-events="none"/>`; }
+    cur.forEach((p, i) => h += `<circle cx="${X(p[0])}" cy="${Y(p[1])}" r="${i === 0 && cur.length >= 3 ? 10 : 7}" fill="${i === 0 ? '#E8891B' : '#F5A623'}" stroke="#fff" stroke-width="2" pointer-events="none"/>`);
     svg.innerHTML = h; opts.onUpdate && opts.onUpdate(info); }
   function classify([x, y]) { // 'in' | 'on' | 'out' — 구멍 고려
     const onEdge = P => { for (let i = 0; i < P.length; i++) { const [x1, y1] = P[i], [x2, y2] = P[(i + 1) % P.length]; const cr = (x2 - x1) * (y - y1) - (y2 - y1) * (x - x1); if (cr === 0 && Math.min(x1, x2) <= x && x <= Math.max(x1, x2) && Math.min(y1, y2) <= y && y <= Math.max(y1, y2)) return true; } return false; };
     const inside = P => { let c = false; for (let i = 0, j = P.length - 1; i < P.length; j = i++) { const [xi, yi] = P[i], [xj, yj] = P[j]; if ((yi > y) !== (yj > y) && x < (xj - xi) * (y - yi) / (yj - yi) + xi) c = !c; } return c; };
     for (const P of polys) if (onEdge(P)) return 'on'; if (!polys.length || !inside(polys[0])) return 'out'; for (let k = 1; k < polys.length; k++) if (inside(polys[k])) return 'out'; return 'in'; }
   function stats() { if (!polys.length) return null; let i = 0, b = 0; for (let x = 0; x <= cols; x++) for (let y = 0; y <= rows; y++) { const c = classify([x, y]); if (c === 'in') i++; else if (c === 'on') b++; } const S = shoelace(polys[0]) - polys.slice(1).reduce((s, P) => s + shoelace(P), 0); return { i, b, S, h: polys.length - 1 }; }
-  svg.addEventListener('pointerdown', e => { const t = e.target.closest('circle[data-x]'); if (!t) return; const p = [+t.dataset.x, +t.dataset.y]; if (cur.length && cur[0][0] === p[0] && cur[0][1] === p[1] && cur.length >= 3) { close(); return; } if (cur.some(q => q[0] === p[0] && q[1] === p[1])) return; cur.push(p); if (opts.auto && cur.length === opts.auto) close(); else draw(); });
+  svg.style.cursor = 'crosshair';
+  svg.addEventListener('pointerdown', e => { const q = svgPt(svg, e); const gx = Math.round((q.x - ox) / cell), gy = Math.round((oy - q.y) / cell); if (gx < 0 || gx > cols || gy < 0 || gy > rows) return; if (Math.hypot(X(gx) - q.x, Y(gy) - q.y) > cell * .6) return; e.preventDefault(); const p = [gx, gy]; if (cur.length && cur[0][0] === p[0] && cur[0][1] === p[1] && cur.length >= 3) { close(); return; } if (cur.some(q => q[0] === p[0] && q[1] === p[1])) return; cur.push(p); if (opts.auto && cur.length === opts.auto) close(); else draw(); });
   function close() { if (cur.length < 3) return; if (!simple(cur)) { alert('변이 서로 교차해요. 다시 그려 보세요.'); cur = []; draw(); return; } if (opts.single) polys = [cur]; else polys.push(cur); cur = []; draw(); }
   draw();
   return { draw, close, clear: () => { polys = []; cur = []; draw(); }, undo: () => { if (cur.length) cur.pop(); else polys.pop(); draw(); }, set: ps => { polys = ps; cur = []; draw(); }, stats, get polys() { return polys; } };
@@ -160,7 +168,7 @@ $('#g1-ex').onclick = () => g1.set([[[1, 1], [5, 2], [3, 5]]]); $('#g1-clear').o
 /* 2 */
 let g2n = 0; const g2 = gridTool('g2-svg', { single: true, showPts: () => $('#g2-show').checked, onUpdate: s => { $('#g2-stat').innerHTML = statHtml(s, $('#g2-show').checked); } });
 $('#g2-close').onclick = g2.close; $('#g2-clear').onclick = g2.clear; $('#g2-show').onchange = g2.draw;
-$('#g2-add').onclick = () => { const s = g2.stats(); if (!s) return; g2n++; const f = s.i + s.b / 2 - 1; $('#g2-tbl').innerHTML += `<tr><td>${g2n}</td><td>${s.S}</td><td>${s.i}</td><td>${s.b}</td><td style="color:${f === s.S ? 'var(--bk-green)' : 'var(--bk-red)'}">${f}</td></tr>`; $('#g2-res').textContent = g2n >= 3 ? '🎉 S = i + b/2 − 1 — 픽의 정리!' : '다각형을 더 그려 표를 채워 보세요.'; };
+$('#g2-add').onclick = () => { const s = g2.stats(); if (!s) { $('#g2-res').textContent = '먼저 다각형을 그리고 닫아 주세요.'; return; } g2n++; const f = s.i + s.b / 2 - 1; const P = g2.polys[0]; const xs = P.map(p => p[0]), ys = P.map(p => p[1]); const mx = Math.min(...xs), my = Math.max(...ys), sc = Math.min(56 / Math.max(1, Math.max(...xs) - mx), 32 / Math.max(1, my - Math.min(...ys))); const th = `<svg class="thumb" viewBox="0 0 64 40" aria-hidden="true"><polygon points="${P.map(p => (4 + (p[0] - mx) * sc).toFixed(1) + ',' + (4 + (my - p[1]) * sc).toFixed(1)).join(' ')}" fill="#AEDBF2" stroke="#2F8FC9" stroke-width="1.5" stroke-linejoin="round"/></svg>`; $('#g2-tbl').innerHTML += `<tr><td>${g2n}${th}</td><td>${P.length}개</td><td>${s.S}</td><td>${s.i}</td><td>${s.b}</td><td style="color:${f === s.S ? 'var(--bk-green)' : 'var(--bk-red)'}">${f}</td></tr>`; $('#g2-res').textContent = g2n >= 3 ? '🎉 S = i + b/2 − 1 — 픽의 정리!' : '다각형을 더 그려 표를 채워 보세요.'; };
 /* 3 */
 const g3 = gridTool('g3-svg', { single: true, cell: 32, showPts: () => $('#g3-show').checked, onUpdate: s => { $('#g3-stat').innerHTML = statHtml(s, $('#g3-show').checked); $('#g3-res').textContent = s ? `손바닥 넓이 ≈ ${s.i} + ${s.b}/2 − 1 = ${s.i + s.b / 2 - 1} cm²` : ''; } });
 $('#g3-close').onclick = g3.close; $('#g3-undo').onclick = g3.undo; $('#g3-clear').onclick = g3.clear; $('#g3-show').onchange = g3.draw;
@@ -170,18 +178,33 @@ $('#g4-close').onclick = g4.close; $('#g4-clear').onclick = g4.clear; $('#g4-sho
 
 /* ★ 지도 */
 (function () {
-  const svg = $('#mp-svg'); let cur = [], poly = null, n = 20; const W = 600, H = 420;
-  function draw() { const cell = W / n; const H2 = +svg.getAttribute('viewBox').split(' ')[3]; const rows = Math.floor(H2 / cell); let h = `<g stroke="#2F8FC9" stroke-opacity=".5">${Array.from({ length: n + 1 }, (_, i) => `<line x1="${i * cell}" y1="0" x2="${i * cell}" y2="${rows * cell}"/>`).join('')}${Array.from({ length: rows + 1 }, (_, j) => `<line x1="0" y1="${j * cell}" x2="${n * cell}" y2="${j * cell}"/>`).join('')}</g>`;
+  const svg = $('#mp-svg'), wrap = $('#mp-wrap'), img = $('#mp-img'); let cur = [], poly = null, n = 20, demo = false, H = 420; const W = 600;
+  /* 예시: 부산 모양을 단순하게 그린 가상의 경계 (가로 600 = 약 50 km) */
+  const DEMO = [[90,120],[150,90],[220,70],[280,80],[340,40],[400,20],[450,30],[480,70],[500,120],[510,170],[490,210],[470,240],[450,260],[420,280],[400,300],[380,320],[360,350],[330,340],[310,360],[290,380],[260,360],[240,330],[215,345],[195,380],[170,350],[150,330],[120,340],[100,370],[70,350],[60,300],[75,250],[60,200],[70,160]], DEMO_KM = 50;
+  const demoArea = shoelace(DEMO) * (DEMO_KM / W) ** 2;
+  function setH(h) { H = h; svg.setAttribute('viewBox', `0 0 ${W} ${H}`); wrap.style.aspectRatio = `${W} / ${H}`; }
+  function scaleVal() { const v = $('#mp-scale').value.trim().replace(',', '.'); const k = Number(v); return v && isFinite(k) && k > 0 ? k : null; }
+  function draw() { const cell = W / n; const rows = Math.floor(H / cell); let h = '';
+    if (demo) h += `<polygon points="${DEMO.join(' ')}" fill="#DDEFD6" stroke="#5E8C4A" stroke-width="2.5" stroke-linejoin="round"/><text x="${W - 10}" y="${H - 12}" text-anchor="end" font-size="15" fill="#5E8C4A">예시 지도 (단순화, 가로 약 ${DEMO_KM} km)</text>`;
+    h += `<g stroke="#2F8FC9" stroke-opacity=".5">${Array.from({ length: n + 1 }, (_, i) => `<line x1="${i * cell}" y1="0" x2="${i * cell}" y2="${rows * cell}"/>`).join('')}${Array.from({ length: rows + 1 }, (_, j) => `<line x1="0" y1="${j * cell}" x2="${n * cell}" y2="${j * cell}"/>`).join('')}</g>`;
     if (poly) h += `<polygon points="${poly.map(p => p[0] * cell + ',' + p[1] * cell).join(' ')}" fill="#F5A623" fill-opacity=".35" stroke="#E8891B" stroke-width="3"/>`;
     if (cur.length) h += `<polyline points="${cur.map(p => p[0] * cell + ',' + p[1] * cell).join(' ')}" fill="none" stroke="#E9533F" stroke-width="3"/>`;
-    for (let x = 0; x <= n; x++) for (let y = 0; y <= rows; y++) h += `<circle cx="${x * cell}" cy="${y * cell}" r="4" fill="#2F8FC9" data-x="${x}" data-y="${y}" style="cursor:pointer"/>`;
-    cur.forEach(p => h += `<circle cx="${p[0] * cell}" cy="${p[1] * cell}" r="6" fill="#E9533F" stroke="#fff"/>`); svg.innerHTML = h;
-    if (poly) { const i = countIn(poly, rows), b = boundaryPts(poly); const S = i + b / 2 - 1; const k = +$('#mp-scale').value || 1; $('#mp-stat').innerHTML = `<div>내부 점<b>${i}</b></div><div>둘레 점<b>${b}</b></div><div>칸 넓이<b>${S}</b></div><div class="hl">면적<b>${(S * k * k).toFixed(1)} km²</b></div>`; $('#mp-res').textContent = `S = ${i} + ${b}/2 − 1 = ${S}칸 × (${k} km)² = ${(S * k * k).toFixed(1)} km²`; } else { $('#mp-stat').innerHTML = ''; $('#mp-res').textContent = cur.length ? `점 ${cur.length}개 — 경계를 따라 계속 누르고 '닫기'` : '지도를 올리고 격자점을 눌러 경계를 따라 그리세요.'; } }
+    const r = Math.max(2.5, Math.min(4, cell / 7));
+    for (let x = 0; x <= n; x++) for (let y = 0; y <= rows; y++) h += `<circle cx="${x * cell}" cy="${y * cell}" r="${r}" fill="#2F8FC9" pointer-events="none"/>`;
+    cur.forEach((p, i) => h += `<circle cx="${p[0] * cell}" cy="${p[1] * cell}" r="${i === 0 && cur.length >= 3 ? 9 : 6}" fill="${i === 0 ? '#B23A2A' : '#E9533F'}" stroke="#fff" pointer-events="none"/>`); svg.innerHTML = h;
+    if (poly) { const i = countIn(poly, rows), b = boundaryPts(poly); const S = i + b / 2 - 1; const k = scaleVal();
+      if (!k) { $('#mp-stat').innerHTML = `<div>내부 점<b>${i}</b></div><div>둘레 점<b>${b}</b></div><div>칸 넓이<b>${S}</b></div>`; $('#mp-res').textContent = '한 칸의 길이를 0보다 큰 수로 입력하세요 (예: 2 또는 2.5).'; return; }
+      const A = S * k * k; $('#mp-stat').innerHTML = `<div>내부 점<b>${i}</b></div><div>둘레 점<b>${b}</b></div><div>칸 넓이<b>${S}</b></div><div class="hl">면적<b>${A.toFixed(1)} km²</b></div>`; $('#mp-res').textContent = `S = ${i} + ${b}/2 − 1 = ${S}칸 × (${k} km)² = ${A.toFixed(1)} km²` + (demo ? ` (예시 지도의 실제 넓이 ≈ ${demoArea.toFixed(0)} km²)` : ''); }
+    else { $('#mp-stat').innerHTML = ''; $('#mp-res').textContent = cur.length ? `점 ${cur.length}개 — 경계를 따라 계속 누르고 '닫기' (첫 점을 다시 눌러도 돼요)` : '지도를 올리거나 예시 지도를 불러온 뒤, 격자점을 눌러 경계를 따라 그리세요.'; } }
   function countIn(P, rows) { let i = 0; for (let x = 0; x <= n; x++) for (let y = 0; y <= rows; y++) { let c = false, on = false; for (let a = 0, bb = P.length - 1; a < P.length; bb = a++) { const [xi, yi] = P[a], [xj, yj] = P[bb]; const cr = (xj - xi) * (y - yi) - (yj - yi) * (x - xi); if (cr === 0 && Math.min(xi, xj) <= x && x <= Math.max(xi, xj) && Math.min(yi, yj) <= y && y <= Math.max(yi, yj)) on = true; if ((yi > y) !== (yj > y) && x < (xj - xi) * (y - yi) / (yj - yi) + xi) c = !c; } if (c && !on) i++; } return i; }
-  svg.addEventListener('pointerdown', e => { const t = e.target.closest('circle[data-x]'); if (!t) return; const p = [+t.dataset.x, +t.dataset.y]; if (cur.some(q => q[0] === p[0] && q[1] === p[1])) return; cur.push(p); draw(); });
-  $('#mp-close').onclick = () => { if (cur.length < 3) return; if (!simple(cur)) { alert('변이 교차해요.'); return; } poly = cur; cur = []; draw(); }; $('#mp-undo').onclick = () => { if (cur.length) cur.pop(); else poly = null; draw(); }; $('#mp-clear').onclick = () => { cur = []; poly = null; draw(); };
-  $('#mp-n').oninput = () => { n = +$('#mp-n').value; cur = []; poly = null; draw(); }; $('#mp-scale').oninput = draw;
-  $('#mp-file').onchange = e => { const f = e.target.files[0]; if (!f) return; const img = $('#mp-img'); img.src = URL.createObjectURL(f); img.hidden = false; img.onload = () => { const r = img.naturalHeight / img.naturalWidth; svg.setAttribute('viewBox', `0 0 600 ${Math.round(600 * r)}`); draw(); }; };
+  function closePoly() { if (cur.length < 3) return; if (!simple(cur)) { alert('변이 교차해요.'); return; } poly = cur; cur = []; draw(); }
+  svg.style.cursor = 'crosshair';
+  svg.addEventListener('pointerdown', e => { const cell = W / n, rows = Math.floor(H / cell); const q = svgPt(svg, e); const x = Math.round(q.x / cell), y = Math.round(q.y / cell); if (x < 0 || x > n || y < 0 || y > rows) return; if (Math.hypot(x * cell - q.x, y * cell - q.y) > cell * .6) return; e.preventDefault(); const p = [x, y]; if (cur.length >= 3 && cur[0][0] === x && cur[0][1] === y) { closePoly(); return; } if (cur.some(q => q[0] === p[0] && q[1] === p[1])) return; if (poly) poly = null; cur.push(p); draw(); });
+  $('#mp-close').onclick = closePoly; $('#mp-undo').onclick = () => { if (cur.length) cur.pop(); else poly = null; draw(); }; $('#mp-clear').onclick = () => { cur = []; poly = null; draw(); };
+  const demoScale = () => { if (demo) $('#mp-scale').value = +(DEMO_KM / n).toFixed(2); };
+  $('#mp-n').oninput = () => { n = +$('#mp-n').value; $('#mp-nv').textContent = n; cur = []; poly = null; demoScale(); draw(); }; $('#mp-scale').oninput = draw;
+  $('#mp-demo').onclick = () => { demo = true; img.hidden = true; img.removeAttribute('src'); setH(420); cur = []; poly = null; demoScale(); draw(); };
+  $('#mp-file').onchange = e => { const f = e.target.files[0]; if (!f) return; img.src = URL.createObjectURL(f); img.onload = () => { demo = false; img.hidden = false; setH(Math.round(W * img.naturalHeight / img.naturalWidth)); cur = []; poly = null; draw(); }; };
   draw();
 })();
 </script>

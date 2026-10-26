@@ -18,7 +18,7 @@
   .mcard.on{border-color:var(--bk-orange);background:#FFF4DF}
   .mcard.asking{border-color:var(--bk-red);box-shadow:0 0 0 4px #FDEEF2}
   .rods{display:flex;gap:10px;align-items:flex-end;justify-content:center;flex-wrap:wrap;min-height:60px}
-  .rodbtn{border:2px solid var(--bk-ink);border-radius:6px;background:#F3D98B;height:30px;cursor:pointer;font-family:var(--f-head);display:grid;place-items:center;-webkit-tap-highlight-color:transparent}
+  .rodbtn{border:2px solid var(--bk-ink);border-radius:6px;background:#F3D98B;height:40px;min-width:40px;box-sizing:border-box;cursor:pointer;font-family:var(--f-head);display:grid;place-items:center;-webkit-tap-highlight-color:transparent}
   .rodbtn.on{background:var(--bk-orange);color:#fff}
   .ruler{position:relative;height:60px;background:#fff;border:2px solid var(--bk-line);border-radius:10px;margin:8px 0;overflow:hidden}
   .ruler .pen{position:absolute;left:10px;top:8px;height:16px;background:linear-gradient(90deg,#2F8FC9,#9B6BD6);border-radius:8px}
@@ -109,7 +109,7 @@
       <div class="result" id="bl-res"></div>
       <div class="setup"><label>단어 암호화: <input class="num" id="bl-word" value="MATH" style="letter-spacing:.1em;width:140px;text-transform:uppercase"></label><button class="bk-btn bk-btn--primary bk-btn--sm" id="bl-enc">전구로 바꾸기</button><button class="bk-btn bk-btn--mint bk-btn--sm" id="bl-quiz">암호 풀기 퀴즈</button></div>
       <div class="cipher" id="bl-out"></div>
-      <details class="reveal" style="margin-left:0"><summary>알파벳 표 보기</summary><div class="alpha" id="bl-tbl"></div></details>
+      <details class="reveal" style="margin-left:0"><summary>알파벳 표 보기 (전구 순서 1·2·4·8·16)</summary><div class="alpha" id="bl-tbl"></div></details>
     </div>
     <div class="bk-panel bk-panel--pink secret">
       <h3>🔍 생각해 보기</h3>
@@ -137,7 +137,7 @@ document.querySelectorAll('#tabs .tab').forEach(b => b.onclick = () => { documen
 /* ===== 1 마법 카드 ===== */
 (function () {
   let k = 4, cards = [], step = 0, sum = 0, playing = false;
-  function build() { k = +$('#mc-n').value; const max = 2 ** k - 1; cards = []; for (let i = 0; i < k; i++) cards.push({ bit: 2 ** i, nums: [] }); for (let n = 1; n <= max; n++) cards.forEach(c => { if (n & c.bit) c.nums.push(n); }); render(); $('#mc-say').textContent = `1부터 ${max}까지의 수 중 하나를 생각하세요. 준비되면 '마술 시작'!`; }
+  function build() { k = +$('#mc-n').value; const max = 2 ** k - 1; playing = false; step = 0; sum = 0; $('#mc-btns').hidden = true; cards = []; for (let i = 0; i < k; i++) cards.push({ bit: 2 ** i, nums: [] }); for (let n = 1; n <= max; n++) cards.forEach(c => { if (n & c.bit) c.nums.push(n); }); render(); $('#mc-say').textContent = `1부터 ${max}까지의 수 중 하나를 생각하세요. 준비되면 '마술 시작'!`; }
   function render() { $('#mc-cards').innerHTML = cards.map((c, i) => `<div class="mcard ${playing && i === step ? 'asking' : ''} ${c.yes ? 'on' : ''}"><h4>카드 ${i + 1}</h4><div class="g">${c.nums.map(n => `<span>${n}</span>`).join('')}</div></div>`).join(''); }
   $('#mc-n').onchange = build; $('#mc-start').onclick = () => { cards.forEach(c => c.yes = false); step = 0; sum = 0; playing = true; $('#mc-btns').hidden = false; ask(); };
   function ask() { render(); $('#mc-say').textContent = `카드 ${step + 1}에 생각한 수가 있나요?`; }
@@ -147,9 +147,10 @@ document.querySelectorAll('#tabs .tab').forEach(b => b.onclick = () => { documen
 
 /* ===== 2 막대 ===== */
 (function () {
-  let rods = [1, 2, 4, 8], on = new Set(), target = 11; const UNIT = 30;
+  let rods = [1, 2, 4, 8], on = new Set(), target = 11; let UNIT = 30;
+  function calcUnit() { const w = $('#rd-pen').parentElement.clientWidth || 480; UNIT = Math.max(12, Math.min(30, (w - 20) / 15)); }
   function sums() { const s = new Set([0]); rods.forEach(r => [...s].forEach(x => s.add(x + r))); s.delete(0); return s; }
-  function render() { $('#rd-pen').style.width = target * UNIT + 'px'; $('#rd-rods').innerHTML = rods.map((r, i) => `<div class="rodbtn ${on.has(i) ? 'on' : ''}" style="width:${r * UNIT}px" data-i="${i}">${r}</div>`).join(''); $('#rd-rods').querySelectorAll('.rodbtn').forEach(b => b.onclick = () => { const i = +b.dataset.i; on.has(i) ? on.delete(i) : on.add(i); render(); });
+  function render() { calcUnit(); $('#rd-pen').style.width = target * UNIT + 'px'; $('#rd-rods').innerHTML = rods.map((r, i) => `<div class="rodbtn ${on.has(i) ? 'on' : ''}" style="width:${Math.max(40, r * UNIT)}px" data-i="${i}">${r}</div>`).join(''); $('#rd-rods').querySelectorAll('.rodbtn').forEach(b => b.onclick = () => { const i = +b.dataset.i; on.has(i) ? on.delete(i) : on.add(i); render(); });
     const used = [...on].map(i => rods[i]); const tot = used.reduce((a, b) => a + b, 0); $('#rd-fill').innerHTML = used.map(r => `<i style="width:${r * UNIT}px"></i>`).join('');
     $('#rd-res').textContent = tot === 0 ? '막대를 골라 보세요.' : tot === target ? `🎉 ${used.join(' + ')} = ${target}. 볼펜의 길이는 ${target}!` : `${used.join(' + ')} = ${tot} (볼펜은 ${tot < target ? '더 길어요' : '더 짧아요'})`;
     const S = sums(); const maxL = rods.reduce((a, b) => a + b, 0); $('#rd-lens').innerHTML = Array.from({ length: Math.min(15, maxL) }, (_, i) => `<span class="${S.has(i + 1) ? 'ok' : ''}">${i + 1}</span>`).join('') + `<span class="bk-muted" style="width:auto;padding:0 8px">${[...S].filter(x => x <= 15).length}가지</span>`; }
@@ -157,21 +158,26 @@ document.querySelectorAll('#tabs .tab').forEach(b => b.onclick = () => { documen
   $('#rd-set2').onclick = () => { rods = [1, 2, 4, 8]; $('#rd-set2').classList.remove('bk-btn--ghost'); $('#rd-set3').classList.add('bk-btn--ghost'); newPen(); };
   $('#rd-set3').onclick = () => { rods = [1, 3, 9]; $('#rd-set3').classList.remove('bk-btn--ghost'); $('#rd-set2').classList.add('bk-btn--ghost'); newPen(); };
   $('#rd-new').onclick = newPen; newPen();
+  window.addEventListener('resize', render); document.querySelector('#tabs .tab[data-t="t2"]').addEventListener('click', () => requestAnimationFrame(render));
 })();
 
 /* ===== 3 전구 ===== */
 (function () {
   const BITS = [1, 2, 4, 8, 16]; let st = [0, 0, 0, 0, 0]; const L = n => n >= 1 && n <= 26 ? String.fromCharCode(64 + n) : '—';
   function render() { $('#bl-bulbs').innerHTML = BITS.map((b, i) => `<div class="bulb ${st[i] ? 'on' : ''}" data-i="${i}"><i>${st[i] ? '💡' : ''}</i><small>${b} 전구</small></div>`).join(''); $('#bl-bulbs').querySelectorAll('.bulb').forEach(d => d.onclick = () => { st[+d.dataset.i] ^= 1; render(); });
-    const n = st.reduce((s, x, i) => s + x * BITS[i], 0); $('#bl-res').textContent = `${st.join('')} → ${BITS.filter((_, i) => st[i]).join(' + ') || 0} = ${n} → 알파벳 ${L(n)}`; }
-  $('#bl-enc').onclick = () => { const w = $('#bl-word').value.toUpperCase().replace(/[^A-Z]/g, ''); $('#bl-out').innerHTML = [...w].map(ch => { const n = ch.charCodeAt(0) - 64; return `<div class="row"><b>${ch}</b><span class="bk-muted" style="width:30px">${n}</span>${BITS.map(b => `<span class="b ${n & b ? 'on' : ''}"></span>`).join('')}<span class="bk-muted">${BITS.map(b => n & b ? 1 : 0).join('')}</span></div>`; }).join(''); };
-  $('#bl-quiz').onclick = () => { const words = ['BUSAN', 'MATH', 'ONCHEON', 'PIXEL', 'EULER', 'GAUSS']; const w = words[ri(words.length)]; $('#bl-out').innerHTML = [...w].map(ch => { const n = ch.charCodeAt(0) - 64; return `<div class="row"><b>?</b>${BITS.map(b => `<span class="b ${n & b ? 'on' : ''}"></span>`).join('')}</div>`; }).join('') + `<div class="row"><input class="num" style="letter-spacing:.1em;width:160px;text-transform:uppercase" placeholder="단어는?" id="bl-ans"><button class="bk-btn bk-btn--sky bk-btn--sm" id="bl-chk">확인</button></div>`; $('#bl-chk').onclick = () => alert($('#bl-ans').value.toUpperCase() === w ? '🎉 정답!' : '다시 생각해 보세요. 전구 1·2·4·8·16을 더해 보면…'); };
+    const n = st.reduce((s, x, i) => s + x * BITS[i], 0); const bin = n.toString(2).padStart(5, '0');
+    $('#bl-res').innerHTML = `<span class="bk-muted" style="font-size:.8rem">전구 순서(1·2·4·8·16)</span> ${st.join('')} → ${BITS.filter((_, i) => st[i]).join(' + ') || 0} = ${n} → 알파벳 <b>${L(n)}</b> <span class="bk-muted" style="font-size:.8rem;white-space:nowrap">(이진수 ${bin}₍₂₎)</span>`; }
+  const bitsOf = n => `<span class="bk-muted" style="font-size:.8rem">${BITS.map(b => n & b ? 1 : 0).join('')} <span style="opacity:.7">/ 이진수 ${n.toString(2).padStart(5, '0')}</span></span>`;
+  $('#bl-enc').onclick = () => { const w = $('#bl-word').value.toUpperCase().replace(/[^A-Z]/g, ''); $('#bl-out').innerHTML = `<div class="bk-muted" style="font-size:.8rem">전구는 1·2·4·8·16 순서 (보통 이진수와는 반대 순서예요)</div>` + [...w].map(ch => { const n = ch.charCodeAt(0) - 64; return `<div class="row"><b>${ch}</b><span class="bk-muted" style="width:30px">${n}</span>${BITS.map(b => `<span class="b ${n & b ? 'on' : ''}"></span>`).join('')}${bitsOf(n)}</div>`; }).join(''); };
+  $('#bl-quiz').onclick = () => { const words = ['BUSAN', 'MATH', 'ONCHEON', 'PIXEL', 'EULER', 'GAUSS']; const w = words[ri(words.length)]; $('#bl-out').innerHTML = `<div class="bk-muted" style="font-size:.8rem">전구 순서 1·2·4·8·16 — 켜진 전구의 수를 더해 글자를 찾으세요.</div>` + [...w].map(ch => { const n = ch.charCodeAt(0) - 64; return `<div class="row"><b>?</b>${BITS.map(b => `<span class="b ${n & b ? 'on' : ''}"></span>`).join('')}</div>`; }).join('') + `<div class="row"><input class="num" style="letter-spacing:.1em;width:160px;text-transform:uppercase" placeholder="단어는?" id="bl-ans"><button class="bk-btn bk-btn--sky bk-btn--sm" id="bl-chk">확인</button></div>`;
+    const chk = () => { const ok = $('#bl-ans').value.toUpperCase().trim() === w; $('#bl-res').innerHTML = ok ? `🎉 정답! <b>${w}</b>` : `다시 생각해 보세요. 켜진 전구의 수(1·2·4·8·16)를 더해 보면…`; if (ok) $('#bl-out').querySelectorAll('.row b').forEach((b, i) => { if (b.textContent === '?') b.textContent = w[i]; }); };
+    $('#bl-chk').onclick = chk; $('#bl-ans').onkeydown = e => { if (e.key === 'Enter') chk(); }; $('#bl-ans').focus(); };
   $('#bl-tbl').innerHTML = Array.from({ length: 26 }, (_, i) => `<span>${L(i + 1)} ${String(i + 1).padStart(2)} ${BITS.map(b => (i + 1) & b ? 1 : 0).join(' ')}</span>`).join('');
   render();
 })();
 
 /* ===== ★ 진법 ===== */
-(function () { const run = () => { const n = Math.max(0, Math.floor(+$('#bs-n').value || 0)); const b2 = n.toString(2); $('#bs-out').innerHTML = `십진수 <b>${n}</b> = ${[...String(n)].map((d, i, a) => `${d}×10<sup>${a.length - 1 - i}</sup>`).join(' + ')}<br>이진수 <b>${b2}₍₂₎</b> = ${[...b2].map((d, i, a) => d === '1' ? `2<sup>${a.length - 1 - i}</sup>` : null).filter(Boolean).join(' + ')} = ${n}<br>60진법: ${Math.floor(n / 60)}×60 + ${n % 60} → 바빌로니아 식으로 (${Math.floor(n / 60)}, ${n % 60})`; }; $('#bs-n').oninput = run; run(); })();
+(function () { const run = () => { const n = Math.max(0, Math.floor(+$('#bs-n').value || 0)); const b2 = n.toString(2); $('#bs-out').innerHTML = `십진수 <b>${n}</b> = ${[...String(n)].map((d, i, a) => `${d}×10<sup>${a.length - 1 - i}</sup>`).join(' + ')}<br>이진수 <b>${b2}₍₂₎</b> = ${[...b2].map((d, i, a) => d === '1' ? `2<sup>${a.length - 1 - i}</sup>` : null).filter(Boolean).join(' + ')} = ${n}<br>60진법: ${(() => { const ds = []; let q = n; do { ds.unshift(q % 60); q = Math.floor(q / 60); } while (q > 0); const terms = ds.map((d, i) => { const p = ds.length - 1 - i; return p === 0 ? `${d}` : p === 1 ? `${d}×60` : `${d}×60<sup>${p}</sup>`; }); return `${terms.join(' + ')} → 바빌로니아 식으로 (${ds.join(', ')})`; })()}`; }; $('#bs-n').oninput = run; run(); })();
 </script>
 </body>
 </html>

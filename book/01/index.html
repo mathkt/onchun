@@ -6,6 +6,18 @@
 <title>01 수학 마술 · 부산의 활동수학</title>
 <link rel="stylesheet" href="../../common.css">
 <link rel="stylesheet" href="../book.css">
+<style>
+  @media(max-width:480px){
+    .rods{gap:5px}
+    .rod{min-width:0;padding:3px 4px;font-size:1.1rem}
+    .rods--slots{padding:8px 6px;flex-wrap:nowrap}
+    .rods--slots .rod{flex:1 1 0}
+    .mult{gap:2px;margin:8px -10px 12px}
+    .mcell{font-size:.8rem;border-radius:4px}
+  }
+  .mcell:not(.diag):not(.mcell--h){cursor:default}
+  .mult-hint{font-size:.85rem;color:var(--bk-ink-soft);margin:-6px 0 8px}
+</style>
 </head>
 <body class="bk">
 <script src="../../common.js" data-num="01" data-name="수학 마술" data-sub="1단원 수학 놀이 활동" data-home="../../" data-up="../index.html#u1" data-up-name="책 목차"></script>
@@ -141,7 +153,7 @@
       <details class="reveal"><summary>힌트 보기</summary><p>어떤 수와 그 수를 뒤집은 수의 차는 항상 <b>9의 배수</b>예요. 9의 배수의 자릿수 합도 9의 배수(9, 18, 27…)이고, 문양표에서 9·18·27 자리에는 모두 같은 ♣가 있어요.</p></details>
       <div class="q"><b>3</b> 세 자리 수나 다섯 자리 수로 바꾸어 위의 활동을 하면 어떤 결과가 나올지 예측해 보자.</div>
       <div class="q"><b>4</b> 세 자리·다섯 자리 수로 직접 해 보자.</div>
-      <div class="bk-row"><input class="num" type="tel" maxlength="5" inputmode="numeric" placeholder="세 자리 또는 다섯 자리" id="s3-exp"><button class="bk-btn bk-btn--mint bk-btn--sm" id="s3-exp-go">계산</button><span id="s3-exp-out" class="hint"></span></div>
+      <div class="bk-row"><input class="num" type="tel" maxlength="5" inputmode="numeric" placeholder="예: 275" id="s3-exp"><button class="bk-btn bk-btn--mint bk-btn--sm" id="s3-exp-go">계산</button><span id="s3-exp-out" class="hint"></span></div>
     </div>
   </section>
 
@@ -179,6 +191,7 @@
       <div class="bk-act"><span class="bk-act__n" style="background:var(--bk-red)">★</span><span class="bk-act__t">나도 수학자 — 곱셈표 속에 숨어있는 피타고라스 수</span><span class="bk-tag">추론</span><span class="bk-tag">의사소통</span><span class="bk-tag">연결</span></div>
       <p class="bk-muted">곱셈표의 <b>노란색 대각선</b> 일부를 한 대각선으로 하는 정사각형을 생각해 보세요. 표에서 <b>왼쪽 위 꼭짓점</b>과 <b>오른쪽 아래 꼭짓점</b>을 차례로 누르면 정사각형이 생겨요.</p>
       <div class="mult" id="mult"></div>
+      <p class="mult-hint">노란 대각선 위의 칸만 누를 수 있어요.</p>
       <div class="pyth" id="pyth" hidden>
         <div class="pyth__corner">꼭짓점 4개: <b id="py-c"></b></div>
         <div class="bubble">대각선 위의 두 수 <b id="py-two"></b>의 합과 차를 각각 구해 보세요.</div>
@@ -246,12 +259,13 @@ const ri = n => Math.floor(Math.random() * n);
     }
     if (stage === 2) {
       $('#s1-pred').textContent = $('#s1-pred').dataset.v; $('#s1-box').classList.add('open');
-      say('여기까지 신기한 수학 마술이었습니다! 🎉 아래에서 비밀을 밝혀 보세요.'); $('#s1-next').disabled = true;
+      say('여기까지 신기한 수학 마술이었습니다! 🎉 아래에서 비밀을 밝혀 보세요.'); $('#s1-next').textContent = '다시 하기 🔄'; stage = 3;
       const tb = $('#s1-tbl tbody'); tb.innerHTML = `<tr><td>${nums[0]} (처음 수)</td><td>— (상자에 ${$('#s1-pred').dataset.v})</td><td></td></tr>`;
       for (let i = 1; i + 1 < nums.length; i += 2) tb.innerHTML += `<tr><td>${nums[i]}</td><td>${nums[i + 1]}</td><td>${nums[i] + nums[i + 1]}</td></tr>`;
       tb.innerHTML += `<tr><td colspan="3">예언 = 처음 수 ${nums[0]} + 9999 × ${pairs} = ${nums[0] + 9999 * pairs}</td></tr>`;
-      $('#s1-secret').hidden = false;
+      $('#s1-secret').hidden = false; return;
     }
+    if (stage === 3) { $('#s1-reset').click(); }
   };
   $('#s1-reset').onclick = () => {
     stage = 0; nums = []; pairs = +$('#s1-pairs').value; $('#s1-hint').textContent = '';
@@ -306,7 +320,7 @@ const ri = n => Math.floor(Math.random() * n);
     if (step === 0) {
       const v = $('#s3-n').value.trim();
       if (!/^\d{4}$/.test(v) || new Set(v).size !== 4) { alert('서로 다른 4개의 숫자로 된 네 자리 수를 넣어 주세요.'); return; }
-      n = +v; rev = rv(v); $('#s3-rev').textContent = String(rev).padStart(4,'0'); $('#s3-s2').hidden = false; step = 1; return;
+      n = +v; rev = rv(v); $('#s3-rev').textContent = rev; $('#s3-s2').hidden = false; step = 1; return;
     }
     if (step === 1) { diff = Math.abs(n - rev); $('#s3-diff').textContent = `${Math.max(n,rev)} − ${Math.min(n,rev)} = ${diff}`; $('#s3-s3').hidden = false; step = 2; return; }
     if (step === 2) { ds = dsum(diff); $('#s3-dsum').textContent = [...String(diff)].join(' + ') + ' = ' + ds; $('#s3-s4').hidden = false; step = 3; return; }
@@ -338,11 +352,11 @@ const ri = n => Math.floor(Math.random() * n);
       if (!(m >= 1 && m <= 12 && d >= 1 && d <= 31)) { alert('생일을 먼저 넣어 주세요 (마술사는 몰라요!).'); return; } val = 0; steps.innerHTML = ''; }
     const P = plan();
     if (step < P.length) { val = P[step].f(val); const li = document.createElement('li'); li.innerHTML = `<span class="bk-muted">${P[step].s}</span><b>${P[step].show(val)}</b>`; steps.appendChild(li); step++;
-      say(step < P.length ? P[step].s : `${val}이라구요? 그럼 당신의 생일은… 🎩`); return; }
+      say(step < P.length ? P[step].s : `${josa(val, '이라구요/라구요')}? 그럼 당신의 생일은… 🎩`); return; }
     // 공개: 마술사는 "백의 자리=달, 나머지=날짜"로 읽는다
     const div = 20 * k, guessM = Math.floor(val / div), guessD = val % div;
     const right = guessM === m && guessD === d;
-    say(`${val}을 ${div}으로 나누면 몫 ${guessM}, 나머지 ${guessD}. 당신의 생일은 <b>${guessM}월 ${guessD}일</b>입니다! ${right ? '🎉 맞지요?' : '…어라? 틀렸네요. 곱하는 수가 작으면 날짜와 달이 섞여요. 왜 그럴까요? (비밀 밝히기)'}`);
+    say(`${josa(val, '을/를')} ${josa(div, '으로/로')} 나누면 몫 ${guessM}, 나머지 ${guessD}. 당신의 생일은 <b>${guessM}월 ${guessD}일</b>입니다! ${right ? '🎉 맞지요?' : '…어라? 틀렸네요. 곱하는 수가 작으면 날짜와 달이 섞여요. 왜 그럴까요? (비밀 밝히기)'}`);
     $('#bd-go').disabled = true;
   };
   $('#bd-reset').onclick = () => { step = 0; steps.innerHTML = ''; $('#bd-go').disabled = false; say(`먼저, 당신이 태어난 달에 ${$('#bd-k').value}를 곱해 보세요.`); };
@@ -357,7 +371,7 @@ const ri = n => Math.floor(Math.random() * n);
   el.innerHTML = h;
   el.querySelectorAll('.mcell[data-r]').forEach(c => c.onclick = () => {
     const r = +c.dataset.r, col = +c.dataset.c;
-    if (r !== col) { alert('노란 대각선 위의 칸을 눌러 주세요.'); return; }
+    if (r !== col) return;
     if (first === null) { clear(); first = r; c.classList.add('pick'); $('#pyth').hidden = true; return; }
     if (r === first) return;
     const m = Math.min(first, r), n = Math.max(first, r); first = null;
