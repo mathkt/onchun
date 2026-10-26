@@ -3550,7 +3550,9 @@
       ghost.getBoundingClientRect();
       ghost.style.transform = `translate3d(${dX}px, ${dY}px, 0)`;
 
-      ghost.addEventListener('transitionend', () => {
+      let doneOnce = false;
+      const finish = () => {
+        if (doneOnce) return; doneOnce = true;
         ghost.remove();
         stone.style.display = 'block';
         stone.style.position = 'absolute';
@@ -3560,7 +3562,9 @@
         tContainer.appendChild(stone);
         completed++;
         if (completed === taken.length) { stIsAnimating = false; stCheckWinCondition(); }
-      }, { once: true });
+      };
+      ghost.addEventListener('transitionend', finish, { once: true });
+      setTimeout(finish, 700); // 백그라운드 탭 등에서 transitionend가 안 올 때 대비
     });
   }
 
