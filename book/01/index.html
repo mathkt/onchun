@@ -220,28 +220,23 @@ const ri = n => Math.floor(Math.random() * n);
   }
   function valid(v) { return /^[1-8]{4}$/.test(v); }
   $('#s1-next').onclick = () => {
-    const inputs = sheet.querySelectorAll('input');
-    const last = inputs[inputs.length - 1];
+    const last = sheet.querySelector('input');
     if (last) {
       const v = last.value.trim();
       if (!valid(v)) { $('#s1-hint').textContent = '1~8 숫자 4개로 된 네 자리 수를 적어 주세요.'; last.focus(); return; }
       $('#s1-hint').textContent = '';
       last.replaceWith(Object.assign(document.createElement('span'), { className: 'num num--ro', textContent: v }));
       nums.push(+v);
+      const audienceCount = nums.filter((_, i) => i === 0 || i % 2 === 1).length; // a1, a2, a3 …
       if (nums.length === 1) {
-        const pred = nums[0] + 9999 * pairs;
-        $('#s1-pred').textContent = '✉️'; $('#s1-pred').dataset.v = pred; $('#s1-box').classList.add('sealed');
-        say(`저도 수를 하나 적어 <b>상자에 넣어</b> 두겠습니다. 이제 제가 적은 수 아래에 또 한 번 네 자리 수를 적어 주세요.`);
-        addRow('마술사', 9999 - nums[0]); nums.push(9999 - nums[0]); addRow('관객');
-        return;
+        $('#s1-pred').textContent = '✉️'; $('#s1-pred').dataset.v = nums[0] + 9999 * pairs; $('#s1-box').classList.add('sealed');
+        say('저도 수를 하나 적어 <b>상자에 넣어</b> 두겠습니다. 이제 제가 적은 수 아래에 또 한 번 네 자리 수를 적어 주세요.');
+        addRow('관객'); return;
       }
-      // 관객이 적음 → 마술사가 보수 적음
-      if (nums.length < 2 * pairs + 1) {
-        const m = 9999 - nums[nums.length - 1]; addRow('마술사', m); nums.push(m);
-        if (nums.length < 2 * pairs + 1) { say('아까 적었던 수 바로 아래에 또 한 번 네 자리 수를 적어 주세요.'); addRow('관객'); return; }
-      }
-      say(`이제 적은 ${nums.length}개의 수를 계산기로 모두 더해 주세요.`);
-      $('#s1-next').textContent = '합 계산하기 🧮'; stage = 1; return;
+      // 관객이 적을 때마다 마술사가 보수를 적는다
+      const m = 9999 - nums[nums.length - 1]; addRow('마술사', m); nums.push(m);
+      if (audienceCount < pairs + 1) { say('아까 적었던 수 바로 아래에 또 한 번 네 자리 수를 적어 주세요. 저도 한 번 더 적겠습니다.'); addRow('관객'); return; }
+      say(`이제 위에 적은 ${nums.length}개의 수를 계산기로 모두 더해 주세요.`); $('#s1-next').textContent = '합 계산하기 🧮'; stage = 1; return;
     }
     if (stage === 1) {
       const sum = nums.reduce((a, b) => a + b, 0);
@@ -251,16 +246,14 @@ const ri = n => Math.floor(Math.random() * n);
     if (stage === 2) {
       $('#s1-pred').textContent = $('#s1-pred').dataset.v; $('#s1-box').classList.add('open');
       say('여기까지 신기한 수학 마술이었습니다! 🎉 아래에서 비밀을 밝혀 보세요.'); $('#s1-next').disabled = true;
-      const tb = $('#s1-tbl tbody');
-      tb.innerHTML = '';
-      for (let i = 0; i + 1 < nums.length; i += 2) tb.innerHTML += `<tr><td>${nums[i]}</td><td>${nums[i + 1]}</td><td>${nums[i] + nums[i + 1]}</td></tr>`;
-      tb.innerHTML += `<tr><td>${nums[nums.length - 1]} (마지막 관객 수)</td><td>—</td><td>예언 = ${nums[nums.length - 1]} + ${9999 * pairs}</td></tr>`;
+      const tb = $('#s1-tbl tbody'); tb.innerHTML = `<tr><td>${nums[0]} (처음 수)</td><td>— (상자에 ${$('#s1-pred').dataset.v})</td><td></td></tr>`;
+      for (let i = 1; i + 1 < nums.length; i += 2) tb.innerHTML += `<tr><td>${nums[i]}</td><td>${nums[i + 1]}</td><td>${nums[i] + nums[i + 1]}</td></tr>`;
+      tb.innerHTML += `<tr><td colspan="3">예언 = 처음 수 ${nums[0]} + 9999 × ${pairs} = ${nums[0] + 9999 * pairs}</td></tr>`;
       $('#s1-secret').hidden = false;
-      return;
     }
   };
   $('#s1-reset').onclick = () => {
-    stage = 0; nums = []; pairs = +$('#s1-pairs').value;
+    stage = 0; nums = []; pairs = +$('#s1-pairs').value; $('#s1-hint').textContent = '';
     sheet.innerHTML = ''; addRow('관객'); $('#s1-next').disabled = false; $('#s1-next').textContent = '다음 ▶';
     $('#s1-box').className = 'box'; $('#s1-pred').textContent = '?'; $('#s1-secret').hidden = true;
     say(`1에서 8까지의 숫자 중 4개를 이용하여 <b>네 자리 수</b>를 적어 주세요.${pairs !== 2 ? ` (이번엔 ${pairs}쌍 적기)` : ''}`);
