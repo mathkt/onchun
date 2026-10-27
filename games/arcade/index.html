@@ -1729,8 +1729,8 @@
   .orange-theme .game-code { color:var(--neon-orange); }
   .pp-mini { display:flex; flex-direction:column; gap:8px; align-items:flex-start; }
   .pp-mini div { display:flex; gap:7px; }
-  .pp-mini i { width:26px; height:26px; border-radius:50%; display:block; box-shadow:inset -3px -3px 5px rgba(0,0,0,.2), inset 3px 3px 5px rgba(255,255,255,.6); }
-  .pp-mini i.off { background:#d8d2c2; opacity:.5; transform:scale(.85); }
+  .pp-mini i { width:26px; height:26px; border-radius:50%; display:block; background-image:radial-gradient(circle at 32% 28%, rgba(255,255,255,.85) 0 13%, rgba(255,255,255,.25) 30%, rgba(255,255,255,0) 52%); box-shadow:inset -3px -3px 5px rgba(0,0,0,.18), inset 3px 3px 5px rgba(255,255,255,.55), 0 2px 4px rgba(0,0,0,.12); }
+  .pp-mini i.off { background:#C9CACF; background-image:none; opacity:.75; transform:scale(.85); box-shadow:inset 3px 3px 6px rgba(0,0,0,.3); }
   #popit-section .section-title { color:var(--neon-orange); }
   #popit-section .rule-subtitle { background:#FFF1D6; border-color:#F5A623; color:#8a4e05; }
   #popit-section .menu-screen-container { border-top:2px solid var(--neon-orange); }
@@ -1751,11 +1751,12 @@
   .pp-row__bubbles { flex:1; display:flex; flex-wrap:wrap; gap:7px; min-width:0; }
   .pp-row__cnt { width:34px; text-align:right; flex:none; color:var(--text-sub); font-size:.85rem; font-weight:700; }
   .bubble { width:38px; height:38px; border-radius:50%; border:0; cursor:pointer; flex:none; touch-action:none; transition:transform .12s, box-shadow .12s;
-    box-shadow:inset -3px -3px 6px rgba(0,0,0,.22), inset 3px 3px 6px rgba(255,255,255,.6), 0 3px 5px rgba(0,0,0,.14); }
+    background-image:radial-gradient(circle at 32% 28%, rgba(255,255,255,.85) 0 13%, rgba(255,255,255,.25) 30%, rgba(255,255,255,0) 52%);
+    box-shadow:inset -3px -4px 7px rgba(0,0,0,.2), inset 3px 3px 6px rgba(255,255,255,.55), 0 3px 6px rgba(0,0,0,.16); }
   .bubble:hover:not(.popped):not(:disabled) { transform:scale(1.08); }
-  .bubble.popped { background:#d8d2c2 !important; opacity:.45; transform:scale(.9); cursor:not-allowed; box-shadow:inset 3px 3px 6px rgba(0,0,0,.35); }
-  .bubble.selected-temp { outline:4px solid #2F8FC9; outline-offset:2px; transform:scale(1.06); }
-  .bubble:disabled:not(.popped) { cursor:default; filter:saturate(.6); }
+  .bubble.popped { background:#C9CACF !important; background-image:none !important; opacity:.75; filter:none !important; transform:scale(.88); cursor:not-allowed; box-shadow:inset 3px 3px 7px rgba(0,0,0,.32), inset -2px -2px 4px rgba(255,255,255,.5); }
+  .bubble.selected-temp { outline:4px solid #1E3A8A; outline-offset:2px; transform:scale(1.06); }
+  .bubble:disabled:not(.popped) { cursor:default; filter:saturate(.9); }
   #selection-box { position:fixed; z-index:40; pointer-events:none; border:2px solid #5BB8E8; background:rgba(91,184,232,.18); border-radius:6px; box-sizing:border-box; }
   .pp-hint { font-size:.9rem; color:var(--text-sub); text-align:center; min-height:1.2em; }
   .pp-controls button { border-color:rgba(232,137,27,.5); background:rgba(245,166,35,.15); color:var(--text-main); padding:12px 0; font-size:1.05rem; }
@@ -1988,7 +1989,7 @@
   .game-card.hov .nt-cell.active { background:rgba(47,143,201,.2); transform:scale(1.08); box-shadow:0 0 15px rgba(47,143,201,.4); }
   .game-card.hov .cyber-stone.taken { transform:translateY(-30px) scale(.4) rotate(45deg); opacity:0; }
   .pp-mini i { transition:transform .25s ease, opacity .25s ease, background-color .25s ease, box-shadow .25s ease; }
-  .game-card:hover .pp-mini i.pop, .game-card.hov .pp-mini i.pop { background:#d8d2c2 !important; opacity:.5; transform:scale(.8); box-shadow:inset 3px 3px 6px rgba(0,0,0,.35); }
+  .game-card:hover .pp-mini i.pop, .game-card.hov .pp-mini i.pop { background:#C9CACF !important; background-image:none !important; opacity:.75; transform:scale(.8); box-shadow:inset 3px 3px 6px rgba(0,0,0,.32); }
   .pp-mini i.p1 { transition-delay:.05s; } .pp-mini i.p2 { transition-delay:.3s; } .pp-mini i.p3 { transition-delay:.55s; } .pp-mini i.p4 { transition-delay:.8s; }
   .game-card:not(:hover):not(.hov) .pp-mini i.pop { transition-delay:0s; }
   .qn-mini { position:relative; }
@@ -2205,9 +2206,9 @@
           </div>
           <div class="preview-stage" onmouseenter="playSfx('hover_deep')">
             <div class="pp-mini">
-              <div><i style="background:#F28B9B"></i><i style="background:#F28B9B"></i></div>
-              <div><i style="background:#F5A623"></i><i style="background:#F5A623"></i><i style="background:#F5A623"></i><i style="background:#F5A623"></i><i class="off"></i></div>
-              <div><i style="background:#5BB8E8"></i><i style="background:#5BB8E8"></i><i class="pop p4" style="background:#5BB8E8"></i><i class="pop p3" style="background:#5BB8E8"></i><i class="pop p2" style="background:#5BB8E8"></i><i class="pop p1" style="background:#5BB8E8"></i></div>
+              <div><i style="background-color:#FF5FA2"></i><i style="background-color:#FF5FA2"></i></div>
+              <div><i style="background-color:#FF9F1C"></i><i style="background-color:#FF9F1C"></i><i style="background-color:#FF9F1C"></i><i style="background-color:#FF9F1C"></i><i class="off"></i></div>
+              <div><i style="background-color:#3DB2FF"></i><i style="background-color:#3DB2FF"></i><i class="pop p4" style="background-color:#3DB2FF"></i><i class="pop p3" style="background-color:#3DB2FF"></i><i class="pop p2" style="background-color:#3DB2FF"></i><i class="pop p1" style="background-color:#3DB2FF"></i></div>
             </div>
           </div>
           <p class="card-desc">한 줄에서 원하는 만큼 버블을 누르고, <b>마지막 버블을 누르는 사람이 승리</b>합니다. 필승 전략은 이진법!</p>
@@ -2594,6 +2595,7 @@
         </div>
       </div>
       <div class="action-buttons">
+        <button class="undo-btn" id="nt-undo-btn" onmouseenter="playSfx('hover')" onclick="playSfx('click'); ntUndo()" style="display:none;">무르기</button>
         <button class="restart-btn" id="nt-restart-btn" onmouseenter="playSfx('hover')" onclick="playSfx('click'); ntRestartGame()" style="display:none;">다시하기</button>
         <button class="restart-btn" id="nt-restart-set-btn" onmouseenter="playSfx('hover')" onclick="playSfx('click'); openNtSettingsAndRestart()" style="display:none;">⚙️ 설정 바꿔 다시하기</button>
         <button class="resume-analysis-btn" id="nt-resume-analysis-btn" onmouseenter="playSfx('hover')" onclick="playSfx('click'); ntResumeAnalysis()" style="display:none;">분석 모드로 복귀</button>
@@ -2783,6 +2785,15 @@
           <option value="misere">패배 (거꾸로 규칙)</option>
         </select>
       </label>
+      <label>무르기 횟수:
+        <select id="set-qn-undo">
+          <option value="0">없음</option>
+          <option value="1">1회</option>
+          <option value="2">2회</option>
+          <option value="3">3회</option>
+          <option value="inf">무제한</option>
+        </select>
+      </label>
       <label>한 턴 당 제한시간:
         <select id="set-qn-time">
           <option value="unlimited">무제한</option>
@@ -2825,6 +2836,15 @@
         <select id="set-pp-rule">
           <option value="last">승리 (기본)</option>
           <option value="misere">패배 (거꾸로 규칙)</option>
+        </select>
+      </label>
+      <label>무르기 횟수:
+        <select id="set-pp-undo">
+          <option value="0">없음</option>
+          <option value="1">1회</option>
+          <option value="2">2회</option>
+          <option value="3">3회</option>
+          <option value="inf">무제한</option>
         </select>
       </label>
       <label>한 턴 당 제한시간:
@@ -2927,6 +2947,15 @@
           <option value="4">4×4 (4개 한 줄)</option>
         </select>
       </label>
+      <label>무르기 횟수:
+        <select id="set-nt-undo">
+          <option value="0">없음</option>
+          <option value="1">1회</option>
+          <option value="2">2회</option>
+          <option value="3">3회</option>
+          <option value="inf">무제한</option>
+        </select>
+      </label>
       <label>한 턴 당 제한시간:
         <select id="set-nt-time">
           <option value="unlimited">무제한</option>
@@ -2972,6 +3001,15 @@
         <select id="set-st-mode">
           <option value="bomb">폭탄</option>
           <option value="gem">보석</option>
+        </select>
+      </label>
+      <label>무르기 횟수:
+        <select id="set-st-undo">
+          <option value="0">없음</option>
+          <option value="1">1회</option>
+          <option value="2">2회</option>
+          <option value="3">3회</option>
+          <option value="inf">무제한</option>
         </select>
       </label>
       <label>한 턴 당 제한시간:
@@ -3357,14 +3395,28 @@
     setTimeout(() => { modal.style.display = 'none'; }, 200);
   }
 
+  /* ===== 무르기 횟수 설정 (게임별, localStorage 저장) ===== */
+  const UNDO_KEY = 'arcade_undo_setting_v1', UNDO_VALS = ['0', '1', '2', '3', 'inf'];
+  const undoSetting = { pp: '1', nt: '1', st: '1', qn: '1' };
+  try { const o = JSON.parse(localStorage.getItem(UNDO_KEY) || '{}'); for (const k in undoSetting) if (UNDO_VALS.includes(o[k])) undoSetting[k] = o[k]; } catch (e) {}
+  function undoSave() { try { localStorage.setItem(UNDO_KEY, JSON.stringify(undoSetting)); } catch (e) {} }
+  function undoMax(p) { const v = undoSetting[p]; return v === 'inf' ? Infinity : (parseInt(v) || 0); }
+  function undoLabel(left) { return left === Infinity ? '무르기 (∞)' : `무르기 (${left}회)`; }
+  function undoOpen(p) { document.getElementById('set-' + p + '-undo').value = undoSetting[p]; }
+  function undoRead(p) { const v = document.getElementById('set-' + p + '-undo').value; if (UNDO_VALS.includes(v)) { undoSetting[p] = v; undoSave(); } }
+  // 무르기 버튼이 보이는가: AI·2인(분석에서 이어 두기 포함)이고 '없음'이 아닐 때 (온라인은 숨김)
+  function undoVisible(mode, p) { return (mode === 'bot' || mode === 'solo') && undoSetting[p] !== '0'; }
+
   function openNtSettings() {
     document.getElementById('set-nt-size').value = ntSize;
     document.getElementById('set-nt-time').value = ntTimeSetting;
+    undoOpen('nt');
     openModal('nt-settings-modal', 'nt-modal-box');
   }
   function saveNtSettings() {
     ntSize = parseInt(document.getElementById('set-nt-size').value);
     ntTimeSetting = document.getElementById('set-nt-time').value;
+    undoRead('nt');
     ntScore = { p1Wins: 0, p2Wins: 0 };
     ntUpdateSubtitle();
     closeModal('nt-settings-modal', 'nt-modal-box');
@@ -3380,6 +3432,7 @@
     document.getElementById('set-st-limit').value = stLimitSetting;
     document.getElementById('set-st-mode').value = stModeType;
     document.getElementById('set-st-time').value = stTimeSetting;
+    undoOpen('st');
     openModal('st-settings-modal', 'st-modal-box');
   }
   function saveStSettings() {
@@ -3387,6 +3440,7 @@
     stLimitSetting = document.getElementById('set-st-limit').value;
     stModeType = document.getElementById('set-st-mode').value;
     stTimeSetting = document.getElementById('set-st-time').value;
+    undoRead('st');
     stScore = { p1Wins: 0, p2Wins: 0 };
     stUpdateSubtitle(false);
     closeModal('st-settings-modal', 'st-modal-box');
@@ -3556,7 +3610,7 @@
   const QN_PHI = (1 + Math.sqrt(5)) / 2;
   let qnSizeSetting = '8', qnStartSetting = 'rand', qnWinRule = 'last', qnTimeSetting = 'unlimited';
   let qnMode = 'bot', qnN = 8, qnQ = null, qnStart = null, qnCur = 1, qnOver = false, qnPhase = 'play', qnLog = [], qnLast = null, qnBotSel = null, qnCold = new Set();
-  let qnUndoLeft = 1;
+  let qnUndoLeft = 1; // 이번 판 무르기 남은 횟수 (설정값으로 매 판 초기화)
   let qnBotTimeout = null, qnTimerInterval = null, qnTimeLeft = 0, qnScore = { p1Wins: 0, p2Wins: 0 };
   function qnColdSet(N) { const s = new Set(); for (let n = 0; ; n++) { const a = Math.floor(n * QN_PHI), b = a + n; if (a >= N) break; if (b < N) { s.add(a + ',' + b); s.add(b + ',' + a); } } return s; }
   function qnBotNum() { return isBranchPlay ? 3 - branchHumanPlayer : 2; }
@@ -3592,6 +3646,7 @@
     document.getElementById('set-qn-start').value = qnStartSetting;
     document.getElementById('set-qn-rule').value = qnWinRule;
     document.getElementById('set-qn-time').value = qnTimeSetting;
+    undoOpen('qn');
     openModal('qn-settings-modal', 'qn-modal-box');
   }
   function saveQnSettings() {
@@ -3599,6 +3654,7 @@
     qnStartSetting = document.getElementById('set-qn-start').value;
     qnWinRule = document.getElementById('set-qn-rule').value;
     qnTimeSetting = document.getElementById('set-qn-time').value;
+    undoRead('qn');
     qnScore = { p1Wins: 0, p2Wins: 0 };
     qnUpdateSubtitle(false);
     closeModal('qn-settings-modal', 'qn-modal-box');
@@ -3653,7 +3709,7 @@
     switchScreen(qnGameScreen, 'flex');
     highlightWinner(0); updateScoreDisplay();
     qnCur = (mode === 'bot' && botFirstTurn === 'bot') ? 2 : 1;
-    qnOver = false; qnLog = []; qnLast = null; qnBotSel = null; qnUndoLeft = 1;
+    qnOver = false; qnLog = []; qnLast = null; qnBotSel = null; qnUndoLeft = undoMax('qn');
     if (qnBotTimeout) { clearTimeout(qnBotTimeout); qnBotTimeout = null; }
     if (preset && preset.start) { qnQ = preset.start.slice(); qnPhase = 'play'; }
     else if (qnStartSetting === 'pick') { qnQ = null; qnPhase = 'place'; }
@@ -3766,13 +3822,14 @@
     qnBotTimeout = setTimeout(() => { qnBotTimeout = null; qnExecuteMove(m); }, 600);
   }
   function qnUndoAvailable() {
-    if (qnOver || qnPhase !== 'play' || isBranchPlay || qnMode === 'online' || !qnLog.length) return false;
-    if (qnMode === 'bot') return qnUndoLeft > 0 && qnLog.some(h => h.player !== qnBotNum());
+    if (qnOver || qnPhase !== 'play' || !undoVisible(qnMode, 'qn') || qnUndoLeft <= 0 || !qnLog.length) return false;
+    if (qnMode === 'bot') return qnLog.some(h => h.player !== qnBotNum());
     return true;
   }
   function qnSyncUndoBtn() {
     const b = document.getElementById('qn-undo-btn'); if (!b) return;
-    b.innerText = qnMode === 'bot' ? `무르기 (${qnUndoLeft}회)` : '무르기';
+    b.style.display = undoVisible(qnMode, 'qn') ? 'inline-block' : 'none';
+    b.innerText = undoLabel(qnUndoLeft);
     b.disabled = !qnUndoAvailable();
   }
   // 무르기: AI 대전은 내 마지막 수(그 뒤 AI 응수까지) 되돌림, 2인은 한 수씩
@@ -3781,8 +3838,9 @@
     if (qnBotTimeout) { clearTimeout(qnBotTimeout); qnBotTimeout = null; }
     qnStopTimer(); qnBotSel = null;
     let h;
-    if (qnMode === 'bot') { const bn = qnBotNum(); while (qnLog.length && qnLog[qnLog.length - 1].player === bn) qnLog.pop(); h = qnLog.pop(); qnUndoLeft--; }
+    if (qnMode === 'bot') { const bn = qnBotNum(); while (qnLog.length && qnLog[qnLog.length - 1].player === bn) qnLog.pop(); h = qnLog.pop(); }
     else h = qnLog.pop();
+    qnUndoLeft--;
     qnQ = h.from.slice(); qnCur = h.player;
     qnLast = qnLog.length ? qnLog[qnLog.length - 1].from.slice() : null;
     playPlaceStone(); qnRender(); qnUpdateUI();
@@ -3970,7 +4028,7 @@
     switchScreen(qnGameScreen, 'flex');
     highlightWinner(0); updateScoreDisplay();
     if (qnBotTimeout) { clearTimeout(qnBotTimeout); qnBotTimeout = null; }
-    qnCur = qnATurn; qnOver = false; qnLog = []; qnLast = null; qnBotSel = null;
+    qnCur = qnATurn; qnOver = false; qnLog = []; qnLast = null; qnBotSel = null; qnUndoLeft = undoMax('qn');
     qnQ = qnAQ.slice(); qnStart = qnQ.slice(); qnPhase = 'play';
     qnUpdateSubtitle(true); qnBuildBoard(); qnRender(); qnUpdateUI();
     if (qnCur !== branchHumanPlayer) qnScheduleBot();
@@ -3989,8 +4047,10 @@
   const ppGameScreen = document.getElementById('pp-game-screen');
   let ppRowsSetting = '3 4 3', ppTimeSetting = 'unlimited', ppWinRule = 'last', ppMaxTake = 0; // ppMaxTake 0 = 제한 없음(심화: 한 번에 최대 n개)
   let ppMode = 'bot', ppInit = [2, 5, 6], ppRows = [], ppCur = 1, ppOver = false, ppHist = [], ppSelRow = null, ppSel = [];
-  let ppBotTimeout = null, ppTimerInterval = null, ppTimeLeft = 0, ppScore = { p1Wins: 0, p2Wins: 0 };
-  const PP_COLORS = ['#F28B9B', '#F5A623', '#3A9E82', '#5BB8E8', '#9B6BD6', '#E9533F', '#2F8FC9'];
+  let ppBotTimeout = null, ppTimerInterval = null, ppTimeLeft = 0, ppScore = { p1Wins: 0, p2Wins: 0 }, ppUndoLeft = 1;
+  // 팝잇 버블 색 (밝고 쨍한 팝잇 색) + 줄 이름 글자용 진한 색(같은 계열)
+  const PP_COLORS = ['#FF5FA2', '#FF9F1C', '#FFD60A', '#57CC99', '#3DB2FF', '#9B5DE5', '#FF6B6B'];
+  const PP_INK    = ['#D6246F', '#C76A00', '#A88600', '#1F8F5F', '#0B78C9', '#6E2FC0', '#D93A3A'];
   function ppParseRows(t) { return String(t).split(/[\s,]+/).map(Number).filter(n => n >= 1).map(n => Math.min(20, Math.floor(n))).slice(0, 7); }
   function ppRandomRows() { const k = 2 + Math.floor(Math.random() * 4); return Array.from({ length: k }, () => 2 + Math.floor(Math.random() * 7)); }
   function ppApplyRules() { const r = ppRowsSetting === 'random' ? ppRandomRows() : ppParseRows(ppRowsSetting); ppInit = r.length ? r : [2, 5, 6]; }
@@ -4009,6 +4069,7 @@
     document.getElementById('set-pp-time').value = ppTimeSetting;
     document.getElementById('set-pp-rule').value = ppWinRule;
     document.getElementById('set-pp-max').value = String(ppMaxTake);
+    undoOpen('pp');
     openModal('pp-settings-modal', 'pp-modal-box');
   }
   function savePpSettings() {
@@ -4018,6 +4079,7 @@
     ppTimeSetting = document.getElementById('set-pp-time').value;
     ppWinRule = document.getElementById('set-pp-rule').value;
     ppMaxTake = parseInt(document.getElementById('set-pp-max').value) || 0;
+    undoRead('pp');
     ppScore = { p1Wins: 0, p2Wins: 0 };
     ppUpdateSubtitle(false);
     closeModal('pp-settings-modal', 'pp-modal-box');
@@ -4067,7 +4129,7 @@
     switchScreen(ppGameScreen, 'flex');
     highlightWinner(0); updateScoreDisplay();
     ppRows = [...ppInit]; ppCur = (mode === 'bot' && botFirstTurn === 'bot') ? 2 : 1;
-    ppOver = false; ppHist = []; ppSelRow = null; ppSel = [];
+    ppOver = false; ppHist = []; ppSelRow = null; ppSel = []; ppUndoLeft = undoMax('pp');
     if (ppBotTimeout) { clearTimeout(ppBotTimeout); ppBotTimeout = null; }
     ppRender(); ppUpdateUI();
     if (ppCur === 2 && mode === 'bot') ppScheduleBot();
@@ -4079,13 +4141,13 @@
     const lock = ppLocked();
     ppRows.forEach((count, ri) => {
       const row = document.createElement('div'); row.className = 'pp-row';
-      const lab = document.createElement('div'); lab.className = 'pp-row__label'; lab.style.color = PP_COLORS[ri % 7]; lab.innerText = `${ri + 1}번줄`;
+      const lab = document.createElement('div'); lab.className = 'pp-row__label'; lab.style.color = PP_INK[ri % 7]; lab.innerText = `${ri + 1}번줄`;
       const bb = document.createElement('div'); bb.className = 'pp-row__bubbles';
       for (let i = 0; i < ppInit[ri]; i++) {
         const b = document.createElement('button'); b.type = 'button';
         const popped = i >= count;
         b.className = 'bubble' + (popped ? ' popped' : '') + ((ppSelRow === ri && ppSel.includes(i)) ? ' selected-temp' : '');
-        b.style.background = PP_COLORS[ri % 7];
+        b.style.backgroundColor = PP_COLORS[ri % 7];
         b.disabled = popped || lock; b.dataset.row = ri; b.dataset.idx = i;
         bb.appendChild(b);
       }
@@ -4100,7 +4162,7 @@
   function ppBtns() {
     document.getElementById('pp-confirm').disabled = !ppSel.length || ppLocked();
     document.getElementById('pp-cancel').disabled = !ppSel.length;
-    document.getElementById('pp-undo').disabled = ppMode === 'online' || ppOver || !ppHist.length || (ppMode === 'bot' && ppCur === ppBotNum());
+    ppSyncUndoBtn();
     document.getElementById('pp-hint').innerText = ppOver ? '' : ppLocked() ? (ppMode === 'bot' ? 'AI가 생각 중…' : '상대 차례예요') : (ppSel.length ? `${ppSelRow + 1}번줄 ${ppSel.length}개 선택 → [선택 완료]` : (ppMaxTake ? `한 줄에서 1~${ppMaxTake}개 누른 뒤 [선택 완료]` : '한 줄에서 원하는 만큼 누른 뒤 [선택 완료]'));
   }
   function ppToggle(ri, i) {
@@ -4120,10 +4182,25 @@
     ppExecuteMove(mv);
     if (ppMode === 'online') Online.sendMove(mv);
   }
+  function ppUndoAvailable() {
+    if (ppOver || !undoVisible(ppMode, 'pp') || ppUndoLeft <= 0 || !ppHist.length) return false;
+    if (ppMode === 'bot') return ppHist.some(h => h.player !== ppBotNum());
+    return true;
+  }
+  function ppSyncUndoBtn() {
+    const b = document.getElementById('pp-undo'); if (!b) return;
+    b.style.display = undoVisible(ppMode, 'pp') ? '' : 'none';
+    b.innerText = undoLabel(ppUndoLeft);
+    b.disabled = !ppUndoAvailable();
+  }
+  // 무르기: AI 대전은 내 마지막 수(그 뒤 AI 응수까지) 되돌림, 2인은 한 수씩
   function ppUndo() {
-    if (ppMode === 'online' || ppOver || !ppHist.length) return;
+    if (!ppUndoAvailable()) return;
+    if (ppBotTimeout) { clearTimeout(ppBotTimeout); ppBotTimeout = null; }
+    ppStopTimer(); playSfx('click');
     if (ppMode === 'bot') { const bn = ppBotNum(); while (ppHist.length && ppHist[ppHist.length - 1].player === bn) ppHist.pop(); if (ppHist.length) ppHist.pop(); ppCur = 3 - bn; }
     else { const last = ppHist.pop(); ppCur = last.player; }
+    ppUndoLeft--;
     ppRows = [...ppInit]; ppHist.forEach(h => ppRows[h.row] -= h.count);
     ppSelRow = null; ppSel = []; ppRender(); ppUpdateUI();
   }
@@ -4316,9 +4393,9 @@
     const board = document.getElementById('pp-a-board'); board.innerHTML = '';
     ppARows.forEach((count, ri) => {
       const row = document.createElement('div'); row.className = 'pp-row';
-      const lab = document.createElement('div'); lab.className = 'pp-row__label'; lab.style.color = PP_COLORS[ri % 7]; lab.innerText = `${ri + 1}번줄`;
+      const lab = document.createElement('div'); lab.className = 'pp-row__label'; lab.style.color = PP_INK[ri % 7]; lab.innerText = `${ri + 1}번줄`;
       const bb = document.createElement('div'); bb.className = 'pp-row__bubbles';
-      for (let i = 0; i < ppAInit[ri]; i++) { const b = document.createElement('span'); b.className = 'bubble' + (i >= count ? ' popped' : ''); b.style.background = PP_COLORS[ri % 7]; b.dataset.row = ri; b.dataset.idx = i; bb.appendChild(b); }
+      for (let i = 0; i < ppAInit[ri]; i++) { const b = document.createElement('span'); b.className = 'bubble' + (i >= count ? ' popped' : ''); b.style.backgroundColor = PP_COLORS[ri % 7]; b.dataset.row = ri; b.dataset.idx = i; bb.appendChild(b); }
       const cnt = document.createElement('div'); cnt.className = 'pp-row__cnt'; cnt.innerText = `${count}개`;
       row.append(lab, bb, cnt); board.appendChild(row);
     });
@@ -4393,7 +4470,7 @@
     for (let b = bits - 1; b >= 0; b--) h += `<th>${1 << b}</th>`;
     h += '</tr>';
     ppARows.forEach((c, i) => {
-      h += `<tr><td style="color:${PP_COLORS[i % 7]}; font-weight:800;">${i + 1}</td><td>${c}</td>${M ? `<td>${vals[i]}</td>` : ''}`;
+      h += `<tr><td style="color:${PP_INK[i % 7]}; font-weight:800;">${i + 1}</td><td>${c}</td>${M ? `<td>${vals[i]}</td>` : ''}`;
       for (let b = bits - 1; b >= 0; b--) { const on = (vals[i] >> b) & 1; h += `<td class="${on ? 'one' : 'zero'}">${on}</td>`; }
       h += '</tr>';
     });
@@ -4421,7 +4498,8 @@
     ppMenuScreen.style.display = 'none'; ppAnalysisScreen.style.display = 'none';
     switchScreen(ppGameScreen, 'flex');
     highlightWinner(0); updateScoreDisplay();
-    ppRows = ppInit.slice(); ppCur = ppBranch.turn; ppOver = false; ppHist = []; ppSelRow = null; ppSel = [];
+    ppRows = ppInit.slice(); ppCur = ppBranch.turn; ppOver = false; ppHist = []; ppSelRow = null; ppSel = []; ppUndoLeft = undoMax('pp');
+    if (ppBotTimeout) { clearTimeout(ppBotTimeout); ppBotTimeout = null; }
     ppUpdateSubtitle(true); ppRender(); ppUpdateUI();
     if (ppCur !== branchHumanPlayer) ppScheduleBot();
   }
@@ -4441,6 +4519,7 @@
   let ntGameBoardMask = 0, ntCurrentPlayer = 1, ntGameOver = false, ntEndState = '';
   let ntGameHistory = [];
   let ntBotTimeout = null;
+  let ntUndoLeft = 1, ntUndoBase = 0; // 무르기 남은 횟수, 무를 수 없는 앞부분(분석에서 가져온 수) 길이
   let ntTimerInterval = null;
   let ntTimeLeft = 0;
 
@@ -4652,7 +4731,7 @@
     ntMenuScreen.style.display = 'none';
     switchScreen(ntGameScreen, 'flex');
 
-    ntGameBoardMask = 0; ntGameHistory = []; ntGameOver = false; ntEndState = '';
+    ntGameBoardMask = 0; ntGameHistory = []; ntGameOver = false; ntEndState = ''; ntUndoLeft = undoMax('nt'); ntUndoBase = 0;
     if (ntBotTimeout) { clearTimeout(ntBotTimeout); ntBotTimeout = null; }
     highlightWinner(0);
     updateScoreDisplay();
@@ -4671,6 +4750,7 @@
     ntGameBoardMask = ntABoardMask;
     ntCurrentPlayer = ntATurn;
     ntGameHistory = JSON.parse(JSON.stringify(ntAHistory));
+    ntUndoLeft = undoMax('nt'); ntUndoBase = ntGameHistory.length;
     ntGameOver = ntIsBoardDead(ntGameBoardMask);
     ntEndState = '';
     if (ntBotTimeout) { clearTimeout(ntBotTimeout); ntBotTimeout = null; }
@@ -4786,6 +4866,35 @@
       let isBotCurrent = isBranchPlay ? (ntCurrentPlayer !== branchHumanPlayer) : (ntCurrentPlayer === 2 && ntMode === 'bot');
       if (isBotCurrent) ntScheduleBotTurn();
     }
+  }
+
+  function ntUndoAvailable() {
+    if (ntGameOver || !undoVisible(ntMode, 'nt') || ntUndoLeft <= 0 || ntGameHistory.length <= ntUndoBase) return false;
+    if (ntMode === 'bot') return ntGameHistory.slice(ntUndoBase).some(h => h.player === humanNum());
+    return true;
+  }
+  function ntSyncUndoBtn() {
+    const b = document.getElementById('nt-undo-btn'); if (!b) return;
+    b.style.display = undoVisible(ntMode, 'nt') ? 'inline-block' : 'none';
+    b.innerText = undoLabel(ntUndoLeft);
+    b.disabled = !ntUndoAvailable();
+  }
+  // 무르기: AI 대전은 내 마지막 수(그 뒤 AI 응수까지) 되돌림, 2인은 한 수씩
+  function ntUndo() {
+    if (!ntUndoAvailable()) return;
+    if (ntBotTimeout) { clearTimeout(ntBotTimeout); ntBotTimeout = null; }
+    ntActionCounter++; // 계산 중인 AI 수 무효화
+    ntStopTimer();
+    const pop = () => { const h = ntGameHistory.pop(); ntGameBoardMask &= ~(1 << h.c); return h; };
+    if (ntMode === 'bot') {
+      const hn = humanNum();
+      while (ntGameHistory.length > ntUndoBase && ntGameHistory[ntGameHistory.length - 1].player !== hn) pop();
+      if (ntGameHistory.length > ntUndoBase) pop();
+      ntCurrentPlayer = hn;
+    } else ntCurrentPlayer = pop().player;
+    ntUndoLeft--; ntEndState = '';
+    playPlaceStone(); highlightWinner(0);
+    ntUpdateGameUI(); ntRenderGameBoard();
   }
 
   async function ntBotTurn() {
@@ -5044,7 +5153,7 @@
   let stMode = 'bot';
   let stCurrentPlayer = 1, stStonesArr = [], stIsAnimating = false, stGameOver = false;
   let stGameHistory = [];
-  let stGameId = 0, stUndoLeft = 1; // 진행 중 애니메이션 무효화용 판 번호, AI 대전 무르기 남은 횟수
+  let stGameId = 0, stUndoLeft = 1, stUndoBase = 0; // 진행 중 애니메이션 무효화용 판 번호, 무르기 남은 횟수, 무를 수 없는 앞부분(분석에서 가져온 수) 길이
   let stBotTimeout = null;
   let stTimerInterval = null;
   let stTimeLeft = 0;
@@ -5119,13 +5228,13 @@
   }
 
   function stUndoAvailable() {
-    if (stGameOver || stIsAnimating || isBranchPlay || stMode === 'online' || !stGameHistory.length) return false;
-    if (stMode === 'bot') return stUndoLeft > 0 && stGameHistory.some(h => h.player === 1);
+    if (stGameOver || stIsAnimating || !undoVisible(stMode, 'st') || stUndoLeft <= 0 || stGameHistory.length <= stUndoBase) return false;
+    if (stMode === 'bot') return stGameHistory.slice(stUndoBase).some(h => h.player === humanNum());
     return true;
   }
   function stSyncUndoBtn() {
     const b = document.getElementById('st-undo-btn'); if (!b) return;
-    b.innerText = stMode === 'bot' ? `무르기 (${stUndoLeft}회)` : '무르기';
+    b.innerText = undoLabel(stUndoLeft);
     b.disabled = !stUndoAvailable();
   }
   function stUndo() {
@@ -5134,10 +5243,12 @@
     stStopTimer();
     const undone = []; // 마지막 수부터
     if (stMode === 'bot') {
-      while (stGameHistory.length && stGameHistory[stGameHistory.length - 1].player === 2) undone.push(stGameHistory.pop());
-      if (stGameHistory.length) undone.push(stGameHistory.pop());
-      stCurrentPlayer = 1; stUndoLeft--;
+      const hn = humanNum();
+      while (stGameHistory.length > stUndoBase && stGameHistory[stGameHistory.length - 1].player !== hn) undone.push(stGameHistory.pop());
+      if (stGameHistory.length > stUndoBase) undone.push(stGameHistory.pop());
+      stCurrentPlayer = hn;
     } else { const last = stGameHistory.pop(); undone.push(last); stCurrentPlayer = last.player; }
+    stUndoLeft--;
     // 가져갔던 돌을 원래 자리(가운데 판의 같은 좌표)로 되돌리기 — FLIP 애니메이션
     const cs = document.getElementById('st-center-stones');
     const moving = [];
@@ -5191,7 +5302,7 @@
     stBuildTakeButtons();
     document.getElementById('st-restart-btn').style.display = 'none';
     document.getElementById('st-restart-set-btn').style.display = 'none';
-    document.getElementById('st-undo-btn').style.display = (selectedMode === 'bot' || selectedMode === 'solo') ? 'inline-block' : 'none';
+    document.getElementById('st-undo-btn').style.display = undoVisible(selectedMode, 'st') ? 'inline-block' : 'none';
     document.getElementById('st-resume-analysis-btn').style.display = 'none';
 
     stMenuScreen.style.display = 'none';
@@ -5200,7 +5311,7 @@
     updateScoreDisplay();
 
     stCurrentPlayer = (stMode === 'bot' && firstTurn === 'bot') ? 2 : 1;
-    stGameOver = false; stStonesArr = []; stGameHistory = []; stIsAnimating = false; stGameId++; stUndoLeft = 1;
+    stGameOver = false; stStonesArr = []; stGameHistory = []; stIsAnimating = false; stGameId++; stUndoLeft = undoMax('st'); stUndoBase = 0;
     if (stBotTimeout) { clearTimeout(stBotTimeout); stBotTimeout = null; }
 
     const cs = document.getElementById('st-center-stones');
@@ -5252,7 +5363,7 @@
       player: (idx % 2) + 1,
       count: count
     }));
-    stIsAnimating = false; stGameId++; stUndoLeft = 1;
+    stIsAnimating = false; stGameId++; stUndoLeft = undoMax('st'); stUndoBase = stGameHistory.length;
     if (stBotTimeout) { clearTimeout(stBotTimeout); stBotTimeout = null; }
 
     const cs = document.getElementById('st-center-stones');
@@ -6130,8 +6241,10 @@
     if (isBranchPlay) { rb.style.display = 'inline-block'; if (sb) sb.style.display = 'none'; }
     else if (mode === 'online') { const host = Online.myNum === 1; rb.style.display = host ? 'inline-block' : 'none'; if (sb) sb.style.display = host ? 'inline-block' : 'none'; }
     else { rb.style.display = 'inline-block'; if (sb) sb.style.display = 'inline-block'; }
-    if (p === 'st') { document.getElementById('st-undo-btn').style.display = (!isBranchPlay && (mode === 'bot' || mode === 'solo')) ? 'inline-block' : 'none'; stSyncUndoBtn(); }
-    if (p === 'qn') { document.getElementById('qn-undo-btn').style.display = (!isBranchPlay && (mode === 'bot' || mode === 'solo')) ? 'inline-block' : 'none'; qnSyncUndoBtn(); }
+    if (p === 'st') { document.getElementById('st-undo-btn').style.display = undoVisible(mode, 'st') ? 'inline-block' : 'none'; stSyncUndoBtn(); }
+    if (p === 'qn') qnSyncUndoBtn();
+    if (p === 'nt') ntSyncUndoBtn();
+    if (p === 'pp') ppSyncUndoBtn();
   }
   {
     // 전역 함수 선언을 감싸기 (호출부는 이름으로 부르므로 그대로 적용됨)
@@ -6146,7 +6259,9 @@
     const _stUI2 = stUpdateUI; stUpdateUI = function () { _stUI2(); stSyncUndoBtn(); };
     const _qnUI2 = qnUpdateUI; qnUpdateUI = function () { _qnUI2(); qnSyncUndoBtn(); };
     const _qnR2 = qnRender; qnRender = function () { _qnR2(); qnSyncUndoBtn(); };
-    const _ntBk = ntGoBack; ntGoBack = function () { ntSettingsThenRestart = false; _ntBk(); document.getElementById('nt-restart-set-btn').style.display = 'none'; };
+    const _ntUI2 = ntUpdateGameUI; ntUpdateGameUI = function () { _ntUI2(); ntSyncUndoBtn(); };
+    const _ntR2 = ntRenderGameBoard; ntRenderGameBoard = function () { _ntR2(); ntSyncUndoBtn(); };
+    const _ntBk = ntGoBack; ntGoBack = function () { ntSettingsThenRestart = false; _ntBk(); document.getElementById('nt-restart-set-btn').style.display = 'none'; document.getElementById('nt-undo-btn').style.display = 'none'; };
     const _stBk = stGoBack; stGoBack = function () { stSettingsThenRestart = false; _stBk(); };
     const _ppBk = ppGoBack; ppGoBack = function () { ppSettingsThenRestart = false; _ppBk(); };
     const _qnBk = qnGoBack; qnGoBack = function () { qnSettingsThenRestart = false; _qnBk(); document.getElementById('qn-undo-btn').style.display = 'none'; };
