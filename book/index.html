@@ -28,6 +28,7 @@
   .act .bk-btn{min-height:36px;padding:4px 12px;font-size:.9rem}
   .act--book{opacity:.8}
   .act--book .act__n{background:#c9c3b0}
+  .act__t .pre-s{display:none}
   .soon{font-size:.75rem;color:#9c8a55;background:#fff3c4;border:1px solid #f1dd8f;padding:3px 9px;border-radius:999px;white-space:nowrap}
   @media(max-width:640px){
     /* 폰: 사진+제목은 한 줄, 활동 목록은 전체 너비로 — 모두 왼쪽 정렬 */
@@ -37,14 +38,18 @@
     .chap__pic{border-radius:12px;font-size:1.6rem}
     .chap__t{justify-content:flex-start;align-items:center;gap:6px 8px;margin:0;text-align:left}
     .chap__t b{font-size:1.15rem}
-    .chap__place{flex-basis:100%;text-align:left}
-    .chap__t .bk-btn,.act .bk-btn{min-height:36px;padding:4px 12px;line-height:1.2}
-    .chap__t .bk-btn{margin:2px 0 0}
+    .chap__t{flex-wrap:wrap}
+    .chap__t b{flex:1 1 auto;min-width:0}
+    .chap__place{flex-basis:100%;order:3;text-align:left}
+    .chap__t .bk-btn,.act .bk-btn{min-height:36px;padding:4px 10px;line-height:1.2;font-size:.82rem;white-space:nowrap;flex:none}
+    .chap__t .bk-btn{margin:0;order:2}
     .acts{grid-column:1/-1;margin-top:0;align-items:stretch}
-    .act{flex-wrap:wrap;justify-content:flex-start;text-align:left;gap:6px 8px;padding:8px 10px}
-    .act__t{flex:1 1 calc(100% - 40px);min-width:0;text-align:left;line-height:1.4}
-    .act .bk-btn,.act .soon{margin-left:34px}
-    .act .bk-btn+.bk-btn{margin-left:0}
+    .act{flex-wrap:nowrap;justify-content:flex-start;text-align:left;gap:8px;padding:7px 8px}
+    .act__n{width:24px;height:24px;font-size:.8rem}
+    .act__t{flex:1 1 auto;min-width:0;text-align:left;line-height:1.35;font-size:.9rem}
+    .act .bk-btn,.act .soon{margin-left:0;flex:none}
+    .act .bk-btn,.chap__t .bk-btn{box-sizing:border-box;min-height:36px!important;height:36px;padding:0 10px;box-shadow:0 2px 0 rgba(0,0,0,.12)}
+    .act__t .pre{display:none}.act__t .pre-s{display:inline!important;color:var(--bk-red)}
   }
 
   .toc-intro{display:flex;align-items:center;gap:12px;flex-wrap:wrap;margin:14px 0 6px}
@@ -133,7 +138,7 @@ UNITS.forEach((u, ui) => {
           <div class="chap__t"><span class="bk-top__num">${c.n}</span><b>${c.t}</b><span class="chap__place">📍 ${c.place}</span>${c.page ? `<a class="bk-btn bk-btn--sky bk-btn--sm" href="${R(c.page)}">이 장 열기 ▶</a>` : ''}</div>
           <div class="acts">${c.acts.map((a, i) => `
             <div class="act ${a.web ? '' : 'act--book'}">
-              <span class="act__n">${i + 1}</span><span class="act__t">${a.t}</span>
+              <span class="act__n">${i + 1}</span><span class="act__t">${a.t.replace(/^(나도 수학자|읽을거리|더 알아보기) — /, (m, k) => `<span class="pre">${k} — </span><span class="pre-s">★ </span>`)}</span>
               ${a.web ? `<a class="bk-btn bk-btn--mint" href="${R(a.web)}">웹으로 하기 ▶</a>` : a.soon ? `<span class="soon">웹 준비 중</span>` : `<span class="soon" style="background:#f3f0e6;border-color:#e0d9c4;color:#8a8370">책으로</span>`}
               ${a.extraWeb ? `<a class="bk-btn bk-btn--ghost bk-btn--sm" href="${R(a.extraWeb)}">${a.extra} ▶</a>` : ''}
             </div>`).join('')}</div>
