@@ -29,7 +29,23 @@
   .act--book{opacity:.8}
   .act--book .act__n{background:#c9c3b0}
   .soon{font-size:.75rem;color:#9c8a55;background:#fff3c4;border:1px solid #f1dd8f;padding:3px 9px;border-radius:999px;white-space:nowrap}
-  @media(max-width:600px){.chap{grid-template-columns:90px 1fr}}
+  @media(max-width:640px){
+    /* 폰: 사진+제목은 한 줄, 활동 목록은 전체 너비로 — 모두 왼쪽 정렬 */
+    .unit__body{padding:6px 10px 14px}
+    .chap{grid-template-columns:64px 1fr;gap:8px 10px;padding:12px 2px;align-items:start;text-align:left}
+    .chap>div:last-child{display:contents}
+    .chap__pic{border-radius:12px;font-size:1.6rem}
+    .chap__t{justify-content:flex-start;align-items:center;gap:6px 8px;margin:0;text-align:left}
+    .chap__t b{font-size:1.15rem}
+    .chap__place{flex-basis:100%;text-align:left}
+    .chap__t .bk-btn,.act .bk-btn{min-height:36px;padding:4px 12px;line-height:1.2}
+    .chap__t .bk-btn{margin:2px 0 0}
+    .acts{grid-column:1/-1;margin-top:0;align-items:stretch}
+    .act{flex-wrap:wrap;justify-content:flex-start;text-align:left;gap:6px 8px;padding:8px 10px}
+    .act__t{flex:1 1 calc(100% - 40px);min-width:0;text-align:left;line-height:1.4}
+    .act .bk-btn,.act .soon{margin-left:34px}
+    .act .bk-btn+.bk-btn{margin-left:0}
+  }
 
   .toc-intro{display:flex;align-items:center;gap:12px;flex-wrap:wrap;margin:14px 0 6px}
   .toc-intro h2{font-family:var(--f-head);font-size:1.5rem;margin:0;flex:1}

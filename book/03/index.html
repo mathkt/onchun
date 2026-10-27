@@ -41,6 +41,61 @@
   .mini5 i.b{background:#222}.mini5 i.w{background:#f8f8f8}.mini5 i.e{background:#F3D98B;border-radius:2px}
   /* 우물고누 */
   .gonu-turn{font-family:var(--f-head);font-size:1.2rem;text-align:center;margin:6px 0}
+  /* 탐구 단계 */
+  .iq-intro{margin:0 0 8px;font-size:.9rem;color:var(--bk-ink-soft)}
+  .iq{display:flex;flex-direction:column;gap:10px}
+  .iq-step{background:#fff;border:2px solid var(--bk-line);border-radius:16px;padding:10px 14px}
+  .iq-step.cur{border-color:var(--bk-orange);box-shadow:0 0 0 3px #FFF1C9}
+  .iq-step.done{border-color:var(--bk-mint-line);background:#F6FCF9}
+  .iq-step.locked{background:rgba(255,255,255,.5);border-style:dashed;opacity:.7}
+  .iq-h{display:flex;align-items:center;gap:8px;font-family:var(--f-head);font-size:1.1rem}
+  .iq-h b{font-weight:400}
+  .iq-n{font-size:1.3rem;color:var(--bk-sky);line-height:1;flex:none}
+  .done .iq-n{color:var(--bk-green)}.locked .iq-n{color:#b9b29c}
+  .iq-st{margin-left:auto;font-size:.78rem;padding:2px 9px;border-radius:999px;background:var(--bk-cream);color:var(--bk-ink-soft);white-space:nowrap}
+  .cur .iq-st{background:#FFE9B8;color:#9a5a00}.done .iq-st{background:#e6f5e3;color:#2f7a2f}
+  .iq-lock{display:none;font-size:.82rem;color:var(--bk-ink-soft);margin-top:2px}
+  .locked .iq-lock{display:block}
+  .locked .iq-b,.locked .iq-hints,.locked .iq-hint{display:none!important}
+  .iq-b{margin-top:6px;font-size:.93rem}
+  .iq-q{margin:4px 0 6px}
+  .iq-hints{display:flex;gap:6px;flex-wrap:wrap;margin-top:8px}
+  .iq-hints .bk-btn{min-height:34px;padding:4px 12px;font-size:.85rem}
+  .iq-hint{background:#FFF6CF;border:1.5px solid #f1dd8f;border-radius:10px;padding:6px 10px;font-size:.88rem;margin:6px 0 0}
+  .iq-in{width:48px;font-family:var(--f-head);font-size:1.1rem;text-align:center;padding:4px 2px;border:2px solid var(--bk-line);border-radius:8px;background:#fff;color:var(--bk-ink);box-sizing:border-box}
+  .iq-in.wide{width:86px}
+  .iq-in:focus{outline:none;border-color:var(--bk-sky)}
+  .iq-in.ok{border-color:var(--bk-green);background:#EDF9F4}.iq-in.bad{border-color:var(--bk-red);background:#fde8e5}
+  .iq-row{display:flex;flex-wrap:wrap;gap:6px 8px;align-items:center;margin:6px 0}
+  .iq-msg{margin:4px 0 6px;padding-left:1.1em;font-size:.86rem;color:var(--bk-red)}
+  .iq-msg.ok{color:#2f7a2f;list-style:none;padding-left:0;font-family:var(--f-head);font-size:1rem}
+  .iq-msg:empty{display:none}
+  .iq-fb{min-height:1.2em;margin:4px 0;font-size:.88rem;color:var(--bk-red)}.iq-fb.ok{color:#2f7a2f;font-family:var(--f-head);font-size:1rem}
+  .iq-mc{display:flex;flex-direction:column;gap:6px;align-items:stretch}
+  .iq-mc .bk-btn{justify-content:flex-start;text-align:left;white-space:normal;line-height:1.35;color:var(--bk-ink)}
+  .iq-mc .bk-btn.ok{border-color:var(--bk-green);background:#EDF9F4;box-shadow:0 3px 0 #8fcf8f}
+  .iq-mc .bk-btn.bad{border-color:var(--bk-red);background:#fde8e5;box-shadow:0 3px 0 #f0a89c}
+  .iq-cmp{background:var(--bk-mint);border:1.5px solid var(--bk-mint-line);border-radius:10px;padding:8px 12px;margin-top:6px;font-size:.9rem}
+  .iq .tbl{margin:4px 0 6px}
+  .iq-scroll{overflow-x:auto;-webkit-overflow-scrolling:touch}
+  .iq-scroll .tbl{display:table;max-width:none;width:auto}
+  .iq .tbl td,.iq .tbl th{padding:5px 7px}
+  .iq-rec tr.ok td{background:#EDF9F4}
+  .iq-rec .bk-btn{min-height:32px;padding:3px 10px;font-size:.82rem;box-shadow:0 2px 0 #3a95c4}
+  .iq-rec .bk-btn--ghost{box-shadow:0 2px 0 #d8cfb3}
+  .iq-ok{color:#2f7a2f;font-family:var(--f-head)}
+  .seq-s{font-family:var(--f-mono,monospace);font-size:.82rem;letter-spacing:.05em;white-space:normal}
+  .iq-rec td:nth-child(2){white-space:normal;min-width:70px}
+  .iq-out{font-family:var(--f-head);font-size:1.15rem;color:var(--bk-red)}
+  .iq .reveal{margin:6px 0 0}
+  @keyframes iqpop{0%{transform:scale(.97)}60%{transform:scale(1.015)}100%{transform:none}}
+  .iq-step.just{animation:iqpop .35s ease-out}
+  @media(prefers-reduced-motion:reduce){.iq-step.just{animation:none}}
+  @media(max-width:640px){.iq-step{padding:9px 10px}.iq-h{font-size:1rem}.iq-b{font-size:.9rem}}
+  /* 정사각형 크기 토글 */
+  .seg{display:inline-flex;border:2px solid var(--bk-sky);border-radius:999px;overflow:hidden;background:#fff}
+  .seg button{font-family:var(--f-head);font-size:.95rem;border:0;background:transparent;color:var(--bk-ink);padding:4px 14px;min-height:36px;cursor:pointer;-webkit-tap-highlight-color:transparent}
+  .seg button.on{background:var(--bk-sky);color:#fff}
 </style>
 </head>
 <body class="bk">
@@ -71,17 +126,14 @@
       <div class="bk-act"><span class="bk-act__n">1</span><span class="bk-act__t">정삼각형 모양의 바둑돌 뒤집기</span><span class="bk-tag">문제 해결</span><span class="bk-tag">추론</span></div>
       <p class="bk-muted">바둑돌을 옮겨 삼각형을 <b>위아래로 뒤집은 모양</b>으로 만들어 보세요. 돌을 누른 뒤 빈 자리(노란 점)를 누르면 옮겨져요. 최소 몇 번에 될까요?</p>
       <div class="setup"><label>단계: <select id="tr-n" class="sel"><option>2</option><option selected>3</option><option>4</option><option>5</option><option>6</option><option>7</option></select></label><button class="bk-btn bk-btn--primary bk-btn--sm" id="tr-reset">다시 놓기</button><button class="bk-btn bk-btn--ghost bk-btn--sm" id="tr-undo">무르기</button></div>
-      <div class="counter"><div>돌 개수 <b id="tr-cnt">6</b></div><div>옮긴 횟수 <b id="tr-mv">0</b></div><div id="tr-best">최소 횟수 <b>?</b></div><button class="bk-btn bk-btn--ghost bk-btn--sm" id="tr-ans">정답 보기</button></div>
+      <div class="counter"><div>돌 개수 <b id="tr-cnt">6</b></div><div>옮긴 횟수 <b id="tr-mv">0</b></div><div id="tr-best" class="ok" hidden>최소 횟수 <b>?</b></div></div>
       <svg class="board" id="tr-svg" viewBox="0 0 520 360"></svg>
       <div class="result" id="tr-res"></div>
     </div>
     <div class="bk-panel bk-panel--pink secret">
-      <h3>🔍 규칙 찾기</h3>
-      <div class="q"><b>1</b> 4단계와 5단계에서 필요한 바둑돌의 개수를 각각 구해 보자.</div>
-      <div class="q"><b>2</b> 2단계에서 7단계까지 뒤집는 데 움직여야 하는 최소 바둑돌 수를 표로 정리해 보자.</div>
-      <table class="tbl" id="tr-tbl"><thead><tr><th>단계</th><th>2</th><th>3</th><th>4</th><th>5</th><th>6</th><th>7</th><th>10</th></tr></thead><tbody><tr><td>돌 개수</td><td>3</td><td>6</td><td>10</td><td>15</td><td>21</td><td>28</td><td>55</td></tr><tr><td>최소 이동</td><td id="tb2">?</td><td id="tb3">?</td><td id="tb4">?</td><td id="tb5">?</td><td id="tb6">?</td><td id="tb7">?</td><td id="tb10">?</td></tr></tbody></table>
-      <button class="bk-btn bk-btn--mint bk-btn--sm" id="tr-show">표 채우기</button>
-      <details class="reveal"><summary>힌트 보기</summary><p>삼각형의 세 꼭짓점 쪽 돌만 옮기고 가운데 큰 덩어리는 그대로 두면 돼요. 최소 이동 횟수는 <b>돌 개수 ÷ 3의 몫</b>, 즉 n단계일 때 ⌊n(n+1)/6⌋이에요. 10단계는 55 ÷ 3 → 18번.</p></details>
+      <h3>🔍 규칙 찾기 — 탐구 단계</h3>
+      <p class="iq-intro">규칙을 바로 알려 주지 않아요! 단계를 하나씩 마치면 다음 단계가 열려요.</p>
+      <div class="iq" id="tr-iq"></div>
     </div>
   </section>
 
@@ -92,16 +144,14 @@
       <div class="bk-rule"><ol><li>한 칸에 한 개의 바둑돌을 놓을 수 있다.</li><li>옆 칸이 비어 있을 때는 빈칸으로 옮길 수 있다. (슬라이드 <b>S</b>)</li><li>옆 칸에 다른 색의 바둑돌이 1개 있고, 그다음 칸이 비어 있을 때는 그 빈칸으로 옮길 수 있다. (점프 <b>J</b>)</li></ol></div>
       <div class="setup"><label>흰 돌 = 검은 돌 = <select id="sl-n" class="sel"><option>1</option><option selected>2</option><option>3</option><option>4</option><option>5</option></select>개</label><button class="bk-btn bk-btn--primary bk-btn--sm" id="sl-reset">다시 놓기</button><button class="bk-btn bk-btn--ghost bk-btn--sm" id="sl-undo">무르기</button></div>
       <div class="line" id="sl-line"></div>
-      <div class="counter"><div>슬라이드 S <b id="sl-s">0</b></div><div>점프 J <b id="sl-j">0</b></div><div>총 이동 <b id="sl-t">0</b></div><div id="sl-best">최소 <b>?</b></div><button class="bk-btn bk-btn--ghost bk-btn--sm" id="sl-ans">정답 보기</button></div>
+      <div class="counter"><div>슬라이드 S <b id="sl-s">0</b></div><div>점프 J <b id="sl-j">0</b></div><div>총 이동 <b id="sl-t">0</b></div><div id="sl-best" class="ok" hidden>최소 <b>?</b></div></div>
       <div>이동 과정: <span class="seq" id="sl-seq"></span></div>
       <div class="result" id="sl-res"></div>
     </div>
     <div class="bk-panel bk-panel--pink secret">
-      <h3>🔍 규칙 찾기</h3>
-      <div class="q"><b>1</b> n=1, 2, 3일 때 슬라이드(S)와 점프(J)로 과정을 나타내고 표를 완성해 보자.</div>
-      <table class="tbl"><thead><tr><th>개수</th><th>이동 과정</th><th>S</th><th>J</th><th>최소 이동</th></tr></thead><tbody id="sl-tbl"><tr><td>n=1</td><td>S J S</td><td>2</td><td>1</td><td>3</td></tr></tbody></table>
-      <p class="bk-muted" style="margin-left:36px">위에서 최소 횟수로 성공하면 표에 자동으로 기록돼요.</p>
-      <details class="reveal"><summary>힌트 보기</summary><p>점프는 n×n = n²번, 슬라이드는 2n번이 필요해요. 최소 이동 횟수 = <b>n² + 2n = n(n+2)</b>. n=2 → 8, n=3 → 15, n=k → k(k+2).</p></details>
+      <h3>🔍 규칙 찾기 — 탐구 단계</h3>
+      <p class="iq-intro">흰 돌과 검은 돌이 n개씩일 때의 규칙을 단계별로 찾아봐요.</p>
+      <div class="iq" id="sl-iq"></div>
     </div>
   </section>
 
@@ -112,18 +162,14 @@
       <p class="bk-muted">양쪽에 놓인 바둑돌의 개수가 다른 경우는 어떻게 될지 탐구해 보세요. 규칙은 활동 2와 같아요.</p>
       <div class="setup"><label>흰 돌 <select id="as-m" class="sel"><option selected>1</option><option>2</option><option>3</option><option>4</option></select></label><label>검은 돌 <select id="as-n" class="sel"><option>2</option><option>3</option><option>4</option><option>5</option><option selected>6</option></select></label><button class="bk-btn bk-btn--primary bk-btn--sm" id="as-reset">다시 놓기</button><button class="bk-btn bk-btn--ghost bk-btn--sm" id="as-undo">무르기</button></div>
       <div class="line" id="as-line"></div>
-      <div class="counter"><div>슬라이드 S <b id="as-s">0</b></div><div>점프 J <b id="as-j">0</b></div><div>총 이동 <b id="as-t">0</b></div><div id="as-best">최소 <b>?</b></div><button class="bk-btn bk-btn--ghost bk-btn--sm" id="as-ans">정답 보기</button></div>
+      <div class="counter"><div>슬라이드 S <b id="as-s">0</b></div><div>점프 J <b id="as-j">0</b></div><div>총 이동 <b id="as-t">0</b></div><div id="as-best" class="ok" hidden>최소 <b>?</b></div></div>
       <div>이동 과정: <span class="seq" id="as-seq"></span></div>
       <div class="result" id="as-res"></div>
     </div>
     <div class="bk-panel bk-panel--pink secret">
-      <h3>🔍 규칙 찾기</h3>
-      <div class="q"><b>1</b> (1, 6), (2, 5), (3, 4)인 경우 최소 이동 횟수를 구하고 표를 채워 보자.</div>
-      <table class="tbl"><thead><tr><th>(m, n)</th><th>흰 돌 이동 칸 수</th><th>검은 돌 이동 칸 수</th><th>점프로 줄인 횟수</th><th>최소 이동</th></tr></thead>
-        <tbody><tr><td>(1, 6)</td><td>1×7=7</td><td>6×2=12</td><td>6</td><td>7+12−6=13</td></tr><tr><td>(2, 5)</td><td id="as25a"></td><td id="as25b"></td><td id="as25c"></td><td id="as25d"></td></tr><tr><td>(3, 4)</td><td id="as34a"></td><td id="as34b"></td><td id="as34c"></td><td id="as34d"></td></tr></tbody></table>
-      <button class="bk-btn bk-btn--mint bk-btn--sm" id="as-show">표 채우기</button>
-      <div class="q"><b>2</b> 흰 돌 m개, 검은 돌 n개일 때의 규칙을 생각해 보자.</div>
-      <details class="reveal"><summary>힌트 보기</summary><p>흰 돌은 각각 (n+1)칸, 검은 돌은 각각 (m+1)칸 움직여야 하고, 점프 한 번은 2칸을 한 번에 가니 점프 횟수 mn만큼 줄어요. 최소 이동 = m(n+1) + n(m+1) − mn = <b>mn + m + n</b>. (슬라이드 m+n번, 점프 mn번)</p></details>
+      <h3>🔍 규칙 찾기 — 탐구 단계</h3>
+      <p class="iq-intro">흰 돌 m개, 검은 돌 n개일 때의 규칙을 단계별로 찾아봐요.</p>
+      <div class="iq" id="as-iq"></div>
     </div>
   </section>
 
@@ -132,9 +178,9 @@
     <div class="bk-panel bk-panel--pink">
       <div class="bk-act"><span class="bk-act__n" style="background:var(--bk-red)">★</span><span class="bk-act__t">나도 수학자 — 정사각형 퍼즐</span><span class="bk-tag">추론</span><span class="bk-tag">정보 처리</span></div>
       <div class="bk-rule"><ol><li>한 칸에 한 개의 바둑돌을 놓을 수 있다.</li><li>상하좌우의 칸이 비어 있을 때는 빈칸으로 바둑돌을 옮길 수 있다.</li><li>상하좌우에 다른 색의 바둑돌이 1개 있고, 다음 칸이 비어 있을 때는 그 빈칸으로 옮길 수 있다. (대각선으로는 옮길 수 없다.)</li></ol></div>
-      <p class="bk-muted" style="margin:10px 0 4px">[그림 1]의 돌을 [그림 2]처럼 흑백이 바뀐 모양으로 옮겨 보세요.</p>
+      <p class="bk-muted" style="margin:10px 0 4px">[그림 1]의 돌을 [그림 2]처럼 흑백이 바뀐 모양으로 옮겨 보세요. <span id="sq-tip">처음이라면 <b>3×3</b>부터 도전!</span></p>
       <div class="bk-row mini-row"><span class="mini5" id="mini-from"></span><span>→</span><span class="mini5" id="mini-to"></span></div>
-      <div class="setup"><button class="bk-btn bk-btn--primary bk-btn--sm" id="sq-reset">다시 놓기</button><button class="bk-btn bk-btn--ghost bk-btn--sm" id="sq-undo">무르기</button><span class="counter" style="margin:0"><div>이동 <b id="sq-mv">0</b></div></span></div>
+      <div class="setup"><span class="seg" role="group" aria-label="판 크기"><button type="button" data-sz="3" aria-pressed="false">3×3</button><button type="button" data-sz="5" class="on" aria-pressed="true">5×5</button></span><button class="bk-btn bk-btn--primary bk-btn--sm" id="sq-reset">다시 놓기</button><button class="bk-btn bk-btn--ghost bk-btn--sm" id="sq-undo">무르기</button><span class="counter" style="margin:0"><div>이동 <b id="sq-mv">0</b></div><div id="sq-best" class="ok" hidden>최소 <b></b></div></span></div>
       <div class="grid5" id="sq-grid"></div>
       <div class="result" id="sq-res"></div>
       <details class="reveal" style="margin-left:0"><summary>힌트 보기</summary><p>가운데 빈칸이 있는 가로줄과 세로줄을 먼저 1차원 퍼즐처럼 풀어 보세요. 한 줄을 바꿔 놓으면 빈칸이 다른 줄로 옮겨 가요. 줄 하나씩 차례로 바꾸는 것이 기본 전략이에요.</p></details>
@@ -166,74 +212,293 @@ const $ = s => document.querySelector(s); const ri = n => Math.floor(Math.random
 document.querySelectorAll('#tabs .tab').forEach(b => b.onclick = () => { document.querySelectorAll('#tabs .tab').forEach(x => x.classList.toggle('on', x === b)); document.querySelectorAll('.act-page').forEach(p => { p.hidden = p.id !== b.dataset.t; p.style.display = p.hidden ? 'none' : ''; }); });
 (function(){ const h=location.hash.slice(1); const b=h&&document.querySelector(`#tabs .tab[data-t="${h}"]`); if(b) b.click(); })();
 
+/* ===== 탐구 단계 (①해보기 → ②표 채우기 → ③규칙 추측 → ④예측하기 → ⑤식 완성) 공용 ===== */
+const RMQ = matchMedia('(prefers-reduced-motion: reduce)');
+const CIRC = '①②③④⑤';
+function inquiry(host, steps, onAll) {
+  const done = new Set();
+  const els = steps.map((s, i) => {
+    const el = document.createElement('section'); el.className = 'iq-step locked';
+    el.innerHTML = `<div class="iq-h"><span class="iq-n">${CIRC[i]}</span><b>${s.t}</b><span class="iq-st">🔒 잠김</span></div>
+      <div class="iq-lock">앞 단계를 마치면 열려요.</div><div class="iq-b"></div>
+      <div class="iq-hints"><button type="button" class="bk-btn bk-btn--ghost bk-btn--sm">💡 힌트 1</button><button type="button" class="bk-btn bk-btn--ghost bk-btn--sm" disabled>💡 힌트 2</button></div>
+      <p class="iq-hint" hidden>${s.h[0]}</p><p class="iq-hint" hidden>${s.h[1]}</p>`;
+    host.appendChild(el); return el;
+  });
+  const set = (i, cls, label) => { const el = els[i]; el.classList.remove('locked', 'cur', 'done'); el.classList.add(cls); el.querySelector('.iq-st').textContent = label; };
+  const pop = el => { if (RMQ.matches) return; el.classList.remove('just'); void el.offsetWidth; el.classList.add('just'); el.addEventListener('animationend', () => el.classList.remove('just'), { once: true }); };
+  const api = {
+    done: i => done.has(i), all: () => done.size === steps.length,
+    finish(i) {
+      if (done.has(i) || els[i].classList.contains('locked')) return;
+      done.add(i); set(i, 'done', '✔ 완료'); pop(els[i]);
+      if (i + 1 < steps.length && !done.has(i + 1)) { set(i + 1, 'cur', '진행 중'); steps[i + 1].open?.(); pop(els[i + 1]); }
+      if (api.all()) onAll?.();
+    }
+  };
+  steps.forEach((s, i) => {
+    const el = els[i], [b1, b2] = el.querySelectorAll('.iq-hints .bk-btn'), [h1, h2] = el.querySelectorAll('.iq-hint');
+    b1.onclick = () => { h1.hidden = !h1.hidden; b2.disabled = false; };
+    b2.onclick = () => { h2.hidden = !h2.hidden;
+      if (s.skip && !el.querySelector('.iq-skip')) { const k = document.createElement('button'); k.type = 'button'; k.className = 'bk-btn bk-btn--ghost bk-btn--sm iq-skip'; k.textContent = '이 단계 건너뛰기 ▶'; k.onclick = () => api.finish(i); el.querySelector('.iq-hints').appendChild(k); } };
+    s.build(el.querySelector('.iq-b'), () => api.finish(i), api);
+  });
+  set(0, 'cur', '진행 중'); steps[0].open?.();
+  return api;
+}
+const numIn = (cls = '') => `<input class="iq-in ${cls}" type="text" inputmode="numeric" pattern="[0-9]*" autocomplete="off" maxlength="4">`;
+const txtIn = (cls = 'wide') => `<input class="iq-in ${cls}" type="text" autocomplete="off" autocapitalize="off" spellcheck="false" maxlength="10">`;
+const normF = v => v.toLowerCase().replace(/[\s×*·⋅x()]/g, '');
+/* 입력 칸 채점: items = [{el, test(v), label, hint}] → 칸마다 초록/빨강, 메시지 목록 */
+function grade(items, msgEl, okText) {
+  let all = true; const out = [];
+  items.forEach(x => { const v = x.el.value.trim(); x.el.classList.remove('ok', 'bad');
+    if (v === '') { all = false; if (!out.includes(`${x.label}: 빈칸이에요.`)) out.push(`${x.label}: 빈칸이에요.`); return; }
+    const ok = x.test(v); x.el.classList.add(ok ? 'ok' : 'bad'); if (!ok) { all = false; out.push(`${x.label}: ${x.hint}`); } });
+  msgEl.classList.toggle('ok', all); msgEl.innerHTML = all ? `<li>✔ ${okText || '모두 맞았어요!'}</li>` : out.map(m => `<li>${m}</li>`).join('');
+  return all;
+}
+function wireInputs(root) { root.querySelectorAll('.iq-in').forEach(i => i.addEventListener('input', () => { if (i.inputMode === 'numeric') i.value = i.value.replace(/\D/g, ''); i.classList.remove('ok', 'bad'); })); }
+/* 객관식 */
+function mc(body, q, opts, ans, wrong, done) {
+  body.insertAdjacentHTML('beforeend', `<p class="iq-q">${q}</p><div class="iq-mc">${opts.map((o, i) => `<button type="button" class="bk-btn bk-btn--ghost bk-btn--sm" data-i="${i}">${'ㄱㄴㄷㄹ'[i]}. ${o}</button>`).join('')}</div><p class="iq-fb" aria-live="polite"></p>`);
+  const fb = body.querySelector('.iq-fb');
+  body.querySelectorAll('.iq-mc button').forEach(b => b.onclick = () => {
+    const i = +b.dataset.i;
+    if (i === ans) { body.querySelectorAll('.iq-mc button').forEach(x => x.disabled = x !== b); b.classList.add('ok'); fb.className = 'iq-fb ok'; fb.textContent = '✔ 맞아요!'; done(); }
+    else { b.classList.add('bad'); fb.className = 'iq-fb'; fb.textContent = wrong; if (!RMQ.matches) b.animate([{ transform: 'translateX(0)' }, { transform: 'translateX(-5px)' }, { transform: 'translateX(5px)' }, { transform: 'none' }], { duration: 240 }); }
+  });
+}
+/* 예측: 숫자 하나 입력 → 비교 공개 */
+function predict(body, q, ans, cmpHtml, wrong, done) {
+  body.insertAdjacentHTML('beforeend', `<p class="iq-q">${q}</p><div class="iq-row">내 예측: ${numIn('wide')} 번 <button type="button" class="bk-btn bk-btn--mint bk-btn--sm">예측 확인</button></div><p class="iq-fb" aria-live="polite"></p><div class="iq-cmp" hidden>${cmpHtml}</div>`);
+  const inp = body.querySelector('.iq-in'), fb = body.querySelector('.iq-fb'); wireInputs(body);
+  body.querySelector('.iq-row .bk-btn').onclick = () => {
+    const v = inp.value.trim(); inp.classList.remove('ok', 'bad'); if (!v) { fb.className = 'iq-fb'; fb.textContent = '예측한 수를 적어 주세요.'; return; }
+    if (+v === ans) { inp.classList.add('ok'); fb.className = 'iq-fb ok'; fb.textContent = `✔ 예측 ${v}번 — 정답과 같아요!`; body.querySelector('.iq-cmp').hidden = false; done(); }
+    else { inp.classList.add('bad'); fb.className = 'iq-fb'; fb.textContent = `예측 ${v}번은 아니에요. ${wrong}`; }
+  };
+}
+/* ① 해보기 기록 표: cases = [{key,label}] */
+function recBox(body, intro, head, cases, onTry) {
+  body.insertAdjacentHTML('beforeend', `<p class="iq-q">${intro}</p><table class="tbl iq-rec"><thead><tr><th>경우</th>${head.map(h => `<th>${h}</th>`).join('')}<th></th></tr></thead><tbody>${cases.map(c => `<tr data-k="${c.key}"><td>${c.label}</td>${head.map(() => '<td>—</td>').join('')}<td><button type="button" class="bk-btn bk-btn--sky bk-btn--sm iq-try">판에서 해 보기</button></td></tr>`).join('')}</tbody></table>`);
+  body.querySelectorAll('.iq-try').forEach(b => b.onclick = () => onTry(b.closest('tr').dataset.k));
+  return (key, cells, isMin) => { const tr = body.querySelector(`tr[data-k="${key}"]`); if (!tr) return; const tds = tr.querySelectorAll('td');
+    cells.forEach((v, i) => tds[i + 1].innerHTML = v); tr.classList.toggle('ok', isMin); tds[tds.length - 1].innerHTML = isMin ? '<span class="iq-ok">✔ 최소</span>' : '<button type="button" class="bk-btn bk-btn--ghost bk-btn--sm iq-try">더 줄이기</button>';
+    const b = tds[tds.length - 1].querySelector('.iq-try'); if (b) b.onclick = () => onTry(key); };
+}
+const goBoard = sec => { const el = document.querySelector(`#${sec} .bk-panel`); el.scrollIntoView({ behavior: RMQ.matches ? 'auto' : 'smooth', block: 'start' }); };
+
 /* ===== 1 삼각형 뒤집기 (격자: X=2x 정수, y) ===== */
+const TR = { min: n => Math.floor(n * (n + 1) / 6), best: {}, iq: null, known(n) { return this.best[n] === this.min(n) || !!this.iq?.all(); }, onSolved: null, setN: null };
 (function () {
-  let n = 3, stones = new Set(), sel = null, moves = 0, hist = [];
+  let n = 3, stones = new Set(), sel = null, moves = 0, hist = [], solved = false;
   const svg = $('#tr-svg'), key = (X, y) => X + ',' + y;
-  function init() { n = +$('#tr-n').value; stones = new Set(); for (let r = 0; r < n; r++) for (let c = 0; c <= r; c++) stones.add(key(2 * c - r, r)); sel = null; moves = 0; hist = []; $('#tr-cnt').textContent = n * (n + 1) / 2; $('#tr-best').innerHTML = `최소 횟수 <b>?</b>`; $('#tr-res').textContent = ''; draw(); }
-  const showBest = () => $('#tr-best').innerHTML = `최소 횟수 <b>${Math.floor(n * (n + 1) / 6)}</b>`; $('#tr-ans').onclick = showBest;
+  function showBest() { const b = $('#tr-best'); b.hidden = !TR.known(n); b.innerHTML = `최소 횟수 <b>${TR.min(n)}</b>`; }
+  function init() { n = +$('#tr-n').value; stones = new Set(); for (let r = 0; r < n; r++) for (let c = 0; c <= r; c++) stones.add(key(2 * c - r, r)); sel = null; moves = 0; hist = []; solved = false; $('#tr-cnt').textContent = n * (n + 1) / 2; showBest(); $('#tr-res').textContent = ''; draw(); }
+  TR.setN = k => { $('#tr-n').value = k; init(); }; TR.refresh = showBest;
   function isDown() { // 어떤 꼭짓점(X0,y0)에 대해 아래로 뾰족한 삼각형인지
     for (const k of stones) { const [X0, y0] = k.split(',').map(Number); let ok = true; for (let j = 0; j < n && ok; j++) for (let c = 0; c <= j; c++) if (!stones.has(key(X0 - j + 2 * c, y0 - j))) { ok = false; break; } if (ok) return true; } return false;
   }
   function draw() {
     const pts = [...stones].map(k => k.split(',').map(Number)); const sp = 46;
-    // 돌 범위에 맞춰 viewBox 조절 (빈 자리 1칸 여유)
     const Xs = pts.map(p => p[0]), Ys = pts.map(p => p[1]); const minX = Math.min(...Xs) - 2, maxX = Math.max(...Xs) + 2, minY = Math.min(...Ys) - 1, maxY = Math.max(...Ys) + 1;
     const P = (X, y) => [(X - minX) * sp / 2 + 30, (y - minY) * sp * 0.88 + 30];
     const vw = (maxX - minX) * sp / 2 + 60, vh = (maxY - minY) * sp * 0.88 + 60; svg.setAttribute('viewBox', `0 0 ${vw} ${vh}`); svg.style.maxWidth = Math.min(520, vw * 1.1) + 'px';
-    // 후보 빈 자리: 돌 주변 6방향
     const spots = new Set(); pts.forEach(([X, y]) => [[2, 0], [-2, 0], [1, 1], [-1, 1], [1, -1], [-1, -1]].forEach(([dx, dy]) => { const k = key(X + dx, y + dy); if (!stones.has(k)) spots.add(k); }));
     let h = '';
     if (sel) spots.forEach(k => { const [X, y] = k.split(',').map(Number); const [px, py] = P(X, y); h += `<circle class="spot" cx="${px}" cy="${py}" r="17" data-k="${k}"/>`; });
     pts.forEach(([X, y]) => { const [px, py] = P(X, y); const k = key(X, y); h += `<circle class="stone ${sel === k ? 'sel' : ''}" cx="${px}" cy="${py}" r="18" fill="#2a2a2a" stroke="#000" data-k="${k}"/>`; });
     svg.innerHTML = h; $('#tr-mv').textContent = moves;
     svg.querySelectorAll('.stone').forEach(e => e.onclick = () => { sel = sel === e.dataset.k ? null : e.dataset.k; draw(); });
-    svg.querySelectorAll('.spot').forEach(e => e.onclick = () => { hist.push([sel, e.dataset.k]); stones.delete(sel); stones.add(e.dataset.k); sel = null; moves++; draw(); if (isDown()) { const best = Math.floor(n * (n + 1) / 6); showBest(); $('#tr-res').textContent = moves <= best ? `🎉 ${moves}번! 최소 횟수로 뒤집었어요.` : `뒤집었어요! (${moves}번) 최소는 ${best}번 — 더 줄여 볼까요?`; } });
+    svg.querySelectorAll('.spot').forEach(e => e.onclick = () => { hist.push([sel, e.dataset.k]); stones.delete(sel); stones.add(e.dataset.k); sel = null; moves++; draw();
+      if (!solved && isDown()) { solved = true; const best = TR.min(n); const isMin = moves <= best;
+        if (isMin || !(n in TR.best) || moves < TR.best[n]) TR.best[n] = Math.min(moves, TR.best[n] ?? Infinity);
+        $('#tr-res').textContent = isMin ? `🎉 ${moves}번! 최소 횟수로 뒤집었어요.` : `뒤집었어요! (${moves}번) — 더 적은 횟수로도 될까요?${TR.known(n) ? ` 최소는 ${best}번.` : ''}`;
+        showBest(); TR.onSolved?.(n, moves, isMin); } });
   }
-  $('#tr-reset').onclick = init; $('#tr-n').onchange = init; $('#tr-undo').onclick = () => { const m = hist.pop(); if (!m) return; stones.delete(m[1]); stones.add(m[0]); moves--; sel = null; $('#tr-res').textContent = ''; draw(); };
-  $('#tr-show').onclick = () => [2,3,4,5,6,7,10].forEach(k => $('#tb' + k).textContent = Math.floor(k * (k + 1) / 6));
+  $('#tr-reset').onclick = init; $('#tr-n').onchange = init; $('#tr-undo').onclick = () => { const m = hist.pop(); if (!m) return; stones.delete(m[1]); stones.add(m[0]); moves--; sel = null; solved = false; $('#tr-res').textContent = ''; draw(); };
   init();
+})();
+/* 활동 1 탐구 단계 */
+(function () {
+  const STEPS = [2, 3, 4, 5, 6, 7], cnt = k => k * (k + 1) / 2;
+  let rec, fill2;
+  TR.iq = inquiry($('#tr-iq'), [
+    { t: '해보기', skip: true, h: ['가운데 큰 덩어리는 그대로 두고, 세 꼭짓점 쪽 돌만 옮겨 보세요.', '4단계: 맨 위 꼭짓점 돌을 맨 아래로, 아래 두 모서리 돌을 하나씩 위로 옮기면 돼요.'],
+      build(body) { rec = recBox(body, '2단계, 3단계, 4단계를 위 판에서 직접 뒤집어 보세요. 성공하면 여기에 자동으로 기록되고, <b>최소 횟수</b>로 성공하면 ✔가 붙어요.', ['돌 개수', '내 기록'], [2, 3, 4].map(k => ({ key: k, label: k + '단계' })), k => { TR.setN(+k); goBoard('t1'); }); } },
+    { t: '표 채우기', h: ['돌 개수는 한 줄에 1개, 2개, 3개, … 씩 늘어나요.', '최소 이동은 판에서 단계를 바꿔 직접 해 보세요. 5단계는 5번이에요.'], open: () => fill2(),
+      build(body, done) {
+        body.insertAdjacentHTML('beforeend', `<p class="iq-q">2단계부터 7단계까지 표를 채우고 [확인]을 눌러 보세요. (①에서 한 기록은 미리 적혀 있어요)</p>
+          <div class="iq-scroll"><table class="tbl"><thead><tr><th>단계</th>${STEPS.map(k => `<th>${k}</th>`).join('')}</tr></thead><tbody>
+          <tr><td>돌 개수</td>${STEPS.map(k => `<td>${k === 4 || k === 5 ? numIn().replace('class="iq-in ', `data-c="${k}" class="iq-in `) : cnt(k)}</td>`).join('')}</tr>
+          <tr><td>최소 이동</td>${STEPS.map(k => `<td>${numIn().replace('class="iq-in ', `data-m="${k}" class="iq-in `)}</td>`).join('')}</tr></tbody></table></div>
+          <div class="iq-row"><button type="button" class="bk-btn bk-btn--mint bk-btn--sm iq-chk">확인</button></div><ul class="iq-msg" aria-live="polite"></ul>
+          <details class="reveal iq-ans"><summary>정답 보기 (끝까지 막혔을 때만!)</summary><p>돌 개수: ${STEPS.map(k => `${k}단계 ${cnt(k)}개`).join(', ')}<br>최소 이동: ${STEPS.map(k => `${k}단계 ${TR.min(k)}번`).join(', ')}</p></details>`);
+        wireInputs(body);
+        fill2 = () => [2, 3, 4].forEach(k => { const i = body.querySelector(`[data-m="${k}"]`); if (i && !i.value && TR.best[k] === TR.min(k)) i.value = TR.best[k]; });
+        body.querySelector('.iq-chk').onclick = () => {
+          const items = [...body.querySelectorAll('[data-c]')].map(el => ({ el, label: `${el.dataset.c}단계 돌 개수`, test: v => +v === cnt(+el.dataset.c), hint: `한 줄씩 1+2+…+${el.dataset.c}개예요.` }))
+            .concat([...body.querySelectorAll('[data-m]')].map(el => { const k = +el.dataset.m; return { el, label: `${k}단계 최소 이동`, test: v => +v === TR.min(k), hint: k <= 4 ? '판에서 직접 해 보세요 (①의 기록을 확인!).' : '판에서 이 단계로 직접 해 보거나, 앞 칸들의 돌 개수와 최소 이동을 비교해 보세요.' }; }));
+          if (grade(items, body.querySelector('.iq-msg'), '표 완성! 이제 규칙을 추측해 봐요.')) done();
+        };
+      } },
+    { t: '규칙 추측', h: ['돌 개수와 최소 이동을 위아래로 나란히 놓고 비교해 보세요.', '6단계: 돌 21개 → 7번. 21 = 7 × □'],
+      build(body, done) { mc(body, '표를 보고 추측해 보세요. <b>최소 이동 = 돌 개수 ÷ □ 의 몫</b>. □에 알맞은 수는?', ['2', '3', '4', '6'], 1, '표의 4단계(돌 10개, 최소 3번)와 6단계(돌 21개, 최소 7번)에 넣어 확인해 보세요.', done); } },
+    { t: '예측하기', h: ['10단계의 돌 개수 = 1+2+…+10 = 55개', '55 ÷ 3 = 18 … 1'],
+      build(body, done) { predict(body, '판에 없는 <b>10단계</b>! 뒤집는 데 필요한 최소 이동 횟수를 예측해 보세요.', 18, '<b>비교</b> — 10단계 돌 개수 55개 → 55 ÷ 3 = 18 … 1 → 최소 <b>18번</b>. 추측한 규칙이 큰 단계에서도 통해요!', '돌 개수부터 구한 뒤 ③의 규칙에 넣어 보세요.', done); } },
+    { t: '식 완성', h: ['n단계 돌 개수 = 1+2+…+n = n(n+1) ÷ 2', '돌 개수 ÷ 3 = n(n+1) ÷ 2 ÷ 3 = n(n+1) ÷ (2×3)'],
+      build(body, done) {
+        body.insertAdjacentHTML('beforeend', `<p class="iq-q">빈칸을 채워 n단계의 식을 완성해 보세요.</p>
+          <div class="iq-row">n단계 돌 개수 = n(n+1) ÷ ${numIn().replace('class="iq-in ', 'data-a="2" class="iq-in ')}</div>
+          <div class="iq-row">최소 이동 = 돌 개수 ÷ ${numIn().replace('class="iq-in ', 'data-a="3" class="iq-in ')} 의 몫</div>
+          <div class="iq-row">　　　　 = n(n+1) ÷ ${numIn().replace('class="iq-in ', 'data-a="6" class="iq-in ')} 의 몫</div>
+          <div class="iq-row"><button type="button" class="bk-btn bk-btn--mint bk-btn--sm iq-chk">확인</button></div><ul class="iq-msg" aria-live="polite"></ul>
+          <details class="reveal iq-ans"><summary>정답 보기 (끝까지 막혔을 때만!)</summary><p>삼각형의 세 꼭짓점 쪽 돌만 옮기고 가운데 큰 덩어리는 그대로 두면 돼요. 최소 이동 횟수는 <b>돌 개수 ÷ 3의 몫</b>, 즉 n단계일 때 n(n+1) ÷ 6의 몫이에요. 10단계는 55 ÷ 3 → 18번.</p></details>`);
+        wireInputs(body);
+        body.querySelector('.iq-chk').onclick = () => { const items = [...body.querySelectorAll('[data-a]')].map((el, i) => ({ el, label: ['돌 개수 식', '최소 이동(돌 개수)', '최소 이동(n의 식)'][i], test: v => +v === +el.dataset.a, hint: ['1+2+…+n을 두 번 더하면 n(n+1)이에요.', '③에서 찾은 수예요.', '÷2 하고 또 ÷3 한 것과 같아요.'][i] }));
+          if (grade(items, body.querySelector('.iq-msg'), '규칙 발견 완료! 🎉 n단계 최소 이동 = n(n+1) ÷ 6의 몫')) done(); };
+      } }
+  ], () => TR.refresh());
+  TR.onSolved = (n, moves, isMin) => { if (n > 4) return; const b = TR.best[n]; rec(n, [n * (n + 1) / 2 + '개', `${b}번`], b === TR.min(n)); if ([2, 3, 4].every(k => TR.best[k] === TR.min(k))) TR.iq.finish(0); };
 })();
 
 /* ===== 1차원 바둑돌 퍼즐 (활동 2·3 공용) ===== */
-function linePuzzle(pre, getMN, onSolve) {
-  let cells = [], sel = null, S = 0, J = 0, seq = [], hist = [], m, n;
-  const line = $('#' + pre + '-line');
-  function init() { [m, n] = getMN(); cells = [...Array(m).fill('w'), '', ...Array(n).fill('b')]; sel = null; S = J = 0; seq = []; hist = []; $('#' + pre + '-best').innerHTML = `최소 <b>?</b>`; $('#' + pre + '-res').textContent = ''; draw(); }
-  const showBest = () => $('#' + pre + '-best').innerHTML = `최소 <b>${m * n + m + n}</b>`; $('#' + pre + '-ans').onclick = showBest;
+function linePuzzle(pre, getMN, hk = {}) {
+  let cells = [], sel = null, S = 0, J = 0, seq = [], hist = [], m, n, solved = false;
+  const line = $('#' + pre + '-line'), best = () => m * n + m + n;
+  function showBest() { const b = $('#' + pre + '-best'); b.hidden = !hk.known?.(m, n); b.innerHTML = `최소 <b>${best()}</b>`; }
+  function init() { [m, n] = getMN(); cells = [...Array(m).fill('w'), '', ...Array(n).fill('b')]; sel = null; S = J = 0; seq = []; hist = []; solved = false; showBest(); $('#' + pre + '-res').textContent = ''; draw(); }
   function moveable(i) { const e = cells.indexOf(''); if (!cells[i]) return null; const d = cells[i] === 'w' ? 1 : -1; if (e === i + d) return 'S'; if (e === i + 2 * d && cells[i + d] && cells[i + d] !== cells[i]) return 'J'; return null; }
   function draw() {
     line.innerHTML = ''; cells.forEach((c, i) => { const d = document.createElement('div'); d.className = 'cell1' + (sel === i ? ' sel' : '') + (moveable(i) ? ' can' : ''); if (c) d.innerHTML = `<div class="st ${c}"></div>`; d.onclick = () => click(i); line.appendChild(d); });
     $('#' + pre + '-s').textContent = S; $('#' + pre + '-j').textContent = J; $('#' + pre + '-t').textContent = S + J; $('#' + pre + '-seq').textContent = seq.join(' ');
   }
   function click(i) { const t = moveable(i); if (!t) return; const e = cells.indexOf(''); hist.push([i, e]); cells[e] = cells[i]; cells[i] = ''; if (t === 'S') S++; else J++; seq.push(t); draw();
-    const goal = [...Array(n).fill('b'), '', ...Array(m).fill('w')].join(); if (cells.join() === goal) { const best = m * n + m + n; showBest(); $('#' + pre + '-res').textContent = (S + J) === best ? `🎉 최소 ${best}번으로 성공!` : `성공! ${S + J}번 (최소 ${best}번)`; if (onSolve) onSolve(m, n, S, J, seq); }
+    const goal = [...Array(n).fill('b'), '', ...Array(m).fill('w')].join();
+    if (cells.join() === goal) { if (solved) return; solved = true; const isMin = S + J === best(); hk.solved?.(m, n, S, J, seq, isMin);
+      $('#' + pre + '-res').textContent = isMin ? `🎉 ${S + J}번, 최소 횟수로 성공!` : `성공! ${S + J}번 — 더 줄일 수 있어요. 다시 놓고 도전!${hk.known?.(m, n) ? ` (최소 ${best()}번)` : ''}`; showBest(); }
     else if (!cells.some((_, k) => moveable(k))) $('#' + pre + '-res').textContent = '움직일 수 없어요. 무르기로 되돌려 보세요.'; }
-  $('#' + pre + '-reset').onclick = init; $('#' + pre + '-undo').onclick = () => { const h = hist.pop(); if (!h) return; const t = seq.pop(); cells[h[0]] = cells[h[1]]; cells[h[1]] = ''; if (t === 'S') S--; else J--; $('#' + pre + '-res').textContent = ''; draw(); };
-  init(); return init;
+  $('#' + pre + '-reset').onclick = init; $('#' + pre + '-undo').onclick = () => { const h = hist.pop(); if (!h) return; const t = seq.pop(); cells[h[0]] = cells[h[1]]; cells[h[1]] = ''; if (t === 'S') S--; else J--; solved = false; $('#' + pre + '-res').textContent = ''; draw(); };
+  init(); return { init, refresh: showBest };
 }
-const slInit = linePuzzle('sl', () => { const k = +$('#sl-n').value; return [k, k]; }, (m, n, S, J, seq) => { if (S + J === m * n + m + n && m > 1) { const id = 'slrow' + m; let tr = document.getElementById(id); if (!tr) { tr = document.createElement('tr'); tr.id = id; $('#sl-tbl').appendChild(tr); } tr.innerHTML = `<td>n=${m}</td><td>${seq.join(' ')}</td><td>${S}</td><td>${J}</td><td>${S + J}</td>`; } });
-$('#sl-n').onchange = slInit;
-const asInit = linePuzzle('as', () => [+$('#as-m').value, +$('#as-n').value]);
-$('#as-m').onchange = asInit; $('#as-n').onchange = asInit;
-$('#as-show').onclick = () => { [[2,5],[3,4]].forEach(([m,n]) => { const id = 'as' + m + n; $('#'+id+'a').textContent = `${m}×${n+1}=${m*(n+1)}`; $('#'+id+'b').textContent = `${n}×${m+1}=${n*(m+1)}`; $('#'+id+'c').textContent = m*n; $('#'+id+'d').textContent = `${m*(n+1)}+${n*(m+1)}−${m*n}=${m*n+m+n}`; }); };
 
-/* ===== ★ 정사각형 퍼즐 ===== */
+/* ===== 2 최소 이동 (대칭) + 탐구 단계 ===== */
 (function () {
-  const START = ['bbbww', 'bbbww', 'bb.ww', 'bbwww', 'bbwww'];
-  let g, sel = null, mv = 0, hist = [];
+  const rec = {}, f = k => k * k + 2 * k; let iq, addRec, fill2;
+  const P = linePuzzle('sl', () => { const k = +$('#sl-n').value; return [k, k]; }, {
+    known: (m) => rec[m]?.isMin || !!iq?.all(),
+    solved: (m, n, S, J, seq, isMin) => { if (rec[m]?.isMin && !isMin) return; rec[m] = { S, J, seq: seq.join(' '), isMin };
+      if (m <= 3) { addRec(m, [`<span class="seq-s">${seq.join(' ')}</span>`, S, J, S + J], isMin); if ([1, 2, 3].every(k => rec[k]?.isMin)) iq.finish(0); } }
+  });
+  $('#sl-n').onchange = P.init;
+  iq = inquiry($('#sl-iq'), [
+    { t: '해보기', skip: true, h: ['흰 돌은 오른쪽, 검은 돌은 왼쪽으로만 가요. 같은 색끼리 길을 막지 않게 흰·검을 번갈아 움직여요.', 'n=1은 S J S. 슬라이드 다음에는 할 수 있는 점프를 모두 해 보세요.'],
+      build(body) { addRec = recBox(body, 'n=1, 2, 3일 때 위 판에서 직접 해 보세요. 성공하면 이동 과정이 자동으로 기록돼요.', ['이동 과정', 'S', 'J', '총'], [1, 2, 3].map(k => ({ key: k, label: 'n=' + k })), k => { $('#sl-n').value = k; P.init(); goBoard('t2'); }); } },
+    { t: '표 채우기', h: ['S 열과 J 열을 따로따로 보세요.', 'S: 2, 4, 6, …  J: 1, 4, 9, … 다음은?'], open: () => fill2(),
+      build(body, done) {
+        body.insertAdjacentHTML('beforeend', `<p class="iq-q">n=1~4의 표를 채우고 [확인]을 눌러 보세요. (①의 기록은 미리 적혀 있어요. n=4는 판에서 해 보거나 규칙으로 예상!)</p>
+          <div class="iq-scroll"><table class="tbl"><thead><tr><th>n</th><th>슬라이드 S</th><th>점프 J</th><th>최소 이동</th></tr></thead><tbody>
+          ${[1, 2, 3, 4].map(k => `<tr><td>n=${k}</td>${['S', 'J', 'T'].map(c => `<td>${numIn().replace('class="iq-in ', `data-k="${k}" data-c="${c}" class="iq-in `)}</td>`).join('')}</tr>`).join('')}</tbody></table></div>
+          <div class="iq-row"><button type="button" class="bk-btn bk-btn--mint bk-btn--sm iq-chk">확인</button></div><ul class="iq-msg" aria-live="polite"></ul>
+          <details class="reveal iq-ans"><summary>정답 보기 (끝까지 막혔을 때만!)</summary><p>${[1, 2, 3, 4].map(k => `n=${k}: S ${2 * k}, J ${k * k}, 최소 ${f(k)}`).join('<br>')}</p></details>`);
+        wireInputs(body);
+        fill2 = () => [1, 2, 3].forEach(k => { if (!rec[k]?.isMin) return; ['S', 'J'].forEach(c => { const i = body.querySelector(`[data-k="${k}"][data-c="${c}"]`); if (!i.value) i.value = rec[k][c]; }); const t = body.querySelector(`[data-k="${k}"][data-c="T"]`); if (!t.value) t.value = rec[k].S + rec[k].J; });
+        body.querySelector('.iq-chk').onclick = () => { const items = [...body.querySelectorAll('[data-k]')].map(el => { const k = +el.dataset.k, c = el.dataset.c; const ans = c === 'S' ? 2 * k : c === 'J' ? k * k : f(k);
+            return { el, label: `n=${k} ${c === 'T' ? '최소 이동' : c}`, test: v => +v === ans, hint: c === 'T' ? 'S와 J를 더한 값이에요.' : k === 4 ? '판에서 n=4로 해 보거나 위 줄들의 규칙을 이어 보세요.' : '①에서 최소로 성공한 기록을 확인해 보세요.' }; });
+          if (grade(items, body.querySelector('.iq-msg'), '표 완성! 최소 이동이 3, 8, 15, 24로 늘어나요.')) done(); };
+      } },
+    { t: '규칙 추측', h: ['8−3, 15−8, 24−15를 계산해 보세요.', '차이 5, 7, 9 — 차이끼리는 얼마씩 커지나요?'],
+      build(body, done) { mc(body, '최소 이동 횟수 3 → 8 → 15 → 24. <b>n이 1 늘면 최소 이동 횟수의 차이는?</b>', ['항상 5씩 늘어난다', '5, 7, 9, …처럼 2씩 커지는 홀수만큼 늘어난다', '2배씩 늘어난다', 'n만큼 늘어난다'], 1, '표에서 이웃한 두 수의 차이를 직접 계산해 보세요.', done); } },
+    { t: '예측하기', h: ['24 다음부터 +11, +13, +15, … 로 이어 가도 돼요.', 'S는 2n, J는 n×n — n=10을 넣어 보세요.'],
+      build(body, done) { predict(body, '흰 돌, 검은 돌이 <b>10개씩</b>일 때 최소 이동 횟수를 예측해 보세요.', 120, '<b>비교</b> — 슬라이드 S = 2 × 10 = 20번, 점프 J = 10 × 10 = 100번 → 최소 <b>120번</b>.', '표의 규칙을 n=10까지 이어 보세요.', done); } },
+    { t: '식 완성', h: ['S 열: 2, 4, 6, 8 → n의 몇 배?', 'J 열: 1, 4, 9, 16 → n × ?'],
+      build(body, done) {
+        body.insertAdjacentHTML('beforeend', `<p class="iq-q">빈칸을 채워 식을 완성해 보세요. (문자는 n으로)</p>
+          <div class="iq-row">슬라이드 S = ${numIn().replace('class="iq-in ', 'data-f="a" class="iq-in ')} × n</div>
+          <div class="iq-row">점프 J = n × ${txtIn('').replace('class="iq-in ', 'data-f="b" class="iq-in ')}</div>
+          <div class="iq-row">최소 이동 = n² + 2n = n × (n + ${numIn().replace('class="iq-in ', 'data-f="c" class="iq-in ')})</div>
+          <div class="iq-row"><button type="button" class="bk-btn bk-btn--mint bk-btn--sm iq-chk">확인</button></div><ul class="iq-msg" aria-live="polite"></ul>
+          <details class="reveal iq-ans"><summary>정답 보기 (끝까지 막혔을 때만!)</summary><p>점프는 n×n = n²번, 슬라이드는 2n번이 필요해요. 최소 이동 횟수 = <b>n² + 2n = n(n+2)</b>. n=2 → 8, n=3 → 15, n=k → k(k+2).</p></details>`);
+        wireInputs(body);
+        body.querySelector('.iq-chk').onclick = () => { const q = c => body.querySelector(`[data-f="${c}"]`);
+          if (grade([{ el: q('a'), label: 'S', test: v => +v === 2, hint: 'S 열 2, 4, 6, 8은 n의 몇 배인가요?' }, { el: q('b'), label: 'J', test: v => normF(v) === 'n', hint: 'J 열 1, 4, 9, 16은 같은 수를 두 번 곱한 수예요.' }, { el: q('c'), label: 'n(n+□)', test: v => +v === 2, hint: 'n² + 2n을 n으로 묶어 보세요.' }], body.querySelector('.iq-msg'), '규칙 발견 완료! 🎉 최소 이동 = n² + 2n = n(n+2)')) done(); };
+      } }
+  ], () => P.refresh());
+})();
+
+/* ===== 3 최소 이동 (비대칭) + 탐구 단계 ===== */
+(function () {
+  const rec = {}, f = (m, n) => m * n + m + n, CASES = [[1, 2], [1, 3], [2, 3]]; let iq, addRec;
+  const P = linePuzzle('as', () => [+$('#as-m').value, +$('#as-n').value], {
+    known: (m, n) => rec[m + ',' + n]?.isMin || !!iq?.all(),
+    solved: (m, n, S, J, seq, isMin) => { const k = m + ',' + n; if (rec[k]?.isMin && !isMin) return; rec[k] = { S, J, isMin };
+      if (CASES.some(([a, b]) => a === m && b === n)) { addRec(k, [S, J, S + J], isMin); if (CASES.every(([a, b]) => rec[a + ',' + b]?.isMin)) iq.finish(0); } }
+  });
+  $('#as-m').onchange = P.init; $('#as-n').onchange = P.init;
+  const ROWS = [[2, 5], [3, 4]];
+  iq = inquiry($('#as-iq'), [
+    { t: '해보기', skip: true, h: ['규칙은 활동 2와 같아요. 흰 돌은 오른쪽, 검은 돌은 왼쪽으로만 가요.', '(1, 2): 흰 돌 하나가 검은 돌 2개를 하나씩 뛰어넘어요 → 점프 2번.'],
+      build(body) { addRec = recBox(body, '(흰 돌 m, 검은 돌 n) = (1, 2), (1, 3), (2, 3)을 위 판에서 직접 해 보세요. 성공하면 자동으로 기록돼요.', ['S', 'J', '총'], CASES.map(([m, n]) => ({ key: m + ',' + n, label: `(${m}, ${n})` })), k => { const [m, n] = k.split(','); $('#as-m').value = m; $('#as-n').value = n; P.init(); goBoard('t3'); }); } },
+    { t: '표 채우기', h: ['(1, 6) 줄을 예시로 보세요. 흰 돌 하나는 검은 돌 n개 + 빈칸 1칸 = (n+1)칸 움직여요.', '점프 한 번은 2칸을 한 번에 가요 → 흰 돌과 검은 돌이 만날 때마다(m×n번) 1번씩 줄어요.'],
+      build(body, done) {
+        const H = ['흰 돌 이동 칸 수', '검은 돌 이동 칸 수', '점프로 줄인 횟수', '최소 이동'];
+        const ans = (m, n) => [m * (n + 1), n * (m + 1), m * n, f(m, n)];
+        body.insertAdjacentHTML('beforeend', `<p class="iq-q">(2, 5), (3, 4)인 경우의 표를 채우고 [확인]을 눌러 보세요.</p>
+          <div class="iq-scroll"><table class="tbl"><thead><tr><th>(m, n)</th>${H.map(h => `<th>${h}</th>`).join('')}</tr></thead><tbody>
+          <tr><td>(1, 6)</td><td>1×7=7</td><td>6×2=12</td><td>6</td><td>7+12−6=13</td></tr>
+          ${ROWS.map(([m, n]) => `<tr><td>(${m}, ${n})</td>${H.map((_, c) => `<td>${numIn().replace('class="iq-in ', `data-r="${m},${n}" data-c="${c}" class="iq-in `)}</td>`).join('')}</tr>`).join('')}</tbody></table></div>
+          <div class="iq-row"><button type="button" class="bk-btn bk-btn--mint bk-btn--sm iq-chk">확인</button></div><ul class="iq-msg" aria-live="polite"></ul>
+          <details class="reveal iq-ans"><summary>정답 보기 (끝까지 막혔을 때만!)</summary><p>${ROWS.map(([m, n]) => { const a = ans(m, n); return `(${m}, ${n}): ${m}×${n + 1}=${a[0]}, ${n}×${m + 1}=${a[1]}, ${a[2]}, ${a[0]}+${a[1]}−${a[2]}=${a[3]}`; }).join('<br>')}</p></details>`);
+        wireInputs(body);
+        const HINT = ['흰 돌 하나는 (n+1)칸씩 움직여요.', '검은 돌 하나는 (m+1)칸씩 움직여요.', '흰 돌과 검은 돌은 서로 한 번씩 만나요 → m×n번.', '흰 돌 칸 수 + 검은 돌 칸 수 − 점프로 줄인 횟수'];
+        body.querySelector('.iq-chk').onclick = () => { const items = [...body.querySelectorAll('[data-r]')].map(el => { const [m, n] = el.dataset.r.split(',').map(Number), c = +el.dataset.c;
+            return { el, label: `(${m}, ${n}) ${H[c]}`, test: v => +v === ans(m, n)[c], hint: HINT[c] }; });
+          if (grade(items, body.querySelector('.iq-msg'), '표 완성! (1,6) 13, (2,5) 17, (3,4) 19')) done(); };
+      } },
+    { t: '규칙 추측', h: ['①의 기록을 보세요. (1, 2)는 S=3, J=2였어요.', '(2, 3): S=5, J=6 — 5와 6을 2와 3으로 만들어 보세요.'],
+      build(body, done) { mc(body, '흰 돌 m개, 검은 돌 n개일 때 <b>슬라이드 S와 점프 J의 횟수</b>는?', ['S = m + n, J = m × n', 'S = m × n, J = m + n', 'S = 2(m + n), J = m × n', 'S = m + n, J = 2 × m × n'], 0, '①에서 기록한 (1, 2), (1, 3), (2, 3)의 S와 J에 넣어 확인해 보세요.', done); } },
+    { t: '예측하기', h: ['점프 J = 4 × 6', '슬라이드 S = 4 + 6'],
+      build(body, done) { predict(body, '흰 돌 <b>4개</b>, 검은 돌 <b>6개</b>일 때 최소 이동 횟수를 예측해 보세요.', 34, '<b>비교</b> — 점프 J = 4 × 6 = 24번, 슬라이드 S = 4 + 6 = 10번 → 최소 <b>34번</b>. 위 판에서 흰 돌 4, 검은 돌 6으로 직접 확인해 볼까요?', '③에서 찾은 S와 J의 규칙에 m=4, n=6을 넣어 보세요.', done); } },
+    { t: '식 완성', h: ['점프는 흰 돌과 검은 돌이 만나는 횟수예요.', '슬라이드는 돌 하나에 한 번씩이에요.'],
+      build(body, done) {
+        body.insertAdjacentHTML('beforeend', `<p class="iq-q">문자 m, n을 써서 식을 완성해 보세요. (예: m×n은 mn으로 써도 돼요)</p>
+          <div class="iq-row">점프 J = ${txtIn().replace('class="iq-in ', 'data-f="j" class="iq-in ')}</div>
+          <div class="iq-row">슬라이드 S = ${txtIn().replace('class="iq-in ', 'data-f="s" class="iq-in ')}</div>
+          <div class="iq-row">최소 이동 = J + S = <span class="iq-out" id="as-out">?</span></div>
+          <div class="iq-row"><button type="button" class="bk-btn bk-btn--mint bk-btn--sm iq-chk">확인</button></div><ul class="iq-msg" aria-live="polite"></ul>
+          <details class="reveal iq-ans"><summary>정답 보기 (끝까지 막혔을 때만!)</summary><p>흰 돌은 각각 (n+1)칸, 검은 돌은 각각 (m+1)칸 움직여야 하고, 점프 한 번은 2칸을 한 번에 가니 점프 횟수 mn만큼 줄어요. 최소 이동 = m(n+1) + n(m+1) − mn = <b>mn + m + n</b>. (슬라이드 m+n번, 점프 mn번)</p></details>`);
+        wireInputs(body);
+        body.querySelector('.iq-chk').onclick = () => { const q = c => body.querySelector(`[data-f="${c}"]`);
+          const ok = grade([{ el: q('j'), label: '점프 J', test: v => ['mn', 'nm'].includes(normF(v)), hint: '흰 돌 m개가 각각 검은 돌 n개를 뛰어넘어요.' }, { el: q('s'), label: '슬라이드 S', test: v => ['m+n', 'n+m'].includes(normF(v)), hint: '돌 하나에 슬라이드 한 번씩이에요.' }], body.querySelector('.iq-msg'), '규칙 발견 완료! 🎉 최소 이동 = mn + m + n');
+          $('#as-out').textContent = ok ? 'mn + m + n' : '?'; if (ok) done(); };
+      } }
+  ], () => P.refresh());
+})();
+
+/* ===== ★ 정사각형 퍼즐 (3×3 / 5×5) ===== */
+(function () {
+  // 5×5: 책 그림. 3×3: 같은 방식(왼쪽 검은 돌·오른쪽 흰 돌, 가운데 줄은 위 검은 돌·아래 흰 돌, 한가운데 빈칸)
+  // 최소 이동은 너비 우선 탐색(BFS)으로 미리 구한 값: 3×3 = 12번(전체 630가지 배치), 5×5 = 47번(전체 약 6760만 가지 배치)
+  // 최소 횟수는 한 번 성공한 뒤에만 보여 줌
+  const LAYOUT = { 3: ['bbw', 'b.w', 'bww'], 5: ['bbbww', 'bbbww', 'bb.ww', 'bbwww', 'bbwww'] }, MIN = { 3: 12, 5: 47 };
+  let N = 5, START = LAYOUT[5], goal, g, sel = null, mv = 0, hist = [], solvedOnce = {};
   const grid = $('#sq-grid');
-  const goal = START.map(r => [...r].map(c => c === 'b' ? 'w' : c === 'w' ? 'b' : c).join(''));
-  function mini(el, rows) { el.innerHTML = rows.map(r => [...r].map(c => `<i class="${c === '.' ? 'e' : c}"></i>`).join('')).join(''); }
-  mini($('#mini-from'), START); mini($('#mini-to'), goal);
-  function init() { g = START.map(r => [...r]); sel = null; mv = 0; hist = []; $('#sq-res').textContent = ''; draw(); }
+  function mini(el, rows) { el.style.gridTemplateColumns = `repeat(${N},16px)`; el.innerHTML = rows.map(r => [...r].map(c => `<i class="${c === '.' ? 'e' : c}"></i>`).join('')).join(''); }
+  function setSize(n) { N = n; START = LAYOUT[n]; goal = START.map(r => [...r].map(c => c === 'b' ? 'w' : c === 'w' ? 'b' : c).join(''));
+    grid.style.gridTemplateColumns = `repeat(${N},1fr)`; grid.style.maxWidth = N === 3 ? '230px' : ''; grid.classList.toggle('g3', N === 3);
+    mini($('#mini-from'), START); mini($('#mini-to'), goal);
+    document.querySelectorAll('#t4 .seg button').forEach(b => { const on = +b.dataset.sz === N; b.classList.toggle('on', on); b.setAttribute('aria-pressed', String(on)); });
+    init(); }
+  function showBest() { const b = $('#sq-best'); b.hidden = !(solvedOnce[N] && MIN[N]); if (MIN[N]) b.innerHTML = `최소 <b>${MIN[N]}</b>`; }
+  function init() { g = START.map(r => [...r]); sel = null; mv = 0; hist = []; $('#sq-res').textContent = ''; showBest(); draw(); }
   function target(r, c) { // 이동 가능한 목적지
     const col = g[r][c]; if (col === '.') return null; const out = [];
     for (const [dr, dc] of [[1,0],[-1,0],[0,1],[0,-1]]) { const r1 = r + dr, c1 = c + dc, r2 = r + 2*dr, c2 = c + 2*dc; if (g[r1]?.[c1] === '.') out.push([r1, c1]); else if (g[r1]?.[c1] && g[r1][c1] !== col && g[r2]?.[c2] === '.') out.push([r2, c2]); }
     return out;
   }
-  const RM = matchMedia('(prefers-reduced-motion: reduce)'); let busy = false;
-  const cellEl = (r, c) => grid.children[r * 5 + c];
+  const RM = RMQ; let busy = false;
+  const cellEl = (r, c) => grid.children[r * N + c];
   function draw() {
     grid.innerHTML = ''; const can = sel ? target(...sel) : [];
     g.forEach((row, r) => row.forEach((c, cc) => { const d = document.createElement('div'); const mov = !sel && c !== '.' && target(r, cc).length > 0;
@@ -241,7 +506,6 @@ $('#as-show').onclick = () => { [[2,5],[3,4]].forEach(([m,n]) => { const id = 'a
       if (c !== '.') d.innerHTML = `<div class="st ${c}"></div>`; d.onclick = () => click(r, cc); grid.appendChild(d); }));
     $('#sq-mv').textContent = mv;
   }
-  // FLIP: 옮기기 전 돌 위치를 재고, 다시 그린 뒤 새 칸의 돌을 그 위치에서 미끄러지게
   function slide(from, to, after) {
     const st = cellEl(...from)?.querySelector('.st'); const a = st?.getBoundingClientRect();
     g[to[0]][to[1]] = g[from[0]][from[1]]; g[from[0]][from[1]] = '.'; sel = null; draw();
@@ -259,11 +523,12 @@ $('#as-show').onclick = () => { [[2,5],[3,4]].forEach(([m,n]) => { const id = 'a
   }
   function doMove(from, to) {
     hist.push([from, to]); mv++;
-    slide(from, to, () => { if (g.map(x => x.join('')).join() === goal.join()) $('#sq-res').textContent = `🎉 ${mv}번 만에 성공!`; });
+    slide(from, to, () => { if (g.map(x => x.join('')).join() === goal.join()) { solvedOnce[N] = true; showBest(); const m0 = MIN[N];
+      $('#sq-res').textContent = m0 ? (mv <= m0 ? `🎉 ${mv}번! 최소 횟수로 성공!` : `🎉 ${mv}번 만에 성공! 최소는 ${m0}번 — 더 줄여 볼까요?`) : `🎉 ${mv}번 만에 성공!`; } });
   }
   function click(r, c) {
     if (busy) return;
-    if (sel) { // 목적지가 여러 곳일 때: 강조된 칸을 누르면 이동, 그 밖은 취소
+    if (sel) {
       const can = target(...sel);
       if (can.some(([a, b]) => a === r && b === c)) { doMove(sel, [r, c]); return; }
       const same = sel[0] === r && sel[1] === c; sel = null; draw(); if (same || g[r][c] === '.') return;
@@ -274,9 +539,10 @@ $('#as-show').onclick = () => { [[2,5],[3,4]].forEach(([m,n]) => { const id = 'a
     if (can.length === 0) { const el = cellEl(r, c); if (!RM.matches) el.animate([{ transform: 'translateX(0)' }, { transform: 'translateX(-5px)' }, { transform: 'translateX(5px)' }, { transform: 'translateX(0)' }], { duration: 220 }); $('#sq-res').textContent = ''; return; }
     sel = [r, c]; draw();
   }
+  document.querySelectorAll('#t4 .seg button').forEach(b => b.onclick = () => { if (!busy && +b.dataset.sz !== N) setSize(+b.dataset.sz); });
   $('#sq-reset').onclick = () => { if (!busy) init(); };
   $('#sq-undo').onclick = () => { if (busy) return; const h = hist.pop(); if (!h) return; mv--; $('#sq-res').textContent = ''; slide(h[1], h[0]); };
-  init();
+  setSize(5);
 })();
 
 /* ===== ★ 우물고누 ===== */

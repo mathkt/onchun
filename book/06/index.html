@@ -56,6 +56,10 @@
   .sanstep .row{display:flex;align-items:center;gap:14px;margin:4px 0;flex-wrap:wrap}
   .sanstep .lbl{width:140px;font-size:.85rem;color:var(--bk-ink-soft)}
   .finger .hit{fill:transparent;stroke:none}
+  .finger{-webkit-tap-highlight-color:transparent}
+  .finger:hover .skin{filter:brightness(1.04)}
+  .fg-wrap{display:flex;flex-direction:column}
+  @media(max-width:560px){.fg-wrap .eq{order:-1;font-size:1.25rem}}
 </style>
 </head>
 <body class="bk">
@@ -85,8 +89,8 @@
     <div class="bk-panel">
       <div class="bk-act"><span class="bk-act__n">1</span><span class="bk-act__t">손가락을 이용한 곱셈구구</span><span class="bk-tag">추론</span><span class="bk-tag">의사소통</span></div>
       <div class="setup"><div class="seg" id="fg-mode"><button class="on" data-m="9">9단</button><button data-m="69">6~9 곱셈</button></div><span class="bk-muted" id="fg-help">손가락을 눌러 접으세요. 9단: 곱할 수에 해당하는 손가락 하나를 접어요.</span></div>
-      <svg class="board" id="fg-svg" viewBox="0 0 586 300"></svg>
-      <div class="eq" id="fg-eq"></div>
+      <div class="fg-wrap"><svg class="board" id="fg-svg" viewBox="0 0 586 270" role="img" aria-label="두 손 그림 — 손가락을 눌러 접기"></svg>
+      <div class="eq" id="fg-eq"></div></div>
     </div>
     <div class="bk-panel bk-panel--pink secret">
       <h3>🔍 원리 설명하기</h3>
@@ -180,12 +184,44 @@ document.querySelectorAll('#tabs .tab').forEach(b => b.onclick = () => { documen
 (function () {
   let mode = '9', folded = new Set();
   const svg = $('#fg-svg');
-  const X = i => 40 + i * 54 + (i >= 5 ? 24 : 0);
+  // 손 그림: 손등이 보이게 두 손을 나란히 — 왼손(새끼→엄지), 오른손(엄지→새끼). 좁은 화면에선 위아래로 쌓아 손가락을 크게.
+  const HW = 290, BASE = 150; // 한 손의 폭, 손바닥 윗선
+  const LEN = [80, 106, 120, 106]; // 새끼·약지·중지·검지 길이
+  const SK = '#F9D3B4', SKD = '#E2A273', SKT = '#C47D4E', OUT = '#8A5A3C', NAIL = '#FDEDE2';
+  function fingerSVG(i, bx, by, ang, len, w, f, lab) {
+    const fl = 34; // 접힌 손가락 길이
+    const L = f ? fl : len, ty = f ? -fl / 2 + 2 : -len + 44;
+    let g = `<g class="finger" data-i="${i}" transform="translate(${bx} ${by}) rotate(${ang})">`;
+    g += `<rect class="hit" x="${-30}" y="${-len - 14}" width="60" height="${len + 44}"/>`;
+    if (f) { // 접힌 손가락: 짧고 진한 색, 끝이 안으로 말린 모양(마디 + 주름)
+      g += `<rect class="skin" x="${-w / 2}" y="${-L}" width="${w}" height="${L + 22}" rx="${w / 2}" fill="${SKD}" stroke="${OUT}" stroke-width="2.5"/>`;
+      g += `<path d="M${-w / 2 + 3} ${-L + 12} Q0 ${-L + 26} ${w / 2 - 3} ${-L + 12}" fill="none" stroke="${SKT}" stroke-width="2.5" stroke-linecap="round"/>`;
+      g += `<ellipse cx="0" cy="${-L + 5}" rx="${w / 2 - 6}" ry="5" fill="${SKT}" opacity=".55"/>`;
+    } else {
+      g += `<rect class="skin" x="${-w / 2}" y="${-L}" width="${w}" height="${L + 22}" rx="${w / 2}" fill="${SK}" stroke="${OUT}" stroke-width="2.5"/>`;
+      g += `<rect x="${-w * .3}" y="${-L + 5}" width="${w * .6}" height="18" rx="8" fill="${NAIL}" stroke="#D9A88A" stroke-width="1.5"/>`;
+      g += `<path d="M${-w / 2 + 8} ${-L * .2} h${w - 16} M${-w / 2 + 10} ${-L * .2 + 5} h${w - 20}" stroke="#D9A88A" stroke-width="1.5" stroke-linecap="round"/>`;
+    }
+    g += `<text x="0" y="${ty}" transform="rotate(${-ang} 0 ${ty})" text-anchor="middle" dominant-baseline="central" font-family="Jua, Noto Sans KR, sans-serif" font-size="${f ? 19 : 20}" fill="${f ? '#fff' : '#2C2A26'}" stroke="${f ? '#8A4A20' : '#FFF6EE'}" stroke-width="3" paint-order="stroke">${lab}</text></g>`;
+    return g;
+  }
+  function handSVG(side, ox, oy, labOf) { // side 0=왼손, 1=오른손(좌우 거울)
+    const mx = x => side ? HW - x : x; let h = `<g transform="translate(${ox} ${oy})">`;
+    let fs = '', fd = ''; // 펴진 손가락은 손바닥 뒤, 접힌 손가락은 손바닥 위(말려 있는 모습)
+    for (let k = 0; k < 4; k++) { const i = side ? 9 - k : k; const t = fingerSVG(i, mx(34 + k * 56), BASE + 4, 0, LEN[k], 40, folded.has(i), labOf(i)); if (folded.has(i)) fd += t; else fs += t; }
+    const ti = side ? 5 : 4; const tf = folded.has(ti);
+    const thumb = fingerSVG(ti, mx(222), BASE + 52, side ? -32 : 32, 80, 42, tf, labOf(ti));
+    h += fs + `<path d="M${mx(10)} ${BASE + 6} Q${mx(8)} ${BASE - 8} ${mx(30)} ${BASE - 8} L${mx(206)} ${BASE - 8} Q${mx(232)} ${BASE - 6} ${mx(236)} ${BASE + 30} L${mx(238)} ${BASE + 66} Q${mx(232)} ${BASE + 92} ${mx(200)} ${BASE + 94} L${mx(44)} ${BASE + 94} Q${mx(12)} ${BASE + 92} ${mx(10)} ${BASE + 62} Z" fill="${SK}" stroke="${OUT}" stroke-width="2.5" pointer-events="none"/>`;
+    h += `<path d="M${mx(60)} ${BASE + 22} q12 -6 24 0 M${mx(116)} ${BASE + 20} q12 -6 24 0 M${mx(172)} ${BASE + 22} q12 -6 24 0" fill="none" stroke="#E0B394" stroke-width="2" stroke-linecap="round" pointer-events="none"/>`;
+    h += fd + thumb + `<text x="${HW / 2}" y="${BASE + 116}" text-anchor="middle" font-family="Jua, Noto Sans KR, sans-serif" font-size="20" fill="#5F5B55">${side ? '오른손' : '왼손'}</text></g>`;
+    return h;
+  }
   function draw() {
-    let h = `<rect x="14" y="150" width="264" height="120" rx="40" fill="#FBE0C8"/><rect x="302" y="150" width="270" height="120" rx="40" fill="#FBE0C8"/><text x="146" y="290" text-anchor="middle" font-family="Jua" fill="#5F5B55">왼손</text><text x="437" y="290" text-anchor="middle" font-family="Jua" fill="#5F5B55">오른손</text>`;
-    // 6~9 모드: 왼손은 가운데(엄지 쪽)부터, 오른손은 가운데부터 바깥으로 접음 → 1개 접으면 6
-    for (let i = 0; i < 10; i++) { const f = folded.has(i); const x = X(i); const lab = mode === '9' ? i + 1 : (i < 5 ? ['·',9,8,7,6][i] : [6,7,8,9,'·'][i - 5]);
-      h += `<g class="finger" data-i="${i}"><rect class="hit" x="${x - 26}" y="30" width="52" height="245"/><rect x="${x - 16}" y="${f ? 120 : 40}" width="32" height="${f ? 50 : 130}" rx="16" fill="${f ? '#E8891B' : '#FBD58E'}" stroke="#2C2A26" stroke-width="2"/><text x="${x}" y="${f ? 150 : 70}" text-anchor="middle" font-family="Jua" font-size="16" fill="${f ? '#fff' : '#2C2A26'}">${lab}</text></g>`; }
+    const narrow = (svg.clientWidth || window.innerWidth) < 470;
+    const labOf = i => mode === '9' ? i + 1 : (i < 5 ? ['·',9,8,7,6][i] : [6,7,8,9,'·'][i - 5]);
+    let h;
+    if (narrow) { svg.setAttribute('viewBox', `0 0 ${HW + 10} 548`); h = handSVG(0, 5, 2, labOf) + handSVG(1, 5, 276, labOf); }
+    else { svg.setAttribute('viewBox', `0 0 586 274`); h = handSVG(0, 3, 2, labOf) + handSVG(1, 293, 2, labOf); }
     svg.innerHTML = h; svg.querySelectorAll('.finger').forEach(g => g.onclick = () => click(+g.dataset.i));
     const eq = $('#fg-eq');
     if (mode === '9') { if (folded.size !== 1) { eq.innerHTML = '<small>손가락 하나를 접어 보세요.</small>'; return; } const n = [...folded][0] + 1; eq.innerHTML = `9 × ${n} = <b style="color:var(--bk-sky)">${n - 1}</b><b style="color:var(--bk-red)">${10 - n}</b> <small>(왼쪽 ${n - 1}개 · 오른쪽 ${10 - n}개)</small>`; }
@@ -196,6 +232,7 @@ document.querySelectorAll('#tabs .tab').forEach(b => b.onclick = () => { documen
       const hand = i < 5 ? 0 : 1; const idx = hand ? i - 5 : 4 - i; const cnt = [...folded].filter(k => (k < 5 ? 0 : 1) === hand).length; const next = idx === 4 ? 0 : (idx + 1 === cnt) ? idx : idx + 1; for (let k = 0; k < 5; k++) { const key = hand ? 5 + k : 4 - k; if (k < next) folded.add(key); else folded.delete(key); } }
     draw(); }
   document.querySelectorAll('#fg-mode button').forEach(b => b.onclick = () => { mode = b.dataset.m; document.querySelectorAll('#fg-mode button').forEach(x => x.classList.toggle('on', x === b)); folded = new Set(); $('#fg-help').textContent = mode === '9' ? '손가락을 눌러 접으세요. 9단: 곱할 수에 해당하는 손가락 하나를 접어요.' : '6=1개, 7=2개, 8=3개, 9=4개 접기. 각 손의 손가락을 누르면 그만큼 접혀요.'; draw(); });
+  let rw = 0; window.addEventListener('resize', () => { const w = svg.clientWidth; if (w && Math.abs(w - rw) > 4) { rw = w; draw(); } });
   draw();
 })();
 
