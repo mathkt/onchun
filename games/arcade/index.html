@@ -2129,6 +2129,57 @@
     .game-card .difficulty-pill { font-size:.56rem; padding:1px 4px; }
     .game-card .card-title { font-size:1.02rem !important; }
   }
+  /* ===== 게임별 배경색 (게임 섹션이 열려 있을 때) ===== */
+  body { transition: background-color .3s ease; }
+  body.gbg-popit   { background-color:#FFF4E3; }
+  body.gbg-notakto { background-color:#EAF5FC; }
+  body.gbg-stone   { background-color:#FDEDEF; }
+  body.gbg-queen   { background-color:#F4ECFC; }
+
+  /* ===== 💣 폭탄 돌 / 💎 보석 돌 ===== */
+  .stone.st-bomb-stone, .a-stone.st-bomb-stone, .st-p-stone.p-bomb-stone, .cyber-stone.bomb {
+    border-radius:50%;
+    background:radial-gradient(circle at 33% 30%, #FFB3A3 0 7%, #E9533F 20%, #B42A1E 52%, #5A120C 82%, #2E0705 100%);
+    border:1.5px solid #3A0A07;
+    box-shadow:0 3px 6px rgba(120,20,10,.35), inset -2px -3px 4px rgba(0,0,0,.3);
+    overflow:visible;
+  }
+  .st-p-stone.p-bomb-stone, .st-p-stone.p-gem-stone, .a-stone.st-bomb-stone, .a-stone.st-gem-stone { position:relative; }
+  .st-p-stone.p-bomb-stone, .st-p-stone.p-gem-stone { border:1px solid #3A0A07; }
+  .st-p-stone.p-gem-stone { border:none; }
+  .stone.st-bomb-stone, .stone.st-gem-stone, .stone.st-gold-stone { z-index:3; } /* 다른 돌에 가리지 않게 */
+  /* 심지 */
+  .stone.st-bomb-stone::before, .a-stone.st-bomb-stone::before, .st-p-stone.p-bomb-stone::before, .cyber-stone.bomb::before {
+    content:''; position:absolute; width:62%; height:62%; top:-44%; right:-24%; pointer-events:none;
+    background:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 20 20'%3E%3Crect x='1.5' y='12.5' width='6.5' height='5' rx='1.3' transform='rotate(-35 4.75 15)' fill='%23463B36' stroke='%23221A17' stroke-width='.8'/%3E%3Cpath d='M6.5 12.5 Q8 6.5 13.5 6.8' stroke='%23C9A36B' stroke-width='2.1' fill='none' stroke-linecap='round'/%3E%3C/svg%3E") center/contain no-repeat;
+  }
+  /* 불꽃 */
+  .stone.st-bomb-stone::after, .a-stone.st-bomb-stone::after, .st-p-stone.p-bomb-stone::after, .cyber-stone.bomb::after {
+    content:''; position:absolute; width:46%; height:46%; top:-58%; right:-42%; pointer-events:none;
+    background:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='-6 -6 12 12'%3E%3Cpath d='M0-5.6 L1.3-1.3 5.6 0 1.3 1.3 0 5.6 -1.3 1.3 -5.6 0 -1.3-1.3Z' fill='%23FFB21F'/%3E%3Cpath d='M0-3 L.7-.7 3 0 .7.7 0 3 -.7.7 -3 0 -.7-.7Z' fill='%23FFF3B0'/%3E%3Ccircle r='.9' fill='%23fff'/%3E%3C/svg%3E") center/contain no-repeat;
+    animation:bombSpark .5s ease-in-out infinite alternate;
+  }
+  @keyframes bombSpark { from { transform:scale(.75) rotate(0); opacity:.85; } to { transform:scale(1.15) rotate(20deg); opacity:1; } }
+  .cyber-stone.bomb { animation:bombWobble 1.4s ease-in-out infinite alternate; }
+  @keyframes bombWobble { from { transform:rotate(-4deg); } to { transform:rotate(4deg) scale(.97); } }
+  .stone.st-gem-stone, .a-stone.st-gem-stone, .st-p-stone.p-gem-stone, .stone.st-gold-stone {
+    border:none; border-radius:0; box-shadow:none;
+    background:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Cg stroke='%23ffffff' stroke-opacity='.75' stroke-width='.6' stroke-linejoin='round'%3E%3Cpath d='M9 4 L2 12 L11 12Z' fill='%239ED9C6'/%3E%3Cpath d='M9 4 L11 12 L16 4Z' fill='%23DFF5EE'/%3E%3Cpath d='M16 4 L11 12 L21 12Z' fill='%23BDE9DB'/%3E%3Cpath d='M16 4 L21 12 L23 4Z' fill='%2375CBB0'/%3E%3Cpath d='M23 4 L21 12 L30 12Z' fill='%234FB394'/%3E%3Cpath d='M2 12 L11 12 L16 29Z' fill='%235FC0A2'/%3E%3Cpath d='M11 12 L21 12 L16 29Z' fill='%233A9E82'/%3E%3Cpath d='M21 12 L30 12 L16 29Z' fill='%23226F57'/%3E%3C/g%3E%3Cpath d='M9 4 L23 4 L30 12 L16 29 L2 12Z' fill='none' stroke='%231E6E54' stroke-width='1.1' stroke-linejoin='round'/%3E%3C/svg%3E") center/100% 100% no-repeat;
+    filter:drop-shadow(0 2px 2px rgba(30,110,84,.45));
+    overflow:visible;
+  }
+  .stone.st-gem-stone::after, .a-stone.st-gem-stone::after, .st-p-stone.p-gem-stone::after, .stone.st-gold-stone::after {
+    content:''; position:absolute; width:42%; height:42%; top:-10%; left:4%; pointer-events:none;
+    background:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='-6 -6 12 12'%3E%3Cpath d='M0-5.5 L1-1 5.5 0 1 1 0 5.5 -1 1 -5.5 0 -1-1Z' fill='%23ffffff'/%3E%3C/svg%3E") center/contain no-repeat;
+    animation:gemTwinkle 1.6s ease-in-out infinite;
+  }
+  @keyframes gemTwinkle { 0%,100% { transform:scale(.35); opacity:.3; } 50% { transform:scale(1); opacity:1; } }
+
+  /* ===== 게임 화면 하단 버튼 줄 (폰에서 줄바꿈) ===== */
+  @media (max-width:640px) {
+    .action-buttons { gap:8px !important; }
+    .action-buttons button { min-height:42px; flex:0 1 auto; white-space:nowrap; }
+  }
 </style>
 </head>
 <body class="bk">
@@ -2338,6 +2389,7 @@
         </div>
       </div>
       <div class="action-buttons">
+        <button class="undo-btn" id="qn-undo-btn" onmouseenter="playSfx('hover')" onclick="playSfx('click'); qnUndo()" style="display:none;">무르기</button>
         <button class="restart-btn" id="qn-restart-btn" onmouseenter="playSfx('hover')" onclick="playSfx('click'); qnRestartGame()" style="display:none;">다시하기</button>
         <button class="restart-btn" id="qn-restart-set-btn" onmouseenter="playSfx('hover')" onclick="playSfx('click'); openQnSettingsAndRestart()" style="display:none;">⚙️ 설정 바꿔 다시하기</button>
         <button class="resume-analysis-btn" id="qn-resume-analysis-btn" onmouseenter="playSfx('hover')" onclick="playSfx('click'); qnResumeAnalysis()" style="display:none;">분석 모드로 복귀</button>
@@ -2543,6 +2595,7 @@
       </div>
       <div class="action-buttons">
         <button class="restart-btn" id="nt-restart-btn" onmouseenter="playSfx('hover')" onclick="playSfx('click'); ntRestartGame()" style="display:none;">다시하기</button>
+        <button class="restart-btn" id="nt-restart-set-btn" onmouseenter="playSfx('hover')" onclick="playSfx('click'); openNtSettingsAndRestart()" style="display:none;">⚙️ 설정 바꿔 다시하기</button>
         <button class="resume-analysis-btn" id="nt-resume-analysis-btn" onmouseenter="playSfx('hover')" onclick="playSfx('click'); ntResumeAnalysis()" style="display:none;">분석 모드로 복귀</button>
         <button class="back-btn" onmouseenter="playSfx('hover')" onclick="playSfx('click'); ntGoBack()">메뉴로 돌아가기</button>
       </div>
@@ -3315,7 +3368,10 @@
     ntScore = { p1Wins: 0, p2Wins: 0 };
     ntUpdateSubtitle();
     closeModal('nt-settings-modal', 'nt-modal-box');
+    if (ntSettingsThenRestart) { ntSettingsThenRestart = false; ntSettingsJustSaved = true; ntRestartGame(); ntSettingsJustSaved = false; }
   }
+  let ntSettingsThenRestart = false, ntSettingsJustSaved = false;
+  function openNtSettingsAndRestart() { ntSettingsThenRestart = true; openNtSettings(); }
 
   let stSettingsThenRestart = false, stSettingsJustSaved = false;
   function openStSettingsAndRestart() { stSettingsThenRestart = true; openStSettings(); }
@@ -3500,6 +3556,7 @@
   const QN_PHI = (1 + Math.sqrt(5)) / 2;
   let qnSizeSetting = '8', qnStartSetting = 'rand', qnWinRule = 'last', qnTimeSetting = 'unlimited';
   let qnMode = 'bot', qnN = 8, qnQ = null, qnStart = null, qnCur = 1, qnOver = false, qnPhase = 'play', qnLog = [], qnLast = null, qnBotSel = null, qnCold = new Set();
+  let qnUndoLeft = 1;
   let qnBotTimeout = null, qnTimerInterval = null, qnTimeLeft = 0, qnScore = { p1Wins: 0, p2Wins: 0 };
   function qnColdSet(N) { const s = new Set(); for (let n = 0; ; n++) { const a = Math.floor(n * QN_PHI), b = a + n; if (a >= N) break; if (b < N) { s.add(a + ',' + b); s.add(b + ',' + a); } } return s; }
   function qnBotNum() { return isBranchPlay ? 3 - branchHumanPlayer : 2; }
@@ -3596,7 +3653,7 @@
     switchScreen(qnGameScreen, 'flex');
     highlightWinner(0); updateScoreDisplay();
     qnCur = (mode === 'bot' && botFirstTurn === 'bot') ? 2 : 1;
-    qnOver = false; qnLog = []; qnLast = null; qnBotSel = null;
+    qnOver = false; qnLog = []; qnLast = null; qnBotSel = null; qnUndoLeft = 1;
     if (qnBotTimeout) { clearTimeout(qnBotTimeout); qnBotTimeout = null; }
     if (preset && preset.start) { qnQ = preset.start.slice(); qnPhase = 'play'; }
     else if (qnStartSetting === 'pick') { qnQ = null; qnPhase = 'place'; }
@@ -3707,6 +3764,28 @@
     const m = Math.random() < getWinMoveProbability(botDifficulty) ? qnBestMove(...qnQ) : ms[Math.floor(Math.random() * ms.length)];
     qnBotSel = m; qnRender();
     qnBotTimeout = setTimeout(() => { qnBotTimeout = null; qnExecuteMove(m); }, 600);
+  }
+  function qnUndoAvailable() {
+    if (qnOver || qnPhase !== 'play' || isBranchPlay || qnMode === 'online' || !qnLog.length) return false;
+    if (qnMode === 'bot') return qnUndoLeft > 0 && qnLog.some(h => h.player !== qnBotNum());
+    return true;
+  }
+  function qnSyncUndoBtn() {
+    const b = document.getElementById('qn-undo-btn'); if (!b) return;
+    b.innerText = qnMode === 'bot' ? `무르기 (${qnUndoLeft}회)` : '무르기';
+    b.disabled = !qnUndoAvailable();
+  }
+  // 무르기: AI 대전은 내 마지막 수(그 뒤 AI 응수까지) 되돌림, 2인은 한 수씩
+  function qnUndo() {
+    if (!qnUndoAvailable()) return;
+    if (qnBotTimeout) { clearTimeout(qnBotTimeout); qnBotTimeout = null; }
+    qnStopTimer(); qnBotSel = null;
+    let h;
+    if (qnMode === 'bot') { const bn = qnBotNum(); while (qnLog.length && qnLog[qnLog.length - 1].player === bn) qnLog.pop(); h = qnLog.pop(); qnUndoLeft--; }
+    else h = qnLog.pop();
+    qnQ = h.from.slice(); qnCur = h.player;
+    qnLast = qnLog.length ? qnLog[qnLog.length - 1].from.slice() : null;
+    playPlaceStone(); qnRender(); qnUpdateUI();
   }
   function qnRestartGame() { closeVictoryModal(); qnStopTimer(); if (isBranchPlay) qnStartBranchPlay(); else qnStartGame(qnMode); }
   function qnGoBack() {
@@ -4965,6 +5044,7 @@
   let stMode = 'bot';
   let stCurrentPlayer = 1, stStonesArr = [], stIsAnimating = false, stGameOver = false;
   let stGameHistory = [];
+  let stGameId = 0, stUndoLeft = 1; // 진행 중 애니메이션 무효화용 판 번호, AI 대전 무르기 남은 횟수
   let stBotTimeout = null;
   let stTimerInterval = null;
   let stTimeLeft = 0;
@@ -5038,36 +5118,50 @@
     }
   }
 
+  function stUndoAvailable() {
+    if (stGameOver || stIsAnimating || isBranchPlay || stMode === 'online' || !stGameHistory.length) return false;
+    if (stMode === 'bot') return stUndoLeft > 0 && stGameHistory.some(h => h.player === 1);
+    return true;
+  }
+  function stSyncUndoBtn() {
+    const b = document.getElementById('st-undo-btn'); if (!b) return;
+    b.innerText = stMode === 'bot' ? `무르기 (${stUndoLeft}회)` : '무르기';
+    b.disabled = !stUndoAvailable();
+  }
   function stUndo() {
-    if (stGameOver || stIsAnimating || isBranchPlay || stMode === 'online' || !stGameHistory.length) return;
+    if (!stUndoAvailable()) return;
     if (stBotTimeout) { clearTimeout(stBotTimeout); stBotTimeout = null; }
     stStopTimer();
-    if (stMode === 'bot') { while (stGameHistory.length && stGameHistory[stGameHistory.length - 1].player === 2) stGameHistory.pop(); if (stGameHistory.length) stGameHistory.pop(); stCurrentPlayer = 1; }
-    else { const last = stGameHistory.pop(); stCurrentPlayer = last.player; }
-    // 판 다시 그리기
-    const taken1 = stGameHistory.filter(h => h.player === 1).reduce((a, h) => a + h.count, 0);
-    const taken2 = stGameHistory.filter(h => h.player === 2).reduce((a, h) => a + h.count, 0);
-    const remain = stN - taken1 - taken2;
+    const undone = []; // 마지막 수부터
+    if (stMode === 'bot') {
+      while (stGameHistory.length && stGameHistory[stGameHistory.length - 1].player === 2) undone.push(stGameHistory.pop());
+      if (stGameHistory.length) undone.push(stGameHistory.pop());
+      stCurrentPlayer = 1; stUndoLeft--;
+    } else { const last = stGameHistory.pop(); undone.push(last); stCurrentPlayer = last.player; }
+    // 가져갔던 돌을 원래 자리(가운데 판의 같은 좌표)로 되돌리기 — FLIP 애니메이션
     const cs = document.getElementById('st-center-stones');
-    cs.innerHTML = '<div id="st-stone-count-badge" class="st-stone-count-badge"></div>';
-    const cRect = cs.getBoundingClientRect(); stStonesArr = [];
-    for (let i = 0; i < remain; i++) {
-      const stone = document.createElement('div');
-      stone.className = 'stone ' + ((i === 0) ? (stModeType === 'bomb' ? 'st-bomb-stone' : 'st-gem-stone') : 'st-normal-stone');
-      stone.style.left = (20 + Math.random() * Math.max(40, cRect.width - 70)) + 'px';
-      stone.style.top = (20 + Math.random() * Math.max(40, cRect.height - 80)) + 'px';
-      cs.appendChild(stone); stStonesArr.push(stone);
-    }
-    [[1, taken1], [2, taken2]].forEach(([p, n]) => {
-      const box = document.getElementById('st-p' + p + '-stones'); box.innerHTML = '';
-      const r = box.getBoundingClientRect();
-      for (let i = 0; i < n; i++) {
-        const st = document.createElement('div'); st.className = 'stone st-normal-stone'; st.style.position = 'absolute';
-        st.style.left = (10 + Math.random() * Math.max(10, r.width - 45)) + 'px'; st.style.top = (10 + Math.random() * Math.max(10, r.height - 45)) + 'px';
-        box.appendChild(st);
-      }
+    const moving = [];
+    undone.forEach(h => (h.taken || []).forEach(t => { moving.push(t); stStonesArr.push(t.el); }));
+    moving.forEach(t => {
+      const el = t.el, first = el.getBoundingClientRect();
+      el.style.transition = 'none'; el.style.transform = 'none'; el.style.display = 'block'; el.style.zIndex = '50';
+      cs.appendChild(el); el.style.left = t.left; el.style.top = t.top;
+      const last = el.getBoundingClientRect();
+      el.style.transform = `translate3d(${first.left - last.left}px, ${first.top - last.top}px, 0)`;
     });
-    highlightWinner(0); stUpdateUI();
+    cs.getBoundingClientRect();
+    moving.forEach(t => { t.el.style.transition = 'transform .45s cubic-bezier(.3,.7,.3,1)'; t.el.style.transform = 'none'; });
+    stIsAnimating = true; playTakeStone();
+    const gid = stGameId;
+    const badge = document.getElementById('st-stone-count-badge');
+    if (badge) badge.innerText = stStonesArr.length;
+    highlightWinner(0); stSyncUndoBtn();
+    setTimeout(() => {
+      if (gid !== stGameId) return;
+      moving.forEach(t => { t.el.style.transition = ''; t.el.style.zIndex = ''; t.el.style.transform = 'none'; });
+      stStonesArr.forEach(el => cs.appendChild(el)); // 쌓이는 순서도 처음과 같게
+      stIsAnimating = false; stUpdateUI();
+    }, 500);
   }
   function stRestartGame() {
     closeVictoryModal();
@@ -5106,7 +5200,7 @@
     updateScoreDisplay();
 
     stCurrentPlayer = (stMode === 'bot' && firstTurn === 'bot') ? 2 : 1;
-    stGameOver = false; stStonesArr = []; stGameHistory = []; stIsAnimating = false;
+    stGameOver = false; stStonesArr = []; stGameHistory = []; stIsAnimating = false; stGameId++; stUndoLeft = 1;
     if (stBotTimeout) { clearTimeout(stBotTimeout); stBotTimeout = null; }
 
     const cs = document.getElementById('st-center-stones');
@@ -5158,7 +5252,7 @@
       player: (idx % 2) + 1,
       count: count
     }));
-    stIsAnimating = false;
+    stIsAnimating = false; stGameId++; stUndoLeft = 1;
     if (stBotTimeout) { clearTimeout(stBotTimeout); stBotTimeout = null; }
 
     const cs = document.getElementById('st-center-stones');
@@ -5239,10 +5333,12 @@
     playTakeStone();
     stIsAnimating = true;
     for (let i = 1; i <= stLimit; i++) { const btn = document.getElementById(`st-btn-${i}`); if (btn) btn.disabled = true; }
-    stGameHistory.push({ player: stCurrentPlayer, count: count });
-
+    const gid = stGameId;
+    setTimeout(stSyncUndoBtn, 0);
     let tContainer = stCurrentPlayer === 1 ? document.getElementById('st-p1-stones') : document.getElementById('st-p2-stones');
     let taken = stStonesArr.splice(-count, count);
+    // 무르기용: 가져가기 전 자리(가운데 판 좌표) 기록
+    stGameHistory.push({ player: stCurrentPlayer, count: count, taken: taken.map(el => ({ el, left: el.style.left, top: el.style.top })) });
     const badge = document.getElementById('st-stone-count-badge');
     if (badge) badge.innerText = stStonesArr.length > 0 ? stStonesArr.length : '';
     let completed = 0;
@@ -5272,6 +5368,7 @@
       const finish = () => {
         if (doneOnce) return; doneOnce = true;
         ghost.remove();
+        if (gid !== stGameId) return; // 그 사이 새 판이 시작됨
         stone.style.display = 'block';
         stone.style.position = 'absolute';
         stone.style.left = (10 + destX) + 'px';
@@ -5338,7 +5435,7 @@
   }
 
   function stGoBack() {
-    closeVictoryModal(); stStopTimer();
+    closeVictoryModal(); stStopTimer(); stGameId++; stIsAnimating = false;
     if (stBotTimeout) { clearTimeout(stBotTimeout); stBotTimeout = null; }
     stTooltip.style.display = 'none';
     stGameScreen.style.display = 'none'; stAnalysisScreen.style.display = 'none';
@@ -5995,7 +6092,7 @@
   qnStartGame = function (m, pre) { _qnStart(m, pre); applyMyName('qn', m); qnUpdateUI(); };
   // 다시하기
   const _ntRestart = ntRestartGame, _stRestart = stRestartGame, _ppRestart = ppRestartGame, _qnRestart = qnRestartGame;
-  function olRestart(g) { if (Online.myNum === 1) { if (ppSettingsJustSaved || qnSettingsJustSaved || stSettingsJustSaved) { olOrig = null; ppSettingsJustSaved = false; } olRestoreOrig(); olSaveOrig(); olCur = OLG[g].settings(); Online.reset(olCur); olStart(olCur); } }
+  function olRestart(g) { if (Online.myNum === 1) { if (ppSettingsJustSaved || qnSettingsJustSaved || stSettingsJustSaved || ntSettingsJustSaved) { olOrig = null; ppSettingsJustSaved = false; } olRestoreOrig(); olSaveOrig(); olCur = OLG[g].settings(); Online.reset(olCur); olStart(olCur); } }
   let ppSettingsJustSaved = false;
   ntRestartGame = function () { if (ntMode === 'online' && Online.active) return olRestart('notakto'); _ntRestart(); };
   stRestartGame = function () { if (stMode === 'online' && Online.active) return olRestart('stone'); _stRestart(); };
@@ -6026,6 +6123,40 @@
     _sv(w, r, l);
   };
 
+  /* ===== 게임 중 [다시하기]·[⚙️ 설정 바꿔 다시하기]·[무르기] 버튼 ===== */
+  const GAME_P = { nt: () => ntMode, st: () => stMode, pp: () => ppMode, qn: () => qnMode };
+  function syncGameActions(p) {
+    const mode = GAME_P[p](), rb = document.getElementById(p + '-restart-btn'), sb = document.getElementById(p + '-restart-set-btn');
+    if (isBranchPlay) { rb.style.display = 'inline-block'; if (sb) sb.style.display = 'none'; }
+    else if (mode === 'online') { const host = Online.myNum === 1; rb.style.display = host ? 'inline-block' : 'none'; if (sb) sb.style.display = host ? 'inline-block' : 'none'; }
+    else { rb.style.display = 'inline-block'; if (sb) sb.style.display = 'inline-block'; }
+    if (p === 'st') { document.getElementById('st-undo-btn').style.display = (!isBranchPlay && (mode === 'bot' || mode === 'solo')) ? 'inline-block' : 'none'; stSyncUndoBtn(); }
+    if (p === 'qn') { document.getElementById('qn-undo-btn').style.display = (!isBranchPlay && (mode === 'bot' || mode === 'solo')) ? 'inline-block' : 'none'; qnSyncUndoBtn(); }
+  }
+  {
+    // 전역 함수 선언을 감싸기 (호출부는 이름으로 부르므로 그대로 적용됨)
+    ntStartGame = (f => function (...a) { f(...a); syncGameActions('nt'); })(ntStartGame);
+    stStartGame = (f => function (...a) { f(...a); syncGameActions('st'); })(stStartGame);
+    ppStartGame = (f => function (...a) { f(...a); syncGameActions('pp'); })(ppStartGame);
+    qnStartGame = (f => function (...a) { f(...a); syncGameActions('qn'); })(qnStartGame);
+    ntStartBranchPlay = (f => function () { f(); syncGameActions('nt'); })(ntStartBranchPlay);
+    stStartBranchPlay = (f => function () { f(); syncGameActions('st'); })(stStartBranchPlay);
+    ppStartBranchPlay = (f => function () { f(); syncGameActions('pp'); })(ppStartBranchPlay);
+    qnStartBranchPlay = (f => function () { f(); syncGameActions('qn'); })(qnStartBranchPlay);
+    const _stUI2 = stUpdateUI; stUpdateUI = function () { _stUI2(); stSyncUndoBtn(); };
+    const _qnUI2 = qnUpdateUI; qnUpdateUI = function () { _qnUI2(); qnSyncUndoBtn(); };
+    const _qnR2 = qnRender; qnRender = function () { _qnR2(); qnSyncUndoBtn(); };
+    const _ntBk = ntGoBack; ntGoBack = function () { ntSettingsThenRestart = false; _ntBk(); document.getElementById('nt-restart-set-btn').style.display = 'none'; };
+    const _stBk = stGoBack; stGoBack = function () { stSettingsThenRestart = false; _stBk(); };
+    const _ppBk = ppGoBack; ppGoBack = function () { ppSettingsThenRestart = false; _ppBk(); };
+    const _qnBk = qnGoBack; qnGoBack = function () { qnSettingsThenRestart = false; _qnBk(); document.getElementById('qn-undo-btn').style.display = 'none'; };
+  }
+  /* 게임별 배경색 (홈은 원래 크림색) */
+  function setGameBg(g) {
+    document.body.classList.remove('gbg-popit', 'gbg-notakto', 'gbg-stone', 'gbg-queen');
+    if (g) document.body.classList.add('gbg-' + g);
+  }
+
   /* ===== 축전 허브 연동: ?game=notakto|stone 으로 바로 진입, 상단바 이름 동기화 ===== */
   function syncTopName(game) {
     const el = document.querySelector('.bk-top__name'); if (!el) return;
@@ -6041,8 +6172,8 @@
     const rb = document.getElementById('top-rules-btn'); if (rb) rb.style.display = game ? '' : 'none';
   }
   const _openGameSection = openGameSection, _returnToHome = returnToHome;
-  openGameSection = function (g) { _openGameSection(g); syncTopName(g); currentGame = g; if (nameModalOpen) rulesAfterName = true; else showRules(false); };
-  returnToHome = function () { _returnToHome(); syncTopName(null); currentGame = null; };
+  openGameSection = function (g) { _openGameSection(g); syncTopName(g); setGameBg(g); currentGame = g; if (nameModalOpen) rulesAfterName = true; else showRules(false); };
+  returnToHome = function () { _returnToHome(); syncTopName(null); setGameBg(null); currentGame = null; };
   const entryGame = new URLSearchParams(location.search).get('game');
   updateNameChip();
   let nameSeen = false; try { nameSeen = !!sessionStorage.getItem(NAME_SEEN_KEY); } catch (e) {}
