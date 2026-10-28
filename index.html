@@ -8,6 +8,7 @@
 <style>
   /* ===== 첫 화면: 스크롤 없이 한 화면 ===== */
   html,body{height:100%}
+  body{word-break:keep-all;overflow-wrap:anywhere}
   body.bk{margin:0;min-height:100dvh;display:flex;flex-direction:column;overflow:hidden;
     background:var(--bk-cream-2) url("img/ch02.jpg") center 30%/cover no-repeat}
   body.bk::before{content:"";position:fixed;inset:0;background:linear-gradient(180deg,rgba(251,240,200,.94) 0%,rgba(251,240,200,.86) 45%,rgba(251,240,200,.96) 100%);z-index:0}
@@ -38,11 +39,13 @@
     .tile{flex-direction:row;justify-content:flex-start;text-align:left;min-height:0;padding:18px 20px;gap:16px}
     .tile__icon{font-size:2.8rem}
     .tile__d{text-align:left}
-    .home p{display:none}
+    .home > p,.tile__d:not(.tile__d--games){display:none}
+    .tile{padding:16px 14px;gap:12px}.tile>div{min-width:0}
+    .home .tile__d--games{font-size:clamp(.62rem,3.6vw,.85rem);white-space:nowrap;letter-spacing:-.3px}
   }
   /* 낮은 화면(크롬북 가로 등) */
   @media(max-height:560px){
-    .home{gap:10px}.home p{display:none}.tile{min-height:150px;gap:6px}.tile__icon{font-size:2.6rem}
+    .home{gap:10px}.home > p{display:none}.tile{min-height:150px;gap:6px}.tile__icon{font-size:2.6rem}
   }
 </style>
 </head>
@@ -57,7 +60,8 @@
       <span class="tile__icon">🎮</span>
       <div>
         <div class="tile__t">메인 게임하기</div>
-        <p class="tile__d">팝잇 · 돌 가져가기 · 노탁토<br>친구와 · 봇과 · 온라인으로</p>
+        <p class="tile__d tile__d--games">노탁토 · 돌 가져가기 · 황금비 퀸 · 팝잇</p>
+        <p class="tile__d">친구와 · 봇과 · 온라인으로</p>
       </div>
     </a>
     <a class="tile tile--book" href="book/index.html">

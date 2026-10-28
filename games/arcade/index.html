@@ -2181,13 +2181,258 @@
     .action-buttons { gap:8px !important; }
     .action-buttons button { min-height:42px; flex:0 1 auto; white-space:nowrap; }
   }
+
+  /* ==========================================================================
+     [2026-10 개편] 게임 순서·색 (쉬운 순): 1 노탁토=주황 · 2 돌=파랑 · 3 퀸=빨강 · 4 팝잇=보라
+     모든 섹션·모달은 아래 --th 변수만 써서 색을 입힌다 (다른 게임 색이 섞이지 않게)
+     ========================================================================== */
+  #notakto-section, .modal-content.theme-notakto, #nt-preview-tooltip { --th:#F5A623; --th2:#E8891B; --th-dk:#C97D15; --th-ink:#A35C0A; --th-soft:#FFF1DC; --th-line:#F5C77A; }
+  #stone-section,   .modal-content.theme-stone,   #st-preview-tooltip { --th:#2F8FC9; --th2:#1F6FA3; --th-dk:#1F6FA3; --th-ink:#1F6E9E; --th-soft:#E6F3FB; --th-line:#AEDBF2; }
+  #queen-section,   .modal-content.theme-queen   { --th:#E9533F; --th2:#C2392A; --th-dk:#A8301F; --th-ink:#B3362A; --th-soft:#FDE8EC; --th-line:#F4B3BE; }
+  #popit-section,   .modal-content.theme-popit   { --th:#8E5CC9; --th2:#6A3FB0; --th-dk:#5A3496; --th-ink:#5A3496; --th-soft:#F1E8FB; --th-line:#CDB6EC; }
+  body.gbg-notakto { background-color:#FFF1DC; }
+  body.gbg-stone   { background-color:#E6F3FB; }
+  body.gbg-queen   { background-color:#FDE8EC; }
+  body.gbg-popit   { background-color:#F1E8FB; }
+
+  /* 한글 줄바꿈: 단어 중간에서 끊지 않기 */
+  body { word-break:keep-all; overflow-wrap:anywhere; }
+
+  /* --- 섹션 머리 --- */
+  :is(#notakto-section,#stone-section,#queen-section,#popit-section) .section-title { color:#2C2A26 !important; }
+  :is(#notakto-section,#stone-section,#queen-section,#popit-section) .rule-subtitle { background:var(--th-soft) !important; border:1.5px solid var(--th-line) !important; color:var(--th-ink) !important; box-shadow:none !important; }
+  :is(#notakto-section,#stone-section,#queen-section,#popit-section) .menu-screen-container { border-top:4px solid var(--th) !important; }
+  /* 게임·분석 화면에서는 큰 제목·규칙 줄 숨김 (메뉴에서만) */
+  :is(#notakto-section,#stone-section,#queen-section,#popit-section).in-play .section-title, :is(#notakto-section,#stone-section,#queen-section,#popit-section).in-play .rule-subtitle { display:none !important; }
+
+  /* --- 메뉴 버튼 --- */
+  :is(#notakto-section,#stone-section,#queen-section,#popit-section) .menu-btn { background:#fff !important; border:2px solid var(--th) !important; color:var(--text-main) !important; box-shadow:0 5px 0 var(--th-dk) !important; }
+  :is(#notakto-section,#stone-section,#queen-section,#popit-section) .menu-btn:hover { background:var(--th-soft) !important; }
+  :is(#notakto-section,#stone-section,#queen-section,#popit-section) .menu-btn.online-btn, :is(#notakto-section,#stone-section,#queen-section,#popit-section) .menu-btn.analysis-btn { background:var(--th-soft) !important; }
+  :is(#notakto-section,#stone-section,#queen-section,#popit-section) .menu-btn.online-btn:hover, :is(#notakto-section,#stone-section,#queen-section,#popit-section) .menu-btn.analysis-btn:hover { filter:brightness(.97); }
+  :is(#notakto-section,#stone-section,#queen-section,#popit-section) .menu-btn.records-btn { background:var(--th-soft) !important; border-color:var(--th-line) !important; color:var(--th-ink) !important; box-shadow:0 4px 0 var(--th-line) !important; }
+  :is(#notakto-section,#stone-section,#queen-section,#popit-section) .help-btn { background:#fff !important; border:2px solid var(--th) !important; color:var(--th-ink) !important; box-shadow:0 4px 0 var(--th-dk) !important; }
+  :is(#notakto-section,#stone-section,#queen-section,#popit-section) .help-btn:hover { background:var(--th) !important; color:#fff !important; }
+  :is(#notakto-section,#stone-section,#queen-section,#popit-section) .settings-gear-btn, :is(#notakto-section,#stone-section,#queen-section,#popit-section) .home-return-btn { border-color:var(--th-line) !important; box-shadow:0 4px 0 var(--th-line) !important; }
+  :is(#notakto-section,#stone-section,#queen-section,#popit-section) .settings-gear-btn:hover, :is(#notakto-section,#stone-section,#queen-section,#popit-section) .home-return-btn:hover { background:var(--th-soft) !important; border-color:var(--th) !important; }
+
+  /* --- 하단 버튼 (다시하기·무르기·메뉴로·분석 복귀) --- */
+  :is(#notakto-section,#stone-section,#queen-section,#popit-section) .back-btn { background:#fff !important; color:var(--th-ink) !important; border:2px solid var(--th) !important; box-shadow:0 4px 0 var(--th-dk) !important; }
+  :is(#notakto-section,#stone-section,#queen-section,#popit-section) .back-btn:hover { background:var(--th-soft) !important; }
+  :is(#notakto-section,#stone-section,#queen-section,#popit-section) .restart-btn:not(:disabled), :is(#notakto-section,#stone-section,#queen-section,#popit-section) .undo-btn:not(:disabled) { background:#fff; color:var(--text-main); border:2px solid var(--th-line) !important; box-shadow:0 4px 0 var(--th-line) !important; }
+  :is(#notakto-section,#stone-section,#queen-section,#popit-section) .restart-btn:not(:disabled):hover, :is(#notakto-section,#stone-section,#queen-section,#popit-section) .undo-btn:not(:disabled):hover { background:var(--th-soft) !important; border-color:var(--th) !important; }
+  :is(#notakto-section,#stone-section,#queen-section,#popit-section) .resume-analysis-btn { background:var(--th-soft) !important; color:var(--th-ink) !important; border:2px solid var(--th) !important; box-shadow:0 4px 0 var(--th-dk) !important; }
+  :is(#notakto-section,#stone-section,#queen-section,#popit-section) .help-close-btn { background:var(--th) !important; color:#fff !important; box-shadow:0 4px 0 var(--th-dk) !important; }
+
+  /* --- 플레이어 칸 · 차례 · 시간 --- */
+  :is(#notakto-section,#stone-section,#queen-section,#popit-section) .nt-frame, :is(#notakto-section,#stone-section,#queen-section,#popit-section) .st-frame { border-color:var(--th-line); }
+  :is(#notakto-section,#stone-section,#queen-section,#popit-section) .active-turn { background:var(--th-soft) !important; border:3px solid var(--th) !important; box-shadow:0 0 0 4px var(--th-line) !important; }
+  :is(#notakto-section,#stone-section,#queen-section,#popit-section) .player-stat, :is(#notakto-section,#stone-section,#queen-section,#popit-section) .a-player-frame span { color:var(--th-ink) !important; }
+  :is(#notakto-section,#stone-section,#queen-section,#popit-section) .winner-frame .player-stat, :is(#notakto-section,#stone-section,#queen-section,#popit-section) .a-player-frame.winner-frame, :is(#notakto-section,#stone-section,#queen-section,#popit-section) .a-player-frame.winner-frame span { color:var(--neon-green) !important; }
+  #nt-turn-indicator, #st-turn-indicator, #pp-turn-indicator, #qn-turn-indicator { color:var(--th-ink) !important; }
+  #nt-timer-display, #st-timer-display, #pp-timer-display, #qn-timer-display { color:var(--th-ink) !important; }
+  :is(#notakto-section,#stone-section,#queen-section,#popit-section) .a-head h2 { color:var(--text-main); }
+
+  /* --- 분석 화면 공통 --- */
+  :is(#notakto-section,#stone-section,#queen-section,#popit-section) #nt-analysis-center, :is(#notakto-section,#stone-section,#queen-section,#popit-section) #st-analysis-center { border-color:var(--th-line) !important; }
+  #nt-a-history-box, #st-a-history-box, #pp-a-history-box, #qn-a-history-box { color:var(--th-ink) !important; border-color:var(--th-line) !important; }
+  :is(#notakto-section,#stone-section,#queen-section,#popit-section) .analysis-move-btn:hover { border-color:var(--th); }
+  :is(#notakto-section,#stone-section,#queen-section,#popit-section) .a-verdict:not(.win):not(.lose), :is(#notakto-section,#stone-section,#queen-section,#popit-section) .a-quiz-msg:not(.win):not(.lose), #popit-section #pp-a-verdict:not(.win):not(.lose) { background:var(--th-soft) !important; border-color:var(--th) !important; }
+  :is(#notakto-section,#stone-section,#queen-section,#popit-section) .eval-toggle-label { border-color:var(--th-line); }
+  :is(#notakto-section,#stone-section,#queen-section,#popit-section) .pp-a-setup input:focus, :is(#notakto-section,#stone-section,#queen-section,#popit-section) .pp-a-setup select:focus { border-color:var(--th) !important; outline:none; }
+
+  /* --- 노탁토 판 (주황) --- */
+  .board-stone::before, .nt-p-stone { text-shadow:none !important; }
+  :is(#notakto-section,#stone-section,#queen-section,#popit-section) .nt-center-area { border-color:var(--th-line); }
+  :is(#notakto-section,#stone-section,#queen-section,#popit-section) .ttt-grid { background:var(--th-soft); border:3px solid var(--th); box-shadow:0 6px 0 var(--th-dk); }
+  :is(#notakto-section,#stone-section,#queen-section,#popit-section) .ttt-cell { border-color:var(--th-line); }
+  :is(#notakto-section,#stone-section,#queen-section,#popit-section) .ttt-cell:hover:not(.occupied):not(.disabled) { background:var(--th-soft); border-color:var(--th); }
+  :is(#notakto-section,#stone-section,#queen-section,#popit-section) .ttt-grid:not(.dead-board):not(.win-board) .board-stone::before { color:var(--th-ink); }
+  :is(#notakto-section,#stone-section,#queen-section,#popit-section) .hide-eval-colors .ttt-cell.cell-win, :is(#notakto-section,#stone-section,#queen-section,#popit-section) .hide-eval-colors .ttt-cell.cell-bad,
+  :is(#notakto-section,#stone-section,#queen-section,#popit-section) .quiz-hide .ttt-cell.cell-win, :is(#notakto-section,#stone-section,#queen-section,#popit-section) .quiz-hide .ttt-cell.cell-bad { background:#fff !important; border:2px solid var(--th-line) !important; }
+  .preview-tooltip { border-color:var(--th, #E7DFC9); }
+  .preview-header { color:var(--th-ink, var(--text-main)); }
+  .p-grid { background:var(--th-soft, #fff); border-color:var(--th, #E7DFC9); }
+  .nt-p-stone { color:var(--th-ink, var(--text-main)); }
+  .nt-p-stone.p-new { color:var(--th, #2C2A26); }
+
+  /* --- 돌 가져가기 (파랑) --- */
+  :is(#notakto-section,#stone-section,#queen-section,#popit-section) #st-center-stones { border:2px solid var(--th-line); }
+  :is(#notakto-section,#stone-section,#queen-section,#popit-section) .st-stone-count-badge { color:var(--th) !important; }
+  .st-normal-stone, .cyber-stone:not(.bomb), .p-normal-stone { background:linear-gradient(135deg,#7CC6EE,#2F8FC9) !important; }
+  :is(#notakto-section,#stone-section,#queen-section,#popit-section) .controls button:not(:disabled) { background:#fff; border:2px solid var(--th); color:var(--text-main); box-shadow:0 5px 0 var(--th-dk); }
+  :is(#notakto-section,#stone-section,#queen-section,#popit-section) .controls button:not(:disabled):hover { background:var(--th-soft); border-color:var(--th); box-shadow:0 5px 0 var(--th-dk); }
+  /* 가운데 돌: JS(stLayoutCenter)가 줄 맞춰 좌표를 정함 */
+  #st-center-stones .stone { transition:left .25s ease, top .25s ease, background .3s; }
+  /* 가져간 돌: 쌓지 않고 개수 + 작은 돌 최대 10개 */
+  .st-frame .stone-container { display:flex; flex-wrap:wrap; align-content:flex-start; justify-content:center; gap:3px; counter-reset:stk; min-height:0 !important; flex-grow:0; position:relative; padding:4px 0; }
+  .st-frame .stone-container::after { content:"가져간 돌 " counter(stk) "개"; order:-1; flex-basis:100%; text-align:center; font-family:'Jua',sans-serif; font-size:1.05rem; color:var(--th-ink); margin-bottom:4px; }
+  .st-frame .stone-container .stone { position:static !important; left:auto !important; top:auto !important; transform:none !important; width:14px !important; height:14px !important; border-radius:4px; counter-increment:stk; flex:none; }
+  .st-frame .stone-container .stone:nth-child(n+11) { position:absolute !important; visibility:hidden; width:0 !important; height:0 !important; border:0 !important; }
+  .st-frame .stone-container .stone::before, .st-frame .stone-container .stone::after { display:none; }
+  /* 분석 판: 상자 안에서 줄바꿈 */
+  #st-analysis-center { grid-template-columns:repeat(auto-fill, 28px) !important; gap:10px !important; padding:20px 18px 56px !important; align-content:start; }
+
+  /* --- 팝잇 (보라) — 버블은 여러 색 그대로, UI만 보라 --- */
+  :is(#notakto-section,#stone-section,#queen-section,#popit-section) #popit-board, :is(#notakto-section,#stone-section,#queen-section,#popit-section) #pp-a-board { border-color:var(--th-line); }
+  #popit-section #pp-confirm:not(:disabled) { background:var(--th); color:#fff; border-color:var(--th-dk); }
+  :is(#notakto-section,#stone-section,#queen-section,#popit-section) .pp-a-calc h4 { color:var(--th-ink); }
+  :is(#notakto-section,#stone-section,#queen-section,#popit-section) .pp-a-calc td.one { background:var(--th-soft); }
+  :is(#notakto-section,#stone-section,#queen-section,#popit-section) .pp-a-calc tr.sum td { border-top-color:var(--th); }
+  #selection-box { border-color:#8E5CC9; background:rgba(142,92,201,.16); }
+
+  /* --- 황금비 퀸 (빨강) --- */
+  :root { --qn-l:#FFFAF8; --qn-d:#F8D7CF; }
+  :is(#notakto-section,#stone-section,#queen-section,#popit-section) .qn-grid { border-color:var(--th-dk); }
+  .qn-cell.goal::before { border:2.5px solid #A8301F; box-shadow:0 0 0 2px rgba(255,255,255,.8); }
+  :is(#notakto-section,#stone-section,#queen-section,#popit-section) .qn-cell.from { box-shadow:inset 0 0 0 3px var(--th); }
+  :is(#notakto-section,#stone-section,#queen-section,#popit-section) .qn-cell.pick:hover::after { background:var(--th); }
+  :is(#notakto-section,#stone-section,#queen-section,#popit-section) .qn-cell.botsel::after { background:var(--th-dk); opacity:.4; }
+  :is(#notakto-section,#stone-section,#queen-section,#popit-section) .qn-cell.hl { box-shadow:inset 0 0 0 3px var(--th-dk); }
+  :is(#notakto-section,#stone-section,#queen-section,#popit-section) .qn-cell.tgt.quiz::after { background:var(--th2); opacity:.25; }
+  /* 나쁜 수(지는 수) 칸: 판 무늬와 확실히 다르게 — 진한 진홍 빗금 */
+  .qn-cell.tgt.cell-bad::after { background:repeating-linear-gradient(45deg, #7A0F2A 0 3px, #C9436B 3px 8px) !important; opacity:.78 !important; }
+  .qn-cell.tgt.cell-bad:hover::after { opacity:.92 !important; }
+  .qn-cell.tgt.cell-win::after { background:#2E8B6F !important; opacity:.68 !important; }
+
+  /* --- 모달 (게임 색) --- */
+  .modal-content[class*="theme-"] .undo-btn:not(:disabled) { border:2px solid var(--th-line); box-shadow:0 4px 0 var(--th-line); }
+  .modal-content { max-height:calc(100dvh - 24px); overflow-y:auto; }
+  #ol-code::placeholder { letter-spacing:0; font-size:1rem; }
+  /* 설정 줄: 글자 위, 고르기 칸 아래 전체 폭 */
+  .settings-group { gap:12px; }
+  .settings-group label { flex-direction:column; align-items:stretch; gap:5px; font-size:1rem; }
+  .settings-group select { width:100% !important; text-align:left; text-align-last:left; font-size:1rem; padding:9px 12px; }
+
+  /* --- 카드: 새 색과 미리보기 --- */
+  .game-card .nt-cell { border-color:var(--c-line); color:var(--c-ink); }
+  .game-card .nt-cell.danger { color:var(--c-dk); border:2px dashed var(--c-dk); }
+  .game-card.hov .nt-cell.active, .game-card:hover .nt-cell.active { background:var(--c-bg); box-shadow:none; }
+  .game-card .qn-mini { border-color:var(--c-dk); }
+  .qn-mini i.g::before { border:2.5px solid #A8301F; }
+  /* 난이도 별 (반 개까지): 회색 별 위에 게임 색 별을 rating/5 폭만큼 */
+  .d-stars { position:relative; display:inline-block; line-height:1; letter-spacing:0 !important; color:#D9D3C2; white-space:nowrap; }
+  .d-stars::before { content:"★★★★★"; }
+  .d-stars::after { content:"★★★★★"; position:absolute; left:0; top:0; width:calc(var(--r) / 5 * 100%); overflow:hidden; color:var(--c); }
+  .difficulty-pill { display:inline-flex; align-items:center; gap:3px; }
+
+  /* --- 상단바: 폰에서 게임 이름 잘림 방지 --- */
+  @media (max-width:640px) {
+    .bk-top__num { display:none !important; }
+    .bk-top__name { font-size:1rem !important; }
+    .bk-top__in { gap:6px !important; }
+    #top-rules-btn { padding-left:9px; padding-right:9px; }
+  }
+
+  /* --- 폰 카드: 제목 두 줄 허용, 알약 작게 --- */
+  @media (max-width:640px) {
+    .game-card .card-title { white-space:normal !important; overflow:visible !important; text-overflow:clip !important; line-height:1.15; min-height:2.3em; display:flex !important; align-items:center; }
+    .game-card .card-top { flex-wrap:nowrap; }
+    .game-card .difficulty-pill { font-size:.6rem; padding:1px 5px; gap:2px; }
+  }
+  @media (max-width:370px) {
+    .game-card .d-lab { display:none; }
+    .game-card .card-title { font-size:1rem !important; }
+  }
+
+  /* --- 폰: 최대한 한 화면 --- */
+  @media (max-width:640px) {
+    main { padding-top:8px !important; padding-bottom:12px !important; }
+    .menu-buttons { gap:10px; margin-bottom:14px; }
+    .menu-btn { height:54px; font-size:1.12rem; }
+    .help-btn { width:46px; height:46px; }
+    .settings-gear-btn, .home-return-btn { padding:11px 10px; font-size:.95rem; }
+    .section-title { font-size:1.25rem !important; margin:2px 0 4px !important; }
+    .rule-subtitle { margin-bottom:10px !important; padding:6px 12px !important; }
+    #nt-game-screen, #st-game-screen, #pp-game-screen, #qn-game-screen { padding-top:2px; }
+    /* 노탁토 판: 칸 크기를 화면 폭에 맞춤 */
+    .nt-center-area { padding:10px !important; }
+    .ttt-grid { padding:8px !important; gap:6px !important; }
+    .ttt-grid.size-3 { --cell:min(88px, calc((100vw - 28px - 20px - 16px - 6px - 12px - 8px) / 3)); }
+    .ttt-grid.size-4 { --cell:min(70px, calc((100vw - 28px - 20px - 16px - 6px - 18px - 8px) / 4)); }
+    .ttt-grid.size-3 { grid-template-columns:repeat(3, var(--cell)) !important; grid-template-rows:repeat(3, var(--cell)) !important; }
+    .ttt-grid.size-4 { grid-template-columns:repeat(4, var(--cell)) !important; grid-template-rows:repeat(4, var(--cell)) !important; }
+    .size-4 .board-stone::before { font-size:1.8rem; }
+    .nt-frame .player-sub { font-size:.72rem; white-space:nowrap; }
+    .nt-frame { padding:8px 10px !important; gap:6px !important; }
+    .nt-frame h2 { font-size:1rem; margin:0; white-space:nowrap; }
+    .nt-frame .player-stat { font-size:1.6rem !important; margin:0 !important; }
+    .nt-frame .player-record, .st-frame .player-record { font-size:.74rem !important; padding:4px 7px; margin:0 !important; }
+    /* 돌 가져가기: 가져간 돌 칸 */
+    .st-frame .stone-container { flex:1; min-width:0; padding:0; }
+    .st-frame .stone-container::after { font-size:.9rem; margin-bottom:2px; white-space:nowrap; }
+    .st-frame .stone-container .stone { width:11px !important; height:11px !important; border-radius:3px; }
+    #st-center-stones { height:200px; }
+    #qn-timer-display:empty, #pp-timer-display:empty { display:none; }
+    #qn-timer-display, #pp-timer-display { margin-bottom:4px !important; }
+    .qn-frame, .pp-frame { padding:6px 12px !important; }
+    .qn-frame .player-stat, .pp-frame .player-stat { font-size:1.4rem !important; }
+    .qn-frame .player-record, .pp-frame .player-record { font-size:.74rem !important; padding:4px 7px; }
+    #qn-board .qn-boardWrap { width:min(100%, calc(100svh - var(--bk-top-h, 52px) - 362px)) !important; margin:0 auto; }
+    #qn-board .pp-hint { font-size:.82rem; min-height:0; }
+    /* 분석 화면: P1/P2 칸 한 줄로 작게 */
+    #nt-analysis-left, #st-analysis-left { flex-direction:row !important; gap:8px; }
+    #nt-analysis-layout, #st-analysis-layout { padding:10px !important; gap:10px !important; min-height:0 !important; }
+    #nt-analysis-center { padding:10px !important; }
+    #st-analysis-center { padding:12px 10px 48px !important; }
+    #nt-analysis-right, #st-analysis-right { height:auto !important; }
+    #nt-a-moves-box, #st-a-moves-box { min-height:0 !important; max-height:260px; }
+    #nt-a-history-box, #st-a-history-box { height:50px !important; min-height:50px !important; }
+    .a-head { gap:6px !important; }
+    .a-head h2 { font-size:1.1rem; }
+    .help-btn.a-help { width:36px; height:36px; }
+  }
+  /* 분석 P1/P2 칸: 늘어나지 않게 (모든 화면) */
+  #nt-analysis-left .a-player-frame, #st-analysis-left .a-player-frame { flex:0 0 auto !important; padding:10px 6px; font-size:1rem; }
+  #nt-analysis-left .a-player-frame span, #st-analysis-left .a-player-frame span { font-size:2rem; margin-top:2px; }
+  @media (max-width:860px) {
+    #nt-analysis-left .a-player-frame, #st-analysis-left .a-player-frame { flex:1 1 0 !important; padding:6px; font-size:.92rem; }
+    #nt-analysis-left .a-player-frame span, #st-analysis-left .a-player-frame span { font-size:1.5rem; }
+  }
+  #nt-analysis-layout, #st-analysis-layout { min-height:0 !important; }
+
+  /* --- 크롬북 가로 (낮은 화면): 스크롤 없이 --- */
+  @media (min-width:861px) {
+    :is(#notakto-section,#stone-section,#queen-section,#popit-section).in-play { padding-top:0; }
+    main { padding-bottom:14px !important; }
+    #nt-turn-indicator, #st-turn-indicator, #pp-turn-indicator, #qn-turn-indicator { font-size:1.5rem !important; margin:0 0 6px !important; }
+    .nt-frame, .st-frame, .qn-frame, .pp-frame { min-height:0 !important; }
+    .action-buttons { margin-top:12px !important; }
+    /* 퀸 판: 남은 높이에 맞춰 (아래 줄·구석까지 보이게) */
+    .qn-boardWrap { width:min(100%, 520px, calc(100svh - var(--bk-top-h, 64px) - 225px)) !important; }
+    #qn-analysis-center .qn-boardWrap { width:min(100%, 460px, calc(100svh - var(--bk-top-h, 64px) - 290px)) !important; }
+    .a-head { margin-bottom:6px !important; }
+    .pp-a-setup { margin-bottom:8px !important; }
+    #pp-analysis-layout, #qn-analysis-layout, #nt-analysis-layout, #st-analysis-layout { padding:14px !important; }
+    /* 분석 화면 높이 */
+    #nt-analysis-right, #st-analysis-right { height:min(460px, calc(100svh - var(--bk-top-h, 64px) - 200px)) !important; }
+    #nt-a-moves-box, #st-a-moves-box { min-height:0 !important; }
+    #pp-analysis-right, #qn-analysis-right { max-height:calc(100svh - var(--bk-top-h, 64px) - 240px) !important; }
+    #pp-a-moves-box, #qn-a-moves-box { min-height:0 !important; }
+    #pp-analysis-left .a-player-frame, #qn-analysis-left .a-player-frame { padding:8px 6px !important; font-size:1rem; }
+    #pp-analysis-left .a-player-frame span, #qn-analysis-left .a-player-frame span { font-size:1.8rem !important; margin-top:2px; }
+    #pp-analysis-left .a-verdict, #qn-analysis-left .a-verdict { flex:1 1 0; min-height:0; overflow-y:auto; font-size:.86rem; line-height:1.45; }
+    .ttt-grid.size-3 { grid-template-columns:repeat(3, min(88px, calc((100svh - var(--bk-top-h, 64px) - 250px) / 3))) !important; grid-template-rows:repeat(3, min(88px, calc((100svh - var(--bk-top-h, 64px) - 250px) / 3))) !important; }
+    .ttt-grid.size-4 { grid-template-columns:repeat(4, min(70px, calc((100svh - var(--bk-top-h, 64px) - 270px) / 4))) !important; grid-template-rows:repeat(4, min(70px, calc((100svh - var(--bk-top-h, 64px) - 270px) / 4))) !important; }
+  }
+  @media (min-width:861px) and (max-height:800px) {
+    main { padding-top:10px !important; }
+    .menu-screen-container { padding:22px 30px !important; }
+    .menu-buttons { gap:12px; margin-bottom:16px; }
+    .menu-btn { height:58px; }
+    .help-btn { width:48px; height:48px; }
+    .section-title { font-size:1.6rem !important; margin:0 0 4px !important; }
+    .rule-subtitle { margin-bottom:12px !important; padding:5px 14px !important; }
+    .nt-center-area { padding:16px !important; }
+    #st-center-stones { height:min(340px, calc(100svh - var(--bk-top-h, 64px) - 240px)) !important; }
+  }
 </style>
 </head>
 <body class="bk">
 
 
 
-<script src="../../common.js" data-num="🎮" data-name="메인 게임" data-sub="팝잇 · 노탁토 · 돌 가져가기 · 황금비 퀸" data-home="../../" data-extra="<button class=&quot;bk-btn bk-btn--ghost bk-btn--sm&quot; id=&quot;sound-toggle&quot; onclick=&quot;toggleMute()&quot;><span id=&quot;sound-icon&quot;>🔊</span> <span id=&quot;sound-text&quot;>소리</span></button><button class=&quot;bk-btn bk-btn--sm&quot; id=&quot;top-rules-btn&quot; style=&quot;display:none&quot; onclick=&quot;showRules(true)&quot;>📖 규칙</button>"></script>
+<script src="../../common.js" data-num="🎮" data-name="메인 게임" data-sub="노탁토 · 돌 가져가기 · 황금비 퀸 · 팝잇" data-home="../../" data-extra="<button class=&quot;bk-btn bk-btn--ghost bk-btn--sm&quot; id=&quot;sound-toggle&quot; onclick=&quot;toggleMute()&quot;><span id=&quot;sound-icon&quot;>🔊</span> <span id=&quot;sound-text&quot;>소리</span></button><button class=&quot;bk-btn bk-btn--sm&quot; id=&quot;top-rules-btn&quot; style=&quot;display:none&quot; onclick=&quot;showRules(true)&quot;>📖 규칙</button>"></script>
 <script src="../online.js?v=4"></script>
 
 <main>
@@ -2197,35 +2442,11 @@
     <div class="name-chip-row"><button type="button" class="name-chip" id="name-chip" onclick="playSfx('click'); openNameModal(true)" title="닉네임 바꾸기">👤 <span id="name-chip-text">닉네임</span> <span class="name-chip-edit">✏️</span></button></div>
 
     <div class="cards-container">
-      <!-- Game 0: Pop it -->
-      <article class="game-card orange-theme" onmousemove="tiltCard(event, this)" onmouseleave="resetTilt(this)" onpointerenter="this.classList.add('hov')" onpointerleave="this.classList.remove('hov')" onclick="playSfx('click'); openGameSection('popit')">
+      <!-- 게임 1: 노탁토 (주황) -->
+      <article class="game-card orange-theme" onmousemove="tiltCard(event, this)" onmouseleave="resetTilt(this)" onpointerenter="this.classList.add('hov')" onpointerleave="this.classList.remove('hov')" onclick="playSfx('click'); openGameSection('notakto')">
         <div>
           <div class="card-header">
-            <div class="card-top"><span class="game-code">게임 1</span><span class="difficulty-pill">난이도 ★★★☆☆</span></div>
-            <h2 class="card-title">팝잇 <span class="card-eng">POP IT</span></h2>
-          </div>
-          <div class="preview-stage" onmouseenter="playSfx('hover_deep')">
-            <div class="pp-mini">
-              <div><i style="background-color:#FF5FA2"></i><i style="background-color:#FF5FA2"></i></div>
-              <div><i style="background-color:#FF9F1C"></i><i style="background-color:#FF9F1C"></i><i style="background-color:#FF9F1C"></i><i style="background-color:#FF9F1C"></i><i class="off"></i></div>
-              <div><i style="background-color:#3DB2FF"></i><i style="background-color:#3DB2FF"></i><i class="pop p4" style="background-color:#3DB2FF"></i><i class="pop p3" style="background-color:#3DB2FF"></i><i class="pop p2" style="background-color:#3DB2FF"></i><i class="pop p1" style="background-color:#3DB2FF"></i></div>
-            </div>
-          </div>
-          <p class="card-desc">한 줄에서 원하는 만큼 버블을 누르고, <b>마지막 버블을 누르는 사람이 승리</b>합니다. 필승 전략은 이진법!</p>
-          <div class="tags-row"><span class="tag">#님게임</span><span class="tag">#이진법</span><span class="tag">#나도수학자</span></div>
-        </div>
-        <div class="card-actions">
-          <button class="btn-play-main" onmouseenter="playSfx('hover_btn')" onclick="event.stopPropagation(); playSfx('click'); openGameSection('popit')">
-            <span>게임 시작</span> <span>▶</span>
-          </button>
-        </div>
-      </article>
-
-      <!-- Game 1: Notakto -->
-      <article class="game-card cyan-theme" onmousemove="tiltCard(event, this)" onmouseleave="resetTilt(this)" onpointerenter="this.classList.add('hov')" onpointerleave="this.classList.remove('hov')" onclick="playSfx('click'); openGameSection('notakto')">
-        <div>
-          <div class="card-header">
-            <div class="card-top"><span class="game-code">게임 2</span><span class="difficulty-pill">난이도 ★★★☆☆</span></div>
+            <div class="card-top"><span class="game-code">게임 1</span><span class="difficulty-pill"><span class="d-lab">난이도</span> <span class="d-stars" style="--r:3" role="img" aria-label="난이도 3/5"></span></span></div>
             <h2 class="card-title">노탁토 <span class="card-eng">NOTAKTO</span></h2>
           </div>
 
@@ -2261,11 +2482,11 @@
         </div>
       </article>
 
-      <!-- Game 2: Stone Taking -->
-      <article class="game-card pink-theme" onmousemove="tiltCard(event, this)" onmouseleave="resetTilt(this)" onpointerenter="this.classList.add('hov')" onpointerleave="this.classList.remove('hov')" onclick="playSfx('click'); openGameSection('stone')">
+      <!-- 게임 2: 돌 가져가기 (파랑) -->
+      <article class="game-card cyan-theme" onmousemove="tiltCard(event, this)" onmouseleave="resetTilt(this)" onpointerenter="this.classList.add('hov')" onpointerleave="this.classList.remove('hov')" onclick="playSfx('click'); openGameSection('stone')">
         <div>
           <div class="card-header">
-            <div class="card-top"><span class="game-code">게임 3</span><span class="difficulty-pill">난이도 ★★★★☆</span></div>
+            <div class="card-top"><span class="game-code">게임 2</span><span class="difficulty-pill"><span class="d-lab">난이도</span> <span class="d-stars" style="--r:3.5" role="img" aria-label="난이도 3.5/5"></span></span></div>
             <h2 class="card-title">돌 가져가기 <span class="card-eng">STONE TAKING</span></h2>
           </div>
 
@@ -2286,7 +2507,7 @@
           </div>
 
           <p class="card-desc">
-            놓여 있는 에너지 스톤을 번갈아 정해진 개수만큼 가져갑니다. <b>마지막 폭탄 돌을 피하거나 보석 돌을 차지</b>하는 사람이 승리합니다!
+            돌을 번갈아 <b>1~k개 중 원하는 만큼</b> 가져가요. <b>마지막 폭탄 돌을 피하거나 보석 돌을 차지</b>하는 사람이 승리합니다!
           </p>
 
           <div class="tags-row">
@@ -2301,11 +2522,11 @@
           </button>
         </div>
       </article>
-      <!-- Game 4: Queen -->
-      <article class="game-card gold-theme" onmousemove="tiltCard(event, this)" onmouseleave="resetTilt(this)" onpointerenter="this.classList.add('hov')" onpointerleave="this.classList.remove('hov')" onclick="playSfx('click'); openGameSection('queen')">
+      <!-- 게임 3: 황금비 퀸 (빨강) -->
+      <article class="game-card pink-theme" onmousemove="tiltCard(event, this)" onmouseleave="resetTilt(this)" onpointerenter="this.classList.add('hov')" onpointerleave="this.classList.remove('hov')" onclick="playSfx('click'); openGameSection('queen')">
         <div>
           <div class="card-header">
-            <div class="card-top"><span class="game-code">게임 4</span><span class="difficulty-pill">난이도 ★★★★★</span></div>
+            <div class="card-top"><span class="game-code">게임 3</span><span class="difficulty-pill"><span class="d-lab">난이도</span> <span class="d-stars" style="--r:4" role="img" aria-label="난이도 4/5"></span></span></div>
             <h2 class="card-title">황금비 퀸 <span class="card-eng">WYTHOFF</span></h2>
           </div>
           <div class="preview-stage" onmouseenter="playSfx('hover_deep')">
@@ -2318,11 +2539,35 @@
               <b class="qn-mini-q">♛</b>
             </div>
           </div>
-          <p class="card-desc">퀸을 <b>왼쪽·아래·대각선</b>으로 옮겨 <b>구석에 먼저 넣는 사람이 승리</b>. 지는 칸이 황금비 위에 놓여요!</p>
+          <p class="card-desc">퀸을 <b>왼쪽·아래·대각선</b>으로 옮겨 <b>구석에 먼저 넣는 사람이 승리</b>. 후공 승리 칸이 황금비 위에 놓여요!</p>
           <div class="tags-row"><span class="tag">#위토프게임</span><span class="tag">#황금비</span><span class="tag">#필승전략확장</span></div>
         </div>
         <div class="card-actions">
           <button class="btn-play-main" onmouseenter="playSfx('hover_btn')" onclick="event.stopPropagation(); playSfx('click'); openGameSection('queen')">
+            <span>게임 시작</span> <span>▶</span>
+          </button>
+        </div>
+      </article>
+
+      <!-- 게임 4: 팝잇 (보라) -->
+      <article class="game-card gold-theme" onmousemove="tiltCard(event, this)" onmouseleave="resetTilt(this)" onpointerenter="this.classList.add('hov')" onpointerleave="this.classList.remove('hov')" onclick="playSfx('click'); openGameSection('popit')">
+        <div>
+          <div class="card-header">
+            <div class="card-top"><span class="game-code">게임 4</span><span class="difficulty-pill"><span class="d-lab">난이도</span> <span class="d-stars" style="--r:5" role="img" aria-label="난이도 5/5"></span></span></div>
+            <h2 class="card-title">팝잇 <span class="card-eng">POP IT</span></h2>
+          </div>
+          <div class="preview-stage" onmouseenter="playSfx('hover_deep')">
+            <div class="pp-mini">
+              <div><i style="background-color:#FF5FA2"></i><i style="background-color:#FF5FA2"></i></div>
+              <div><i style="background-color:#FF9F1C"></i><i style="background-color:#FF9F1C"></i><i style="background-color:#FF9F1C"></i><i style="background-color:#FF9F1C"></i><i class="off"></i></div>
+              <div><i style="background-color:#3DB2FF"></i><i style="background-color:#3DB2FF"></i><i class="pop p4" style="background-color:#3DB2FF"></i><i class="pop p3" style="background-color:#3DB2FF"></i><i class="pop p2" style="background-color:#3DB2FF"></i><i class="pop p1" style="background-color:#3DB2FF"></i></div>
+            </div>
+          </div>
+          <p class="card-desc">한 줄에서 원하는 만큼 버블을 누르고, <b>마지막 버블을 누르는 사람이 승리</b>합니다. 필승 전략은 이진법!</p>
+          <div class="tags-row"><span class="tag">#님게임</span><span class="tag">#이진법</span><span class="tag">#나도수학자</span></div>
+        </div>
+        <div class="card-actions">
+          <button class="btn-play-main" onmouseenter="playSfx('hover_btn')" onclick="event.stopPropagation(); playSfx('click'); openGameSection('popit')">
             <span>게임 시작</span> <span>▶</span>
           </button>
         </div>
@@ -2359,7 +2604,7 @@
       </div>
       <div class="menu-footer-btns">
         <button class="settings-gear-btn" onmouseenter="playSfx('hover')" onclick="playSfx('click'); openQnSettings()">⚙️ 게임 설정</button>
-        <button class="home-return-btn" onmouseenter="playSfx('hover')" onclick="playSfx('click'); returnToHome()">🏠 초기 화면으로</button>
+        <button class="home-return-btn" onmouseenter="playSfx('hover')" onclick="playSfx('click'); returnToHome()">🎮 게임 목록으로</button>
       </div>
     </div>
 
@@ -2467,7 +2712,7 @@
       </div>
       <div class="menu-footer-btns">
         <button class="settings-gear-btn" onmouseenter="playSfx('hover')" onclick="playSfx('click'); openPpSettings()">⚙️ 게임 설정</button>
-        <button class="home-return-btn" onmouseenter="playSfx('hover')" onclick="playSfx('click'); returnToHome()">🏠 초기 화면으로</button>
+        <button class="home-return-btn" onmouseenter="playSfx('hover')" onclick="playSfx('click'); returnToHome()">🎮 게임 목록으로</button>
       </div>
     </div>
 
@@ -2570,7 +2815,7 @@
       </div>
       <div class="menu-footer-btns">
         <button class="settings-gear-btn" onmouseenter="playSfx('hover')" onclick="playSfx('click'); openNtSettings()">⚙️ 게임 설정</button>
-        <button class="home-return-btn" onmouseenter="playSfx('hover')" onclick="playSfx('click'); returnToHome()">🏠 초기 화면으로</button>
+        <button class="home-return-btn" onmouseenter="playSfx('hover')" onclick="playSfx('click'); returnToHome()">🎮 게임 목록으로</button>
       </div>
     </div>
 
@@ -2583,14 +2828,14 @@
         <div class="nt-frame" id="nt-frame-p1">
           <h2 id="nt-p1-name">플레이어</h2>
           <div class="player-stat" id="nt-p1-stones-count">0</div>
-          <div class="player-sub">놓은 돌 개수</div>
+          <div class="player-sub">놓은 X 개수</div>
           <div class="player-record" id="nt-p1-record">전적: 0승 0패</div>
         </div>
         <div class="nt-center-area" id="nt-game-board-container"></div>
         <div class="nt-frame" id="nt-frame-p2">
           <h2 id="nt-p2-name">AI</h2>
           <div class="player-stat" id="nt-p2-stones-count">0</div>
-          <div class="player-sub">놓은 돌 개수</div>
+          <div class="player-sub">놓은 X 개수</div>
           <div class="player-record" id="nt-p2-record">전적: 0승 0패</div>
         </div>
       </div>
@@ -2608,14 +2853,14 @@
       <div style="display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:8px; width:100%; margin-bottom:10px;">
         <div class="a-head" style="margin:0;"><h2 style="margin:0;">📊 분석 모드 (<span id="nt-a-initial-info"></span>)</h2><button class="help-btn a-help" onmouseenter="playSfx('hover')" onclick="ntShowHelp('analysis')" title="도움말">?</button><button class="help-close-btn a-quiz-btn" id="nt-a-quiz-btn" onclick="playSfx('click'); ntAQuiz()">🎯 퀴즈</button></div>
         <label class="eval-toggle-label" style="display:inline-flex; align-items:center; gap:8px; cursor:pointer; font-size:0.95rem; font-weight:700; padding:8px 14px; border-radius:10px;">
-          <input type="checkbox" id="nt-eval-color-toggle" checked onchange="playSfx('click'); ntToggleEvalColors()" style="cursor:pointer; width:18px; height:18px; accent-color:#2F8FC9;">
+          <input type="checkbox" id="nt-eval-color-toggle" checked onchange="playSfx('click'); ntToggleEvalColors()" style="cursor:pointer; width:18px; height:18px; accent-color:var(--th);">
           <span>판에 수 평가 색상 표시</span>
         </label>
       </div>
       <div id="nt-analysis-layout">
         <div id="nt-analysis-left">
-          <div class="a-player-frame" id="nt-a-frame-p1">P1 놓은 돌<span id="nt-a-p1-score">0</span></div>
-          <div class="a-player-frame" id="nt-a-frame-p2">P2 놓은 돌<span id="nt-a-p2-score">0</span></div>
+          <div class="a-player-frame" id="nt-a-frame-p1">P1 놓은 X<span id="nt-a-p1-score">0</span></div>
+          <div class="a-player-frame" id="nt-a-frame-p2">P2 놓은 X<span id="nt-a-p2-score">0</span></div>
         </div>
         <div id="nt-analysis-center"></div>
         <div id="nt-analysis-right">
@@ -2666,7 +2911,7 @@
       </div>
       <div class="menu-footer-btns">
         <button class="settings-gear-btn" onmouseenter="playSfx('hover')" onclick="playSfx('click'); openStSettings()">⚙️ 게임 설정</button>
-        <button class="home-return-btn" onmouseenter="playSfx('hover')" onclick="playSfx('click'); returnToHome()">🏠 초기 화면으로</button>
+        <button class="home-return-btn" onmouseenter="playSfx('hover')" onclick="playSfx('click'); returnToHome()">🎮 게임 목록으로</button>
       </div>
     </div>
 
@@ -2736,8 +2981,8 @@
 
 <div id="st-preview-tooltip" class="preview-tooltip" style="flex-direction:row; width:300px;">
   <div style="display:flex; flex-direction:column; gap:10px; min-width:65px; border-right:1px solid rgba(255,255,255,0.2); padding-right:10px;">
-    <div style="font-weight:800; color:var(--neon-cyan);" id="st-tt-p1">P1: 0</div>
-    <div style="font-weight:800; color:var(--neon-pink);" id="st-tt-p2">P2: 0</div>
+    <div style="font-weight:800; color:var(--th-ink);" id="st-tt-p1">P1: 0</div>
+    <div style="font-weight:800; color:var(--text-main);" id="st-tt-p2">P2: 0</div>
   </div>
   <div id="st-tt-stones" style="flex:1; display:grid; grid-template-columns:repeat(auto-fill, minmax(16px, 1fr)); gap:5px; align-content:start;"></div>
 </div>
@@ -2775,8 +3020,8 @@
       <label>퀸 시작 위치:
         <select id="set-qn-start">
           <option value="rand">무작위</option>
-          <option value="pick">직접 놓기 (게임 화면에서 칸 고르기)</option>
-          <option value="cold">도전 위치 (지는 칸에서 시작 — 선공이 불리)</option>
+          <option value="pick">직접 놓기 (판에서 칸 고르기)</option>
+          <option value="cold">도전 위치 (후공 승리 칸에서 시작)</option>
         </select>
       </label>
       <label>구석에 퀸을 넣으면:
@@ -3498,6 +3743,9 @@
     void el.offsetWidth;
     el.classList.add('fade-screen');
     el.style.display = displayType;
+    // 게임·분석 화면에서는 큰 제목/규칙 줄을 숨겨 한 화면에 들어가게 (메뉴에서만 보임)
+    const sec = el.closest && el.closest('.game-section');
+    if (sec && sec !== el) sec.classList.toggle('in-play', !el.classList.contains('menu-screen-container'));
   }
 
   function openGameSection(game) {
@@ -3614,7 +3862,7 @@
   let qnBotTimeout = null, qnTimerInterval = null, qnTimeLeft = 0, qnScore = { p1Wins: 0, p2Wins: 0 };
   function qnColdSet(N) { const s = new Set(); for (let n = 0; ; n++) { const a = Math.floor(n * QN_PHI), b = a + n; if (a >= N) break; if (b < N) { s.add(a + ',' + b); s.add(b + ',' + a); } } return s; }
   function qnBotNum() { return isBranchPlay ? 3 - branchHumanPlayer : 2; }
-  // 지는 자리(P-position) 표: 보통 규칙은 황금비 지는 칸(qnColdSet), 거꾸로 규칙은 판 전체를 거꾸로 따져서(역방향 귀납) 구함
+  // 지는 자리(P-position) 표: 보통 규칙은 황금비 후공 승리 칸(qnColdSet), 거꾸로 규칙은 판 전체를 거꾸로 따져서(역방향 귀납) 구함
   const qnColdCache = {}, qnPCache = {};
   function qnColdOf(N) { return qnColdCache[N] || (qnColdCache[N] = qnColdSet(N)); }
   function qnPTable(N) {
@@ -3664,14 +3912,14 @@
   function qnShowHelp(topic) {
     playBtnSound('help');
     const rule = "<b>[황금비 퀸 규칙]</b><br>1. 퀸은 <b>왼쪽, 아래, 왼쪽 아래 대각선</b>으로만, 한 번에 원하는 만큼 움직입니다(꼭 한 칸 이상).<br>2. 퀸을 <b>구석(0,0)에 넣는 사람이 승리</b>합니다.<br>3. 설정에서 판 크기·시작 위치(직접 놓기, 도전 위치)·거꾸로 규칙을 바꿀 수 있어요.";
-    const map = { bot: ['🤖 AI 플레이', 'AI와 번갈아 둡니다. 최상 난이도는 항상 <b>지는 칸(황금비 자리)</b>으로 퀸을 보냅니다.<br><br>' + rule],
+    const map = { bot: ['🤖 AI 플레이', 'AI와 번갈아 둡니다. 최상 난이도는 항상 <b>후공 승리 칸(황금비 자리)</b>으로 퀸을 보냅니다.<br><br>' + rule],
       solo: ['👥 2인 플레이', '하나의 기기에서 두 명이 번갈아 둡니다.<br><br>' + rule],
       analysis: ['📊 분석 모드', '퀸이 갈 수 있는 <b>모든 칸(합법 수)</b>을 계산해서 보여 줍니다.<br><br>' +
-        "- <span style='color:#3A9E82; font-weight:bold;'>[필승 수]</span>: 상대를 <b>지는 칸</b>으로 보내는 수예요. 상대가 어떻게 해도 이길 수 있어요. (판에서 초록색)<br>" +
+        "- <span style='color:#3A9E82; font-weight:bold;'>[필승 수]</span>: 상대를 <b>후공 승리 칸</b>으로 보내는 수예요. 상대가 어떻게 해도 이길 수 있어요. (판에서 초록색)<br>" +
         "- <span style='color:#C9436B; font-weight:bold;'>[나쁜 수]</span>: 상대에게 이길 기회를 주는 수예요. 화살표 뒤 <code>(c,d) 대응</code>은 상대의 최선의 대응이에요. (판에서 빨간색)<br>" +
         "- <b>(승리 확정)/(패배 확정)</b>: 그 수로 퀸이 바로 구석에 들어가요.<br>" +
         '- 판 크기를 고르고 📍 직접 놓기·🎲 랜덤으로 시작 위치를 정할 수 있고, 🎯 퀴즈로 이기는 수 찾기 연습, “이 포지션에서 AI와 두기”도 할 수 있어요.<br><br>' +
-        '지는 칸 (1,2), (3,5), (4,7)… 이 왜 <b>황금비 φ≈1.618</b> 직선 위에 놓이는지는 <b>📐 황금비 그림 보기</b>에서 그림으로 볼 수 있어요. (거꾸로 규칙이면 지는 칸이 조금 달라져요)'] };
+        '후공 승리 칸 (1,2), (3,5), (4,7)… 이 왜 <b>황금비 φ≈1.618</b> 직선 위에 놓이는지는 <b>📐 황금비 그림 보기</b>에서 그림으로 볼 수 있어요. (거꾸로 규칙이면 후공 승리 칸이 조금 달라져요)'] };
     const [t, c] = map[topic];
     document.getElementById('help-modal-box').classList.remove('pink-modal');
     document.getElementById('help-title').innerText = t; document.getElementById('help-content').innerHTML = c;
@@ -3929,8 +4177,8 @@
     });
     const v = document.getElementById('qn-a-verdict');
     v.className = 'a-verdict ' + (ok ? 'win' : 'lose');
-    v.innerHTML = ok ? `<b>정답! 🎉</b><br>(${to[0]},${to[1]})은 상대가 <b>지는 칸</b>이에요. 상대가 어디로 옮겨도 다시 지는 칸으로 보낼 수 있어요.`
-                     : `<b>아쉬워요 😢</b><br>이기는 수: ${wins.map(w => `(${w[0]},${w[1]})`).join(', ')} (초록색). 상대를 지는 칸으로 보내야 해요.`;
+    v.innerHTML = ok ? `<b>정답! 🎉</b><br>(${to[0]},${to[1]})은 <b>후공 승리 칸</b>이에요. 상대가 어디로 옮겨도 다시 후공 승리 칸으로 보낼 수 있어요.`
+                     : `<b>아쉬워요 😢</b><br>이기는 수: ${wins.map(w => `(${w[0]},${w[1]})`).join(', ')} (초록색). 상대를 후공 승리 칸으로 보내야 해요.`;
     const qid = qnAQuizSeq, snap = qnAHist.length;
     setTimeout(() => { if (qid !== qnAQuizSeq || snap !== qnAHist.length || qnAnalysisScreen.style.display === 'none') return; qnAApply(to); }, 1600);
   }
@@ -3983,14 +4231,14 @@
     hb.scrollTop = hb.scrollHeight;
     // 판정 상자
     const v = document.getElementById('qn-a-verdict'), pT = josa('P' + qnATurn, '이', '가');
-    const coldTxt = `<br><small>${mis ? '거꾸로 규칙의 ' : ''}지는 칸: ${qnAColdList().slice(0, 6).join(', ')}${qnAColdList().length > 6 ? ' …' : ''}${mis ? '' : ' (황금비 φ≈1.618!)'}</small>`;
+    const coldTxt = `<br><small>${mis ? '거꾸로 규칙의 ' : ''}후공 승리 칸: ${qnAColdList().slice(0, 6).join(', ')}${qnAColdList().length > 6 ? ' …' : ''}${mis ? '' : ' (황금비 φ≈1.618!)'}</small>`;
     if (qnAPhase === 'place') { v.className = 'a-verdict'; v.innerHTML = '<b>시작 위치 정하기</b><br>판에서 칸을 눌러 퀸을 놓거나 🎲 랜덤 위치를 누르세요.' + coldTxt; }
     else if (over) { v.className = 'a-verdict win'; v.innerHTML = `<b>게임 종료 — P${winner} 승리!</b><br>${josa('P' + (3 - qnATurn), '이', '가')} 퀸을 구석에 넣었어요.${mis ? ' (거꾸로 규칙)' : ''}`; }
-    else if (qnAQuizOn) { v.className = 'a-verdict'; v.innerHTML = `<b>🎯 ${pT} 둘 차례</b><br>퀸이 (${qnAQ[0]},${qnAQ[1]})에 있어요. 상대를 지는 칸으로 보내는 수를 찾아보세요!`; }
+    else if (qnAQuizOn) { v.className = 'a-verdict'; v.innerHTML = `<b>🎯 ${pT} 둘 차례</b><br>퀸이 (${qnAQ[0]},${qnAQ[1]})에 있어요. 상대를 후공 승리 칸으로 보내는 수를 찾아보세요!`; }
     else {
       const lose = qnIsCold(qnAQ[0], qnAQ[1], N, qnWinRule), w = evals.filter(e => e.win);
       v.className = 'a-verdict ' + (lose ? 'lose' : 'win');
-      v.innerHTML = lose ? `<b>${pT} 둘 차례 — 지는 칸 (${qnAQ[0]},${qnAQ[1]})</b><br>어디로 옮겨도 상대가 바르게 두면 집니다. 작게 움직이며 상대 실수를 기다리세요!` + coldTxt
+      v.innerHTML = lose ? `<b>${pT} 둘 차례 — 후공 승리 칸 (${qnAQ[0]},${qnAQ[1]})</b><br>어디로 옮겨도 상대가 바르게 두면 집니다. 적절히 움직이며 상대의 실수를 기다리세요!` + coldTxt
                          : `<b>${pT} 둘 차례 — 이기는 자리</b><br>이기는 수 ${w.length}개: ${w.slice(0, 4).map(e => `(${e.to[0]},${e.to[1]})`).join(', ')}` + coldTxt;
     }
     // 합법 수 목록
@@ -5271,6 +5519,7 @@
       if (gid !== stGameId) return;
       moving.forEach(t => { t.el.style.transition = ''; t.el.style.zIndex = ''; t.el.style.transform = 'none'; });
       stStonesArr.forEach(el => cs.appendChild(el)); // 쌓이는 순서도 처음과 같게
+      stLayoutCenter();
       stIsAnimating = false; stUpdateUI();
     }, 500);
   }
@@ -5319,16 +5568,14 @@
     document.getElementById('st-p1-stones').innerHTML = '';
     document.getElementById('st-p2-stones').innerHTML = '';
 
-    let cRect = cs.getBoundingClientRect();
     for (let i = 0; i < stN; i++) {
       let stone = document.createElement('div');
       let sClass = (i === 0) ? (stModeType === 'bomb' ? 'st-bomb-stone' : 'st-gem-stone') : 'st-normal-stone';
       stone.className = 'stone ' + sClass;
-      stone.style.left = (20 + Math.random() * Math.max(40, cRect.width - 70)) + 'px';
-      stone.style.top = (20 + Math.random() * Math.max(40, cRect.height - 80)) + 'px';
       cs.appendChild(stone);
       stStonesArr.push(stone);
     }
+    stLayoutCenter();
     stUpdateUI();
     if (stCurrentPlayer === 2 && stMode === 'bot') stBotTimeout = setTimeout(stBotTurn, 600);
   }
@@ -5373,40 +5620,50 @@
     const p2Box = document.getElementById('st-p2-stones');
     p1Box.innerHTML = ''; p2Box.innerHTML = '';
 
-    let p1Rect = p1Box.getBoundingClientRect();
     for (let i = 0; i < stAP1Score; i++) {
       let s = document.createElement('div');
       s.className = 'stone st-normal-stone';
-      s.style.left = (10 + Math.random() * Math.max(10, p1Rect.width - 45)) + 'px';
-      s.style.top = (10 + Math.random() * Math.max(10, p1Rect.height - 45)) + 'px';
       p1Box.appendChild(s);
     }
-
-    let p2Rect = p2Box.getBoundingClientRect();
     for (let i = 0; i < stAP2Score; i++) {
       let s = document.createElement('div');
       s.className = 'stone st-normal-stone';
-      s.style.left = (10 + Math.random() * Math.max(10, p2Rect.width - 45)) + 'px';
-      s.style.top = (10 + Math.random() * Math.max(10, p2Rect.height - 45)) + 'px';
       p2Box.appendChild(s);
     }
 
-    let cRect = cs.getBoundingClientRect();
     for (let i = 0; i < stACurrentN; i++) {
       let stone = document.createElement('div');
       let sClass = (i === 0) ? (stModeType === 'bomb' ? 'st-bomb-stone' : 'st-gem-stone') : 'st-normal-stone';
       stone.className = 'stone ' + sClass;
-      stone.style.left = (20 + Math.random() * Math.max(40, cRect.width - 70)) + 'px';
-      stone.style.top = (20 + Math.random() * Math.max(40, cRect.height - 80)) + 'px';
       cs.appendChild(stone);
       stStonesArr.push(stone);
     }
+    stLayoutCenter();
 
     stUpdateUI();
     if (stCurrentPlayer !== branchHumanPlayer && !stGameOver) {
       stBotTimeout = setTimeout(stBotTurn, 600);
     }
   }
+
+  /* 가운데 돌을 겹치지 않게 줄 맞춰 놓기 (0번=폭탄/보석이 맨 앞, 뒤에서부터 가져감) */
+  function stLayoutCenter() {
+    const cs = document.getElementById('st-center-stones');
+    if (!cs || !cs.clientWidth) return;
+    const n = stStonesArr.length; if (!n) return;
+    const W = cs.clientWidth, H = cs.clientHeight, S = 28, PAD = 12, BADGE = 40;
+    let G = 10, cols = Math.max(1, Math.min(10, Math.floor((W - PAD * 2 + G) / (S + G))));
+    let rows = Math.ceil(n / cols);
+    if (rows * (S + G) - G > H - PAD * 2 - BADGE) { G = 6; cols = Math.max(1, Math.min(12, Math.floor((W - PAD * 2 + G) / (S + G)))); rows = Math.ceil(n / cols); }
+    const gw = Math.min(n, cols) * (S + G) - G, gh = rows * (S + G) - G;
+    const x0 = Math.max(PAD, (W - gw) / 2);
+    const y0 = Math.max(PAD, Math.min((H - BADGE - gh) / 2 + 4, H - PAD - gh));
+    stStonesArr.forEach((el, i) => {
+      el.style.left = (x0 + (i % cols) * (S + G)) + 'px';
+      el.style.top = (y0 + Math.floor(i / cols) * (S + G)) + 'px';
+    });
+  }
+  window.addEventListener('resize', () => { const gs = document.getElementById('st-game-screen'); if (gs && gs.style.display !== 'none' && !stIsAnimating) stLayoutCenter(); });
 
   function stUpdateUI() {
     const badge = document.getElementById('st-stone-count-badge');
@@ -5973,7 +6230,7 @@
   const RULES = {
     popit: ['팝잇 (POP IT)', `<b>목표</b>: 마지막 버블을 내가 누르기!<br>① 자기 차례에 <b>한 줄</b>을 골라 버블을 <b>1개 이상</b> 누릅니다(드래그로 여러 개 선택).<br>② 다른 줄의 버블을 같이 누를 수는 없어요.<br>③ <b>마지막 버블을 누르는 사람이 승리</b>합니다.<br><small>⚙️ 설정에서 ‘누르면 패배’, ‘한 번에 최대 n개’(심화)로 바꿀 수 있어요.</small>`],
     notakto: ['노탁토 (NOTAKTO)', `<b>목표</b>: 한 줄을 만들지 않고 버티기!<br>① 둘 다 <b>X만</b> 번갈아 빈 칸에 놓습니다.<br>② 가로·세로·대각선 <b>한 줄을 완성한 사람이 패배</b>!<br>③ 3×3이 기본, 설정에서 4×4도 할 수 있어요.`],
-    queen: ['황금비 퀸 (WYTHOFF)', `<b>목표</b>: 퀸을 구석(0,0)에 먼저 넣기!<br>① 퀸은 <b>왼쪽, 아래, 왼쪽 아래 대각선</b>으로만 움직여요.<br>② 한 번에 원하는 만큼, 꼭 한 칸 이상.<br>③ <b>구석에 퀸을 넣는 사람이 승리</b>합니다.<br><small>⚙️ 설정에서 판 크기·시작 위치(직접 놓기·도전 위치)·거꾸로 규칙을 바꿀 수 있어요. 지는 칸의 비밀은 📊 분석 모드에서!</small>`],
+    queen: ['황금비 퀸 (WYTHOFF)', `<b>목표</b>: 퀸을 구석(0,0)에 먼저 넣기!<br>① 퀸은 <b>왼쪽, 아래, 왼쪽 아래 대각선</b>으로만 움직여요.<br>② 한 번에 원하는 만큼, 꼭 한 칸 이상.<br>③ <b>구석에 퀸을 넣는 사람이 승리</b>합니다.<br><small>⚙️ 설정에서 판 크기·시작 위치(직접 놓기·도전 위치)·거꾸로 규칙을 바꿀 수 있어요. 후공 승리 칸의 비밀은 📊 분석 모드에서!</small>`],
     stone: ['돌 가져가기 (STONE TAKING)', `<b>목표</b>: 마지막 폭탄 돌을 피하기! (책 ‘마지막 카드를 가져라’ 심화판)<br>① 번갈아 돌을 <b>1개~k개</b>씩 가져갑니다.<br>② <b>폭탄 모드</b>: 마지막 빨간 폭탄 돌을 가져가면 <b>패배</b>.<br>③ <b>보석 모드</b>: 마지막 초록 보석 돌을 가져가면 <b>승리</b>.`],
   };
   function showRules(force) {
@@ -5989,7 +6246,7 @@
     closeModal('rules-modal', 'rules-box');
   }
 
-  /* ===== 👤 이름 (세 게임 공통, 기기에 저장) ===== */
+  /* ===== 👤 이름 (네 게임 공통, 기기에 저장) ===== */
   const NAME_KEY = 'onchun_name';
   const NAME_ADJ = ['용감한', '씩씩한', '날쌘', '똑똑한', '엉뚱한', '느긋한', '반짝이는', '꼬마', '거대한', '수상한', '명랑한', '졸린'];
   const NAME_ANIMAL = ['수달', '펭귄', '두더지', '고양이', '여우', '판다', '거북이', '다람쥐', '돌고래', '올빼미', '카피바라', '햄스터'];
@@ -6057,7 +6314,7 @@
   }
   function clearRecords() { if (!recordsGame) return; const r = recLoad(); delete r[recordsGame]; recSave(r); openRecords(recordsGame); }
 
-  /* ===== 🌐 온라인 대전 (games/online.js) — 세 게임 공통 ===== */
+  /* ===== 🌐 온라인 대전 (games/online.js) — 네 게임 공통 ===== */
   const OLG = {
     stone:   { p: 'st', mode: () => stMode, over: () => stGameOver, cur: () => stCurrentPlayer, start: () => stStartGame('online'), back: () => stGoBack(),
                settings: () => { applyStRandomRules(); return { n: stN, limit: stLimit, mode: stModeType }; },
@@ -6079,7 +6336,7 @@
   function olHelp() {
     document.getElementById('help-modal-box').classList.remove('pink-modal');
     document.getElementById('help-title').innerText = '🌐 온라인 대전';
-    document.getElementById('help-content').innerHTML = '한 사람이 <b>방 만들기</b>를 눌러 4자리 번호를 받고, 다른 사람이 그 번호를 입력해 <b>입장</b>하면 바로 시작돼요.<br><br>· 방을 만든 사람이 <b>선공(1번)</b>, 다시하기도 방장이 눌러요.<br>· 판 설정(돌 개수, 팝잇 줄 등)은 방장 설정을 따라요.<br>· 같은 와이파이가 아니어도 되고, 폰·크롬북 어디서나 돼요.<br>· 이름을 넣어 두면 세 게임 모두에서 같은 이름이 쓰여요.';
+    document.getElementById('help-content').innerHTML = '한 사람이 <b>방 만들기</b>를 눌러 4자리 번호를 받고, 다른 사람이 그 번호를 입력해 <b>입장</b>하면 바로 시작돼요.<br><br>· 방을 만든 사람이 <b>선공(1번)</b>, 다시하기도 방장이 눌러요.<br>· 판 설정(돌 개수, 팝잇 줄 등)은 방장 설정을 따라요.<br>· 같은 와이파이가 아니어도 되고, 폰·크롬북 어디서나 돼요.<br>· 이름을 넣어 두면 네 게임 모두에서 같은 이름이 쓰여요.';
     openModal('help-modal', 'help-modal-box');
   }
   function openOnlineModal(g) {
