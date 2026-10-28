@@ -70,7 +70,7 @@ window.Online = (function () {
   }
 
   return {
-    get myNum() { return myNum; }, get active() { return active; }, get code() { return code; }, get names() { return names; },
+    get myNum() { return myNum; }, get active() { return active; }, get code() { return code; }, get names() { return names; }, get gameNo() { return gameNo; },
     init(o) { game = (o && o.game) || game; },
     on(h) { handlers.push(h); },
     async create(settings, name) {
@@ -80,7 +80,7 @@ window.Online = (function () {
         const c = newCode(); const ref = base().child(key(c));
         const s = await ref.get();
         if (!s.exists() || (Date.now() - (s.val().createdAt || 0)) > 3 * 3600 * 1000) {
-          code = c; roomRef = ref; myNum = 1; applied = 0; active = true;
+          code = c; roomRef = ref; myNum = 1; applied = 0; active = true; gameNo = 1;
           await ref.set({ createdAt: TS(), updatedAt: TS(), lobby: null, host: { name: name || '방장', online: true, id: myId }, guest: null });
           await ref.update({ kind: game, settings: settings || {}, gameNo: 1, updatedAt: TS() });
           ref.onDisconnect().update({ left: myId, 'host/online': false, updatedAt: TS() });
@@ -97,11 +97,25 @@ window.Online = (function () {
       if (!s.exists() || !s.val().gameNo) throw new Error('그 번호의 방이 없어요.');
       const r = s.val();
       if (r.guest || r.left) throw new Error('이미 꽉 찼거나 끝난 방이에요.');
-      code = c; roomRef = ref; myNum = 2; applied = 0; active = true;
+      code = c; roomRef = ref; myNum = 2; applied = 0; active = true; gameNo = r.gameNo;
       await ref.update({ guest: { name: name || '손님', online: true, id: myId }, updatedAt: TS() });
       ref.onDisconnect().update({ left: myId, 'guest/online': false, updatedAt: TS() });
       listen();
       return r.settings || {};
+    },
+    // 다른 게임의 방인지 찾아보기: 들어갈 수 있는 방이면 그 게임 이름(stone|notakto|popit|queen), 없으면 null
+    async probe(c) {
+      await ensureDb();
+      c = String(c || '').trim();
+      for (const g in PREFIX) {
+        if (g === game) continue;
+        try {
+          const s = await base().child(PREFIX[g] + c).get();
+          const r = s.val();
+          if (r && r.gameNo && !r.guest && !r.left && (Date.now() - (r.createdAt || 0)) < 3 * 3600 * 1000) return g;
+        } catch (e) { }
+      }
+      return null;
     },
     sendMove(move) {
       if (!active || !roomRef) return;
