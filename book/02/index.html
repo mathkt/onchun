@@ -14,7 +14,16 @@
   .chip.new{border-color:var(--bk-orange);box-shadow:0 4px 0 #c9731a}
   .chip.last{background:var(--bk-yellow);border-color:var(--bk-orange)}
   .chip--card{width:46px;height:64px;border-radius:8px;border-width:2px}
-  .chip--ghost{border-color:var(--bk-purple);box-shadow:0 4px 0 #6a3fb0}
+  .chip--ghost{border-color:#c9c3b0;color:#b0a98f;background:#f6f2e6;box-shadow:none;cursor:not-allowed}
+  .chip--ghost::after{content:"✕";position:absolute;top:-7px;right:-6px;width:18px;height:18px;border-radius:50%;background:#c9c3b0;color:#fff;font-size:.7rem;display:grid;place-items:center}
+  .chip--ok{border-color:var(--bk-green);box-shadow:0 4px 0 #2f7a5c;animation:chipPulse 1.6s ease-in-out infinite}
+  .chip--ok:hover,.chip--ok:active{background:#EDF9F4}
+  @keyframes chipPulse{0%,100%{box-shadow:0 4px 0 #2f7a5c}50%{box-shadow:0 4px 0 #2f7a5c,0 0 0 5px rgba(58,158,130,.25)}}
+  .chips.busy .chip--ok{animation:none}
+  .chip.lift{transform:translateY(-10px) scale(1.12);box-shadow:0 10px 18px rgba(0,0,0,.18);z-index:2}
+  .chip{position:relative;transition:transform .18s,box-shadow .18s}
+  .dv-legend{display:flex;gap:12px;flex-wrap:wrap;font-size:.85rem;color:var(--bk-ink-soft);margin:2px 0 6px}
+  .dv-legend i{display:inline-block;width:14px;height:14px;border-radius:4px;border:2px solid;vertical-align:middle;margin-right:4px}
   .ops{display:flex;gap:10px;margin:6px 0;flex-wrap:wrap}
   .ops .bk-btn{white-space:nowrap}
   .ops label{flex-basis:100%}
@@ -36,6 +45,7 @@
   .exp-tbl td input{width:44px;min-width:44px;padding:6px 2px;text-align:center;font-size:1.1rem}
   .cards-row{display:flex;flex-wrap:wrap;gap:6px;margin:10px 0}
   .card{width:48px;height:66px;border-radius:8px;background:#fff;border:2px solid var(--bk-ink);display:grid;place-items:center;font-family:var(--f-head);font-size:1.3rem;transition:.25s;position:relative}
+  .card.lift{transform:translateY(-12px) scale(1.12);z-index:2}
   .card.taken-p1{background:var(--bk-sky);color:#fff;border-color:var(--bk-sky);transform:translateY(-6px)}
   .card.taken-p2{background:var(--bk-red);color:#fff;border-color:var(--bk-red);transform:translateY(-6px)}
   .card.next{border-color:var(--bk-orange);box-shadow:0 0 0 3px var(--bk-yellow)}
@@ -130,7 +140,7 @@
       </ol></div>
       <div class="setup">
         <label>n = <select id="as-n" class="sel"><option>5</option><option selected>6</option><option>7</option><option>8</option><option>9</option><option>10</option><option>11</option><option>12</option></select></label>
-        <label>상대: <select id="as-mode" class="sel"><option value="pvp">친구와 번갈아</option><option value="bot">봇 (나중에 함)</option><option value="botfirst">봇 (먼저 함)</option></select></label>
+        <label>상대: <select id="as-mode" class="sel"><option value="alt" selected>봇 (선공 번갈아)</option><option value="bot">봇 (나중에 함)</option><option value="botfirst">봇 (먼저 함)</option><option value="pvp">친구와 번갈아</option></select></label>
         <button class="bk-btn bk-btn--primary bk-btn--sm" id="as-start">새 게임</button>
       </div>
       <div class="turn" id="as-turn"><span class="dot"></span><span>푸리(먼저)의 차례 — 두 수를 고르세요</span></div>
@@ -203,7 +213,7 @@
       <div class="setup">
         <label>카드 n = <select id="lc-n" class="sel"><option>11</option><option>13</option><option>15</option><option>20</option></select></label>
         <label>한 번에 최대 <select id="lc-k" class="sel"><option value="2">2장</option><option value="3">3장</option></select></label>
-        <label>상대: <select id="lc-mode" class="sel"><option value="pvp">친구와 번갈아</option><option value="bot">봇 (나중에 함)</option><option value="botfirst">봇 (먼저 함)</option></select></label>
+        <label>상대: <select id="lc-mode" class="sel"><option value="alt" selected>봇 (선공 번갈아)</option><option value="bot">봇 (나중에 함)</option><option value="botfirst">봇 (먼저 함)</option><option value="pvp">친구와 번갈아</option></select></label>
         <label>봇 실력: <select id="lc-diff" class="sel"><option value="0.5">쉬움</option><option value="0.85" selected>보통</option><option value="1">완벽</option></select></label>
         <button class="bk-btn bk-btn--primary bk-btn--sm" id="lc-start">새 게임</button>
       </div>
@@ -256,6 +266,8 @@
 
 <script>
 const $ = s => document.querySelector(s); const ri = n => Math.floor(Math.random() * n);
+/* 카드가 날아가기 전에 살짝 들리며 빛나는 동작 */
+function liftThen(el, color) { el.classList.add('lift'); el.style.boxShadow = `0 10px 18px rgba(0,0,0,.18), 0 0 0 4px ${color}`; return new Promise(r => setTimeout(() => { el.classList.remove('lift'); el.style.boxShadow = ''; r(); }, 230)); }
 const josaN = (w, p) => w + josa(String(w).replace(/\(.*?\)/g, '').trim() || w, p).slice(-1); // '봇(나중)' → '봇(나중)이'
 document.querySelectorAll('#tabs .tab').forEach(b => b.onclick = () => {
   document.querySelectorAll('#tabs .tab').forEach(x => x.classList.toggle('on', x === b));
@@ -326,7 +338,8 @@ const RMQ = matchMedia('(prefers-reduced-motion: reduce)');
     const i = ri(nums.length); let j = ri(nums.length); while (j === i) j = ri(nums.length); sel = [i, j]; render(); setTimeout(() => { if (g0 === gen) apply(Math.random() < .5 ? '+' : '-'); }, 500);
   }
   $('#as-plus').onclick = () => apply('+'); $('#as-minus').onclick = () => apply('-'); $('#as-cancel').onclick = () => { if (busy) return; sel = []; render(); };
-  $('#as-start').onclick = () => { gen++; busy = false; document.querySelectorAll('body > .fly-ghost').forEach(e => e.remove()); chips.classList.remove('done'); n = +$('#as-n').value; mode = $('#as-mode').value; names = mode === 'pvp' ? ['푸리(먼저)', '매매(나중)'] : mode === 'bot' ? ['나(먼저)', '봇(나중)'] : ['봇(먼저)', '나(나중)']; nums = Array.from({ length: n }, (_, i) => ({ v: i + 1, id: ++uid })); sel = []; turn = 0; over = false; log.innerHTML = ''; $('#as-result').textContent = ''; render(); if (isBot()) botLater(); };
+  let asAltBotFirst = true;
+  $('#as-start').onclick = () => { gen++; busy = false; document.querySelectorAll('body > .fly-ghost').forEach(e => e.remove()); chips.classList.remove('done'); n = +$('#as-n').value; mode = $('#as-mode').value; if (mode === 'alt') { asAltBotFirst = !asAltBotFirst; mode = asAltBotFirst ? 'botfirst' : 'bot'; } names = mode === 'pvp' ? ['푸리(먼저)', '매매(나중)'] : mode === 'bot' ? ['나(먼저)', '봇(나중)'] : ['봇(먼저)', '나(나중)']; nums = Array.from({ length: n }, (_, i) => ({ v: i + 1, id: ++uid })); sel = []; turn = 0; over = false; log.innerHTML = ''; $('#as-result').textContent = ''; render(); if (isBot()) botLater(); };
   $('#as-start').click();
 
   /* 필승 전략 찾기 표: [확인]으로 홀짝 채점 */
@@ -352,11 +365,11 @@ const RMQ = matchMedia('(prefers-reduced-motion: reduce)');
   const divisorsLeft = v => cards.filter(c => c !== v && v % c === 0);
   function render() {
     chips.innerHTML = '';
-    for (let v = 1; v <= n; v++) { const c = document.createElement('button'); const inPlay = cards.includes(v); c.dataset.v = v; c.className = 'chip chip--card' + (inPlay ? '' : ' gone') + (inPlay && divisorsLeft(v).length === 0 ? ' chip--ghost' : ''); c.textContent = v; c.title = inPlay ? `약수: ${divisorsLeft(v).join(',') || '없음'}` : ''; c.onclick = () => take(v); chips.appendChild(c); }
+    for (let v = 1; v <= n; v++) { const c = document.createElement('button'); const inPlay = cards.includes(v); c.dataset.v = v; c.className = 'chip chip--card' + (inPlay ? '' : ' gone') + (inPlay ? (divisorsLeft(v).length === 0 ? ' chip--ghost' : ' chip--ok') : ''); c.textContent = v; c.title = inPlay ? `약수: ${divisorsLeft(v).join(',') || '없음'}` : ''; c.onclick = () => take(v); chips.appendChild(c); }
     $('#dv-p1').textContent = p1.reduce((a, b) => a + b, 0); $('#dv-p2').textContent = p2.reduce((a, b) => a + b, 0);
     $('#dv-h1').innerHTML = p1.map(v => `<span>${v}</span>`).join(''); $('#dv-h2').innerHTML = p2.map(v => `<span>${v}</span>`).join('');
     const canMove = cards.some(v => divisorsLeft(v).length > 0);
-    $('#dv-hint').textContent = over ? '' : '보라색 테두리 카드는 귀신이 가져갈 약수가 없어서 지금은 가져갈 수 없어요.';
+    $('#dv-hint').innerHTML = over ? '' : '<span class="dv-legend"><span><i style="border-color:var(--bk-green)"></i>지금 가져갈 수 있는 카드</span><span><i style="border-color:#c9c3b0;background:#f6f2e6"></i>✕ 귀신이 가져갈 약수가 없어 못 가져가요</span></span>';
     if (!over && !canMove) { over = true; p2.push(...cards); cards = []; render(); const a = p1.reduce((x, y) => x + y, 0), b = p2.reduce((x, y) => x + y, 0); $('#dv-result').textContent = `더 가져갈 카드가 없어요. 공격수 ${a} : 귀신 ${b} → ${a > b ? '공격수 승리! 🎉' : a < b ? '수학 귀신 승리 👻' : '무승부'}`; }
   }
   /* 카드 이동 애니메이션 (FLIP): 손 영역에 자리를 먼저 만들고 → 복제 카드를 원래 자리에서 그 자리로 날림 */
@@ -369,8 +382,9 @@ const RMQ = matchMedia('(prefers-reduced-motion: reduce)');
     slot.textContent = v; slot.style.visibility = 'hidden'; hand.appendChild(slot);
     const g0 = gen, land = () => { if (g0 !== gen) return; slot.style.visibility = ''; src?.classList.add('gone'); const arr = who === 1 ? p1 : p2; arr.push(v); $('#dv-p' + who).textContent = sum(arr); };
     if (RM.matches || !src) { land(); return Promise.resolve(); }
+    return liftThen(src, who === 2 ? '#8E5CC9' : '#3a9e82').then(() => {
     const a = src.getBoundingClientRect(), b = slot.getBoundingClientRect();
-    const clone = src.cloneNode(true); clone.classList.remove('chip--ghost');
+    const clone = src.cloneNode(true); clone.classList.remove('chip--ghost', 'chip--ok', 'lift');
     Object.assign(clone.style, { position: 'fixed', left: a.left + 'px', top: a.top + 'px', width: a.width + 'px', height: a.height + 'px', margin: 0, zIndex: 999, pointerEvents: 'none', boxSizing: 'border-box' });
     if (who === 2) clone.style.borderColor = 'var(--bk-purple)';
     document.body.appendChild(clone); src.style.visibility = 'hidden';
@@ -381,6 +395,7 @@ const RMQ = matchMedia('(prefers-reduced-motion: reduce)');
       { transform: `translate(${dx}px,${dy}px) scale(${sc}) rotate(0)`, opacity: .4 }
     ], { duration: 560, easing: 'cubic-bezier(.4,0,.2,1)' });
     return anim.finished.catch(() => {}).then(() => { clone.remove(); src.style.visibility = ''; land(); });
+    });
   }
   async function take(v) {
     if (busy || over || !cards.includes(v)) return; const d = divisorsLeft(v);
@@ -420,8 +435,9 @@ const RMQ = matchMedia('(prefers-reduced-motion: reduce)');
     slot.textContent = v; slot.className = 'p' + (who + 1); slot.style.visibility = 'hidden'; hand.appendChild(slot);
     const g0 = gen, land = () => { if (g0 !== gen) return; slot.style.visibility = ''; if (src) src.style.visibility = ''; cnt[who]++; $('#lc-c' + (who + 1)).textContent = cnt[who]; };
     if (RMQ.matches || !src) { land(); return Promise.resolve(); }
+    return liftThen(src, who ? 'var(--bk-red)' : 'var(--bk-sky)').then(() => {
     const a = src.getBoundingClientRect(), b = slot.getBoundingClientRect();
-    const clone = src.cloneNode(true); clone.classList.add('fly-ghost'); clone.classList.remove('key', 'next');
+    const clone = src.cloneNode(true); clone.classList.add('fly-ghost'); clone.classList.remove('key', 'next', 'lift');
     Object.assign(clone.style, { position: 'fixed', left: a.left + 'px', top: a.top + 'px', width: a.width + 'px', height: a.height + 'px', margin: 0, zIndex: 999, pointerEvents: 'none', boxSizing: 'border-box', opacity: 1 });
     document.body.appendChild(clone); src.style.visibility = 'hidden';
     const dx = (b.left + b.width / 2) - (a.left + a.width / 2), dy = (b.top + b.height / 2) - (a.top + a.height / 2), sc = Math.max(.3, b.height / a.height);
@@ -430,6 +446,7 @@ const RMQ = matchMedia('(prefers-reduced-motion: reduce)');
       { transform: `translate(${dx * .5}px,${dy * .5 - 30}px) scale(1.1) rotate(${who ? 8 : -8}deg)`, opacity: 1, offset: .45 },
       { transform: `translate(${dx}px,${dy}px) scale(${sc}) rotate(0)`, opacity: .4 }
     ], { duration: 520, easing: 'cubic-bezier(.4,0,.2,1)', fill: 'forwards' }).finished.catch(() => {}).then(() => { clone.remove(); land(); });
+    });
   }
   async function take(c) {
     if (over || busy || taken + c > n) return; busy = true; const g0 = gen, who = turn, from = taken + 1;
@@ -446,7 +463,8 @@ const RMQ = matchMedia('(prefers-reduced-motion: reduce)');
   function botMove() { if (over || busy || !isBot()) return; const rem = n - taken; const want = rem % (k + 1); let c; if (want > 0 && Math.random() < diff) c = want; else { c = 1 + ri(Math.min(k, rem)); if (want > 0 && c === want && Math.min(k, rem) > 1) c = (c % Math.min(k, rem)) + 1; } take(c); }
   $('#lc-take1').onclick = () => take(1); $('#lc-take2').onclick = () => take(2); $('#lc-take3').onclick = () => take(3);
   $('#lc-key').onchange = render;
-  $('#lc-start').onclick = () => { gen++; busy = false; document.querySelectorAll('body > .fly-ghost').forEach(e => e.remove()); n = +$('#lc-n').value; k = +$('#lc-k').value; mode = $('#lc-mode').value; diff = +$('#lc-diff').value; names = mode === 'pvp' ? ['플레이어 1', '플레이어 2'] : mode === 'bot' ? ['나', '봇'] : ['봇', '나']; taken = 0; turn = 0; over = false; cnt[0] = cnt[1] = 0; for (const q in owner) delete owner[q]; ['1', '2'].forEach(i => { $('#lc-h' + i).innerHTML = ''; $('#lc-c' + i).textContent = 0; }); log.innerHTML = ''; $('#lc-result').textContent = ''; render(); if (isBot()) botLater(); };
+  let lcAltBotFirst = true;
+  $('#lc-start').onclick = () => { gen++; busy = false; document.querySelectorAll('body > .fly-ghost').forEach(e => e.remove()); n = +$('#lc-n').value; k = +$('#lc-k').value; mode = $('#lc-mode').value; if (mode === 'alt') { lcAltBotFirst = !lcAltBotFirst; mode = lcAltBotFirst ? 'botfirst' : 'bot'; } diff = +$('#lc-diff').value; names = mode === 'pvp' ? ['플레이어 1', '플레이어 2'] : mode === 'bot' ? ['나', '봇'] : ['봇', '나']; taken = 0; turn = 0; over = false; cnt[0] = cnt[1] = 0; for (const q in owner) delete owner[q]; ['1', '2'].forEach(i => { $('#lc-h' + i).innerHTML = ''; $('#lc-c' + i).textContent = 0; }); log.innerHTML = ''; $('#lc-result').textContent = ''; render(); if (isBot()) botLater(); };
   $('#lc-start').click();
 })();
 
