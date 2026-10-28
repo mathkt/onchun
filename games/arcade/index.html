@@ -2447,19 +2447,7 @@
   .p3-tipbody { display:flex; justify-content:center; }
 
   /* --- 게임 중 진행 수순 (한 줄, 가로로 넘김) --- */
-  .p3-hist { display:flex; align-items:center; gap:8px; width:100%; max-width:980px; margin:8px auto 0; padding:5px 8px; box-sizing:border-box; background:#fff; border:1.5px solid var(--th-line, #E7DFC9); border-radius:12px; min-height:40px; }
-  .p3-hist-lab { flex:none; font-family:'Jua',sans-serif; color:var(--th-ink, #5F5B55); font-size:.92rem; white-space:nowrap; }
-  .p3-hist-list { flex:1; min-width:0; display:flex; gap:6px; overflow-x:auto; overflow-y:hidden; scrollbar-width:thin; padding:2px 0; scroll-behavior:smooth; }
-  .p3-chip { flex:none; white-space:nowrap; font:700 .84rem 'Noto Sans KR',sans-serif; padding:5px 10px; border-radius:999px; background:#FFF9E8; border:1.5px solid #E7DFC9; color:#3d3a35; cursor:pointer; -webkit-touch-callout:none; user-select:none; -webkit-user-select:none; touch-action:pan-x; }
-  .p3-chip.p1 { border-color:var(--th-line, #E7DFC9); }
-  .p3-chip.p2 { background:#fff; border-style:dashed; }
-  .p3-chip:hover { border-color:var(--th, #999); }
-  .p3-chip.on { background:var(--th, #333); border-color:var(--th, #333); color:#fff; border-style:solid; }
-  .p3-chip-start { color:var(--text-sub); }
-  .p3-hist-empty { color:var(--text-sub); font-size:.82rem; align-self:center; white-space:nowrap; }
-  .p3-rv-ban { flex:none; display:inline-flex; align-items:center; gap:6px; white-space:nowrap; font-weight:800; font-size:.86rem; color:#fff; background:var(--th, #333); border-radius:999px; padding:3px 4px 3px 10px; }
-  .p3-rv-ban button { border:0; border-radius:999px; background:#fff; color:var(--th-ink, #333); font:800 .8rem 'Noto Sans KR',sans-serif; padding:4px 9px; cursor:pointer; }
-  /* 다시 보기·왜? 덮개: 판 위에 그 자리의 판을 그대로 (입력 막음) */
+  /* 왜? 덮개: 판 위에 그 자리의 판을 그대로 (입력 막음) */
   #nt-game-board-container, #st-center-stones, #popit-board, #nt-analysis-center, #st-analysis-center, #pp-a-board { position:relative; }
   .qn-boardWrap { position:relative; }
   .p3-ov { position:absolute; inset:0; z-index:30; display:flex; align-items:center; justify-content:center; border-radius:inherit; cursor:default; }
@@ -2467,8 +2455,6 @@
   .qn-boardWrap > .p3-ov { position:relative; inset:auto; grid-column:2; grid-row:1; display:block; z-index:30; }
   .qn-boardWrap > .p3-ov > .qn-grid { width:100%; }
   #popit-board > .p3-ov, #pp-a-board > .p3-ov { align-items:stretch; padding:inherit; box-sizing:border-box; }
-  .p3-ov.p3-rv { box-shadow:inset 0 0 0 3px var(--th, #333); }
-  .p3-ov.p3-rv::after { content:'다시 보기'; position:absolute; right:8px; bottom:6px; font:800 .72rem 'Noto Sans KR',sans-serif; color:#fff; background:var(--th, #333); padding:2px 8px; border-radius:999px; opacity:.9; pointer-events:none; }
   .p3-pp { display:flex; flex-direction:column; gap:8px; width:100%; }
   #pp-a-board .p3-pp { gap:6px; }
   .p3-st { display:flex; flex-direction:column; align-items:center; gap:10px; width:100%; padding:12px; box-sizing:border-box; }
@@ -2483,8 +2469,6 @@
   .qn-cell.p3-hl { box-shadow:inset 0 0 0 4px #E9533F !important; }
   .qn-cell.p3-hl2 { box-shadow:inset 0 0 0 4px #2F8FC9 !important; }
   .qn-cell.p3-from::after { content:""; position:absolute; inset:22%; border-radius:50%; border:2px dashed rgba(44,42,38,.55); }
-  /* 다시 보기 중: 판 아래 버튼도 잠금 */
-  .p3-rv-on #st-controls button, .p3-rv-on .pp-controls button { pointer-events:none; opacity:.45; }
   /* 미니 판 (툴팁) */
   .p3-ppm { display:flex; flex-direction:column; gap:4px; }
   .p3-ppm .r { display:flex; gap:3px; align-items:center; }
@@ -2529,7 +2513,6 @@
   /* --- 🔍 복기 --- */
   .p3-vbtns { display:flex; gap:10px; justify-content:center; flex-wrap:wrap; }
   .p3-vbtns .victory-close-btn { margin-top:0; }
-  .p3-vrev { background:#fff !important; color:#2C2A26 !important; border:2px solid #2C2A26 !important; }
   .p3-rev { width:100%; box-sizing:border-box; margin:0 0 8px; padding:7px 12px; background:#fff; border:2px solid var(--th, #999); border-radius:14px; display:flex; flex-direction:column; gap:4px; }
   .p3-rev[hidden] { display:none; }
   .p3-rev-row { display:flex; flex-wrap:wrap; align-items:center; gap:6px 10px; font-size:.92rem; }
@@ -2571,7 +2554,6 @@
     .p3-reviewing .ttt-grid.size-3 { grid-template-columns:repeat(3, min(80px, calc((100svh - var(--bk-top-h, 64px) - 330px) / 3))) !important; grid-template-rows:repeat(3, min(80px, calc((100svh - var(--bk-top-h, 64px) - 330px) / 3))) !important; }
     .p3-reviewing .ttt-grid.size-4 { grid-template-columns:repeat(4, min(64px, calc((100svh - var(--bk-top-h, 64px) - 350px) / 4))) !important; grid-template-rows:repeat(4, min(64px, calc((100svh - var(--bk-top-h, 64px) - 350px) / 4))) !important; }
     #nt-a-history-box, #st-a-history-box, #pp-a-history-box, #qn-a-history-box { height:58px !important; min-height:58px !important; }
-    .p3-hist { margin-top:6px; }
     #st-center-stones { height:min(340px, calc(100svh - var(--bk-top-h, 64px) - 290px)) !important; }
     #pp-analysis-center { max-height:calc(100svh - var(--bk-top-h, 64px) - 240px); min-height:0; }
     .p3-reviewing .action-buttons { margin-top:8px !important; }
@@ -2583,7 +2565,7 @@
     .pp-a-calc h4 { margin-bottom:2px; font-size:.95rem; }
     .pp-a-calc .note { margin-top:3px; font-size:.78rem; }
   }
-  /* 게임 화면 크롬북: 진행 수순 줄이 들어갈 자리 */
+  /* 게임 화면 크롬북 */
   @media (min-width:861px) and (max-height:800px) {
     #qn-board .qn-boardWrap { width:min(100%, 520px, calc(100svh - var(--bk-top-h, 64px) - 268px)) !important; }
     .nt-frame, .st-frame, .qn-frame, .pp-frame { min-height:0 !important; }
@@ -2591,10 +2573,6 @@
 
   /* --- 폰: 판 → 판정 줄 → 수 버튼(가로 칩) → 나머지 --- */
   @media (max-width:640px) {
-    .p3-hist { padding:4px 6px; gap:6px; margin-top:6px; min-height:36px; }
-    .p3-hist-lab { font-size:.8rem; }
-    .p3-chip { font-size:.78rem; padding:4px 8px; }
-    .p3-rvb-t { display:none; }
     #qn-board .qn-boardWrap { width:min(100%, calc(100svh - var(--bk-top-h, 52px) - 404px)) !important; }
     #nt-analysis-layout, #st-analysis-layout, #pp-analysis-layout, #qn-analysis-layout { flex-direction:row !important; flex-wrap:wrap !important; align-items:flex-start !important; align-content:flex-start; gap:8px !important; padding:10px !important; }
     #nt-analysis-left, #st-analysis-left, #pp-analysis-left, #qn-analysis-left,
@@ -2732,6 +2710,125 @@
     .qg-tab { padding:6px 8px; }
     .qg-tab b { font-size:.8rem; }
   }
+  /* ===== [4차] 메뉴 단순화: 큰 버튼 3개 + 작은 줄 ===== */
+  .menu-buttons { gap:12px; margin-bottom:16px; }
+  .menu-btn.menu-primary { width:100%; height:64px; flex:none; font-size:1.3rem; }
+  .menu-buttons .menu-sub { flex:none; }
+  .menu-sub { display:grid; grid-template-columns:1fr 1.5fr .8fr .95fr; gap:8px; width:100%; margin-top:4px; }
+  .menu-sub-btn { min-height:44px; padding:8px 4px; border-radius:12px; border:1.5px solid var(--th-line, #E7DFC9); background:#fff; color:var(--text-main); font:700 .88rem 'Noto Sans KR',sans-serif; cursor:pointer; white-space:nowrap; overflow:hidden; text-overflow:ellipsis; box-shadow:0 3px 0 var(--th-line, #E7DFC9); transition:background .15s; }
+  .menu-sub-btn:hover { background:var(--th-soft, #FFF9E8); border-color:var(--th); }
+  .menu-sub-btn:active { transform:translateY(2px); box-shadow:none; }
+  .menu-sub-btn.lesson-btn { background:var(--th-soft, #FFF9E8); border-color:var(--th); font-weight:800; }
+  @media (max-width:640px) {
+    .menu-btn.menu-primary { height:56px; font-size:1.15rem; }
+    .menu-sub { grid-template-columns:repeat(2, minmax(0,1fr)); gap:7px; }
+    .menu-sub-btn { min-height:42px; font-size:.86rem; }
+    .menu-buttons { gap:10px; margin-bottom:12px; }
+  }
+  @media (max-width:370px) { .menu-sub-btn { font-size:.8rem; padding:8px 4px; } }
+  @media (min-width:861px) and (max-height:800px) { .menu-btn.menu-primary { height:56px; } .menu-buttons { gap:10px; margin-bottom:12px; } }
+
+  /* ===== 🤖 게임 중 AI 난이도 (바로 적용) ===== */
+  .ai-diff { display:none; align-items:center; justify-content:center; gap:8px; flex-wrap:wrap; width:100%; margin:0 0 8px; }
+  .ai-diff.on { display:flex; }
+  .ai-diff-lab { font:800 .86rem 'Noto Sans KR',sans-serif; color:var(--th-ink, #5F5B55); white-space:nowrap; }
+  .ai-diff-seg { display:inline-flex; border:1.5px solid var(--th-line, #E7DFC9); border-radius:999px; overflow:hidden; background:#fff; }
+  .ai-diff-seg button { border:0; background:transparent; color:var(--text-main); font:700 .84rem 'Noto Sans KR',sans-serif; padding:6px 11px; cursor:pointer; min-height:34px; }
+  .ai-diff-seg button + button { border-left:1px solid var(--th-line, #E7DFC9); }
+  .ai-diff-seg button.on { background:var(--th, #333); color:#fff; }
+  @media (max-width:640px) { .ai-diff { gap:6px; margin-bottom:6px; } .ai-diff-seg button { padding:5px 8px; font-size:.8rem; min-height:32px; } }
+
+  /* ===== 📜 전적: 최근 5판 목록 + 다시 보기 ===== */
+  .rec-games { display:flex; flex-direction:column; gap:6px; margin-top:6px; }
+  .rec-game { display:flex; align-items:center; gap:8px; width:100%; text-align:left; border:1.5px solid #E7DFC9; background:#fff; border-radius:12px; padding:8px 10px; font:700 .9rem 'Noto Sans KR',sans-serif; color:#2C2A26; cursor:pointer; }
+  .rec-game:hover { border-color:var(--th); background:var(--th-soft, #FFF9E8); }
+  .rec-game > b { flex:none; width:30px; height:30px; border-radius:50%; display:grid; place-items:center; color:#fff; background:#3A9E82; }
+  .rec-game.l > b { background:#C9436B; }
+  .rec-game > span { white-space:nowrap; overflow:hidden; text-overflow:ellipsis; }
+  .rec-game .rec-meta { margin-left:auto; color:var(--text-sub); font-weight:600; font-size:.8rem; flex:none; }
+  .rec-game .rec-go { flex:none; color:var(--th-ink, #333); }
+  .rp-board { display:flex; justify-content:center; align-items:center; min-height:160px; margin:8px 0; padding:8px; border-radius:14px; background:#FFF9E8; border:1.5px solid var(--th-line, #E7DFC9); overflow:hidden; }
+  .rp-board .qn-grid { width:min(100%, 300px); }
+  .rp-board .ttt-grid { gap:5px; padding:8px; }
+  .rp-board .ttt-grid.size-3 { grid-template-columns:repeat(3, min(76px, 20vw)) !important; grid-template-rows:repeat(3, min(76px, 20vw)) !important; }
+  .rp-board .ttt-grid.size-4 { grid-template-columns:repeat(4, min(58px, 15vw)) !important; grid-template-rows:repeat(4, min(58px, 15vw)) !important; }
+  .rp-board .board-stone::before { font-size:1.9rem !important; }
+  .ls-fig .board-stone::before { font-size:1.15rem !important; }
+  .rp-board .p3-pp { gap:5px; }
+  .rp-board .p3-pp .bubble { width:22px; height:22px; }
+  .rp-cap { text-align:center; font:800 .95rem 'Noto Sans KR',sans-serif; min-height:1.5em; color:#2C2A26; }
+  .rp-cap .p3-bad { color:#A43456; } .rp-cap .p3-good { color:#1F6B50; } .rp-cap .p3-lost { color:var(--text-sub); }
+  .rp-ctl { display:flex; align-items:center; justify-content:center; gap:8px; margin-top:10px; }
+  .rp-ctl button { min-width:52px; min-height:42px; border-radius:12px; border:2px solid var(--th, #999); background:#fff; color:var(--th-ink, #333); font:800 1.05rem 'Noto Sans KR',sans-serif; cursor:pointer; }
+  .rp-ctl button:disabled { opacity:.35; cursor:default; }
+  .rp-pos { min-width:90px; text-align:center; font-weight:800; }
+  .rp-dots { display:flex; flex-wrap:wrap; justify-content:center; gap:4px; margin-top:8px; }
+  .rp-dots button { width:22px; height:22px; border-radius:50%; border:1.5px solid #E7DFC9; background:#fff; font:700 .68rem 'Noto Sans KR',sans-serif; cursor:pointer; padding:0; color:#2C2A26; }
+  .rp-dots button.bad { border-color:#E9533F; background:#FDE8EE; } .rp-dots button.good { border-color:#9ED9C6; }
+  .rp-dots button.cur { background:var(--th, #333); border-color:var(--th, #333); color:#fff; }
+
+  /* ===== 📘 필승 전략 배우기 (카드) ===== */
+  #lesson-modal .modal-content { max-width:560px; width:min(96vw, 560px); max-height:calc(100svh - 24px); overflow:auto; }
+  .ls-head { display:flex; align-items:center; gap:8px; margin-bottom:6px; }
+  .ls-head h2 { margin:0; flex:1; font-size:1.3rem; color:var(--th-ink, #333); }
+  .ls-step { font:800 .8rem 'Noto Sans KR',sans-serif; color:var(--th-ink, #333); background:var(--th-soft, #FFF9E8); border:1.5px solid var(--th-line, #E7DFC9); border-radius:999px; padding:3px 10px; white-space:nowrap; }
+  .ls-dots { display:flex; gap:5px; margin:0 0 10px; }
+  .ls-dots i { flex:1; height:5px; border-radius:3px; background:#E7DFC9; }
+  .ls-dots i.on { background:var(--th, #333); }
+  .ls-card { background:#FFFDF7; border:1.5px solid var(--th-line, #E7DFC9); border-radius:16px; padding:14px 16px; animation:p3fade .3s ease both; }
+  .ls-card h3 { margin:0 0 8px; font-family:'Jua',sans-serif; font-weight:400; font-size:1.15rem; color:#2C2A26; }
+  .ls-card p { margin:0 0 8px; font-size:.95rem; line-height:1.6; color:#3d3a35; }
+  .ls-card p:last-child { margin-bottom:0; }
+  .ls-card b { color:var(--th-ink, #333); }
+  .ls-fig { display:flex; justify-content:center; align-items:center; gap:14px; flex-wrap:wrap; margin:10px 0; padding:10px; background:#fff; border-radius:12px; border:1px dashed var(--th-line, #E7DFC9); }
+  .ls-fig figure { margin:0; display:flex; flex-direction:column; align-items:center; gap:4px; }
+  .ls-fig figcaption { font:700 .78rem 'Noto Sans KR',sans-serif; color:var(--text-sub); text-align:center; }
+  .ls-fig .ttt-grid { grid-template-columns:repeat(var(--ls-n,3), 36px) !important; grid-template-rows:repeat(var(--ls-n,3), 36px) !important; gap:3px; }
+  .ls-fig .ttt-grid .ttt-cell { border-radius:6px; }
+  .ls-fig .ttt-grid .board-stone { width:60%; height:60%; }
+  .ls-fig .ttt-cell .cell-coord { font-size:.6rem; }
+  .ls-fig .qn-grid { width:170px; }
+  .ls-cold { position:absolute; inset:0; background:#E9533F; opacity:.72; pointer-events:none; }
+  .ls-fig .ttt-cell.occupied .cell-coord { display:none; }
+  .ls-fig .p3-st { padding:4px; gap:6px; } .ls-fig .p3-st-stones { gap:5px; } .ls-fig .a-stone { width:18px; height:18px; }
+  .ls-fig .p3-pp { gap:4px; width:auto; } .ls-fig .p3-pp .bubble { width:18px; height:18px; } .ls-fig .pp-row__label { font-size:.72rem; width:38px; } .ls-fig .pp-row__cnt { font-size:.72rem; }
+  .ls-bin { font-family:'IBM Plex Mono',ui-monospace,monospace; font-size:.9rem; border-collapse:collapse; margin:4px auto; }
+  .ls-bin td, .ls-bin th { padding:2px 8px; border-bottom:1px solid #E7DFC9; text-align:center; }
+  .ls-bin .odd { color:#C9436B; font-weight:800; }
+  .ls-nav { display:flex; gap:8px; margin-top:12px; align-items:center; }
+  .ls-nav button { min-height:44px; border-radius:12px; cursor:pointer; font:800 .95rem 'Noto Sans KR',sans-serif; }
+  .ls-nav .ls-prev { flex:0 0 auto; padding:0 14px; border:1.5px solid #E7DFC9; background:#fff; color:#2C2A26; }
+  .ls-nav .ls-next { flex:1; border:0; background:var(--th, #333); color:#fff; }
+  .ls-nav .ls-close { flex:0 0 auto; padding:0 12px; border:1.5px solid #E7DFC9; background:#fff; color:var(--text-sub); }
+  .ls-final { display:flex; flex-direction:column; gap:8px; margin-top:8px; }
+  .ls-final .rec-games { margin:0; }
+  .ls-final-btn { min-height:46px; border-radius:12px; border:2px solid var(--th, #999); background:#fff; color:var(--th-ink, #333); font:800 .95rem 'Noto Sans KR',sans-serif; cursor:pointer; }
+  .ls-final-btn:hover { background:var(--th-soft, #FFF9E8); }
+  .ls-empty { font-size:.88rem; color:var(--text-sub); text-align:center; padding:6px; }
+
+  /* ===== 🎓 판 위 튜토리얼 (코치 마크) ===== */
+  #tut-layer { position:fixed; inset:0; z-index:15000; display:none; }
+  #tut-layer.on { display:block; }
+  #tut-layer.pass { pointer-events:none; }
+  .tut-cut { position:absolute; border-radius:14px; box-shadow:0 0 0 9999px rgba(30,26,20,.62), 0 0 0 4px var(--th, #F5A623), 0 0 18px 6px rgba(255,255,255,.35); pointer-events:none; transition:left .25s, top .25s, width .25s, height .25s; }
+  .tut-cut.pulse { animation:tutpulse 1s ease-in-out infinite; }
+  @keyframes tutpulse { 50% { box-shadow:0 0 0 9999px rgba(30,26,20,.62), 0 0 0 7px var(--th, #F5A623), 0 0 24px 10px rgba(255,255,255,.5); } }
+  .tut-bubble { position:absolute; left:16px; right:16px; max-width:460px; margin:0 auto; background:#fff; border:2px solid var(--th, #F5A623); border-radius:16px; padding:12px 14px; box-shadow:0 12px 30px rgba(0,0,0,.25); pointer-events:auto; animation:p3fade .25s ease both; }
+  .tut-bubble::before { content:""; position:absolute; width:16px; height:16px; background:#fff; border:2px solid var(--th, #F5A623); border-right:0; border-bottom:0; transform:rotate(45deg); left:calc(50% - 8px); top:-10px; }
+  .tut-bubble.up::before { top:auto; bottom:-10px; transform:rotate(225deg); }
+  .tut-bubble.noarrow::before { display:none; }
+  .tut-step { font:800 .78rem 'Noto Sans KR',sans-serif; color:var(--th-ink, #333); margin-bottom:4px; }
+  .tut-title { font-family:'Jua',sans-serif; font-size:1.15rem; color:#2C2A26; margin:0 0 6px; }
+  .tut-text { font-size:.93rem; line-height:1.55; color:#3d3a35; margin:0; }
+  .tut-text b { color:var(--th-ink, #333); }
+  .tut-btns { display:flex; gap:8px; align-items:center; margin-top:10px; flex-wrap:wrap; }
+  .tut-btns button { min-height:40px; border-radius:11px; cursor:pointer; font:800 .9rem 'Noto Sans KR',sans-serif; padding:0 14px; }
+  .tut-skip { border:1.5px solid #E7DFC9; background:#fff; color:var(--text-sub); }
+  .tut-next { flex:1; border:0; background:var(--th, #333); color:#fff; }
+  .tut-again { margin-left:auto; display:inline-flex; align-items:center; gap:5px; font:700 .78rem 'Noto Sans KR',sans-serif; color:var(--text-sub); cursor:pointer; white-space:nowrap; }
+  .tut-again input { width:16px; height:16px; accent-color:var(--th); }
+  .tut-wait { display:inline-flex; align-items:center; gap:6px; font:800 .88rem 'Noto Sans KR',sans-serif; color:var(--th-ink, #333); }
+  @media (max-width:640px) { .tut-bubble { padding:10px 12px; } .tut-text { font-size:.9rem; } }
 </style>
 </head>
 <body class="bk">
@@ -2888,28 +2985,18 @@
 
     <div id="qn-menu-screen" class="menu-screen-container fade-screen">
       <div class="menu-buttons">
-        <div class="menu-row">
-          <button class="menu-btn" onmouseenter="playSfx('hover_btn')" onclick="playSfx('click'); openBotModal('queen')">🤖 AI 플레이</button>
-          <button class="help-btn" onmouseenter="playSfx('hover')" onclick="qnShowHelp('bot')" title="도움말">?</button>
-        </div>
-        <div class="menu-row">
-          <button class="menu-btn" onmouseenter="playSfx('hover_btn')" onclick="playSfx('click'); qnStartGame('solo')">👥 2인 플레이</button>
-          <button class="help-btn" onmouseenter="playSfx('hover')" onclick="qnShowHelp('solo')" title="도움말">?</button>
-        </div>
-        <div class="menu-row">
-          <button class="menu-btn online-btn" onmouseenter="playSfx('hover_btn')" onclick="playSfx('click'); openOnlineModal('queen')">🌐 온라인 대전</button>
-          <button class="help-btn" onmouseenter="playSfx('hover')" onclick="olHelp()" title="도움말">?</button>
-        </div>
-        <div class="menu-row">
-          <button class="menu-btn analysis-btn" onmouseenter="playSfx('hover_btn')" onclick="playSfx('click'); qnStartAnalysis()">📊 분석 모드</button>
-          <button class="help-btn" onmouseenter="playSfx('hover')" onclick="qnShowHelp('analysis')" title="도움말">?</button>
-        </div>
-        <div class="menu-row">
-          <button class="menu-btn records-btn" onmouseenter="playSfx('hover_btn')" onclick="playSfx('click'); openRecords('queen')">📜 전적 보기</button>
+        <button class="menu-btn menu-primary" onmouseenter="playSfx('hover_btn')" onclick="playSfx('click'); startAiGame('queen')">🤖 AI 플레이</button>
+        <button class="menu-btn menu-primary" onmouseenter="playSfx('hover_btn')" onclick="playSfx('click'); qnStartGame('solo')">👥 2인 플레이</button>
+        <button class="menu-btn menu-primary online-btn" onmouseenter="playSfx('hover_btn')" onclick="playSfx('click'); openOnlineModal('queen')">🌐 온라인 대전</button>
+        <div class="menu-sub">
+          <button class="menu-sub-btn analysis-btn" onmouseenter="playSfx('hover')" onclick="playSfx('click'); qnStartAnalysis()">📊 분석 모드</button>
+          <button class="menu-sub-btn lesson-btn" onmouseenter="playSfx('hover')" onclick="playSfx('click'); openLesson('queen')">📘 필승 전략 배우기</button>
+          <button class="menu-sub-btn records-btn" onmouseenter="playSfx('hover')" onclick="playSfx('click'); openRecords('queen')">📜 전적</button>
+          <button class="menu-sub-btn help-sub-btn" onmouseenter="playSfx('hover')" onclick="openHelpTabs('queen')">❓ 도움말</button>
         </div>
       </div>
       <div class="menu-footer-btns">
-        <button class="settings-gear-btn" onmouseenter="playSfx('hover')" onclick="playSfx('click'); openQnSettings()">⚙️ 게임 설정</button>
+        <button class="settings-gear-btn" onmouseenter="playSfx('hover')" onclick="playSfx('click'); openQnSettings()">⚙️ 설정</button>
         <button class="home-return-btn" onmouseenter="playSfx('hover')" onclick="playSfx('click'); returnToHome()">🎮 게임 목록으로</button>
       </div>
     </div>
@@ -2951,7 +3038,7 @@
 
     <!-- 황금비 퀸 분석 화면 -->
     <div id="qn-analysis-screen">
-      <div class="a-head"><h2 style="margin:0;">📊 분석 모드 <span id="qn-a-sub" style="font-size:.9rem; color:var(--text-sub); font-family:'Noto Sans KR',sans-serif;"></span></h2><button class="help-btn a-help" onmouseenter="playSfx('hover')" onclick="qnShowHelp('analysis')" title="도움말">?</button></div>
+      <div class="a-head"><h2 style="margin:0;">📊 분석 모드 <span id="qn-a-sub" style="font-size:.9rem; color:var(--text-sub); font-family:'Noto Sans KR',sans-serif;"></span></h2><button class="help-btn a-help" onmouseenter="playSfx('hover')" onclick="qnShowHelp('analysis')" title="도움말">?</button><button class="help-close-btn a-quiz-btn a-lesson-btn" type="button" onclick="playSfx('click'); openLesson('queen')">📘 전략</button></div>
       <div class="pp-a-setup">
         <label>판 크기 <select id="qn-a-size" onchange="playSfx('click'); qnASetSize()"><option value="5">5×5</option><option value="6">6×6</option><option value="7">7×7</option><option value="8">8×8</option><option value="9">9×9</option><option value="10">10×10</option><option value="11">11×11</option><option value="12">12×12</option><option value="13">13×13</option><option value="14">14×14</option><option value="15">15×15</option></select></label>
         <button class="undo-btn" onclick="playSfx('click'); qnAPlaceMode()">📍 퀸 직접 놓기</button>
@@ -3064,28 +3151,18 @@
 
     <div id="pp-menu-screen" class="menu-screen-container fade-screen">
       <div class="menu-buttons">
-        <div class="menu-row">
-          <button class="menu-btn" onmouseenter="playSfx('hover_btn')" onclick="playSfx('click'); openBotModal('popit')">🤖 AI 플레이</button>
-          <button class="help-btn" onmouseenter="playSfx('hover')" onclick="ppShowHelp('bot')" title="도움말">?</button>
-        </div>
-        <div class="menu-row">
-          <button class="menu-btn" onmouseenter="playSfx('hover_btn')" onclick="playSfx('click'); ppStartGame('solo')">👥 2인 플레이</button>
-          <button class="help-btn" onmouseenter="playSfx('hover')" onclick="ppShowHelp('solo')" title="도움말">?</button>
-        </div>
-        <div class="menu-row">
-          <button class="menu-btn online-btn" onmouseenter="playSfx('hover_btn')" onclick="playSfx('click'); openOnlineModal('popit')">🌐 온라인 대전</button>
-          <button class="help-btn" onmouseenter="playSfx('hover')" onclick="olHelp()" title="도움말">?</button>
-        </div>
-        <div class="menu-row">
-          <button class="menu-btn analysis-btn" onmouseenter="playSfx('hover_btn')" onclick="playSfx('click'); ppStartAnalysis()">📊 분석 모드</button>
-          <button class="help-btn" onmouseenter="playSfx('hover')" onclick="ppShowHelp('analysis')" title="도움말">?</button>
-        </div>
-        <div class="menu-row">
-          <button class="menu-btn records-btn" onmouseenter="playSfx('hover_btn')" onclick="playSfx('click'); openRecords('popit')">📜 전적 보기</button>
+        <button class="menu-btn menu-primary" onmouseenter="playSfx('hover_btn')" onclick="playSfx('click'); startAiGame('popit')">🤖 AI 플레이</button>
+        <button class="menu-btn menu-primary" onmouseenter="playSfx('hover_btn')" onclick="playSfx('click'); ppStartGame('solo')">👥 2인 플레이</button>
+        <button class="menu-btn menu-primary online-btn" onmouseenter="playSfx('hover_btn')" onclick="playSfx('click'); openOnlineModal('popit')">🌐 온라인 대전</button>
+        <div class="menu-sub">
+          <button class="menu-sub-btn analysis-btn" onmouseenter="playSfx('hover')" onclick="playSfx('click'); ppStartAnalysis()">📊 분석 모드</button>
+          <button class="menu-sub-btn lesson-btn" onmouseenter="playSfx('hover')" onclick="playSfx('click'); openLesson('popit')">📘 필승 전략 배우기</button>
+          <button class="menu-sub-btn records-btn" onmouseenter="playSfx('hover')" onclick="playSfx('click'); openRecords('popit')">📜 전적</button>
+          <button class="menu-sub-btn help-sub-btn" onmouseenter="playSfx('hover')" onclick="openHelpTabs('popit')">❓ 도움말</button>
         </div>
       </div>
       <div class="menu-footer-btns">
-        <button class="settings-gear-btn" onmouseenter="playSfx('hover')" onclick="playSfx('click'); openPpSettings()">⚙️ 게임 설정</button>
+        <button class="settings-gear-btn" onmouseenter="playSfx('hover')" onclick="playSfx('click'); openPpSettings()">⚙️ 설정</button>
         <button class="home-return-btn" onmouseenter="playSfx('hover')" onclick="playSfx('click'); returnToHome()">🎮 게임 목록으로</button>
       </div>
     </div>
@@ -3126,7 +3203,7 @@
 
     <!-- 팝잇 분석 화면 -->
     <div id="pp-analysis-screen">
-      <div class="a-head"><h2 style="margin:0;">📊 분석 모드 <span id="pp-a-sub" style="font-size:.9rem; color:var(--text-sub); font-family:'Noto Sans KR',sans-serif;"></span></h2><button class="help-btn a-help" onmouseenter="playSfx('hover')" onclick="ppShowHelp('analysis')" title="도움말">?</button></div>
+      <div class="a-head"><h2 style="margin:0;">📊 분석 모드 <span id="pp-a-sub" style="font-size:.9rem; color:var(--text-sub); font-family:'Noto Sans KR',sans-serif;"></span></h2><button class="help-btn a-help" onmouseenter="playSfx('hover')" onclick="ppShowHelp('analysis')" title="도움말">?</button><button class="help-close-btn a-quiz-btn a-lesson-btn" type="button" onclick="playSfx('click'); openLesson('popit')">📘 전략</button></div>
       <div class="pp-a-setup">
         <label>줄 설정 <input id="pp-a-rows" type="text" inputmode="numeric" placeholder="예: 3 4 3"></label>
         <button class="undo-btn" onclick="playSfx('click'); ppASetRows()">판 만들기</button>
@@ -3167,28 +3244,18 @@
     <!-- 노탁토 전용 메뉴 화면 -->
     <div id="nt-menu-screen" class="menu-screen-container fade-screen">
       <div class="menu-buttons">
-        <div class="menu-row">
-          <button class="menu-btn" onmouseenter="playSfx('hover_btn')" onclick="playSfx('click'); openBotModal('notakto')">🤖 AI 플레이</button>
-          <button class="help-btn" onmouseenter="playSfx('hover')" onclick="ntShowHelp('bot')" title="도움말">?</button>
-        </div>
-        <div class="menu-row">
-          <button class="menu-btn" onmouseenter="playSfx('hover_btn')" onclick="playSfx('click'); ntStartGame('solo')">👥 2인 플레이</button>
-          <button class="help-btn" onmouseenter="playSfx('hover')" onclick="ntShowHelp('solo')" title="도움말">?</button>
-        </div>
-        <div class="menu-row">
-          <button class="menu-btn online-btn" onmouseenter="playSfx('hover_btn')" onclick="playSfx('click'); openOnlineModal('notakto')">🌐 온라인 대전</button>
-          <button class="help-btn" onmouseenter="playSfx('hover')" onclick="olHelp()" title="도움말">?</button>
-        </div>
-        <div class="menu-row">
-          <button class="menu-btn analysis-btn" onmouseenter="playSfx('hover_btn')" onclick="playSfx('click'); ntStartAnalysis()">📊 분석 모드</button>
-          <button class="help-btn" onmouseenter="playSfx('hover')" onclick="ntShowHelp('analysis')" title="도움말">?</button>
-        </div>
-        <div class="menu-row">
-          <button class="menu-btn records-btn" onmouseenter="playSfx('hover_btn')" onclick="playSfx('click'); openRecords('notakto')">📜 전적 보기</button>
+        <button class="menu-btn menu-primary" onmouseenter="playSfx('hover_btn')" onclick="playSfx('click'); startAiGame('notakto')">🤖 AI 플레이</button>
+        <button class="menu-btn menu-primary" onmouseenter="playSfx('hover_btn')" onclick="playSfx('click'); ntStartGame('solo')">👥 2인 플레이</button>
+        <button class="menu-btn menu-primary online-btn" onmouseenter="playSfx('hover_btn')" onclick="playSfx('click'); openOnlineModal('notakto')">🌐 온라인 대전</button>
+        <div class="menu-sub">
+          <button class="menu-sub-btn analysis-btn" onmouseenter="playSfx('hover')" onclick="playSfx('click'); ntStartAnalysis()">📊 분석 모드</button>
+          <button class="menu-sub-btn lesson-btn" onmouseenter="playSfx('hover')" onclick="playSfx('click'); openLesson('notakto')">📘 필승 전략 배우기</button>
+          <button class="menu-sub-btn records-btn" onmouseenter="playSfx('hover')" onclick="playSfx('click'); openRecords('notakto')">📜 전적</button>
+          <button class="menu-sub-btn help-sub-btn" onmouseenter="playSfx('hover')" onclick="openHelpTabs('notakto')">❓ 도움말</button>
         </div>
       </div>
       <div class="menu-footer-btns">
-        <button class="settings-gear-btn" onmouseenter="playSfx('hover')" onclick="playSfx('click'); openNtSettings()">⚙️ 게임 설정</button>
+        <button class="settings-gear-btn" onmouseenter="playSfx('hover')" onclick="playSfx('click'); openNtSettings()">⚙️ 설정</button>
         <button class="home-return-btn" onmouseenter="playSfx('hover')" onclick="playSfx('click'); returnToHome()">🎮 게임 목록으로</button>
       </div>
     </div>
@@ -3225,7 +3292,7 @@
     <!-- 노탁토 분석 화면 -->
     <div id="nt-analysis-screen">
       <div style="display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:8px; width:100%; margin-bottom:10px;">
-        <div class="a-head" style="margin:0;"><h2 style="margin:0;">📊 분석 모드 (<span id="nt-a-initial-info"></span>)</h2><button class="help-btn a-help" onmouseenter="playSfx('hover')" onclick="ntShowHelp('analysis')" title="도움말">?</button><button class="help-close-btn a-quiz-btn" id="nt-a-quiz-btn" onclick="playSfx('click'); ntAQuiz()">🎯 퀴즈</button></div>
+        <div class="a-head" style="margin:0;"><h2 style="margin:0;">📊 분석 모드 (<span id="nt-a-initial-info"></span>)</h2><button class="help-btn a-help" onmouseenter="playSfx('hover')" onclick="ntShowHelp('analysis')" title="도움말">?</button><button class="help-close-btn a-quiz-btn a-lesson-btn" type="button" onclick="playSfx('click'); openLesson('notakto')">📘 전략</button><button class="help-close-btn a-quiz-btn" id="nt-a-quiz-btn" onclick="playSfx('click'); ntAQuiz()">🎯 퀴즈</button></div>
         <label class="eval-toggle-label" style="display:inline-flex; align-items:center; gap:8px; cursor:pointer; font-size:0.95rem; font-weight:700; padding:8px 14px; border-radius:10px;">
           <input type="checkbox" id="nt-eval-color-toggle" checked onchange="playSfx('click'); ntToggleEvalColors()" style="cursor:pointer; width:18px; height:18px; accent-color:var(--th);">
           <span>판에 수 평가 색상 표시</span>
@@ -3263,28 +3330,18 @@
     <!-- 돌 가져가기 전용 메뉴 화면 -->
     <div id="st-menu-screen" class="menu-screen-container fade-screen">
       <div class="menu-buttons">
-        <div class="menu-row">
-          <button class="menu-btn" onmouseenter="playSfx('hover_btn')" onclick="playSfx('click'); openBotModal('stone')">🤖 AI 플레이</button>
-          <button class="help-btn" onmouseenter="playSfx('hover')" onclick="stShowHelp('bot')" title="도움말">?</button>
-        </div>
-        <div class="menu-row">
-          <button class="menu-btn" onmouseenter="playSfx('hover_btn')" onclick="playSfx('click'); stStartGame('solo')">👥 2인 플레이</button>
-          <button class="help-btn" onmouseenter="playSfx('hover')" onclick="stShowHelp('solo')" title="도움말">?</button>
-        </div>
-        <div class="menu-row">
-          <button class="menu-btn online-btn" onmouseenter="playSfx('hover_btn')" onclick="playSfx('click'); openOnlineModal('stone')">🌐 온라인 대전</button>
-          <button class="help-btn" onmouseenter="playSfx('hover')" onclick="olHelp()" title="도움말">?</button>
-        </div>
-        <div class="menu-row">
-          <button class="menu-btn analysis-btn" onmouseenter="playSfx('hover_btn')" onclick="playSfx('click'); stStartAnalysis()">📊 분석 모드</button>
-          <button class="help-btn" onmouseenter="playSfx('hover')" onclick="stShowHelp('analysis')" title="도움말">?</button>
-        </div>
-        <div class="menu-row">
-          <button class="menu-btn records-btn" onmouseenter="playSfx('hover_btn')" onclick="playSfx('click'); openRecords('stone')">📜 전적 보기</button>
+        <button class="menu-btn menu-primary" onmouseenter="playSfx('hover_btn')" onclick="playSfx('click'); startAiGame('stone')">🤖 AI 플레이</button>
+        <button class="menu-btn menu-primary" onmouseenter="playSfx('hover_btn')" onclick="playSfx('click'); stStartGame('solo')">👥 2인 플레이</button>
+        <button class="menu-btn menu-primary online-btn" onmouseenter="playSfx('hover_btn')" onclick="playSfx('click'); openOnlineModal('stone')">🌐 온라인 대전</button>
+        <div class="menu-sub">
+          <button class="menu-sub-btn analysis-btn" onmouseenter="playSfx('hover')" onclick="playSfx('click'); stStartAnalysis()">📊 분석 모드</button>
+          <button class="menu-sub-btn lesson-btn" onmouseenter="playSfx('hover')" onclick="playSfx('click'); openLesson('stone')">📘 필승 전략 배우기</button>
+          <button class="menu-sub-btn records-btn" onmouseenter="playSfx('hover')" onclick="playSfx('click'); openRecords('stone')">📜 전적</button>
+          <button class="menu-sub-btn help-sub-btn" onmouseenter="playSfx('hover')" onclick="openHelpTabs('stone')">❓ 도움말</button>
         </div>
       </div>
       <div class="menu-footer-btns">
-        <button class="settings-gear-btn" onmouseenter="playSfx('hover')" onclick="playSfx('click'); openStSettings()">⚙️ 게임 설정</button>
+        <button class="settings-gear-btn" onmouseenter="playSfx('hover')" onclick="playSfx('click'); openStSettings()">⚙️ 설정</button>
         <button class="home-return-btn" onmouseenter="playSfx('hover')" onclick="playSfx('click'); returnToHome()">🎮 게임 목록으로</button>
       </div>
     </div>
@@ -3321,7 +3378,7 @@
 
     <!-- 돌 가져가기 분석 화면 -->
     <div id="st-analysis-screen">
-      <div class="a-head"><h2 style="margin:0;">📊 분석 모드 (돌 <span id="st-a-initial-n"></span>)</h2><button class="help-btn a-help" onmouseenter="playSfx('hover')" onclick="stShowHelp('analysis')" title="도움말">?</button><button class="help-close-btn a-quiz-btn" id="st-a-quiz-btn" onclick="playSfx('click'); stAQuiz()">🎯 퀴즈: 이기는 수 찾기</button></div>
+      <div class="a-head"><h2 style="margin:0;">📊 분석 모드 (돌 <span id="st-a-initial-n"></span>)</h2><button class="help-btn a-help" onmouseenter="playSfx('hover')" onclick="stShowHelp('analysis')" title="도움말">?</button><button class="help-close-btn a-quiz-btn a-lesson-btn" type="button" onclick="playSfx('click'); openLesson('stone')">📘 전략</button><button class="help-close-btn a-quiz-btn" id="st-a-quiz-btn" onclick="playSfx('click'); stAQuiz()">🎯 퀴즈: 이기는 수 찾기</button></div>
       <div id="st-analysis-layout">
         <div id="st-analysis-left">
           <div class="a-player-frame" id="st-a-frame-p1">P1 가져간 돌<span id="st-a-p1-score">0</span></div>
@@ -3374,7 +3431,7 @@
     <div class="victory-trophy" id="modal-trophy-icon">🏆</div>
     <h2 class="victory-title" id="modal-winner-text">플레이어 승리!</h2>
     <div class="victory-desc" id="modal-reason-text">게임 결과가 여기에 표시됩니다.</div>
-    <div class="p3-vbtns"><button class="victory-close-btn p3-vrev" id="victory-review-btn" style="display:none" onclick="playSfx('click'); p3ReviewOpen()">🔍 복기</button><button class="victory-close-btn" onclick="playSfx('click'); closeVictoryModal()">확인</button></div>
+    <div class="p3-vbtns"><button class="victory-close-btn" onclick="playSfx('click'); closeVictoryModal()">확인</button></div>
   </div>
 </div>
 
@@ -3402,6 +3459,13 @@
         <select id="set-qn-rule">
           <option value="last">승리 (기본)</option>
           <option value="misere">패배 (거꾸로 규칙)</option>
+        </select>
+      </label>
+      <label>AI 플레이 선공:
+        <select id="set-qn-first">
+          <option value="alt">번갈아 (판마다 바뀜)</option>
+          <option value="player">내가 먼저</option>
+          <option value="bot">AI 먼저</option>
         </select>
       </label>
       <label>무르기 횟수 (한 사람당):
@@ -3456,6 +3520,13 @@
         <select id="set-pp-rule">
           <option value="last">승리 (기본)</option>
           <option value="misere">패배 (거꾸로 규칙)</option>
+        </select>
+      </label>
+      <label>AI 플레이 선공:
+        <select id="set-pp-first">
+          <option value="alt">번갈아 (판마다 바뀜)</option>
+          <option value="player">내가 먼저</option>
+          <option value="bot">AI 먼저</option>
         </select>
       </label>
       <label>무르기 횟수 (한 사람당):
@@ -3553,8 +3624,7 @@
   <div class="modal-content" id="rules-box" style="max-width:520px;">
     <h2 id="rules-title" style="color:var(--neon-cyan); margin-top:0;">게임 설명</h2>
     <div id="rules-body" style="line-height:1.7; font-size:1.02rem; color:#3d3a35;"></div>
-    <label style="display:flex; align-items:center; gap:8px; margin:16px 0 6px; color:var(--text-sub); cursor:pointer;"><input type="checkbox" id="rules-skip" style="width:20px;height:20px;"> 다음부터 보지 않기</label>
-    <div style="text-align:center; margin-top:10px;"><button class="help-close-btn" style="width:100%;" onclick="playSfx('click'); closeRules()">알겠어요, 시작! ▶</button></div>
+    <div style="display:flex; gap:8px; margin-top:16px; flex-wrap:wrap;"><button class="help-close-btn" style="flex:1; min-width:140px;" onclick="playSfx('click'); closeRules()">알겠어요</button><button class="undo-btn" style="flex:1; min-width:140px;" onclick="playSfx('click'); closeRules(); tutStart(currentGame, true)">🎓 판에서 배우기</button></div>
   </div>
 </div>
 
@@ -3578,6 +3648,13 @@
         <select id="set-nt-size">
           <option value="3">3×3 (3개 한 줄)</option>
           <option value="4">4×4 (4개 한 줄)</option>
+        </select>
+      </label>
+      <label>AI 플레이 선공:
+        <select id="set-nt-first">
+          <option value="alt">번갈아 (판마다 바뀜)</option>
+          <option value="player">내가 먼저</option>
+          <option value="bot">AI 먼저</option>
         </select>
       </label>
       <label>무르기 횟수 (한 사람당):
@@ -3637,6 +3714,13 @@
           <option value="gem">보석</option>
         </select>
       </label>
+      <label>AI 플레이 선공:
+        <select id="set-st-first">
+          <option value="alt">번갈아 (판마다 바뀜)</option>
+          <option value="player">내가 먼저</option>
+          <option value="bot">AI 먼저</option>
+        </select>
+      </label>
       <label>무르기 횟수 (한 사람당):
         <select id="set-st-undo">
           <option value="0">없음</option>
@@ -3663,34 +3747,34 @@
   </div>
 </div>
 
-<!-- 🤖 AI 설정 모달 -->
-<div id="bot-setup-modal" class="modal-overlay" onclick="if(event.target === this) closeModal('bot-setup-modal', 'bs-modal-box')">
-  <div class="modal-content" id="bs-modal-box" style="max-width:410px;">
-    <h2 style="color:var(--neon-cyan); margin-top:0; text-align:center;">🤖 AI 설정</h2>
-    <div class="settings-group">
-      <label>AI 난이도:
-        <select id="bot-setup-diff">
-          <option value="최상">최상</option>
-          <option value="상">상</option>
-          <option value="중" selected>중</option>
-          <option value="하">하</option>
-          <option value="최하">최하</option>
-        </select>
-      </label>
-      <label>선공 설정:
-        <select id="bot-setup-turn">
-          <option value="alt">번갈아 (다시하기마다 바뀜)</option>
-          <option value="player">플레이어 선공</option>
-          <option value="bot">AI 선공</option>
-        </select>
-      </label>
-    </div>
-    <div style="text-align:center; margin-top:26px; display:flex; gap:12px; justify-content:center;">
-      <button class="help-close-btn" onclick="playSfx('click'); startGameWithBot()">게임 시작</button>
-      <button class="undo-btn" onclick="playSfx('close_modal'); closeModal('bot-setup-modal', 'bs-modal-box')">취소</button>
+<!-- 🎞 전적 다시 보기 (읽기 전용) -->
+<div id="replay-modal" class="modal-overlay" onclick="if(event.target === this) closeModal('replay-modal', 'replay-box')">
+  <div class="modal-content" id="replay-box" style="max-width:520px;">
+    <h2 id="replay-title" style="color:var(--neon-cyan); margin-top:0; margin-bottom:4px; font-size:1.25rem;">🎞 다시 보기</h2>
+    <div id="replay-sub" style="font-size:.85rem; color:var(--text-sub);"></div>
+    <div class="rp-board" id="replay-board"></div>
+    <div class="rp-cap" id="replay-cap"></div>
+    <div class="rp-ctl"><button type="button" id="replay-prev" aria-label="이전 수" onclick="playSfx('click'); rpGoto(RP.j - 1)">◀</button><span class="rp-pos" id="replay-pos"></span><button type="button" id="replay-next" aria-label="다음 수" onclick="playSfx('click'); rpGoto(RP.j + 1)">▶</button></div>
+    <div class="rp-dots" id="replay-dots"></div>
+    <div style="display:flex; gap:8px; justify-content:center; margin-top:14px; flex-wrap:wrap;">
+      <button class="undo-btn" type="button" onclick="playSfx('click'); rpLearn()">📘 이 판으로 전략 배우기</button>
+      <button class="help-close-btn" type="button" onclick="playSfx('close_modal'); closeModal('replay-modal', 'replay-box')">닫기</button>
     </div>
   </div>
 </div>
+
+<!-- 📘 필승 전략 배우기 -->
+<div id="lesson-modal" class="modal-overlay" onclick="if(event.target === this) lsClose()">
+  <div class="modal-content" id="lesson-box">
+    <div class="ls-head"><h2 id="lesson-title">📘 필승 전략 배우기</h2><span class="ls-step" id="lesson-step"></span></div>
+    <div class="ls-dots" id="lesson-dots"></div>
+    <div id="lesson-card"></div>
+    <div class="ls-nav"><button type="button" class="ls-prev" id="lesson-prev" onclick="playSfx('click'); lsGo(LS.i - 1)">◀ 이전</button><button type="button" class="ls-next" id="lesson-next" onclick="playSfx('click'); lsGo(LS.i + 1)">다음 ▶</button><button type="button" class="ls-close" onclick="playSfx('close_modal'); lsClose()">닫기</button></div>
+  </div>
+</div>
+
+<!-- 🎓 판 위 튜토리얼 (코치 마크) -->
+<div id="tut-layer" aria-live="polite"><div class="tut-cut" id="tut-cut"></div><div class="tut-bubble" id="tut-bubble"></div></div>
 
 <!-- ⚔️ 분석 모드에서 포지션 이어두기 전용 모달 -->
 <div id="branch-bot-modal" class="modal-overlay" onclick="if(event.target === this) closeModal('branch-bot-modal', 'bb-modal-box')">
@@ -4160,34 +4244,30 @@
     if (stSettingsThenRestart) { stSettingsThenRestart = false; stSettingsJustSaved = true; stRestartGame(); stSettingsJustSaved = false; }
   }
 
-  function openBotModal(gameType) {
-    botPendingGame = gameType;
-    document.getElementById('bot-setup-turn').value = 'alt'; // 기본: 번갈아
-    openModal('bot-setup-modal', 'bs-modal-box');
+  /* 🤖 AI 플레이: 설정 창 없이 바로 시작 (난이도·선공은 게임별 저장값 — 기본 중 · 번갈아) */
+  function startAiGame(gameType) {
+    botDifficulty = aiDiffGet(gameType);
+    botFirstTurn = aiFirstGet(gameType);
+    startCount[gameType] = 0;
+    if (gameType === 'notakto') { ntScore = { p1Wins: 0, p2Wins: 0 }; ntStartGame('bot'); }
+    else if (gameType === 'popit') { ppScore = { p1Wins: 0, p2Wins: 0 }; ppStartGame('bot'); }
+    else if (gameType === 'queen') { qnScore = { p1Wins: 0, p2Wins: 0 }; qnStartGame('bot'); }
+    else { stScore = { p1Wins: 0, p2Wins: 0 }; stStartGame('bot'); }
   }
-  function startGameWithBot() {
-    botDifficulty = document.getElementById('bot-setup-diff').value;
-    botFirstTurn = document.getElementById('bot-setup-turn').value;
-    closeModal('bot-setup-modal', 'bs-modal-box');
-    startCount[botPendingGame] = 0;
-    if (botPendingGame === 'notakto') {
-      ntScore = { p1Wins: 0, p2Wins: 0 };
-      ntStartGame('bot');
-    } else if (botPendingGame === 'popit') {
-      ppScore = { p1Wins: 0, p2Wins: 0 };
-      ppStartGame('bot');
-    } else if (botPendingGame === 'queen') {
-      qnScore = { p1Wins: 0, p2Wins: 0 };
-      qnStartGame('bot');
-    } else {
-      stScore = { p1Wins: 0, p2Wins: 0 };
-      stStartGame('bot');
-    }
-  }
+  /* 게임별 AI 난이도·선공 (localStorage) */
+  const AI_DIFFS = ['최하', '하', '중', '상', '최상'], AI_KEY = 'arcade_ai_setting_v1';
+  const aiSetting = { notakto: { d: '중', f: 'alt' }, stone: { d: '중', f: 'alt' }, popit: { d: '중', f: 'alt' }, queen: { d: '중', f: 'alt' } };
+  try { const o = JSON.parse(localStorage.getItem(AI_KEY) || '{}'); for (const g in aiSetting) if (o[g]) { if (AI_DIFFS.includes(o[g].d)) aiSetting[g].d = o[g].d; if (['alt', 'player', 'bot'].includes(o[g].f)) aiSetting[g].f = o[g].f; } } catch (e) {}
+  function aiSave() { try { localStorage.setItem(AI_KEY, JSON.stringify(aiSetting)); } catch (e) {} }
+  function aiDiffGet(g) { return (aiSetting[g] || {}).d || '중'; }
+  function aiFirstGet(g) { return (aiSetting[g] || {}).f || 'alt'; }
+  function aiDiffSet(g, d) { if (!AI_DIFFS.includes(d) || !aiSetting[g]) return; aiSetting[g].d = d; aiSave(); }
+  function aiFirstSet(g, f) { if (!aiSetting[g]) return; aiSetting[g].f = f; aiSave(); }
 
   function openBranchBotModal(gameType) {
     branchGameType = gameType;
     document.getElementById('branch-player-role').value = (gameType === 'notakto' ? ntATurn : gameType === 'popit' ? ppATurn : gameType === 'queen' ? qnATurn : stATurn).toString();
+    document.getElementById('branch-bot-diff').value = aiDiffGet(gameType);
     openModal('branch-bot-modal', 'bb-modal-box');
   }
   function startBranchBotGame() {
@@ -6738,16 +6818,12 @@
   };
   function showRules(force) {
     const g = currentGame; if (!g || !RULES[g]) return;
-    if (!force) { try { if (localStorage.getItem('onchun_rules_' + g)) return; } catch (e) {} }
+    if (!force) { const go = () => { if (typeof tutMaybe === 'function') tutMaybe(g); else setTimeout(go, 50); }; setTimeout(go, 0); return; } // 처음 들어왔을 때는 설명 창 대신 판 위 튜토리얼 (뒤 스크립트에 있음)
     document.getElementById('rules-title').innerText = '📖 ' + RULES[g][0];
     document.getElementById('rules-body').innerHTML = RULES[g][1];
-    document.getElementById('rules-skip').checked = false;
     openModal('rules-modal', 'rules-box');
   }
-  function closeRules() {
-    try { if (document.getElementById('rules-skip').checked && currentGame) localStorage.setItem('onchun_rules_' + currentGame, '1'); } catch (e) {}
-    closeModal('rules-modal', 'rules-box');
-  }
+  function closeRules() { closeModal('rules-modal', 'rules-box'); }
 
   /* ===== 👤 이름 (네 게임 공통, 기기에 저장) ===== */
   const NAME_KEY = 'onchun_name';
@@ -6758,7 +6834,7 @@
   function setMyName(n) { try { localStorage.setItem(NAME_KEY, n); } catch (e) {} updateNameChip(); }
   function updateNameChip() { const el = document.getElementById('name-chip-text'); if (el) el.textContent = getMyName() || '닉네임 정하기'; }
 
-  /* ===== 👋 닉네임 모달: 페이지를 열 때마다(새로고침 포함) — 칸은 비워 두고, 이전 이름은 버튼으로만 ===== */
+  /* ===== 👋 닉네임 모달: 저장된 이름이 없을 때만 (있으면 홈의 👤 칩으로 바꾸기) ===== */
   let nameModalOpen = false, rulesAfterName = false;
   function openNameModal() {
     const inp = document.getElementById('name-input');
@@ -6798,10 +6874,12 @@
   function recWho() { return getMyName() || '이름 없음'; }
   function recLoad() { const a = recAll()[recWho()]; return a && typeof a === 'object' ? a : {}; }
   function recSave(r) { try { const all = recAll(); all[recWho()] = r; localStorage.setItem(REC_KEY, JSON.stringify(all)); } catch (e) {} }
-  function recAdd(game, key, win, opp) {
+  function recAdd(game, key, win, opp, rec) {
     const r = recLoad(); r[game] = r[game] || {}; const g = r[game];
     g[key] = g[key] || { w: 0, l: 0 }; g[key][win ? 'w' : 'l']++;
     g.history = (g.history || []).slice(-19); g.history.push({ t: Date.now(), key, win, opp: opp || '' });
+    // 최근 5판은 수순까지 저장 (다시 보기·📘 내 플레이로 배우기)
+    if (rec && rec.moves && rec.moves.length) { g.games = (g.games || []).slice(-4); g.games.push({ t: Date.now(), key, win, opp: opp || '', rec }); }
     recSave(r);
   }
   let recordsGame = null;
@@ -6816,16 +6894,17 @@
       html += '<table style="width:100%; border-collapse:collapse; font-size:.98rem;">';
       keys.forEach(k => { const v = g[k]; tw += v.w; tl += v.l; html += `<tr><td style="padding:6px 4px; border-bottom:1px dashed #E7DFC9;">${lab(k)}</td><td style="padding:6px 4px; border-bottom:1px dashed #E7DFC9; text-align:right; white-space:nowrap;"><b style="color:#3A9E82">${v.w}승</b> <b style="color:#C9436B">${v.l}패</b></td></tr>`; });
       html += `<tr><td style="padding:8px 4px; font-weight:700;">합계</td><td style="padding:8px 4px; text-align:right; font-weight:700;">${tw}승 ${tl}패 (승률 ${tw + tl ? Math.round(tw * 100 / (tw + tl)) : 0}%)</td></tr></table>`;
-      const h = (g.history || []).slice().reverse().slice(0, 10);
-      if (h.length) {
-        html += '<div style="margin-top:12px; font-size:.85rem; color:var(--text-sub);">최근 기록</div><div style="display:flex; flex-wrap:wrap; gap:5px; margin-top:4px;">';
-        h.forEach(x => { const d = new Date(x.t); html += `<span style="padding:3px 8px; border-radius:999px; background:${x.win ? '#DFF5EE' : '#FDE8EE'}; font-size:.8rem;">${x.win ? '승' : '패'} · ${lab(x.key).replace(/^[^ ]+ /, '')}${x.opp ? ' · ' + escHtml(x.opp) : ''} · ${d.getMonth() + 1}/${d.getDate()} ${String(d.getHours()).padStart(2, '0')}:${String(d.getMinutes()).padStart(2, '0')}</span>`; });
-        html += '</div>';
-      }
+    }
+    const gs = (g.games || []).slice().reverse();
+    if (gs.length) {
+      html += '<div style="margin-top:14px; font-size:.88rem; font-weight:800; color:var(--th-ink, #5F5B55);">🎞 최근 5판 — 누르면 한 수씩 다시 볼 수 있어요</div><div class="rec-games">';
+      gs.forEach((x, i) => { html += `<button type="button" class="rec-game ${x.win ? 'w' : 'l'}" onclick="playSfx('click'); openReplay('${game}', ${gs.length - 1 - i})"><b>${x.win ? '승' : '패'}</b><span>${escHtml(lab(x.key).replace(/^[^ ]+ /, ''))}${x.opp ? ' · ' + escHtml(x.opp) : ''}</span><span class="rec-meta">${x.rec.moves.length}수 · ${recDate(x.t)}</span><span class="rec-go">▶</span></button>`; });
+      html += '</div>';
     }
     document.getElementById('records-title').innerText = `📜 ${GAME_NAME[game]} 전적 · ${recWho()}`;
     document.getElementById('records-body').innerHTML = html;
   }
+  function recDate(t) { const d = new Date(t); return `${d.getMonth() + 1}/${d.getDate()} ${String(d.getHours()).padStart(2, '0')}:${String(d.getMinutes()).padStart(2, '0')}`; }
   function escHtml(t) { return String(t).replace(/[&<>"']/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' })[c]); }
   function openRecords(game) { recordsGame = game; renderRecords(game); openModal('records-modal', 'records-box'); }
   function clearRecords() {
@@ -7038,14 +7117,15 @@
     const g = currentGame, G = g && OLG[g];
     const mode = G ? G.mode() : '';
     const wn = winNum === 1 || winNum === 2 ? winNum : (/2/.test(w) ? 2 : 1);
+    const rec = G && !isBranchPlay && typeof p3Capture === 'function' ? p3Capture(P3_KEY[g]) : null;
     if (Online.active && mode === 'online') {
       const me = Online.myNum, mine = wn === me, nm = Online.names || {};
       w = nm[wn] || (wn === 1 ? '방장' : '손님');
       l = !mine;
-      if (G && !isBranchPlay) recAdd(g, 'online', mine, nm[me === 1 ? 2 : 1] || '');
+      if (G && !isBranchPlay) recAdd(g, 'online', mine, nm[me === 1 ? 2 : 1] || '', rec);
     } else if (G && !isBranchPlay) {
-      if (mode === 'bot') recAdd(g, 'ai:' + botDifficulty, !l);
-      else if (mode === 'solo') recAdd(g, 'solo', wn === 1);
+      if (mode === 'bot') recAdd(g, 'ai:' + botDifficulty, !l, '', rec);
+      else if (mode === 'solo') recAdd(g, 'solo', wn === 1, '', rec);
     }
     _sv(w, r, l);
   };
@@ -7113,7 +7193,7 @@
   updateNameChip();
   const validEntry = ['notakto', 'stone', 'popit', 'queen'].includes(entryGame);
   if (validEntry) { currentGame = entryGame; }
-  openNameModal();
+  if (!getMyName()) openNameModal();
   if (validEntry) openGameSection(entryGame);
   else syncTopName(null);
 
@@ -7182,7 +7262,7 @@
 </script>
 <script>
   /* ==========================================================================
-     [3차] 진행 수순(게임 중) · 다시 보기 · 판정 줄 · 👀 왜? · 🔍 복기 · 연속 퀴즈
+     [3차] 판정 줄 · 👀 왜? · 복기(📘 내 플레이로 배우기·📜 전적에서 씀) · 연속 퀴즈
      게임 4개 공통. 기존 함수는 이름으로 감싸서(래핑) 붙인다.
      ========================================================================== */
   const P3_KEYS = ['nt', 'st', 'pp', 'qn'];
@@ -7322,16 +7402,6 @@
     t.style.left = Math.max(8, Math.min(innerWidth - w - 8, L)) + 'px'; t.style.top = Math.max(8, T) + 'px';
   }
   function p3TipHide(k) { const t = k === 'nt' ? ntTooltip : k === 'st' ? stTooltip : $id(k + '-preview-tooltip'); if (t) t.style.display = 'none'; }
-  function p3HistTip(k, j, x, y, rect) {
-    const box = $id(k + '-p3-hist'); if (!box || !box._moves) return;
-    const M = box._moves, s = p3StateAt(k, box._start, M, j), m = j ? M[j - 1] : null;
-    const head = j ? `${j}수째 뒤 · P${m.p}: ${p3MoveTxt(k, m, p3StateAt(k, box._start, M, j - 1))}` : '시작 자리';
-    const mark = !m ? undefined : k === 'nt' ? m.c : k === 'pp' ? s.last : k === 'qn' ? m.to : undefined;
-    p3TipPlace(p3TipFill(k, s, head, mark), x, y, rect);
-  }
-
-  /* ---------- 1) 게임 중 진행 수순 + 다시 보기 ---------- */
-  let p3RV = null; // { k, j, ov } — 지금 보고 있는 지난 자리
   function p3GameHost(k) { return k === 'nt' ? $id('nt-game-board-container') : k === 'st' ? $id('st-center-stones') : k === 'pp' ? $id('popit-board') : $id('qn-boardWrap'); }
   function p3GameOver(k) { return k === 'nt' ? ntGameOver : k === 'st' ? stGameOver : k === 'pp' ? ppOver : qnOver; }
   function p3Overlay(host, cls) {
@@ -7339,63 +7409,6 @@
     if (!host.classList.contains('qn-boardWrap')) { let bg = getComputedStyle(host).backgroundColor; if (!bg || /rgba\(0, 0, 0, 0\)|transparent/.test(bg)) bg = '#FFF9E8'; ov.style.background = bg; }
     ov.addEventListener('pointerdown', e => e.stopPropagation()); ov.addEventListener('click', e => e.stopPropagation());
     host.appendChild(ov); return ov;
-  }
-  function p3HistRender(k) {
-    const box = $id(k + '-p3-hist'); if (!box) return;
-    const rb = $id(k + '-review-btn'); if (rb) rb.style.display = p3GameOver(k) && p3GMoves(k).length ? 'inline-block' : 'none';
-    const moves = p3GMoves(k), start = p3GStart(k), list = box.querySelector('.p3-hist-list');
-    box._moves = moves; box._start = start;
-    const act = p3RV && p3RV.k === k ? p3RV.j : -1;
-    let lab = box.querySelector('.p3-hist-lab');
-    lab.innerHTML = act >= 0 ? `<span class="p3-rv-ban">📍 ${act ? act + '수째' : '시작'}<span class="p3-rvb-t"> 보는 중</span> <button type="button" data-back="1">현재로 ↩</button></span>` : '진행 수순';
-    list.innerHTML = '';
-    const add = (j, txt, cls) => { const b = p3Mk('button', 'p3-chip' + cls + (j === act ? ' on' : '')); b.type = 'button'; b.textContent = txt; b.dataset.j = j; list.appendChild(b); return b; };
-    add(0, '시작', ' p3-chip-start');
-    let s = start;
-    moves.forEach((m, i) => { add(i + 1, `${i + 1}. P${m.p}: ${p3MoveTxt(k, m, s)}`, ' p' + m.p); s = p3Apply(k, s, m); });
-    if (!moves.length) list.appendChild(p3Mk('span', 'p3-hist-empty', '아직 둔 수가 없어요'));
-    const on = list.querySelector('.p3-chip.on');
-    requestAnimationFrame(() => { if (!on) { list.scrollLeft = list.scrollWidth; return; } const a = on.getBoundingClientRect(), b = list.getBoundingClientRect(); list.scrollLeft += (a.left - b.left) - (b.width - a.width) / 2; });
-    if (p3RV && p3RV.k === k && !p3RV.ov.isConnected) { const h = p3GameHost(k); if (h) h.appendChild(p3RV.ov); } // 판을 새로 그렸으면 덮개 다시 얹기
-  }
-  function p3RvEnter(k, j) {
-    const box = $id(k + '-p3-hist'); const M = (box && box._moves) || [];
-    if (j >= M.length) { p3RvExit(); return; } // 마지막 수 = 지금 자리
-    p3RvExit(true);
-    const host = p3GameHost(k); if (!host) return;
-    const ov = p3Overlay(host, 'p3-rv');
-    ov.appendChild(p3Big(k, p3StateAt(k, box._start, M, j), j, M)); ov.firstChild.classList.add('p3-fade');
-    p3RV = { k, j, ov };
-    $id(k + '-game-screen').classList.add('p3-rv-on');
-    p3TipHide(k); playSfx('click'); p3HistRender(k);
-  }
-  function p3RvExit(silent) {
-    if (!p3RV) return; const k = p3RV.k; p3RV.ov.remove(); p3RV = null;
-    $id(k + '-game-screen')?.classList.remove('p3-rv-on');
-    if (!silent) p3HistRender(k);
-  }
-  function p3BindHist(k) {
-    const box = $id(k + '-p3-hist'), list = box.querySelector('.p3-hist-list');
-    let lpT = null;
-    box.addEventListener('click', e => {
-      if (e.target.closest('[data-back]')) { playSfx('click'); p3RvExit(); return; }
-      const b = e.target.closest('.p3-chip'); if (!b) return;
-      if (b._lp) { b._lp = false; return; } // 길게 눌러 미리 본 뒤 손을 뗀 것
-      const j = +b.dataset.j;
-      if (p3RV && p3RV.k === k && p3RV.j === j) p3RvExit(); else p3RvEnter(k, j);
-    });
-    list.addEventListener('mouseover', e => { if (lastPtrType !== 'mouse') return; const b = e.target.closest('.p3-chip'); if (b) p3HistTip(k, +b.dataset.j, e.clientX, e.clientY); });
-    list.addEventListener('mousemove', e => { if (lastPtrType !== 'mouse') return; const b = e.target.closest('.p3-chip'); const t = p3TipEl(k); if (b && t.style.display === 'flex') p3TipPlace(t, e.clientX, e.clientY); });
-    list.addEventListener('mouseout', e => { const b = e.target.closest('.p3-chip'); if (b && !b.contains(e.relatedTarget)) p3TipHide(k); });
-    list.addEventListener('pointerdown', e => {
-      if (e.pointerType === 'mouse') return; const b = e.target.closest('.p3-chip'); if (!b) return;
-      b._lp = false; clearTimeout(lpT);
-      lpT = setTimeout(() => { b._lp = true; p3HistTip(k, +b.dataset.j, 0, 0, b.getBoundingClientRect()); }, 420);
-    });
-    const endLp = () => { clearTimeout(lpT); p3TipHide(k); };
-    ['pointerup', 'pointercancel'].forEach(t => list.addEventListener(t, endLp));
-    list.addEventListener('scroll', () => { clearTimeout(lpT); });
-    list.addEventListener('contextmenu', e => { if (e.target.closest('.p3-chip')) e.preventDefault(); });
   }
 
   /* ---------- 2) 판정 줄 ---------- */
@@ -7568,13 +7581,13 @@
     return lastWins ? last.p : 3 - last.p;
   }
   function p3Name(k, n) { const g = P3_GAME[k], mode = k === 'nt' ? ntMode : k === 'st' ? stMode : k === 'pp' ? ppMode : qnMode; return (mode === 'bot' || mode === 'online') ? `P${n}(${escHtml(pLabel(g, n))})` : `P${n}`; }
-  function p3ReviewOpen(k) {
+  function p3ReviewOpen(k, recIn) {
     k = k || P3_KEY[currentGame]; if (!k) return;
-    let rec = p3Last[k]; if (!rec && p3GameOver(k)) rec = p3Last[k] = p3Capture(k);
+    let rec = recIn || p3Last[k]; if (!rec && p3GameOver(k)) rec = p3Last[k] = p3Capture(k);
     if (!rec || !rec.moves.length) return;
-    closeVictoryModal(true); p3RvExit(true); p3TipHide(k);
+    closeVictoryModal(true); p3TipHide(k);
     $id('start-toast')?.classList.remove('on');
-    p3Rev = { k, rec, notes: p3Annotate(rec), idx: 0, off: false, fromGame: true };
+    p3Rev = { k, rec, notes: p3Annotate(rec), idx: 0, off: false, fromGame: !recIn };
     if (k === 'nt') { ntAStart = { mask: 0, turn: rec.first, hist: [] }; if (ntSize !== rec.N) ntSize = rec.N; ntStartAnalysis(true); }
     else if (k === 'st') { stN = rec.n0; stLimit = rec.L; stModeType = rec.mode; stAStartTurn = rec.first; stStartAnalysis(true); }
     else if (k === 'pp') { ppWinRule = rec.rule; ppMaxTake = rec.M; ppAInit = rec.init.slice(); ppAStartTurn = rec.first; ppStartAnalysis(true); }
@@ -7648,7 +7661,7 @@
     if (!on) return;
     const { rec, notes, idx, off } = p3Rev, n = rec.moves.length, w = p3RevWinner(rec);
     if (off) {
-      panel.innerHTML = `<div class="p3-rev-row"><b>🔍 복기</b><span class="p3-rev-sum">복기 수순에서 벗어나 자유롭게 분석 중이에요.</span><button type="button" data-act="back">↩ 복기로 돌아가기</button>${p3Rev.fromGame ? '<button type="button" data-act="game">게임 화면</button>' : ''}<button type="button" data-act="end">복기 끝</button></div>`;
+      panel.innerHTML = `<div class="p3-rev-row"><b>📘 내 플레이</b><span class="p3-rev-sum">내 판의 수순에서 벗어나 자유롭게 분석 중이에요.</span><button type="button" data-act="back">↩ 내 판으로 돌아가기</button>${p3Rev.fromGame ? '<button type="button" data-act="game">게임 화면</button>' : ''}<button type="button" data-act="end">끝내기</button></div>`;
       return;
     }
     const bad = notes.map((x, i) => x.t === 'bad' ? i : -1).filter(i => i >= 0), dec = bad.length ? bad[bad.length - 1] : -1;
@@ -7665,9 +7678,9 @@
         + (x.t === 'bad' ? `<span class="p3-bad">⚠️ 여기서 이길 수 있었는데 지는 수를 뒀어요 (이기는 수: ${x.wins.slice(0, 4).join(', ')}${x.wins.length > 4 ? ' …' : ''})</span>`
           : x.t === 'good' ? `<span class="p3-good">✅ 이기는 수</span>` : `<span class="p3-lost">➖ 이미 지는 자리 (어떻게 둬도 상대가 바르게 두면 져요)</span>`);
     }
-    panel.innerHTML = `<div class="p3-rev-row"><b>🔍<span class="p3-lg"> 복기</span></b><span class="p3-rev-sum">${sum}</span>
+    panel.innerHTML = `<div class="p3-rev-row"><b>📘<span class="p3-lg"> 내 플레이로 배우기</span></b><span class="p3-rev-sum">${sum}</span>
       <span class="p3-rev-ctl"><button type="button" data-act="prev" ${idx ? '' : 'disabled'} aria-label="이전 수">◀</button><span class="p3-rev-pos">${idx >= n ? '끝' : idx + 1 + '수째'} / ${n}수</span><button type="button" data-act="next" ${idx < n ? '' : 'disabled'} aria-label="다음 수">▶</button></span>
-      ${p3Rev.fromGame ? '<button type="button" data-act="game">↩ 게임<span class="p3-lg"> 화면</span></button>' : ''}<button type="button" data-act="end"><span class="p3-lg">복기 </span>끝</button></div>
+      ${p3Rev.fromGame ? '<button type="button" data-act="game">↩ 게임<span class="p3-lg"> 화면</span></button>' : ''}<button type="button" data-act="end">끝내기</button></div>
       <div class="p3-rev-note">${note}</div>`;
     // 진행 수순 상자: 전체 수를 칩으로 (누르면 그 수를 두기 직전 자리로)
     const hb = $id(k + '-a-history-box'); hb.innerHTML = '';
@@ -7682,7 +7695,7 @@
   function p3RevBackToGame() {
     if (!p3Rev) return; const k = p3Rev.k; p3Rev = null; p3RevRender(k);
     $id(k + '-analysis-screen').style.display = 'none';
-    switchScreen($id(k + '-game-screen'), 'flex'); p3HistRender(k);
+    switchScreen($id(k + '-game-screen'), 'flex');
     if (k === 'st') stLayoutCenter();
   }
   function p3RevClick(e) {
@@ -7797,13 +7810,6 @@
   /* ---------- 화면 붙이기 + 기존 함수 감싸기 ---------- */
   (function p3Init() {
     P3_KEYS.forEach(k => {
-      // 게임 화면: 판 아래 진행 수순 줄, [🔍 복기] 버튼
-      const board = $id(k === 'nt' ? 'nt-board' : k === 'st' ? 'st-board' : k === 'pp' ? 'pp-board' : 'qn-board');
-      const hist = p3Mk('div', 'p3-hist', '<span class="p3-hist-lab">진행 수순</span><div class="p3-hist-list"></div>'); hist.id = k + '-p3-hist';
-      board.after(hist); p3BindHist(k);
-      const acts = $id(k + '-game-screen').querySelector('.action-buttons');
-      const rb = p3Mk('button', 'restart-btn p3-review-btn', '🔍 복기'); rb.id = k + '-review-btn'; rb.type = 'button'; rb.style.display = 'none';
-      rb.onclick = () => { playSfx('click'); p3ReviewOpen(k); }; acts.prepend(rb);
       // 분석 화면: 판 칸(열) 맨 위에 판정 줄, 위에 복기 판
       let col;
       if (k === 'nt' || k === 'st') { const c = $id(k + '-analysis-center'); col = p3Mk('div', 'p3-acol'); c.before(col); col.appendChild(c); }
@@ -7815,25 +7821,10 @@
       $id(k + '-a-history-box').addEventListener('click', e => { if (p3Rev && p3Rev.k === k && !p3Rev.off) p3RevClick(e); });
     });
 
-    // 시간 멈춤: 다시 보기 중에도 (창이 열린 것처럼)
-    const _amo = anyModalOpen; anyModalOpen = function () { return _amo() || !!(p3RV && p3Shown(p3RV.k + '-game-screen')); };
-    // 게임 화면 그리기 → 진행 수순 갱신
     const wrapAfter = (name, fn) => { const f = window[name]; window[name] = function (...a) { const r = f.apply(this, a); fn(...a); return r; }; };
     const wrapBefore = (name, fn) => { const f = window[name]; window[name] = function (...a) { fn(...a); return f.apply(this, a); }; };
-    wrapAfter('ntRenderGameBoard', () => p3HistRender('nt'));
-    wrapAfter('stUpdateUI', () => p3HistRender('st'));
-    wrapAfter('ppRender', () => p3HistRender('pp'));
-    wrapAfter('qnRender', () => p3HistRender('qn'));
-    // 다시 보기 중엔 입력 막기 (돌 버튼·팝잇 버블)
-    const _stTake3 = stPlayerTake; stPlayerTake = function (c) { if (p3RV && p3RV.k === 'st') return; return _stTake3(c); };
-    const _ntHandle3 = ntHandlePlayerMove; ntHandlePlayerMove = function (c) { if (p3RV && p3RV.k === 'nt') return; return _ntHandle3(c); };
-    const _qnOnCell3 = qnOnCell; qnOnCell = function (x, y) { if (p3RV && p3RV.k === 'qn') return; return _qnOnCell3(x, y); };
-    const _ppLocked = ppLocked; ppLocked = function () { return (p3RV && p3RV.k === 'pp') || _ppLocked(); };
-    // 판이 바뀌는 동작 전에는 다시 보기 끝내기 · 화면을 떠나면 복기 끝내기
+    // 화면을 떠나면 복기 끝내기
     P3_KEYS.forEach(k => {
-      const G = { nt: ['ntUndo', 'ntRestartGame', 'ntStartGame', 'ntStartBranchPlay', 'ntResumeAnalysis', 'ntGoBack'], st: ['stUndo', 'stRestartGame', 'stStartGame', 'stStartBranchPlay', 'stResumeAnalysis', 'stGoBack'],
-                  pp: ['ppUndo', 'ppRestartGame', 'ppStartGame', 'ppStartBranchPlay', 'ppResumeAnalysis', 'ppGoBack'], qn: ['qnUndo', 'qnRestartGame', 'qnStartGame', 'qnStartBranchPlay', 'qnResumeAnalysis', 'qnGoBack'] }[k];
-      G.forEach(n => wrapBefore(n, () => { if (p3RV && p3RV.k === k) p3RvExit(true); p3TipHide(k); }));
       ['StartBranchPlay', 'GoBack', 'StartGame', 'RestartGame'].forEach(s => wrapBefore(k + s, () => { if (p3Rev && p3Rev.k === k) { p3Rev = null; p3RevRender(k); } p3WhyStop(k, true); }));
       wrapAfter(k + 'GoBack', () => { const sc = $id(k + '-analysis-screen'); if (sc) sc.classList.remove('p3-reviewing'); });
     });
@@ -7844,18 +7835,10 @@
     wrapAfter('qnAUpdate', () => p3AfterA('qn'));
     // 퀴즈 시작 → 연속 퀴즈 판
     wrapAfter('ntAQuiz', () => qzBegin('nt')); wrapAfter('stAQuiz', () => qzBegin('st')); wrapAfter('ppAQuiz', () => qzBegin('pp')); wrapAfter('qnAQuiz', () => qzBegin('qn'));
-    // 게임이 끝나면 복기용 기록 + 승리 창에 [🔍 복기]
-    const _svm = showVictoryModal;
-    showVictoryModal = function (...a) {
-      const k = P3_KEY[currentGame], vb = $id('victory-review-btn');
-      if (k && p3GameOver(k)) { p3Last[k] = p3Capture(k); if (vb) vb.style.display = p3Last[k].moves.length ? '' : 'none'; p3HistRender(k); }
-      else if (vb) vb.style.display = 'none';
-      return _svm(...a);
-    };
     // 분석 도움말에 새 기능 안내 덧붙이기
     ['ntShowHelp', 'stShowHelp', 'ppShowHelp', 'qnShowHelp'].forEach(n => wrapAfter(n, topic => {
       if (topic !== 'analysis') return;
-      $id('help-content').insertAdjacentHTML('beforeend', '<br><br><b>[새 기능]</b><br>- 판 위 줄: 지금 차례인 사람이 <b>이기는 자리🟢 / 지는 자리🔴</b>인지 알려 줘요.<br>- <b>👀</b>: 나쁜 수 옆 버튼을 누르면 그 수를 둔 뒤 상대의 최선의 대응을 판에서 보여 줘요.<br>- <b>🎯 퀴즈</b>는 [다음 문제]로 계속 이어지고, 🔥 연속 정답과 ⏱ 30초 타임어택도 있어요.<br>- 게임이 끝나면 <b>🔍 복기</b>로 내 수를 한 수씩 되짚어 볼 수 있어요.');
+      $id('help-content').insertAdjacentHTML('beforeend', '<br><br><b>[더 보기]</b><br>- 판 위 줄: 지금 차례인 사람이 <b>이기는 자리🟢 / 지는 자리🔴</b>인지 알려 줘요.<br>- <b>👀</b>: 나쁜 수 옆 버튼을 누르면 그 수를 둔 뒤 상대의 최선의 대응을 판에서 보여 줘요.<br>- <b>🎯 퀴즈</b>는 [다음 문제]로 계속 이어지고, 🔥 연속 정답과 ⏱ 30초 타임어택도 있어요.<br>- <b>📘 필승 전략 배우기</b>에서 카드로 전략을 익히고, 📜 전적에 남은 내 판을 한 수씩 되짚어 볼 수 있어요.');
     }));
     window.addEventListener('resize', () => P3_KEYS.forEach(p3TipHide));
     window.addEventListener('scroll', () => P3_KEYS.forEach(p3TipHide), { passive: true });
@@ -8172,6 +8155,330 @@
     // 퀸 메뉴로 나가면 황금비 화면도 닫기
     const _qnBackG = qnGoBack; qnGoBack = function (...a) { stopAuto(); scr.style.display = 'none'; return _qnBackG(...a); };
     NAV_SCREENS.queen.push('qn-golden-screen');
+  })();
+</script>
+<script>
+  /* ==========================================================================
+     [4차] 바로 플레이, 설명은 필요할 때만
+     · 게임 중 AI 난이도 바로 바꾸기 · 설정의 선공 · 📜 최근 5판 다시 보기
+     · 📘 필승 전략 배우기(카드 + 내 플레이로 배우기) · 🎓 판 위 튜토리얼 · ❓ 도움말 탭
+     ========================================================================== */
+  (function p4Init() {
+    const G_OF = { nt: 'notakto', st: 'stone', pp: 'popit', qn: 'queen' };
+    const wrapAfter = (name, fn) => { const f = window[name]; window[name] = function (...a) { const r = f.apply(this, a); fn(...a); return r; }; };
+    const wrapBefore = (name, fn) => { const f = window[name]; window[name] = function (...a) { fn(...a); return f.apply(this, a); }; };
+    const modeOf = k => k === 'nt' ? ntMode : k === 'st' ? stMode : k === 'pp' ? ppMode : qnMode;
+
+    /* ---------- 1) 선공 설정(게임별) → firstPlayer ---------- */
+    const _fp = firstPlayer;
+    firstPlayer = function (game, mode) {
+      if (mode === 'bot') botFirstTurn = tutForceFirst ? 'player' : aiFirstGet(game);
+      return _fp(game, mode);
+    };
+    const SET_P = { notakto: 'nt', stone: 'st', popit: 'pp', queen: 'qn' };
+    const OPEN_FN = { notakto: 'openNtSettings', stone: 'openStSettings', popit: 'openPpSettings', queen: 'openQnSettings' };
+    const SAVE_FN = { notakto: 'saveNtSettings', stone: 'saveStSettings', popit: 'savePpSettings', queen: 'saveQnSettings' };
+    for (const g in SET_P) {
+      const sel = () => $id('set-' + SET_P[g] + '-first');
+      wrapAfter(OPEN_FN[g], () => { const e = sel(); if (e) e.value = aiFirstGet(g); });
+      wrapBefore(SAVE_FN[g], () => { const e = sel(); if (e && ['alt', 'player', 'bot'].includes(e.value)) aiFirstSet(g, e.value); });
+    }
+
+    /* ---------- 2) 게임 중 AI 난이도 (바로 적용) ---------- */
+    function aiNameEls(k) { // AI 이름을 보여 주는 요소들
+      const hn = isBranchPlay ? branchHumanPlayer : 1, ai = 3 - hn;
+      return { name: $id(`${k}-p${ai}-name`), turn: $id(`${k}-turn-indicator`) };
+    }
+    function aiDiffRender(k) {
+      const box = $id(k + '-ai-diff'); if (!box) return;
+      const on = modeOf(k) === 'bot';
+      box.classList.toggle('on', on);
+      if (!on) return;
+      box.querySelectorAll('button').forEach(b => b.classList.toggle('on', b.dataset.d === botDifficulty));
+    }
+    window.aiDiffChange = function (k, d) {
+      if (!AI_DIFFS.includes(d) || modeOf(k) !== 'bot') return;
+      botDifficulty = d; aiDiffSet(G_OF[k], d);
+      const { name, turn } = aiNameEls(k);
+      if (name) name.innerText = `AI (${d})`;
+      if (turn && /^AI/.test(turn.innerText)) turn.innerText = `AI (${d})의 턴`;
+      aiDiffRender(k);
+      playSfx('click');
+    };
+    P3_KEYS.forEach(k => {
+      const box = p3Mk('div', 'ai-diff'); box.id = k + '-ai-diff';
+      box.innerHTML = `<span class="ai-diff-lab">🤖 AI 난이도</span><div class="ai-diff-seg" role="group" aria-label="AI 난이도">${AI_DIFFS.map(d => `<button type="button" data-d="${d}" onclick="aiDiffChange('${k}', '${d}')">${d}</button>`).join('')}</div>`;
+      const timer = $id(k + '-timer-display'); timer.after(box);
+      [k + 'StartGame', k + 'StartBranchPlay'].forEach(n => wrapAfter(n, () => aiDiffRender(k)));
+      wrapAfter(k + 'GoBack', () => $id(k + '-ai-diff').classList.remove('on'));
+    });
+
+    /* ---------- 3) 📜 최근 5판 다시 보기 ---------- */
+    window.RP = null;
+    const recStart = rec => rec.k === 'nt' ? { mask: 0 } : rec.k === 'st' ? { n: rec.n0, t: [0, 0, 0] } : rec.k === 'pp' ? { init: rec.init.slice(), popped: rec.init.map(() => new Set()) } : { N: rec.N, q: rec.start.slice(), from: null };
+    // 그림을 그릴 때 그 판의 규칙(노탁토 크기·돌 모드)을 잠깐 적용했다가 되돌리기
+    function withRecEnv(rec, fn) {
+      const pn = ntBoardSize, pm = stModeType;
+      if (rec.k === 'nt' && ntBoardSize !== rec.N) ntInitBoardGeometry(rec.N);
+      if (rec.k === 'st') stModeType = rec.mode;
+      try { return fn(); } finally { if (rec.k === 'nt' && ntBoardSize !== pn) ntInitBoardGeometry(pn); stModeType = pm; }
+    }
+    const recNames = x => /^ai:/.test(x.key) ? { 1: recWho(), 2: 'AI' } : { 1: 'P1', 2: 'P2' };
+    const recLab = key => key === 'solo' ? '👥 2인' : key === 'online' ? '🌐 온라인' : '🤖 AI ' + key.slice(3);
+    window.openReplay = function (game, idx) {
+      const g = recLoad()[game], x = g && g.games && g.games[idx]; if (!x || !x.rec) return;
+      const rec = x.rec;
+      RP = { game, rec, meta: x, notes: withRecEnv(rec, () => p3Annotate(rec)), j: 0 };
+      $id('replay-title').innerText = `🎞 ${GAME_NAME[game]} · ${x.win ? '승리' : '패배'}`;
+      $id('replay-sub').innerText = `${recLab(x.key)}${x.opp ? ' · ' + x.opp : ''} · ${rec.moves.length}수 · ${recDate(x.t)}`;
+      rpGoto(0);
+      openModal('replay-modal', 'replay-box');
+    };
+    window.rpGoto = function (j) {
+      if (!RP) return; const { rec, notes } = RP, n = rec.moves.length, k = rec.k;
+      j = Math.max(0, Math.min(n, j)); RP.j = j;
+      const nm = recNames(RP.meta);
+      const board = $id('replay-board'); board.innerHTML = '';
+      withRecEnv(rec, () => { const el = p3Big(k, p3StateAt(k, recStart(rec), rec.moves, j), j, rec.moves); el.classList.add('p3-fade'); board.appendChild(el); });
+      let cap;
+      if (!j) cap = `시작 자리 — ${nm[rec.first]} 차례`;
+      else { const m = rec.moves[j - 1], x = notes[j - 1]; cap = `<b>${j}수째 · ${escHtml(nm[m.p])}</b> — ${p3RevMoveSay(k, m)} ` + (x.t === 'bad' ? `<span class="p3-bad">⚠️ 이기는 수가 있었어요 (${x.wins.slice(0, 3).join(', ')})</span>` : x.t === 'good' ? `<span class="p3-good">✅ 이기는 수</span>` : `<span class="p3-lost">➖ 이미 지는 자리</span>`); }
+      if (j === n) cap += ` 🏁 ${escHtml(nm[p3RevWinner(rec)])} 승리`;
+      $id('replay-cap').innerHTML = cap;
+      $id('replay-pos').innerText = `${j} / ${n}수`;
+      $id('replay-prev').disabled = j === 0; $id('replay-next').disabled = j === n;
+      const dots = $id('replay-dots'); dots.innerHTML = '';
+      for (let i = 0; i <= n; i++) { const b = p3Mk('button', (i ? notes[i - 1].t : '') + (i === j ? ' cur' : ''), i ? String(i) : '•'); b.type = 'button'; b.title = i ? i + '수째' : '시작'; b.onclick = () => { playSfx('click'); rpGoto(i); }; dots.appendChild(b); }
+    };
+    window.rpLearn = function () { if (!RP) return; const { game, rec } = RP; closeModal('replay-modal', 'replay-box'); closeModal('records-modal', 'records-box'); setTimeout(() => lsReview(game, rec), 220); };
+
+    /* ---------- 4) 📘 필승 전략 배우기 ---------- */
+    window.LS = { game: null, i: 0, cards: [] };
+    const fig = (items) => { const f = p3Mk('div', 'ls-fig'); items.forEach(([el, cap]) => { const fg = p3Mk('figure'); fg.appendChild(el); if (cap) fg.appendChild(p3Mk('figcaption', null, cap)); f.appendChild(fg); }); return f; };
+    const ntFig = (N, cells, o = {}) => { const pn = ntBoardSize; if (pn !== N) ntInitBoardGeometry(N); let m = 0; cells.forEach(c => m |= (1 << c)); const el = p3NtBig(m, { coord: true, hl: o.hl, hl2: o.hl2, lose: o.lose }); el.style.setProperty('--ls-n', N); if (pn !== N) ntInitBoardGeometry(pn); return el; };
+    const stFig = (n, mode, hl) => { const pm = stModeType; stModeType = mode; const el = p3StBig(n, { hl }); stModeType = pm; return el; };
+    const ppFig = (init, rows, hl) => { const popped = p3PpFromRows(init, rows); return p3PpBig(init, popped, hl ? { hl: { row: hl.row, idx: p3PpPick(init, popped, hl.row, hl.count) } } : {}); };
+    const qnFig = (N, q, o) => { const el = p3QnGrid(N, q, o || {}); return el; };
+    const qnColdFig = (N, q, hl) => { const el = qnFig(N, q, { hl }); el.querySelectorAll('.qn-cell').forEach((c, i) => { const y = N - 1 - Math.floor(i / N), x = i % N; if (qnIsCold(x, y, N, 'last')) c.appendChild(p3Mk('i', 'ls-cold')); }); return el; };
+    const binTable = (rows) => { const bits = Math.max(...rows).toString(2).length; let h = '<table class="ls-bin"><tr><th>줄</th>' + Array.from({ length: bits }, (_, i) => `<th>${1 << (bits - 1 - i)}</th>`).join('') + '</tr>'; rows.forEach((r, i) => { h += `<tr><td>${i + 1}번줄 (${r})</td>` + r.toString(2).padStart(bits, '0').split('').map(b => `<td>${b}</td>`).join('') + '</tr>'; }); const sums = Array.from({ length: bits }, (_, i) => rows.reduce((a, r) => a + ((r >> (bits - 1 - i)) & 1), 0)); h += '<tr><td><b>1의 개수</b></td>' + sums.map(c => `<td class="${c % 2 ? 'odd' : ''}">${c}</td>`).join('') + '</tr></table>'; return h; };
+    const P = (h) => `<p>${h}</p>`;
+    const LESSONS = {
+      notakto: () => [
+        { t: '규칙 다시 보기', h: P('둘 다 <b>X만</b> 번갈아 놓고, 가로·세로·대각선 <b>한 줄을 완성한 사람이 패배</b>해요.') + P('그래서 "이기는 수"란 <b>상대가 어디에 둬도 결국 한 줄을 만들 수밖에 없게</b> 만드는 수예요.'), f: () => fig([[ntFig(3, [0, 1, 2], { lose: true }), '맨 윗줄을 완성 → 패배'], [ntFig(3, [4, 6, 2]), '아직 안전한 판']]) },
+        { t: '3×3 선공 전략: 가운데 먼저!', h: P('3×3에서는 <b>선공이 가운데(5번)</b>를 차지하면 이겨요.') + P('가운데 X는 가로·세로·대각선 <b>4개 줄</b>에 걸쳐 있어서, 상대가 어디에 둬도 그 줄은 "위험한 줄"이 되고 안전한 칸이 빠르게 줄어들어요.'), f: () => fig([[ntFig(3, [4], { hl: 4 }), '① 선공: 가운데'], [ntFig(3, [4, 0], { hl: 0 }), '② 후공이 구석에 두면…']]) },
+        { t: '대칭으로 따라 두기', h: P('가운데를 차지한 뒤에는 상대가 둔 칸의 <b>정반대 칸(점대칭)</b>에 두면 돼요. 구석 ↔ 반대 구석, 변 ↔ 반대 변.') + P('예: 상대가 1번에 두면 나는 9번, 상대가 2번이면 나는 8번. 이렇게 하면 <b>먼저 줄을 완성하는 쪽은 항상 상대</b>가 돼요.'), f: () => fig([[ntFig(3, [4, 0, 8], { hl: 8, hl2: 0 }), '1번 ↔ 9번'], [ntFig(3, [4, 0, 8, 1, 7], { hl: 7, hl2: 1 }), '2번 ↔ 8번 … 상대가 막혀요']]) },
+        { t: '죽은 줄 피하기', h: P('이미 X가 2개 있는 줄의 남은 칸은 <b>절대 두면 안 되는 칸</b>이에요(두는 순간 패배).') + P('판이 커질수록(4×4) 중요한 건 <b>"안전한 칸이 몇 개 남았나"</b>예요. 안전한 칸이 <b>홀수</b>로 남게 넘기면 마지막 안전한 칸을 내가 차지하고, 상대가 죽은 칸에 두게 돼요.'), f: () => fig([[ntFig(3, [0, 1, 4, 8], { hl2: 2 }), '3번 칸은 죽은 칸(윗줄 완성)'], [ntFig(4, [0, 5, 10, 3, 12]), '4×4: 안전한 칸 세기']]) },
+      ],
+      stone: () => [
+        { t: '규칙 다시 보기', h: P('번갈아 돌을 <b>1~k개</b> 가져가요. <b>폭탄 모드</b>: 마지막 폭탄 돌을 가져가면 패배. <b>보석 모드</b>: 마지막 보석 돌을 가져가면 승리.') + P('책의 "마지막 카드를 가져라"와 같은 게임이에요. 핵심은 <b>거꾸로 세기</b>!'), f: () => fig([[stFig(7, 'bomb'), '폭탄 모드 (빨강이 폭탄)'], [stFig(7, 'gem'), '보석 모드 (초록이 보석)']]) },
+        { t: '보석 모드: (k+1)의 배수를 남겨라', h: P('한 번에 최대 k개를 가져갈 수 있으면, 내가 a개 가져간 뒤 상대가 몇 개를 가져가도 나는 <b>합이 k+1</b>이 되게 가져갈 수 있어요.') + P('그러니 <b>상대 차례에 남은 돌이 (k+1)의 배수</b>이면 내가 이겨요. 예: k=3이면 4, 8, 12, 16개를 남기기.'), f: () => fig([[stFig(9, 'gem', 1), 'k=3, 9개 → 1개 가져가 8개 남기기'], [stFig(8, 'gem'), '8 = 4의 배수: 상대는 져요']]) },
+        { t: '폭탄 모드: 배수 + 1을 남겨라', h: P('폭탄 모드는 <b>마지막 돌을 가져가면 패배</b>니까 목표가 한 칸 밀려요. 상대에게 <b>(k+1)의 배수 + 1</b>개를 남기면, 결국 상대가 폭탄 1개만 남은 상황을 맞아요.') + P('예: k=3이면 5, 9, 13, 17개를 남기기. 보석 모드와 딱 1개 차이예요!'), f: () => fig([[stFig(11, 'bomb', 2), 'k=3, 11개 → 2개 가져가 9개'], [stFig(5, 'bomb'), '5 = 4×1+1: 상대는 폭탄을 집게 돼요']]) },
+        { t: '시작부터 지는 수가 있을 때', h: P('처음 돌 개수가 이미 "지는 개수"(보석: 배수, 폭탄: 배수+1)면 선공은 <b>이론상 져요</b>. 이럴 땐 <b>1개만 가져가며 길게 끌고</b> 상대가 실수하길 기다려요.') + P('상대가 한 번이라도 배수를 안 맞추면, 그때부터는 내가 배수를 맞춰 끝까지 가져가요. 📊 분석 모드의 <b>🎯 퀴즈</b>로 연습해 보세요.'), f: () => fig([[stFig(8, 'gem'), '8개에서 선공? → 1개씩, 실수 기다리기']]) },
+      ],
+      queen: () => [
+        { t: '규칙 다시 보기', h: P('퀸을 <b>왼쪽·아래·왼쪽 아래 대각선</b>으로 원하는 만큼 옮겨요. <b>구석 (0,0)에 넣는 사람이 승리</b>.') + P('위토프(Wythoff) 게임이라고 불러요. 돌 두 무더기 님 게임과 같은 구조예요: 가로 x, 세로 y가 두 무더기!'), f: () => fig([[qnFig(6, [4, 3], { hl: [0, 0] }), '퀸 (4,3) → 구석이 목표']]) },
+        { t: '후공 승리 칸(빨강)', h: P('어떤 칸에서는 <b>지금 차례인 사람이 어떻게 옮겨도 져요</b>. 이런 칸을 "후공 승리 칸"이라 해요. (1,2), (2,1), (3,5), (5,3), (4,7), (7,4), (6,10), (10,6)…') + P('상대를 이 칸으로 보내면 내가 이겨요. 반대로 내가 이 칸에 있으면 어디로 가도 이기는 칸이 없어요.'), f: () => fig([[qnColdFig(8, [6, 4], [5, 3]), '빨강 = 후공 승리 칸 · (6,4)에서 대각선으로 (5,3)!']]) },
+        { t: '왜 하필 그 칸일까? 황금비', h: P('후공 승리 칸은 (0,0)부터 시작해서, 아직 안 쓴 가장 작은 수 a를 고르고 <b>b = a + n</b>(n번째 칸)으로 만들어요: (1,2), (3,5), (4,7), (6,10), (8,13)…') + P('이 칸들은 <b>a = ⌊n·φ⌋, b = ⌊n·φ²⌋</b> (φ ≈ 1.618, 황금비)로 딱 맞아요. 📊 분석 모드의 <b>📐 황금비 그림</b>에서 직접 확인해 보세요.'), f: () => fig([[qnColdFig(12, null), '12×12의 후공 승리 칸 — 황금비 직선 위에!']]) },
+        { t: '실전 전략', h: P('① 지금 퀸 자리에서 <b>가로·세로·대각선으로 닿는 빨간 칸</b>이 있으면 그리로 옮겨요(이기는 수).') + P('② 없으면(내가 빨간 칸에 있으면) <b>조금만 움직여</b> 상대가 실수하길 기다려요. 거꾸로 규칙(구석에 넣으면 패배)에서는 승리 칸이 조금 달라져요 — 분석 모드로 확인!'), f: () => fig([[qnColdFig(8, [7, 2], [1, 2]), '(7,2) → 왼쪽으로 쭉 (1,2)! 상대는 어디로 가도 져요']]) },
+      ],
+      popit: () => [
+        { t: '규칙 다시 보기', h: P('한 줄에서 버블을 <b>원하는 만큼</b>(1개 이상) 누르고, <b>마지막 버블을 누르는 사람이 승리</b>.') + P('님(Nim) 게임이에요. 필승 전략은 <b>이진법</b>으로 계산해요!'), f: () => fig([[ppFig([3, 4, 5], [3, 4, 5]), '3줄: 3 · 4 · 5개']]) },
+        { t: '이진법으로 바꿔 더하기 (XOR)', h: P('각 줄의 개수를 <b>이진법</b>으로 쓰고, 자리마다 <b>1의 개수</b>를 세요.') + P('모든 자리가 <b>짝수</b>면 "지는 판"(지금 차례인 사람이 져요), <b>홀수인 자리가 하나라도</b> 있으면 이기는 수가 있어요.') + binTable([3, 4, 5]), f: () => fig([[ppFig([3, 4, 5], [3, 4, 5]), '3 ⊕ 4 ⊕ 5 = 2 ≠ 0 → 이기는 수 있음']]) },
+        { t: '이기는 수 찾기', h: P('<b>모든 자리를 짝수로</b> 만드는 수를 찾아요. 3·4·5에서는 1번줄 3(011)을 1(001)로 만들면 1 ⊕ 4 ⊕ 5 = 0!') + P('즉 <b>1번줄에서 2개</b>를 누르면 상대는 지는 판을 받아요. 그 뒤엔 상대가 둘 때마다 다시 짝수로 맞춰 주면 끝.') + binTable([1, 4, 5]), f: () => fig([[ppFig([3, 4, 5], [3, 4, 5], { row: 0, count: 2 }), '1번줄 2개 누르기'], [ppFig([3, 4, 5], [1, 4, 5]), '→ 1·4·5: 모두 짝수']]) },
+        { t: '거꾸로 규칙 · 최대 n개', h: P('<b>거꾸로 규칙</b>(마지막 버블을 누르면 패배): 2개 이상 남은 줄이 2줄 이상이면 보통 규칙과 같아요. 마지막에 <b>1개짜리 줄만 남는 순간</b>, 1개짜리 줄을 <b>홀수 개</b>로 남겨 상대에게 넘기면 이겨요.') + P('<b>한 번에 최대 n개</b>: 각 줄 개수를 <b>(n+1)로 나눈 나머지</b>로 바꾼 뒤 똑같이 이진법으로 더해요. 📊 분석 모드가 표를 그려 줘요.'), f: () => fig([[ppFig([1, 1, 1, 2], [1, 1, 1, 2]), '거꾸로: 2개짜리 줄을 0으로 → 1·1·1(홀수) 넘기기']]) },
+      ],
+    };
+    function lsCardsFor(game) {
+      const cards = LESSONS[game]().map(c => ({ ...c }));
+      cards.push({ t: '내 플레이로 배우기', final: true });
+      return cards;
+    }
+    window.openLesson = function (game) {
+      LS = { game, i: 0, cards: lsCardsFor(game) };
+      $id('lesson-title').innerText = `📘 ${GAME_NAME[game]} 필승 전략`;
+      lsGo(0);
+      openModal('lesson-modal', 'lesson-box');
+      $id('lesson-box').scrollTop = 0;
+    };
+    window.lsGo = function (i) {
+      const n = LS.cards.length; i = Math.max(0, Math.min(n - 1, i)); LS.i = i;
+      const c = LS.cards[i], box = $id('lesson-card'); box.innerHTML = '';
+      $id('lesson-step').innerText = `${i + 1} / ${n}`;
+      $id('lesson-dots').innerHTML = LS.cards.map((_, j) => `<i class="${j <= i ? 'on' : ''}"></i>`).join('');
+      const card = p3Mk('div', 'ls-card'); card.appendChild(p3Mk('h3', null, (c.final ? '🎮 ' : `${i + 1}. `) + c.t));
+      if (c.final) {
+        const games = ((recLoad()[LS.game] || {}).games || []).slice().reverse();
+        card.appendChild(p3Mk('p', null, '📜 전적에 남은 <b>최근 5판</b> 중 하나를 고르면, 한 수씩 되짚으며 <b>전략을 놓친 수(⚠️)</b>를 분석 모드에서 짚어 줘요.'));
+        const wrap = p3Mk('div', 'ls-final');
+        if (!games.length) wrap.appendChild(p3Mk('div', 'ls-empty', '아직 저장된 판이 없어요. AI와 한 판 둔 뒤 다시 와 보세요!'));
+        else {
+          const list = p3Mk('div', 'rec-games');
+          games.forEach((x, j) => { const b = p3Mk('button', 'rec-game ' + (x.win ? 'w' : 'l'), `<b>${x.win ? '승' : '패'}</b><span>${escHtml(recLab(x.key))}${x.opp ? ' · ' + escHtml(x.opp) : ''}</span><span class="rec-meta">${x.rec.moves.length}수 · ${recDate(x.t)}</span><span class="rec-go">▶</span>`); b.type = 'button'; b.onclick = () => { playSfx('click'); lsClose(); setTimeout(() => lsReview(LS.game, x.rec), 220); }; list.appendChild(b); });
+          wrap.appendChild(list);
+        }
+        const qz = p3Mk('button', 'ls-final-btn', '🎯 연습 퀴즈 풀기 (이기는 수 찾기)'); qz.type = 'button'; qz.onclick = () => { playSfx('click'); lsClose(); setTimeout(() => lsQuiz(LS.game), 220); };
+        wrap.appendChild(qz);
+        const ai = p3Mk('button', 'ls-final-btn', '🤖 배운 전략으로 AI와 한 판'); ai.type = 'button'; ai.onclick = () => { playSfx('click'); lsClose(); setTimeout(() => startAiGame(LS.game), 220); };
+        wrap.appendChild(ai);
+        card.appendChild(wrap);
+      } else {
+        const body = p3Mk('div', null, c.h);
+        if (c.f) { try { const f = c.f(); const firstP = body.querySelector('p'); if (firstP && firstP.nextSibling) firstP.after(f); else body.appendChild(f); } catch (e) { console.warn('lesson fig', e); } }
+        card.appendChild(body);
+      }
+      box.appendChild(card);
+      $id('lesson-prev').disabled = i === 0;
+      const nx = $id('lesson-next'); nx.style.display = c.final ? 'none' : ''; nx.innerText = i === n - 2 ? '내 플레이로 배우기 ▶' : '다음 ▶';
+      $id('lesson-box').scrollTop = 0;
+    };
+    window.lsClose = function () { closeModal('lesson-modal', 'lesson-box'); };
+    // 저장된 판을 분석 모드 복기로 열기 (전략을 놓친 수 ⚠️ 표시)
+    window.lsReview = function (game, rec) {
+      if (currentGame !== game) { skipRulesOnce = true; openGameSection(game); }
+      p3ReviewOpen(P3_KEY[game], rec);
+    };
+    function lsQuiz(game) {
+      if (currentGame !== game) { skipRulesOnce = true; openGameSection(game); }
+      if (game === 'notakto') ntAQuiz(); else if (game === 'stone') stAQuiz(); else if (game === 'popit') ppAQuiz(); else { qnStartAnalysis(); qnAQuiz(); }
+      window.scrollTo(0, 0);
+    }
+
+    /* ---------- 5) ❓ 도움말 탭 ---------- */
+    const HELP_FN = { notakto: ntShowHelp, stone: stShowHelp, popit: ppShowHelp, queen: qnShowHelp };
+    const HELP_TABS = [['bot', '🤖 AI 플레이'], ['solo', '👥 2인 플레이'], ['online', '🌐 온라인'], ['analysis', '📊 분석 모드']];
+    let helpTabsOn = false;
+    const _om = openModal;
+    openModal = function (id, box) { if (id === 'help-modal' && helpTabsOn && openModalSet.has(id)) return; return _om(id, box); };
+    function helpTabsRender(game, topic) {
+      let bar = $id('help-tabs');
+      if (!bar) { bar = p3Mk('div', 'menu-sub'); bar.id = 'help-tabs'; bar.style.marginBottom = '12px'; $id('help-title').after(bar); }
+      bar.innerHTML = HELP_TABS.map(([t, l]) => `<button type="button" class="menu-sub-btn${t === topic ? ' lesson-btn' : ''}" data-t="${t}">${l}</button>`).join('');
+      bar.querySelectorAll('button').forEach(b => b.onclick = () => { playSfx('click'); helpShow(game, b.dataset.t); });
+    }
+    function helpShow(game, topic) {
+      helpTabsOn = true;
+      if (topic === 'online') olHelp(); else HELP_FN[game](topic);
+      helpTabsRender(game, topic);
+      $id('help-modal-box').scrollTop = 0;
+    }
+    window.openHelpTabs = function (game) { helpShow(game, 'bot'); };
+    ['ntShowHelp', 'stShowHelp', 'ppShowHelp', 'qnShowHelp'].forEach(n => wrapAfter(n, topic => {
+      if (topic === 'bot') $id('help-content').insertAdjacentHTML('beforeend', '<br><br><b>[난이도·선공]</b><br>- 🤖 AI 플레이는 누르면 <b>바로 시작</b>돼요(기본: 난이도 중, 선공 번갈아).<br>- 난이도는 게임 화면 위 <b>🤖 AI 난이도</b> 버튼으로 게임 중에도 바로 바꿀 수 있어요.<br>- 선공(번갈아 / 내가 먼저 / AI 먼저)은 <b>⚙️ 설정</b>에서 바꿔요.');
+      if (topic === 'solo') $id('help-content').insertAdjacentHTML('beforeend', '<br><br>- 판마다 선공이 번갈아 바뀌고, 무르기 횟수는 ⚙️ 설정에서 정해요.<br>- 처음 보는 게임이면 📖 규칙 → <b>🎓 판에서 배우기</b>로 판 위에서 한 수씩 익혀 보세요.');
+    }));
+    wrapAfter('closeModal', id => { if (id === 'help-modal') { helpTabsOn = false; const b = $id('help-tabs'); if (b) b.remove(); } });
+    // 개별 도움말(분석 화면의 ?)로 열렸을 때는 탭 없음
+    ['ntShowHelp', 'stShowHelp', 'ppShowHelp', 'qnShowHelp', 'olHelp'].forEach(n => wrapBefore(n, () => { if (!helpTabsOn) { const b = $id('help-tabs'); if (b) b.remove(); } }));
+
+    /* ---------- 6) 🎓 판 위 튜토리얼 ---------- */
+    const TUT_KEY = g => 'onchun_tut_' + g;
+    window.tutForceFirst = false;
+    let TUT = null; // { g, k, step, target, forced }
+    const layer = $id('tut-layer'), cut = $id('tut-cut'), bub = $id('tut-bubble');
+    const tutSeen = g => { try { return !!localStorage.getItem(TUT_KEY(g)); } catch (e) { return false; } };
+    const tutMark = g => { try { localStorage.setItem(TUT_KEY(g), '1'); } catch (e) {} };
+    window.tutMaybe = function (g) { if (!g || tutSeen(g)) return; tutStart(g, false); };
+    window.tutStart = function (g, forced) {
+      if (!g || !RULES[g]) return;
+      if (TUT) tutEnd(true);
+      // 사람이 먼저 두는 AI 판으로 시작 (퀸은 랜덤 시작 위치로)
+      const qs = qnStartSetting; if (g === 'queen' && qs === 'pick') qnStartSetting = 'rand';
+      tutForceFirst = true;
+      try { startAiGame(g); } finally { tutForceFirst = false; qnStartSetting = qs; }
+      TUT = { g, k: P3_KEY[g], step: 1, forced: !!forced };
+      setTimeout(() => $id('start-toast')?.classList.remove('on'), 80);
+      layer.classList.add('on');
+      tutShow();
+    };
+    const TUT_RULE = {
+      notakto: '둘 다 <b>X만</b> 번갈아 놓아요. 가로·세로·대각선 <b>한 줄을 완성하면 패배</b>!',
+      stone: '번갈아 돌을 <b>1~k개</b> 가져가요. <b>폭탄 모드</b>: 마지막 폭탄 돌을 가져가면 패배 · <b>보석 모드</b>: 마지막 보석 돌을 가져가면 승리.',
+      queen: '퀸을 <b>왼쪽·아래·왼쪽 아래 대각선</b>으로 원하는 만큼 옮겨요. <b>구석 (0,0)에 넣는 사람이 승리</b>!',
+      popit: '<b>한 줄</b>에서 버블을 원하는 만큼 누르고 [선택 완료]. <b>마지막 버블을 누르는 사람이 승리</b>!',
+    };
+    const TUT_GOAL = {
+      notakto: '한 줄을 <b>만들지 않고 버티는</b> 게임이에요. 상대가 먼저 한 줄을 만들게 유도해 보세요. 3×3이면 <b>가운데 + 대칭</b>이 필승!',
+      stone: '상대 차례에 남는 돌을 <b>(k+1)의 배수</b>(보석) 또는 <b>배수+1</b>(폭탄)로 맞추면 이겨요. 남은 돌 수를 늘 세어 보세요!',
+      queen: '<b>빨간 후공 승리 칸</b>으로 상대를 보내면 이겨요. (1,2), (3,5), (4,7)… 📘 필승 전략 배우기에서 황금비의 비밀을!',
+      popit: '줄마다 개수를 <b>이진법</b>으로 더해 모든 자리를 <b>짝수</b>로 맞추면 이겨요. 📊 분석 모드가 표를 그려 줘요!',
+    };
+    function tutSuggest() { // 2단계: 어디를 눌러 볼지 { el, text }
+      const g = TUT.g;
+      if (g === 'notakto') {
+        const N = ntBoardSize, c = N === 3 ? 4 : 5, cells = document.querySelectorAll('#nt-game-board-container .ttt-cell');
+        return { el: cells[c], text: N === 3 ? '<b>가운데 칸</b>을 눌러 X를 놓아 보세요. 3×3에선 선공이 가운데를 차지하면 유리해요!' : '빈 칸을 눌러 X를 놓아 보세요. 한 줄이 되지 않게 조심!' };
+      }
+      if (g === 'stone') {
+        const n = stStonesArr.length, L = stLimit, bomb = stModeType === 'bomb';
+        let k = 0; for (let i = 1; i <= Math.min(L, n); i++) { const r = n - i; if (bomb ? (r > 0 && (r - 1) % (L + 1) === 0) : (r % (L + 1) === 0)) { k = i; break; } }
+        const btn = $id('st-btn-' + (k || 1));
+        return { el: btn, text: k ? `지금 돌 <b>${n}개</b>, 한 번에 최대 ${L}개. <b>${k}개</b>를 가져가면 ${n - k}개가 남아요 — ${bomb ? `${L + 1}의 배수+1` : `${L + 1}의 배수`}, 이기는 수예요!` : `지금 돌 <b>${n}개</b>는 이기는 수가 없는 개수예요. <b>1개</b>만 가져가고 상대 실수를 기다려 보세요.` };
+      }
+      if (g === 'popit') {
+        const row = document.querySelector('#pp-game-screen .pp-center');
+        return { el: row, text: '<b>1번줄</b> 버블을 원하는 만큼 누른 뒤 <b>[선택 완료]</b>를 눌러요. (드래그로 여러 개 선택도 돼요)' };
+      }
+      const ms = qnQ ? qnMoves(...qnQ) : [], cold = ms.find(([a, b]) => qnIsCold(a, b, qnN, qnWinRule));
+      const to = cold || ms[0], cell = to && document.querySelector(`#qn-grid .qn-cell[data-x="${to[0]}"][data-y="${to[1]}"]`);
+      return { el: cell, text: cold ? `초록 칸 중 <b>(${to[0]},${to[1]})</b>을 눌러 보세요 — 후공 승리 칸이라 상대가 어디로 가도 내가 유리해요!` : `초록 칸(갈 수 있는 칸) 중 하나를 눌러 퀸을 옮겨 보세요.` };
+    }
+    function tutContent() {
+      const g = TUT.g, s = TUT.step, name = RULES[g][0];
+      if (s === 1) return { el: p3GameHost(TUT.k), step: '1 / 3 · 규칙', title: `📖 ${name}`, text: TUT_RULE[g], next: '다음 ▶', pass: false };
+      if (s === 2) { const sg = tutSuggest(); return { el: sg.el || p3GameHost(TUT.k), step: '2 / 3 · 한 수 둬 보기', title: '👆 직접 눌러 보세요', text: sg.text, next: null, pass: true, pulse: true }; }
+      return { el: p3GameHost(TUT.k), step: '3 / 3 · 목표', title: '🎯 이기려면?', text: TUT_GOAL[g], next: '시작! ▶', pass: false };
+    }
+    function tutShow() {
+      if (!TUT) return;
+      const c = tutContent(); TUT.target = c.el;
+      layer.classList.toggle('pass', !!c.pass);
+      cut.classList.toggle('pulse', !!c.pulse);
+      bub.innerHTML = `<div class="tut-step">${c.step}</div><div class="tut-title">${c.title}</div><p class="tut-text">${c.text}</p>
+        <div class="tut-btns"><button type="button" class="tut-skip">건너뛰기</button>${c.next ? `<button type="button" class="tut-next">${c.next}</button>` : '<span class="tut-wait">👆 판에서 한 수 두면 다음으로</span>'}<label class="tut-again"><input type="checkbox" ${TUT.again === false ? '' : 'checked'}> 다시 보지 않기</label></div>`;
+      bub.querySelector('.tut-skip').onclick = () => { playSfx('close_modal'); tutEnd(); };
+      const nx = bub.querySelector('.tut-next'); if (nx) nx.onclick = () => { playSfx('click'); tutNext(); };
+      bub.querySelector('.tut-again input').onchange = e => { TUT.again = e.target.checked; };
+      if (c.el && c.el.scrollIntoView) c.el.scrollIntoView({ block: 'center', inline: 'nearest' });
+      requestAnimationFrame(tutPlace);
+    }
+    function tutPlace() {
+      if (!TUT) return;
+      if (TUT.target && !TUT.target.isConnected && TUT.step === 2) TUT.target = tutSuggest().el; // 판을 새로 그렸으면 다시 찾기
+      const el = TUT.target, W = innerWidth, H = innerHeight;
+      let r = el ? el.getBoundingClientRect() : { left: W / 2 - 60, top: H / 2 - 60, width: 120, height: 120, bottom: H / 2 + 60 };
+      const pad = 6;
+      cut.style.left = (r.left - pad) + 'px'; cut.style.top = (r.top - pad) + 'px'; cut.style.width = (r.width + pad * 2) + 'px'; cut.style.height = (r.height + pad * 2) + 'px';
+      const bh = bub.offsetHeight || 160;
+      bub.classList.remove('up', 'noarrow');
+      if (r.bottom + 14 + bh < H - 8) bub.style.top = (r.bottom + 14) + 'px';
+      else if (r.top - 14 - bh > 8) { bub.style.top = (r.top - 14 - bh) + 'px'; bub.classList.add('up'); }
+      else { bub.style.top = Math.max(8, H - bh - 12) + 'px'; bub.classList.add('noarrow'); }
+    }
+    function tutNext() {
+      if (!TUT) return;
+      if (TUT.step >= 3) { tutEnd(); return; }
+      TUT.step++; tutShow();
+    }
+    function tutEnd(silent) {
+      if (!TUT) return;
+      const t = TUT; TUT = null;
+      layer.classList.remove('on', 'pass'); cut.classList.remove('pulse');
+      if (!silent && t.again !== false) tutMark(t.g);
+    }
+    window.tutEnd = tutEnd;
+    // 2단계: 사람이 한 수 두면 → 3단계 (AI가 둔 뒤 보여 주기)
+    const tutMoved = k => { if (TUT && TUT.k === k && TUT.step === 2) { TUT.step = 3; setTimeout(() => { if (TUT && TUT.step === 3) tutShow(); }, 700); } };
+    wrapBefore('ntExecuteGameMove', () => { if (TUT && TUT.k === 'nt' && ntCurrentPlayer === 1) tutMoved('nt'); });
+    wrapBefore('stExecuteMove', () => { if (TUT && TUT.k === 'st' && stCurrentPlayer === 1) tutMoved('st'); });
+    wrapBefore('ppExecuteMove', () => { if (TUT && TUT.k === 'pp' && ppCur === 1) tutMoved('pp'); });
+    wrapBefore('qnExecuteMove', () => { if (TUT && TUT.k === 'qn' && qnCur === 1) tutMoved('qn'); });
+    // 화면을 떠나거나 다시 시작하면 튜토리얼 닫기
+    P3_KEYS.forEach(k => ['GoBack', 'RestartGame', 'StartGame', 'Undo'].forEach(s => wrapBefore(k + s, () => { if (TUT && TUT.k === k) tutEnd(); })));
+    wrapBefore('returnToHome', () => tutEnd());
+    window.addEventListener('resize', () => { if (TUT) tutPlace(); });
+    window.addEventListener('scroll', () => { if (TUT) tutPlace(); }, { passive: true });
+    // 뒤로 가기: 튜토리얼이 열려 있으면 그것부터 닫기
+    const _amo = anyModalOpen; anyModalOpen = function () { return _amo() || !!TUT; };
   })();
 </script>
 </body>
