@@ -1757,6 +1757,22 @@
   .bubble.popped { background:#C9CACF !important; background-image:none !important; opacity:.75; filter:none !important; transform:scale(.88); cursor:not-allowed; box-shadow:inset 3px 3px 7px rgba(0,0,0,.32), inset -2px -2px 4px rgba(255,255,255,.5); }
   .bubble.selected-temp { outline:4px solid #1E3A8A; outline-offset:2px; transform:scale(1.06); }
   .bubble:disabled:not(.popped) { cursor:default; filter:saturate(.9); }
+  /* 버블 터짐(사라짐) → 남은 버블이 왼쪽으로 미끄러져 빈자리 채움 (FLIP) · 무르기는 반대로 다시 생김 */
+  @keyframes ppPopOut { 0% { transform:scale(1); opacity:1; } 35% { transform:scale(1.18); opacity:1; } 100% { transform:scale(0); opacity:0; } }
+  @keyframes ppPopIn { from { transform:scale(0); opacity:0; } to { transform:scale(1); opacity:1; } }
+  .bubble.popping { animation:ppPopOut .25s ease-in forwards !important; pointer-events:none; }
+  .bubble.popin { animation:ppPopIn .3s cubic-bezier(.2,.8,.3,1.25); }
+  .bubble.sliding { transition:transform .3s cubic-bezier(.2,.7,.3,1) !important; }
+  /* 팝잇 설정: 🎲 랜덤 버튼 · 🔧 심화 설정 접기 */
+  .pp-rows-random { flex:none; font-family:'Jua',sans-serif; font-size:1rem; padding:0 12px; border-radius:10px; border:2px solid var(--th-line, #D9CFAE); background:var(--th-soft, #FFF9E8); color:var(--th-ink, #5A3496); cursor:pointer; white-space:nowrap; transition:transform .1s, background .15s; }
+  .pp-rows-random:hover { background:#fff; transform:translateY(-1px); }
+  .pp-rows-random:active { transform:translateY(1px); }
+  details.pp-adv { border:2px dashed var(--th-line, #D9CFAE); border-radius:12px; padding:8px 12px; }
+  details.pp-adv > summary { cursor:pointer; font-weight:800; color:var(--text-sub); list-style:none; display:flex; align-items:center; gap:6px; user-select:none; }
+  details.pp-adv > summary::-webkit-details-marker { display:none; }
+  details.pp-adv > summary::after { content:'▾'; margin-left:auto; transition:transform .2s; }
+  details.pp-adv[open] > summary::after { transform:rotate(180deg); }
+  details.pp-adv > label { margin-top:10px; }
   #selection-box { position:fixed; z-index:40; pointer-events:none; border:2px solid #5BB8E8; background:rgba(91,184,232,.18); border-radius:6px; box-sizing:border-box; }
   .pp-hint { font-size:.9rem; color:var(--text-sub); text-align:center; min-height:1.2em; }
   .pp-controls button { border-color:rgba(232,137,27,.5); background:rgba(245,166,35,.15); color:var(--text-main); padding:12px 0; font-size:1.05rem; }
@@ -1989,8 +2005,8 @@
   /* 카드 미리보기 호버 (터치는 .hov) */
   .game-card.hov .nt-cell.active { background:rgba(47,143,201,.2); transform:scale(1.08); box-shadow:0 0 15px rgba(47,143,201,.4); }
   .game-card.hov .cyber-stone.taken { transform:translateY(-30px) scale(.4) rotate(45deg); opacity:0; }
-  .pp-mini i { transition:transform .25s ease, opacity .25s ease, background-color .25s ease, box-shadow .25s ease; }
-  .game-card:hover .pp-mini i.pop, .game-card.hov .pp-mini i.pop { background:#C9CACF !important; background-image:none !important; opacity:.75; transform:scale(.8); box-shadow:inset 3px 3px 6px rgba(0,0,0,.32); }
+  .pp-mini i { transition:transform .25s ease, opacity .25s ease, width .25s ease, margin-left .25s ease; }
+  .game-card:hover .pp-mini i.pop, .game-card.hov .pp-mini i.pop { opacity:0; transform:scale(0); width:0; margin-left:-7px; }
   .pp-mini i.p1 { transition-delay:.05s; } .pp-mini i.p2 { transition-delay:.3s; } .pp-mini i.p3 { transition-delay:.55s; } .pp-mini i.p4 { transition-delay:.8s; }
   .game-card:not(:hover):not(.hov) .pp-mini i.pop { transition-delay:0s; }
   .qn-mini { position:relative; }
@@ -2962,7 +2978,7 @@
           <div class="preview-stage" onmouseenter="playSfx('hover_deep')">
             <div class="pp-mini">
               <div><i style="background-color:#FF5FA2"></i><i style="background-color:#FF5FA2"></i></div>
-              <div><i style="background-color:#FF9F1C"></i><i style="background-color:#FF9F1C"></i><i style="background-color:#FF9F1C"></i><i style="background-color:#FF9F1C"></i><i class="off"></i></div>
+              <div><i style="background-color:#FF9F1C"></i><i style="background-color:#FF9F1C"></i><i style="background-color:#FF9F1C"></i><i style="background-color:#FF9F1C"></i></div>
               <div><i style="background-color:#3DB2FF"></i><i style="background-color:#3DB2FF"></i><i class="pop p4" style="background-color:#3DB2FF"></i><i class="pop p3" style="background-color:#3DB2FF"></i><i class="pop p2" style="background-color:#3DB2FF"></i><i class="pop p1" style="background-color:#3DB2FF"></i></div>
             </div>
           </div>
@@ -3496,37 +3512,17 @@
   <div class="modal-content orange-modal" id="pp-modal-box" style="max-width: 450px;">
     <h2 style="color:var(--neon-orange); margin-top:0; text-align:center;">⚙️ 게임 설정</h2>
     <div class="settings-group">
-      <label>팝잇 줄 설정:
-        <select id="set-pp-rows-mode" onchange="document.getElementById('set-pp-rows-wrap').style.display=this.value==='custom'?'':'none'">
-          <option value="random">랜덤 (2~5줄, 줄마다 2~8개)</option>
-          <option value="custom">직접 입력</option>
-        </select>
-      </label>
-      <div id="set-pp-rows-wrap" style="display:none;">
-        <label>줄별 버블 수 (띄어쓰기로 구분, 최대 7줄·줄당 20개):
-          <input id="set-pp-rows" type="text" inputmode="numeric" placeholder="예: 2 5 6" style="width:100%; box-sizing:border-box; font-size:1.1rem; padding:8px 10px; border:2px solid #D9CFAE; border-radius:10px;">
-        </label>
-        <div id="set-pp-rows-preview" style="font-size:.9rem; color:var(--text-sub); margin-top:4px;"></div>
-      </div>
-      <label>한 번에 누를 수 있는 개수 (심화):
-        <select id="set-pp-max">
-          <option value="0">제한 없음 (기본 팝잇)</option>
-          <option value="2">최대 2개</option>
-          <option value="3">최대 3개</option>
-          <option value="4">최대 4개</option>
-        </select>
+      <label>팝잇 줄 (띄어쓰기로 구분, 최대 7줄·줄당 20개):
+        <div style="display:flex; gap:6px; align-items:stretch;">
+          <input id="set-pp-rows" type="text" inputmode="numeric" placeholder="예: 3 4 3 (비우면 랜덤)" style="flex:1; min-width:0; box-sizing:border-box; font-size:1.1rem; padding:8px 10px; border:2px solid #D9CFAE; border-radius:10px;">
+          <button type="button" id="set-pp-rows-random" class="pp-rows-random" onclick="ppFillRandomRows()" title="랜덤 (2~5줄, 줄마다 2~8개)">🎲 랜덤</button>
+        </div>
+        <div id="set-pp-rows-preview" style="font-size:.9rem; color:var(--text-sub); font-weight:500;"></div>
       </label>
       <label>마지막 버블을 누르면:
         <select id="set-pp-rule">
           <option value="last">승리 (기본)</option>
           <option value="misere">패배 (거꾸로 규칙)</option>
-        </select>
-      </label>
-      <label>AI 플레이 선공:
-        <select id="set-pp-first">
-          <option value="alt">번갈아 (판마다 바뀜)</option>
-          <option value="player">내가 먼저</option>
-          <option value="bot">AI 먼저</option>
         </select>
       </label>
       <label>무르기 횟수 (한 사람당):
@@ -3536,6 +3532,13 @@
           <option value="2">2회</option>
           <option value="3">3회</option>
           <option value="inf">무제한</option>
+        </select>
+      </label>
+      <label>AI 플레이 선공:
+        <select id="set-pp-first">
+          <option value="alt">번갈아 (판마다 바뀜)</option>
+          <option value="player">내가 먼저</option>
+          <option value="bot">AI 먼저</option>
         </select>
       </label>
       <label>한 턴 당 제한시간:
@@ -3548,6 +3551,17 @@
         </select>
       </label>
       <div class="set-note">⏳ 시간이 다 되면 아무 수나 자동으로 둬요.</div>
+      <details class="pp-adv" id="set-pp-adv">
+        <summary>🔧 심화 설정</summary>
+        <label>한 번에 누를 수 있는 개수 (심화):
+          <select id="set-pp-max">
+            <option value="0">제한 없음 (기본 팝잇)</option>
+            <option value="2">최대 2개</option>
+            <option value="3">최대 3개</option>
+            <option value="4">최대 4개</option>
+          </select>
+        </label>
+      </details>
     </div>
     <div style="text-align:center; margin-top:26px;">
       <button class="help-close-btn" onclick="playSfx('click'); savePpSettings()">저장</button>
@@ -4244,7 +4258,7 @@
     if (stSettingsThenRestart) { stSettingsThenRestart = false; stSettingsJustSaved = true; stRestartGame(); stSettingsJustSaved = false; }
   }
 
-  /* 🤖 AI 플레이: 설정 창 없이 바로 시작 (난이도·선공은 게임별 저장값 — 기본 중 · 번갈아) */
+  /* 🤖 AI 플레이: 설정 창 없이 바로 시작 (난이도·선공은 게임별 저장값 — 기본 중 · 번갈아, 팝잇만 '내가 먼저') */
   function startAiGame(gameType) {
     botDifficulty = aiDiffGet(gameType);
     botFirstTurn = aiFirstGet(gameType);
@@ -4256,7 +4270,7 @@
   }
   /* 게임별 AI 난이도·선공 (localStorage) */
   const AI_DIFFS = ['최하', '하', '중', '상', '최상'], AI_KEY = 'arcade_ai_setting_v1';
-  const aiSetting = { notakto: { d: '중', f: 'alt' }, stone: { d: '중', f: 'alt' }, popit: { d: '중', f: 'alt' }, queen: { d: '중', f: 'alt' } };
+  const aiSetting = { notakto: { d: '중', f: 'alt' }, stone: { d: '중', f: 'alt' }, popit: { d: '중', f: 'player' }, queen: { d: '중', f: 'alt' } };
   try { const o = JSON.parse(localStorage.getItem(AI_KEY) || '{}'); for (const g in aiSetting) if (o[g]) { if (AI_DIFFS.includes(o[g].d)) aiSetting[g].d = o[g].d; if (['alt', 'player', 'bot'].includes(o[g].f)) aiSetting[g].f = o[g].f; } } catch (e) {}
   function aiSave() { try { localStorage.setItem(AI_KEY, JSON.stringify(aiSetting)); } catch (e) {} }
   function aiDiffGet(g) { return (aiSetting[g] || {}).d || '중'; }
@@ -4853,10 +4867,12 @@
   let ppMode = 'bot', ppInit = [2, 5, 6], ppRows = [], ppCur = 1, ppOver = false, ppHist = [], ppSelRow = null, ppSel = [];
   // 버블마다 터졌는지 기억 (줄마다 터진 버블 번호 Set) — 게임 이론 계산은 남은 개수(ppRows)로
   let ppPopped = [], ppGlow = null, ppSeq = 0;
-  function ppRebuild() {
+  let ppBoardFresh = true; // true면 다음 ppRender에서 판을 새로 그림(애니메이션 없음) — 새 판 시작 때
+  function ppRebuild(keepBoard) {
     ppPopped = ppInit.map(() => new Set());
     ppHist.forEach(h => (h.idx || []).forEach(i => ppPopped[h.row].add(i)));
     ppRows = ppInit.map((n, i) => n - ppPopped[i].size);
+    if (!keepBoard) ppBoardFresh = true;
   }
   // 그 줄에서 아직 안 터진 버블 중 오른쪽부터 k개
   function ppPickIdx(row, k) { const a = []; for (let i = ppInit[row] - 1; i >= 0 && a.length < k; i--) if (!ppPopped[row].has(i)) a.push(i); return a.sort((x, y) => x - y); }
@@ -4876,20 +4892,25 @@
   }
   let ppSettingsThenRestart = false;
   function openPpSettingsAndRestart() { ppSettingsThenRestart = true; openPpSettings(); }
+  function ppRowsPreview() {
+    const r = ppParseRows(document.getElementById('set-pp-rows').value);
+    document.getElementById('set-pp-rows-preview').innerText = r.length ? `${r.length}줄: ${r.join('개, ')}개` : '비워 두면 판마다 랜덤 (2~5줄, 줄마다 2~8개)';
+  }
+  // 🎲 랜덤 버튼: 입력칸에 랜덤 줄을 채워 넣음 (저장하면 그 줄로 고정)
+  function ppFillRandomRows() { playSfx('click'); document.getElementById('set-pp-rows').value = ppRandomRows().join(' '); ppRowsPreview(); }
   function openPpSettings() {
-    document.getElementById('set-pp-rows-mode').value = ppRowsSetting === 'random' ? 'random' : 'custom';
-    document.getElementById('set-pp-rows-wrap').style.display = ppRowsSetting === 'random' ? 'none' : '';
     document.getElementById('set-pp-rows').value = ppRowsSetting === 'random' ? '' : ppRowsSetting;
+    ppRowsPreview();
     document.getElementById('set-pp-time').value = ppTimeSetting;
     document.getElementById('set-pp-rule').value = ppWinRule;
     document.getElementById('set-pp-max').value = String(ppMaxTake);
+    document.getElementById('set-pp-adv').open = ppMaxTake > 0; // 심화 규칙을 쓰는 중이면 펼쳐서 보여 줌
     undoOpen('pp');
     openModal('pp-settings-modal', 'pp-modal-box');
   }
   function savePpSettings() {
-    const mode = document.getElementById('set-pp-rows-mode').value;
-    const rows = ppParseRows(document.getElementById('set-pp-rows').value);
-    ppRowsSetting = (mode === 'random' || !rows.length) ? 'random' : rows.join(' ');
+    const rows = ppParseRows(document.getElementById('set-pp-rows').value); // 비어 있으면 랜덤
+    ppRowsSetting = !rows.length ? 'random' : rows.join(' ');
     ppTimeSetting = document.getElementById('set-pp-time').value;
     ppWinRule = document.getElementById('set-pp-rule').value;
     ppMaxTake = parseInt(document.getElementById('set-pp-max').value) || 0;
@@ -4899,10 +4920,7 @@
     closeModal('pp-settings-modal', 'pp-modal-box');
     if (ppSettingsThenRestart) { ppSettingsThenRestart = false; ppSettingsJustSaved = true; ppRestartGame(); ppSettingsJustSaved = false; }
   }
-  document.getElementById('set-pp-rows').addEventListener('input', e => {
-    const r = ppParseRows(e.target.value);
-    document.getElementById('set-pp-rows-preview').innerText = r.length ? `${r.length}줄: ${r.join('개, ')}개` : '';
-  });
+  document.getElementById('set-pp-rows').addEventListener('input', ppRowsPreview);
   function ppShowHelp(topic) {
     playBtnSound('help');
     const rule = "<b>[팝잇 규칙]</b><br>1. 자기 차례에 <b>한 줄</b>을 골라 그 줄의 버블을 <b>1개 이상</b> 누릅니다(드래그로 여러 개 선택 가능).<br>2. 서로 다른 줄을 동시에 누를 수는 없습니다.<br>3. <b>마지막 버블을 누르는 사람이 승리</b>합니다.";
@@ -4956,24 +4974,76 @@
   }
   function ppBotNum() { return isBranchPlay ? 3 - branchHumanPlayer : 2; }
   function ppLocked() { return ppOver || (ppMode === 'bot' && ppCur === ppBotNum()) || (ppMode === 'online' && ppCur !== Online.myNum); }
+  /* 팝잇 판 그리기 — 터진 버블은 사라지고(팝 .25s) 남은 버블이 왼쪽으로 미끄러져 빈자리를 채움(FLIP .3s).
+     DOM을 통째로 다시 만들지 않고 줄마다 "있어야 할 버블(안 터진 것)"과 맞춰 넣고 빼기 때문에
+     사람·AI·온라인 상대·무르기(반대로 다시 생김) 모두 같은 애니메이션을 탐. 버블의 data-idx는 원래 번호 그대로. */
+  function ppMkBubble(ri, i) {
+    const b = document.createElement('button'); b.type = 'button'; b.className = 'bubble';
+    b.style.backgroundColor = PP_COLORS[ri % 7]; b.dataset.row = ri; b.dataset.idx = i;
+    return b;
+  }
+  // FLIP: fn()으로 줄 안의 버블을 넣고 뺀 뒤, 자리가 바뀐 버블은 원래 자리에서 새 자리로 미끄러짐
+  function ppFlip(bb, fn) {
+    const els = Array.from(bb.querySelectorAll('.bubble')), first = new Map(els.map(b => [b, b.getBoundingClientRect()]));
+    fn();
+    els.forEach(b => {
+      if (!b.isConnected || b.classList.contains('popping')) return;
+      const f = first.get(b), l = b.getBoundingClientRect(), dx = f.left - l.left, dy = f.top - l.top;
+      if (Math.abs(dx) < 1 && Math.abs(dy) < 1) return;
+      b.classList.remove('sliding'); b.style.transition = 'none'; b.style.transform = `translate(${dx}px, ${dy}px)`;
+      void b.offsetWidth;
+      b.style.transition = ''; b.classList.add('sliding'); b.style.transform = '';
+      clearTimeout(b._slideT); b._slideT = setTimeout(() => b.classList.remove('sliding'), 320);
+    });
+  }
   function ppRender() {
-    const board = document.getElementById('popit-board'); board.innerHTML = '';
+    const board = document.getElementById('popit-board');
     const lock = ppLocked();
+    const sig = ppInit.join(',');
+    if (ppBoardFresh || board.dataset.sig !== sig || board.querySelectorAll(':scope > .pp-row').length !== ppInit.length) {
+      // 새 판: 통째로 다시 그림 (애니메이션 없음)
+      ppBoardFresh = false; board.innerHTML = ''; board.dataset.sig = sig;
+      ppInit.forEach((n, ri) => {
+        const row = document.createElement('div'); row.className = 'pp-row';
+        const lab = document.createElement('div'); lab.className = 'pp-row__label'; lab.style.color = PP_INK[ri % 7]; lab.innerText = `${ri + 1}번줄`;
+        const bb = document.createElement('div'); bb.className = 'pp-row__bubbles';
+        for (let i = 0; i < n; i++) if (!ppPopped[ri].has(i)) bb.appendChild(ppMkBubble(ri, i));
+        const cnt = document.createElement('div'); cnt.className = 'pp-row__cnt';
+        row.append(lab, bb, cnt); board.appendChild(row);
+      });
+    }
+    const rowEls = board.querySelectorAll(':scope > .pp-row');
     ppRows.forEach((count, ri) => {
-      const row = document.createElement('div'); row.className = 'pp-row';
-      const lab = document.createElement('div'); lab.className = 'pp-row__label'; lab.style.color = PP_INK[ri % 7]; lab.innerText = `${ri + 1}번줄`;
-      const bb = document.createElement('div'); bb.className = 'pp-row__bubbles';
-      for (let i = 0; i < ppInit[ri]; i++) {
-        const b = document.createElement('button'); b.type = 'button';
-        const popped = ppPopped[ri] ? ppPopped[ri].has(i) : i >= count;
-        const glow = ppGlow && ppGlow.row === ri && ppGlow.idx.includes(i);
-        b.className = 'bubble' + (popped ? ' popped' : '') + ((ppSelRow === ri && ppSel.includes(i)) ? ' selected-temp' : '') + (glow ? ' ai-glow' : '') + (ppGlow && ppGlow.after && glow ? ' just-popped' : '');
-        b.style.backgroundColor = PP_COLORS[ri % 7];
-        b.disabled = popped || lock; b.dataset.row = ri; b.dataset.idx = i;
-        bb.appendChild(b);
+      const row = rowEls[ri], bb = row.querySelector('.pp-row__bubbles');
+      row.querySelector('.pp-row__cnt').innerText = `${count}개`;
+      const live = new Map(); // idx → 살아 있는(터지는 중이 아닌) 버블 요소
+      bb.querySelectorAll('.bubble').forEach(b => { if (!b.classList.contains('popping')) live.set(+b.dataset.idx, b); });
+      const gone = [...live.keys()].filter(i => ppPopped[ri].has(i));
+      const need = []; for (let i = 0; i < ppInit[ri]; i++) if (!ppPopped[ri].has(i) && !live.has(i)) need.push(i);
+      if (gone.length) {
+        // 1) 터짐: 제자리에서 팡 하고 작아짐 → 2) 사라지면 남은 버블이 왼쪽으로 미끄러짐
+        gone.forEach(i => { const b = live.get(i); b.classList.remove('selected-temp', 'ai-glow', 'sliding', 'popin'); b.disabled = true; b.classList.add('popping'); });
+        clearTimeout(bb._popT);
+        bb._popT = setTimeout(() => ppFlip(bb, () => bb.querySelectorAll('.bubble.popping').forEach(b => b.remove())), 250);
       }
-      const cnt = document.createElement('div'); cnt.className = 'pp-row__cnt'; cnt.innerText = `${count}개`;
-      row.append(lab, bb, cnt); board.appendChild(row);
+      if (need.length) {
+        // 무르기: 원래 번호 자리에 다시 생기고(popin) 옆 버블은 오른쪽으로 미끄러짐
+        bb.querySelectorAll('.bubble.popping').forEach(b => { if (!ppPopped[ri].has(+b.dataset.idx)) b.remove(); }); // 터지던 걸 되돌리면 지우고 새로
+        ppFlip(bb, () => need.forEach(i => {
+          const b = ppMkBubble(ri, i); b.classList.add('popin');
+          const after = Array.from(bb.querySelectorAll('.bubble')).find(x => +x.dataset.idx > i);
+          bb.insertBefore(b, after || null);
+          setTimeout(() => b.classList.remove('popin'), 320);
+        }));
+      }
+      bb.querySelectorAll('.bubble').forEach(b => {
+        if (b.classList.contains('popping')) return;
+        const i = +b.dataset.idx;
+        const glow = !!(ppGlow && ppGlow.row === ri && ppGlow.idx.includes(i));
+        b.classList.toggle('selected-temp', ppSelRow === ri && ppSel.includes(i));
+        b.classList.toggle('ai-glow', glow);
+        b.disabled = lock;
+      });
     });
     document.getElementById('pp-p1-count').innerText = ppHist.filter(h => h.player === 1).reduce((a, h) => a + h.count, 0);
     document.getElementById('pp-p2-count').innerText = ppHist.filter(h => h.player === 2).reduce((a, h) => a + h.count, 0);
@@ -5022,7 +5092,7 @@
     const pl = undoPlan(ppHist, 0, ppMode, ppCur);
     for (let i = 0; i < pl.n; i++) ppHist.pop();
     ppCur = pl.next; ppUndoLeft[pl.owner]--;
-    ppRebuild();
+    ppRebuild(true); // 판은 그대로 두고 버블만 다시 생기게(애니메이션)
     ppSelRow = null; ppSel = []; ppRender(); ppUpdateUI();
   }
   function ppUpdateUI() {
@@ -5229,7 +5299,7 @@
       const row = document.createElement('div'); row.className = 'pp-row';
       const lab = document.createElement('div'); lab.className = 'pp-row__label'; lab.style.color = PP_INK[ri % 7]; lab.innerText = `${ri + 1}번줄`;
       const bb = document.createElement('div'); bb.className = 'pp-row__bubbles';
-      for (let i = 0; i < ppAInit[ri]; i++) { const b = document.createElement('span'); b.className = 'bubble' + (i >= count ? ' popped' : ''); b.style.backgroundColor = PP_COLORS[ri % 7]; b.dataset.row = ri; b.dataset.idx = i; bb.appendChild(b); }
+      for (let i = 0; i < count; i++) { const b = document.createElement('span'); b.className = 'bubble'; b.style.backgroundColor = PP_COLORS[ri % 7]; b.dataset.row = ri; b.dataset.idx = i; bb.appendChild(b); } // 터진 버블은 안 그림(남은 개수만)
       const cnt = document.createElement('div'); cnt.className = 'pp-row__cnt'; cnt.innerText = `${count}개`;
       row.append(lab, bb, cnt); board.appendChild(row);
     });
