@@ -2034,6 +2034,47 @@
 
   /* 황금비 퀸 분석 모드 */
   #qn-analysis-screen { display:none; flex-direction:column; align-items:center; width:100%; max-width:1060px; }
+  /* 분석 모드 탭 */
+  #qn-atabs { width:100%; margin-bottom:10px; }
+  #qn-a-quiz-btn[hidden] { display:none !important; }
+  #qn-atabs .qg-tab b { white-space:normal; }
+  #qn-atabs .qg-tab[aria-selected="true"] { background:var(--th); border-color:var(--th-dk); color:#fff; box-shadow:0 3px 0 var(--th-dk); }
+  #qn-atabs .qg-tab[aria-selected="true"] .qg-tn { color:rgba(255,255,255,.85); }
+  #qn-analysis-screen.qn-tab-learn :is(#qn-analysis-layout, .pp-a-setup, #qn-p3-rev, .qn-free-only), #qn-analysis-screen.qn-tab-quiz :is(.pp-a-setup, .qn-free-only) { display:none !important; }
+  #qn-analysis-screen:not(.qn-tab-learn) #qn-learn { display:none !important; }
+  #qn-learn { width:100%; display:flex; flex-direction:column; gap:10px; }
+  .qn-learn-body { display:grid; grid-template-columns:auto minmax(0,1fr); gap:14px; align-items:start; background:#fff; border:2px solid #E7DFC9; border-radius:18px; padding:14px; box-shadow:0 10px 30px rgba(90,70,20,.12); }
+  .qn-learn-left { display:flex; flex-direction:column; align-items:center; gap:6px; }
+  #qn-l-boardWrap { width:min(400px, calc(100svh - var(--bk-top-h, 64px) - 290px)) !important; min-width:220px; }
+  .qn-learn-right { display:flex; flex-direction:column; gap:8px; min-width:0; }
+  .qn-learn-top { display:flex; align-items:center; justify-content:space-between; gap:8px; flex-wrap:wrap; }
+  .qn-learn-top label { display:flex; align-items:center; gap:6px; font-weight:700; color:var(--text-sub); }
+  .qn-learn-top select { font-size:1rem; padding:6px 8px; border:2px solid #D9CFAE; border-radius:10px; background:#FFF9E8; font-family:'Jua',sans-serif; }
+  #qn-l-ask { flex:none; }
+  .qn-l-exp { background:#FFF9F6; border:1.5px solid #E7DFC9; border-radius:12px; padding:10px 12px; font-size:.9rem; line-height:1.6; display:flex; flex-direction:column; gap:8px; }
+  .qn-l-exp[hidden] { display:none !important; }
+  .qn-l-exp h4 { margin:0; font-family:'Jua',sans-serif; font-weight:400; font-size:1.02rem; color:var(--th-ink, #2C2A26); }
+  .qn-l-exp .ok { color:#1F6B50; } .qn-l-exp .no { color:#A43456; }
+  .qn-l-exp table { border-collapse:collapse; font-family:'IBM Plex Mono',monospace; font-size:.8rem; }
+  .qn-l-exp td, .qn-l-exp th { border:1px solid #E7DFC9; padding:3px 7px; text-align:center; white-space:nowrap; }
+  .qn-l-exp tr.me td { background:var(--th-soft, #FDE8EE); font-weight:700; }
+  .qn-l-exp .chip { display:inline-block; padding:1px 7px; border-radius:8px; background:#fff; border:1.5px solid var(--th-line, #E7DFC9); font-family:'IBM Plex Mono',monospace; font-size:.82rem; margin:1px 2px 1px 0; }
+  .qn-l-exp .chip.near { border-color:var(--th, #E9533F); font-weight:700; }
+  .qn-cell.cold-dot::before { content:""; position:absolute; inset:34%; border-radius:50%; background:var(--th, #E9533F); opacity:.55; z-index:1; }
+  .qn-cell.goal.cold-dot::before { inset:16%; background:transparent; }
+  .qn-cell.l-pick { box-shadow:inset 0 0 0 4px #D93A5E; }
+  .qn-gd { width:100%; background:#fff; border:2px solid #E7DFC9; border-radius:18px; padding:4px 14px; }
+  .qn-gd > summary { cursor:pointer; font-family:'Jua',sans-serif; font-size:1.05rem; padding:8px 0; color:var(--th-ink, #2C2A26); }
+  .qn-gd[open] > summary { border-bottom:1.5px solid #E7DFC9; }
+  @media (max-width:760px) {
+    /* 폰: 문제 글 → 판 → 설명 순서로 한 줄 */
+    .qn-learn-body { display:flex; flex-direction:column; padding:10px; gap:8px; }
+    .qn-learn-left, .qn-learn-right { display:contents; }
+    .qn-learn-top { order:1; } #qn-l-ask { order:2; } #qn-l-boardWrap { order:3; } #qn-l-hint { order:4; } #qn-l-exp { order:5; } .qn-learn-right > .qg-stepBtns { order:6; }
+    #qn-l-boardWrap { width:min(100%, calc(100svh - var(--bk-top-h, 64px) - 330px)) !important; min-width:0; margin:0 auto; }
+    .qn-l-exp table { font-size:.74rem; } .qn-l-exp td, .qn-l-exp th { padding:2px 5px; }
+    .qn-gd > summary { font-size:.95rem; }
+  }
   .pp-a-setup select { font-size:1rem; padding:6px 8px; border:2px solid #D9CFAE; border-radius:10px; background:#FFF9E8; font-family:'Jua',sans-serif; }
   #qn-analysis-layout { display:flex; width:100%; gap:16px; background:#fff; border:2px solid #E7DFC9; padding:18px; border-radius:20px; box-shadow:0 10px 30px rgba(90,70,20,.12); align-items:stretch; }
   #qn-analysis-left { flex:0 0 170px; width:170px; display:flex; flex-direction:column; gap:12px; }
@@ -2289,6 +2330,9 @@
   .st-frame .stone-container .stone::before, .st-frame .stone-container .stone::after { display:none; }
   /* 분석 판: 상자 안에서 줄바꿈 */
   #st-analysis-center { grid-template-columns:repeat(auto-fill, 28px) !important; gap:10px !important; padding:20px 18px 56px !important; align-content:start; }
+  /* 분석 판 돌 흩뿌리기(stLayoutAnalysis): 절대 좌표, 겹침 없음 */
+  #st-analysis-center.st-scatter { display:block !important; padding:0 !important; box-sizing:border-box; min-width:0; }
+  #st-analysis-center.st-scatter .a-stone { position:absolute; }
 
   /* --- 팝잇 (보라) — 버블은 여러 색 그대로, UI만 보라 --- */
   :is(#notakto-section,#stone-section,#queen-section,#popit-section) #popit-board, :is(#notakto-section,#stone-section,#queen-section,#popit-section) #pp-a-board { border-color:var(--th-line); }
@@ -2631,7 +2675,7 @@
   }
 
   /* --- 📐 황금비 그림 (퀸 섹션 안 화면, 기본 규칙 기준) --- */
-  #qn-golden-screen { display:none; flex-direction:column; align-items:stretch; width:100%; max-width:1060px; gap:8px;
+  #qn-golden-screen { display:flex; flex-direction:column; align-items:stretch; width:100%; max-width:1060px; gap:8px; padding-top:10px;
     --qg-ink:#2C2A26; --qg-muted:#5F5B55; --qg-line:#E7DFC9; --qg-panel:#fff; --qg-sq-l:#FFFAF8; --qg-sq-d:#F8D7CF; --qg-lose:var(--th, #E9533F); --qg-win:#3a9e82; --qg-p0:#2F8FC9; --qg-p1:#E8891B; --qg-mono:'IBM Plex Mono',ui-monospace,monospace; }
   #qn-golden-screen [hidden] { display:none !important; }
   .qg-top { display:flex; align-items:center; gap:10px; flex-wrap:wrap; }
@@ -3055,12 +3099,46 @@
     <!-- 황금비 퀸 분석 화면 -->
     <div id="qn-analysis-screen">
       <div class="a-head"><h2 style="margin:0;">📊 분석 모드 <span id="qn-a-sub" style="font-size:.9rem; color:var(--text-sub); font-family:'Noto Sans KR',sans-serif;"></span></h2><button class="help-btn a-help" onmouseenter="playSfx('hover')" onclick="qnShowHelp('analysis')" title="도움말">?</button><button class="help-close-btn a-quiz-btn a-lesson-btn" type="button" onclick="playSfx('click'); openLesson('queen')">📘 전략</button></div>
-      <div class="pp-a-setup">
+      <!-- 분석 모드 탭: 🎯 이기는 수 찾기(설명형 퀴즈 + 📐 황금비 그림) / 🔎 자유 분석 / 🏁 퀴즈 풀기(연속·타임어택) -->
+      <div class="qg-tabs qn-atabs" role="tablist" id="qn-atabs">
+        <button class="qg-tab" type="button" role="tab" data-t="learn" aria-selected="true" onclick="playSfx('click'); qnATabSet('learn')"><span class="qg-tn">배우기</span><b>🎯 이기는 수 찾기</b></button>
+        <button class="qg-tab" type="button" role="tab" data-t="free" aria-selected="false" onclick="playSfx('click'); qnATabSet('free')"><span class="qg-tn">직접 두며 보기</span><b>🔎 자유 분석</b></button>
+        <button class="qg-tab" type="button" role="tab" data-t="quiz" aria-selected="false" onclick="playSfx('click'); qnATabSet('quiz')"><span class="qg-tn">연속 · 타임어택</span><b>🏁 퀴즈 풀기</b></button>
+      </div>
+      <!-- (a) 🎯 이기는 수 찾기 -->
+      <div id="qn-learn">
+        <div class="qn-learn-body">
+          <div class="qn-learn-left">
+            <div class="qn-boardWrap" id="qn-l-boardWrap">
+              <div class="qn-ylab" id="qn-l-ylab"></div>
+              <div class="qn-grid" id="qn-l-grid" role="grid" aria-label="이기는 수 찾기 체스판"></div>
+              <div class="qn-xlab" id="qn-l-xlab"></div>
+            </div>
+            <div class="pp-hint" id="qn-l-hint"></div>
+          </div>
+          <div class="qn-learn-right">
+            <div class="qn-learn-top">
+              <label>판 크기 <select id="qn-l-size" onchange="playSfx('click'); qnLSize()"><option value="5">5×5</option><option value="6">6×6</option><option value="7">7×7</option><option value="8" selected>8×8</option><option value="9">9×9</option><option value="10">10×10</option><option value="11">11×11</option><option value="12">12×12</option><option value="13">13×13</option><option value="14">14×14</option><option value="15">15×15</option></select></label>
+              <span class="qg-meta" id="qn-l-score"></span>
+            </div>
+            <div id="qn-l-ask" class="a-verdict"></div>
+            <div id="qn-l-exp" class="qn-l-exp" hidden></div>
+            <div class="qg-stepBtns">
+              <button class="qg-btn primary" type="button" id="qn-l-next" onclick="playSfx('click'); qnLNext()">다음 문제 ▶</button>
+              <button class="qg-btn" type="button" id="qn-l-show" onclick="playSfx('click'); qnLShow()">정답 보기</button>
+            </div>
+          </div>
+        </div>
+        <details class="qn-gd" id="qn-golden-box">
+          <summary>📐 황금비 그림 — 후공 승리 칸이 왜 황금비 직선 위에 있을까? (칸 살펴보기 · 후공 승리 칸 찾기 · 황금비 그림)</summary>
+          <div id="qn-golden-screen-slot"></div>
+        </details>
+      </div>
+      <div class="pp-a-setup qn-free-only">
         <label>판 크기 <select id="qn-a-size" onchange="playSfx('click'); qnASetSize()"><option value="5">5×5</option><option value="6">6×6</option><option value="7">7×7</option><option value="8">8×8</option><option value="9">9×9</option><option value="10">10×10</option><option value="11">11×11</option><option value="12">12×12</option><option value="13">13×13</option><option value="14">14×14</option><option value="15">15×15</option></select></label>
         <button class="undo-btn" onclick="playSfx('click'); qnAPlaceMode()">📍 퀸 직접 놓기</button>
         <button class="undo-btn" onclick="playSfx('click'); qnARandom()">🎲 랜덤 위치</button>
-        <button class="help-close-btn" id="qn-a-quiz-btn" onclick="playSfx('click'); qnAQuiz()">🎯 퀴즈: 이기는 수 찾기</button>
-        <button class="undo-btn" onclick="playSfx('click'); qgOpen()">📐 황금비 그림 보기</button>
+        <button class="help-close-btn" id="qn-a-quiz-btn" onclick="playSfx('click'); qnAQuiz()" hidden>🎯 퀴즈: 이기는 수 찾기</button>
       </div>
       <div id="qn-analysis-layout">
         <div id="qn-analysis-left">
@@ -3084,19 +3162,15 @@
         </div>
       </div>
       <div class="action-buttons">
-        <button class="restart-btn" id="qn-a-branch-btn" onmouseenter="playSfx('hover')" onclick="playSfx('click'); qnABranch()">이 포지션에서 AI와 두기</button>
-        <button class="restart-btn" onmouseenter="playSfx('hover')" onclick="playSfx('click'); qnARestart()">처음부터</button>
-        <button class="undo-btn" id="qn-analysis-undo-btn" onmouseenter="playSfx('hover')" onclick="qnAUndo()">무르기</button>
+        <button class="restart-btn qn-free-only" id="qn-a-branch-btn" onmouseenter="playSfx('hover')" onclick="playSfx('click'); qnABranch()">이 포지션에서 AI와 두기</button>
+        <button class="restart-btn qn-free-only" onmouseenter="playSfx('hover')" onclick="playSfx('click'); qnARestart()">처음부터</button>
+        <button class="undo-btn qn-free-only" id="qn-analysis-undo-btn" onmouseenter="playSfx('hover')" onclick="qnAUndo()">무르기</button>
         <button class="back-btn" onmouseenter="playSfx('hover')" onclick="playSfx('click'); qnGoBack()">메뉴로 돌아가기</button>
       </div>
     </div>
 
     <!-- 📐 황금비 그림 (예전 games/queen 분석 화면을 옮겨 옴 · 기본 규칙 기준) -->
     <div id="qn-golden-screen">
-      <div class="qg-top">
-        <button class="back-btn qg-back" type="button" onmouseenter="playSfx('hover')" onclick="playSfx('click'); qgClose()">← 분석으로 돌아가기</button>
-        <h2 class="qg-h">📐 황금비 그림</h2>
-      </div>
       <p class="qg-basis">📌 기본 규칙(구석에 퀸을 넣으면 승리) 기준 그림이에요.</p>
       <div class="qg-tabs" role="tablist" id="qg-tabs">
         <button class="qg-tab" type="button" role="tab" data-t="0" aria-selected="true"><span class="qg-tn">1단계</span><b>칸 살펴보기</b></button>
@@ -4481,8 +4555,11 @@
         "- <span style='color:#3A9E82; font-weight:bold;'>[필승 수]</span>: 상대를 <b>후공 승리 칸</b>으로 보내는 수예요. 상대가 어떻게 해도 이길 수 있어요. (판에서 초록색)<br>" +
         "- <span style='color:#C9436B; font-weight:bold;'>[나쁜 수]</span>: 상대에게 이길 기회를 주는 수예요. 화살표 뒤 <code>(c,d) 대응</code>은 상대의 최선의 대응이에요. (판에서 빨간색)<br>" +
         "- <b>(승리 확정)/(패배 확정)</b>: 그 수로 퀸이 바로 구석에 들어가요.<br>" +
-        '- 판 크기를 고르고 📍 직접 놓기·🎲 랜덤으로 시작 위치를 정할 수 있고, 🎯 퀴즈로 이기는 수 찾기 연습, “이 포지션에서 AI와 두기”도 할 수 있어요.<br><br>' +
-        '후공 승리 칸 (1,2), (3,5), (4,7)… 이 왜 <b>황금비 φ≈1.618</b> 직선 위에 놓이는지는 <b>📐 황금비 그림 보기</b>에서 그림으로 볼 수 있어요. (거꾸로 규칙이면 후공 승리 칸이 조금 달라져요)'] };
+        '<br><b>[세 가지 탭]</b><br>' +
+        '- <b>🎯 이기는 수 찾기</b>: 문제 자리가 나오면 퀸을 옮길 칸을 고르세요. 고르고 나면 <b>왜</b> 그 칸이 후공 승리 칸인지((⌊nφ⌋, ⌊nφ²⌋) 쌍 표, 두 좌표 차가 n이면서 작은 쪽이 ⌊nφ⌋) 설명이 나오고, 맨 아래 <b>📐 황금비 그림</b>(칸 살펴보기 · 후공 승리 칸 찾기 · 황금비 그림)을 펼쳐 볼 수 있어요.<br>' +
+        '- <b>🔎 자유 분석</b>: 판 크기를 고르고 📍 직접 놓기·🎲 랜덤으로 시작 위치를 정한 뒤 수를 두며 판정을 보고, “이 포지션에서 AI와 두기”·무르기·처음부터를 쓸 수 있어요.<br>' +
+        '- <b>🏁 퀴즈 풀기</b>: 설명 없이 빠르게 — 🔥 연속 정답 기록과 ⏱ 30초 타임어택.<br><br>' +
+        '후공 승리 칸 (1,2), (3,5), (4,7)… 은 <b>황금비 φ≈1.618</b> 직선 위에 놓여요. (거꾸로 규칙이면 후공 승리 칸이 조금 달라져요)'] };
     const [t, c] = map[topic];
     document.getElementById('help-modal-box').classList.remove('pink-modal');
     document.getElementById('help-title').innerText = t; document.getElementById('help-content').innerHTML = c;
@@ -6218,10 +6295,11 @@
     document.getElementById('st-p1-stones').innerHTML = '';
     document.getElementById('st-p2-stones').innerHTML = '';
 
+    stSeed = (Math.random() * 0x7fffffff) | 0; stLayoutN = stN;
     for (let i = 0; i < stN; i++) {
       let stone = document.createElement('div');
       let sClass = (i === 0) ? (stModeType === 'bomb' ? 'st-bomb-stone' : 'st-gem-stone') : 'st-normal-stone';
-      stone.className = 'stone ' + sClass;
+      stone.className = 'stone ' + sClass; stone._slot = i;
       cs.appendChild(stone);
       stStonesArr.push(stone);
     }
@@ -6281,10 +6359,11 @@
       p2Box.appendChild(s);
     }
 
+    stSeed = (Math.random() * 0x7fffffff) | 0; stLayoutN = stACurrentN;
     for (let i = 0; i < stACurrentN; i++) {
       let stone = document.createElement('div');
       let sClass = (i === 0) ? (stModeType === 'bomb' ? 'st-bomb-stone' : 'st-gem-stone') : 'st-normal-stone';
-      stone.className = 'stone ' + sClass;
+      stone.className = 'stone ' + sClass; stone._slot = i;
       cs.appendChild(stone);
       stStonesArr.push(stone);
     }
@@ -6296,24 +6375,67 @@
     }
   }
 
-  /* 가운데 돌을 겹치지 않게 줄 맞춰 놓기 (0번=폭탄/보석이 맨 앞, 뒤에서부터 가져감) */
+  /* 가운데 돌을 자연스럽게 흩뿌리기 — 절대 겹치지 않게.
+     방법: 상자를 C×C 셀 격자로 나누고 돌마다 셀 하나씩(가운데 가까운 셀부터, 약간 무작위) → 셀 안에서 랜덤 위치(지터).
+     셀 크기 C ≥ 돌 크기+6 이고 지터 범위가 C−(돌+6) 이라 이웃 돌과 최소 거리가 항상 돌+6px 이상.
+     시드(stSeed)로 같은 판이면 항상 같은 자리 → 무르기해도 제자리로. 창 크기가 바뀌면 같은 시드로 다시 배치. */
+  let stSeed = 1, stLayoutN = 0, stASeed = 1;
+  function stRng(seed) { let a = (seed >>> 0) || 1; return () => { a = (a + 0x6D2B79F5) >>> 0; let t = a; t = Math.imul(t ^ (t >>> 15), t | 1); t ^= t + Math.imul(t ^ (t >>> 7), t | 61); return ((t ^ (t >>> 14)) >>> 0) / 4294967296; }; }
+  function stScatter(n, W, H, seed) {
+    const S = 28, D = S + 6, PAD = 8, BW = 88, BH = 52; // BW×BH: 왼쪽 아래 개수 글자 자리(돌 안 놓음)
+    const iw = Math.max(D, W - PAD * 2);
+    let C = Math.max(D, Math.min(64, Math.floor(Math.sqrt(iw * Math.max(D, H - PAD * 2) * 0.8 / Math.max(1, n))))), needH = 0;
+    const cellsFor = (C, H) => {
+      const cols = Math.max(1, Math.floor(iw / C)), rows = Math.max(1, Math.floor((H - PAD * 2) / C));
+      const x0 = PAD + (iw - cols * C) / 2, y0 = PAD + ((H - PAD * 2) - rows * C) / 2, out = [];
+      for (let r = 0; r < rows; r++) for (let c = 0; c < cols; c++) {
+        const x = x0 + c * C, y = y0 + r * C;
+        if (x < BW && y + C > H - BH) continue; // 개수 글자와 겹치는 셀 제외
+        out.push({ x, y, cx: x + C / 2, cy: y + C / 2 });
+      }
+      return { cells: out, cols, rows };
+    };
+    let g = cellsFor(C, H);
+    while (g.cells.length < n) {
+      if (C - 2 >= D) C -= 2; else { H += C; needH = H; } // 셀을 줄여도 안 들어가면 상자 높이를 키움
+      g = cellsFor(C, H);
+    }
+    const rng = stRng(seed), J = C - D;
+    const cx0 = W / 2, cy0 = (H - (H > 2 * BH ? BH / 2 : 0)) / 2;
+    // 가운데에 가까운 셀부터 (거리 + 랜덤 흔들림) n개 고르고, 돌 번호에 무작위로 배정
+    const scored = g.cells.map(c => ({ c, s: Math.hypot(c.cx - cx0, c.cy - cy0) + rng() * C * 1.6 })).sort((a, b) => a.s - b.s).slice(0, n).map(o => o.c);
+    for (let i = scored.length - 1; i > 0; i--) { const j = Math.floor(rng() * (i + 1)); [scored[i], scored[j]] = [scored[j], scored[i]]; }
+    const pos = scored.map(c => { const x = c.x + D / 2 + rng() * J, y = c.y + D / 2 + rng() * J; return { left: Math.round(x - S / 2), top: Math.round(y - S / 2) }; });
+    return { pos, needH };
+  }
   function stLayoutCenter() {
     const cs = document.getElementById('st-center-stones');
     if (!cs || !cs.clientWidth) return;
-    const n = stStonesArr.length; if (!n) return;
-    const W = cs.clientWidth, H = cs.clientHeight, S = 28, PAD = 12, BADGE = 40;
-    let G = 10, cols = Math.max(1, Math.min(10, Math.floor((W - PAD * 2 + G) / (S + G))));
-    let rows = Math.ceil(n / cols);
-    if (rows * (S + G) - G > H - PAD * 2 - BADGE) { G = 6; cols = Math.max(1, Math.min(12, Math.floor((W - PAD * 2 + G) / (S + G)))); rows = Math.ceil(n / cols); }
-    const gw = Math.min(n, cols) * (S + G) - G, gh = rows * (S + G) - G;
-    const x0 = Math.max(PAD, (W - gw) / 2);
-    const y0 = Math.max(PAD, Math.min((H - BADGE - gh) / 2 + 4, H - PAD - gh));
+    const n = Math.max(stLayoutN, stStonesArr.length); if (!n) return;
+    cs.style.removeProperty('height');
+    const r = stScatter(n, cs.clientWidth, cs.clientHeight, stSeed);
+    if (r.needH) cs.style.setProperty('height', r.needH + 'px', 'important');
     stStonesArr.forEach((el, i) => {
-      el.style.left = (x0 + (i % cols) * (S + G)) + 'px';
-      el.style.top = (y0 + Math.floor(i / cols) * (S + G)) + 'px';
+      const p = r.pos[el._slot != null ? el._slot : i] || r.pos[0];
+      el.style.left = p.left + 'px'; el.style.top = p.top + 'px';
     });
   }
-  window.addEventListener('resize', () => { const gs = document.getElementById('st-game-screen'); if (gs && gs.style.display !== 'none' && !stIsAnimating) stLayoutCenter(); });
+  // 분석 판의 돌도 같은 방식으로 (총 stN개 기준 자리, 남은 개수만 보여 줌)
+  function stLayoutAnalysis() {
+    const c = document.getElementById('st-analysis-center'); if (!c) return;
+    const els = c.querySelectorAll('.a-stone'); if (!els.length) { c.style.height = ''; return; }
+    const n = Math.max(stN, els.length);
+    c.classList.add('st-scatter');
+    c.style.height = Math.max(150, Math.min(340, Math.round(Math.sqrt(n) * (innerWidth <= 640 ? 50 : 58)))) + 'px';
+    if (!c.clientWidth) return;
+    const r = stScatter(n, c.clientWidth, c.clientHeight, stASeed);
+    if (r.needH) c.style.height = r.needH + 'px';
+    els.forEach((el, i) => { const p = r.pos[i] || r.pos[0]; el.style.left = p.left + 'px'; el.style.top = p.top + 'px'; });
+  }
+  window.addEventListener('resize', () => {
+    const gs = document.getElementById('st-game-screen'); if (gs && gs.style.display !== 'none' && !stIsAnimating) stLayoutCenter();
+    const as = document.getElementById('st-analysis-screen'); if (as && as.style.display && as.style.display !== 'none') stLayoutAnalysis();
+  });
 
   function stUpdateUI() {
     const badge = document.getElementById('st-stone-count-badge');
@@ -6529,7 +6651,7 @@
     const modeText = stModeType === 'gem' ? '보석 모드' : '폭탄 모드';
     document.getElementById('st-a-initial-n').innerText = `${stN}개, 최대 ${stLimit}개, ${modeText}`;
     stACurrentN = stN; stATurn = stAStartTurn; stAP1Score = 0; stAP2Score = 0;
-    stAHistoryLog = []; stAHistoryMeta = [];
+    stAHistoryLog = []; stAHistoryMeta = []; stASeed = (Math.random() * 0x7fffffff) | 0;
     stUpdateAnalysisBoard();
   }
 
@@ -6565,6 +6687,7 @@
     badge.className = 'st-stone-count-badge';
     badge.innerText = stACurrentN > 0 ? stACurrentN : '';
     c.appendChild(badge);
+    stLayoutAnalysis();
 
     const hb = document.getElementById('st-a-history-box');
     hb.innerText = stAHistoryLog.map((log, i) => `${i + 1}.P${(i + stAStartTurn - 1) % 2 + 1}:${log}`).join(", ");
@@ -7869,11 +7992,9 @@
 
   /* ---------- 깊이 3 (뒤로 가기): 황금비 그림 · 게임에서 연 복기 ---------- */
   function p3DeepUI() {
-    if (currentGame === 'queen' && p3Shown('qn-golden-screen')) return true;
     return !!(p3Rev && p3Rev.fromGame && P3_GAME[p3Rev.k] === currentGame && p3Shown(p3Rev.k + '-analysis-screen'));
   }
   function p3DeepBack() {
-    if (p3Shown('qn-golden-screen')) { qgClose(); return; }
     if (p3Rev) { if (p3Rev.fromGame) p3RevBackToGame(); else p3RevEnd(); }
   }
 
@@ -7915,12 +8036,14 @@
   })();
 </script>
 <script>
-  /* ===== 📐 황금비 그림 (퀸 섹션 안 화면) — 예전 games/queen 분석 3단계를 옮김. 이름은 모두 qg- 로 시작 =====
-     · 기본 규칙(구석에 넣으면 승리) 기준. 분석 화면에서 열고 닫아도 분석 자리는 그대로(뒤로 가기도 같음) */
+  /* ===== 📐 황금비 그림 — 예전 games/queen 분석 3단계를 옮김. 이름은 모두 qg- 로 시작 =====
+     · 기본 규칙(구석에 넣으면 승리) 기준. 분석 모드 [🎯 이기는 수 찾기] 탭 아래 접힘 상자(details) 안에 들어 있음 */
   (function () {
     const $q = id => document.getElementById(id);
     const PHI = (1 + Math.sqrt(5)) / 2;
-    const scr = $q('qn-golden-screen');
+    const scr = $q('qn-golden-screen'), box = $q('qn-golden-box');
+    $q('qn-golden-screen-slot').appendChild(scr); // 접힘 상자 안으로 옮김
+    const qgVisible = () => box.open && p3Shown('qn-analysis-screen') && qnAnalysisScreen.classList.contains('qn-tab-learn');
     const A = { N: 10, view: 'lose', q: null, auto: null, sol: null, tab: 0, ph: 0, card: 0, fmode: 'watch', brush: 'L', paint: new Map(), check: false, hint: null, msg: '', built: 0 };
     const moves = (x, y) => qnMoves(x, y);
     const fmt = ([x, y]) => `(${x}, ${y})`;
@@ -8019,7 +8142,7 @@
       $q('qg-fAuto').textContent = A.auto ? '⏸ 멈추기' : '자동 재생';
       $q('qg-fAuto').disabled = ph >= maxPh && !A.auto;
     }
-    function findStep() { if (!scr || scr.style.display === 'none') { stopAuto(); return; } const max = pairsOf(A.N).length * 2; if (A.ph < max) A.ph++; if (A.ph >= max) stopAuto(); renderFind(); }
+    function findStep() { if (!qgVisible()) { stopAuto(); return; } const max = pairsOf(A.N).length * 2; if (A.ph < max) A.ph++; if (A.ph >= max) stopAuto(); renderFind(); }
 
     /* 2단계: 직접 칠하기 */
     function paintCell(x, y) {
@@ -8207,24 +8330,152 @@
     $q('qg-phiPrev').onclick = () => { if (A.card > 0) { playSfx('click'); A.card--; renderCard(); } };
     $q('qg-phiNext').onclick = () => { if (A.card < CARDS.length - 1) { playSfx('click'); A.card++; renderCard(); } };
 
-    // 열기·닫기: 분석 화면은 숨기기만 (자리·수순 그대로) → 닫으면 같은 자리로
-    window.qgOpen = function () {
+    // 접힘 상자 열기·닫기 (처음 열 때 판을 만듦)
+    function ensureBuilt() { if (!A.sol || A.built !== A.N) { A.sol = solve(A.N); buildBoard(); } }
+    box.addEventListener('toggle', () => { if (box.open) { ensureBuilt(); setTab(A.tab); } else stopAuto(); });
+    window.qgOpen = function () { box.open = true; ensureBuilt(); setTab(A.tab); };
+    window.qgClose = function () { stopAuto(); box.open = false; };
+    window.qgPause = function () { if (A.auto) { stopAuto(); if (A.tab === 1 && A.fmode === 'watch') renderFind(); } };
+    // 퀸 메뉴로 나가면 자동 재생 멈춤
+    const _qnBackG = qnGoBack; qnGoBack = function (...a) { stopAuto(); return _qnBackG(...a); };
+  })();
+</script>
+<script>
+  /* ===== 📊 황금비 퀸 분석 모드 탭 =====
+     learn: 🎯 이기는 수 찾기(한 문제씩, 고른 뒤 설명 + 📐 황금비 그림 접힘 상자)
+     free : 🔎 자유 분석(기존 분석 판 · 판정 줄 · 👀 왜? · 무르기 · AI와 두기 · 내 플레이로 배우기)
+     quiz : 🏁 퀴즈 풀기(기존 연속 퀴즈 · 🔥 연속 · ⏱ 30초) — 같은 분석 판을 씀 */
+  (function qnTabsInit() {
+    const $ = id => document.getElementById(id);
+    const scr = $('qn-analysis-screen');
+    const PHI = (1 + Math.sqrt(5)) / 2;
+    let tab = 'learn', busy = 0;
+    function apply() {
+      ['learn', 'free', 'quiz'].forEach(t => scr.classList.toggle('qn-tab-' + t, tab === t));
+      $('qn-atabs').querySelectorAll('.qg-tab').forEach(b => b.setAttribute('aria-selected', String(b.dataset.t === tab)));
+      if (tab !== 'learn' && typeof qgPause === 'function') qgPause();
+    }
+    function leaveQuiz() { if (qnAQuizOn) { qzStopTimer(); qnAQuizOn = false; qnAQuizAnswered = false; } }
+    window.qnATabSet = function (t) {
+      if (t === tab) return;
       if (typeof p3WhyStop === 'function') p3WhyStop('qn', true);
-      qnTooltipHide();
-      qnAnalysisScreen.style.display = 'none';
-      if (!A.sol || A.built !== A.N) { A.sol = solve(A.N); buildBoard(); }
-      switchScreen(scr, 'flex'); setTab(A.tab); window.scrollTo(0, 0);
+      if (t === 'learn') { leaveQuiz(); tab = 'learn'; apply(); busy++; qnAUpdate(); busy--; if (!L.q) qnLNext(); }
+      else if (t === 'free') { leaveQuiz(); tab = 'free'; apply(); qnAUpdate(); }
+      else { tab = 'quiz'; apply(); qnAQuiz(); }
     };
-    window.qgClose = function () {
-      stopAuto();
-      if (scr.style.display === 'none' || !scr.style.display) return;
-      scr.style.display = 'none';
-      switchScreen(qnAnalysisScreen, 'flex'); qnAUpdate(); window.scrollTo(0, 0);
+    window.qnATab = () => tab;
+    // 기존 함수들이 분석 판을 새로 그리면 탭을 맞춤 (퀴즈면 quiz, 아니면 free) — 복기·AI와 두기 복귀 등
+    const wrapBefore = (name, fn) => { const f = window[name]; window[name] = function (...a) { fn(...a); return f.apply(this, a); }; };
+    const wrapAfter = (name, fn) => { const f = window[name]; window[name] = function (...a) { const r = f.apply(this, a); fn(...a); return r; }; };
+    wrapBefore('qnAUpdate', () => { if (busy) return; const want = qnAQuizOn ? 'quiz' : 'free'; if (tab !== want) { tab = want; apply(); } });
+    wrapBefore('qnAQuiz', () => { busy++; });
+    wrapAfter('qnAQuiz', () => { busy--; if (tab !== 'quiz') { tab = 'quiz'; apply(); } });
+    // 메뉴의 📊 분석 모드 → 기본 탭은 🎯 이기는 수 찾기
+    wrapAfter('qnStartAnalysis', () => { tab = 'free'; qnATabSet('learn'); });
+    // 🏁 퀴즈의 [그만] → 자유 분석 탭
+    wrapAfter('qzStop', k => { if (k === 'qn' && tab === 'quiz') { tab = 'free'; apply(); } });
+
+    /* ---------- 🎯 이기는 수 찾기 ---------- */
+    const L = { N: 8, built: 0, q: null, answered: false, pick: null, wins: [], solved: 0, right: 0 };
+    const fmt = p => `(${p[0]},${p[1]})`;
+    const cold = (x, y) => qnIsCold(x, y, L.N, qnWinRule);
+    function build() {
+      const N = L.N; $('qn-l-boardWrap').style.setProperty('--n', N);
+      const g = $('qn-l-grid'); g.innerHTML = '';
+      for (let y = N - 1; y >= 0; y--) for (let x = 0; x < N; x++) {
+        const c = document.createElement('button'); c.type = 'button'; c.className = 'qn-cell' + ((x + y) % 2 === 0 ? ' d' : '');
+        c.dataset.x = x; c.dataset.y = y; if (!x && !y) c.classList.add('goal');
+        c.onclick = () => onCell(x, y);
+        c.onmouseenter = () => { if (c.classList.contains('tgt')) playSfx('hover'); };
+        g.appendChild(c);
+      }
+      $('qn-l-ylab').innerHTML = Array.from({ length: N }, (_, i) => `<span>${N - 1 - i}</span>`).join('');
+      $('qn-l-xlab').innerHTML = Array.from({ length: N }, (_, i) => `<span>${i}</span>`).join('');
+      L.built = N;
+    }
+    function onCell(x, y) {
+      if (L.answered || !L.q) return;
+      if (!qnMoves(...L.q).some(([a, b]) => a === x && b === y)) return;
+      answer([x, y]);
+    }
+    window.qnLSize = function () { L.N = parseInt($('qn-l-size').value) || 8; qnLNext(); };
+    window.qnLNext = function () {
+      if (L.built !== L.N) build();
+      L.q = qnARandPos(L.N, true); L.answered = false; L.pick = null;
+      L.wins = qnMoves(...L.q).filter(([a, b]) => cold(a, b));
+      render();
     };
-    function qnTooltipHide() { const t = $q('qn-preview-tooltip'); if (t) t.style.display = 'none'; }
-    // 퀸 메뉴로 나가면 황금비 화면도 닫기
-    const _qnBackG = qnGoBack; qnGoBack = function (...a) { stopAuto(); scr.style.display = 'none'; return _qnBackG(...a); };
-    NAV_SCREENS.queen.push('qn-golden-screen');
+    window.qnLShow = function () { if (!L.q || L.answered) return; answer(null); };
+    function answer(to) {
+      L.answered = true; L.pick = to;
+      const ok = !!to && cold(to[0], to[1]);
+      if (to) { L.solved++; if (ok) L.right++; }
+      if (to) { if (ok) playWinSound(); else playLoseSound(); } else playSfx('click');
+      render();
+    }
+    function render() {
+      const N = L.N, q = L.q, mis = qnWinRule === 'misere';
+      const moves = q ? qnMoves(...q) : [], mv = new Set(moves.map(m => m + '')), win = new Set(L.wins.map(m => m + ''));
+      $('qn-l-grid').querySelectorAll('.qn-cell').forEach(c => {
+        const x = +c.dataset.x, y = +c.dataset.y, k = x + ',' + y, isQ = q && q[0] === x && q[1] === y;
+        c.innerHTML = isQ ? '<span class="q">♛</span>' : '';
+        c.classList.toggle('tgt', mv.has(k));
+        c.classList.toggle('quiz', mv.has(k) && !L.answered);
+        c.classList.toggle('cell-win', L.answered && win.has(k));
+        c.classList.toggle('cell-bad', L.answered && !!L.pick && L.pick + '' === k && !win.has(k));
+        c.classList.toggle('l-pick', L.answered && !!L.pick && L.pick + '' === k);
+        c.classList.toggle('cold-dot', L.answered && (x || y) ? cold(x, y) : false);
+        c.disabled = !mv.has(k) || L.answered;
+      });
+      $('qn-l-score').textContent = L.solved ? `맞힘 ${L.right} / ${L.solved}` : '';
+      $('qn-l-show').disabled = !q || L.answered;
+      const ask = $('qn-l-ask'), exp = $('qn-l-exp');
+      if (!q) { ask.className = 'a-verdict'; ask.innerHTML = '[다음 문제]를 누르세요.'; exp.hidden = true; return; }
+      if (!L.answered) {
+        ask.className = 'a-verdict';
+        ask.innerHTML = `<b>🎯 퀸이 ${fmt(q)}에 있어요 — 내 차례!</b><br>상대를 <b>후공 승리 칸</b>으로 보내는 칸을 판에서 눌러 보세요. (색칠된 칸 = 갈 수 있는 칸)`;
+        $('qn-l-hint').textContent = '왼쪽·아래·왼쪽 아래 대각선으로 원하는 만큼 — 이기는 칸을 고르세요';
+        exp.hidden = true; return;
+      }
+      const to = L.pick, ok = !!to && win.has(to + '');
+      ask.className = 'a-verdict ' + (ok ? 'win' : 'lose');
+      if (ok) ask.innerHTML = `<b>정답! 🎉</b> ${fmt(to)}는 후공 승리 칸이에요. 상대가 어디로 옮겨도 다시 후공 승리 칸으로 보낼 수 있어요.`;
+      else if (to) ask.innerHTML = `<b>아쉬워요 😢</b> ${fmt(to)}는 이기는 수가 아니에요. 정답은 초록 칸: ${L.wins.map(fmt).join(', ')}`;
+      else ask.innerHTML = `<b>👀 정답 보기</b> 이기는 수는 초록 칸: ${L.wins.map(fmt).join(', ')}`;
+      $('qn-l-hint').textContent = '초록 = 이기는 수 · 빨간 점 = 후공 승리 칸 · [다음 문제]로 계속';
+      // 설명
+      const best = ok ? to : L.wins[0];
+      let h = '';
+      if (to && !ok) {
+        const resp = (!to[0] && !to[1]) ? null : qnMoves(to[0], to[1]).find(([a, b]) => cold(a, b));
+        const respTxt = (!to[0] && !to[1]) ? (mis ? '구석에 넣는 사람이 지는 규칙이라 바로 패배예요.' : '')
+          : !resp ? '' : (!resp[0] && !resp[1] && !mis) ? `상대가 퀸을 바로 <b>구석 (0,0)</b>에 넣어서 이겨요.` : `상대가 <b>${fmt(resp)}</b>(후공 승리 칸)으로 옮겨서, 내가 다시 지는 자리에서 두게 돼요.`;
+        h += `<div><b class="no">❌ ${fmt(to)}로 가면?</b> ${respTxt}</div>`;
+      }
+      h += `<div><b class="ok">✅ ${fmt(best)}가 이기는 수인 까닭</b> — 상대가 ${fmt(best)}에서 어디로 옮겨도(가로·세로·대각선) 후공 승리 칸이 아니라서, 내가 다시 후공 승리 칸으로 되돌려 보낼 수 있어요.</div>`;
+      // 근처 후공 승리 칸
+      const lim = Math.max(q[0], q[1]), near = [];
+      for (let x = 0; x <= lim && x < N; x++) for (let y = 0; y <= lim && y < N; y++) if (cold(x, y) && (x || y || !mis)) near.push([x, y]);
+      near.sort((a, b) => Math.max(a[0], a[1]) - Math.max(b[0], b[1]) || a[0] - b[0]);
+      h += `<div><b>이 근처 후공 승리 칸</b> (빨간 점): ${near.map(p => `<span class="chip${win.has(p + '') ? ' near' : ''}">${fmt(p)}</span>`).join('')}<br><small>진한 테두리 = 지금 퀸에서 한 번에 갈 수 있는 칸</small></div>`;
+      // 황금비 표
+      if (!mis) {
+        const rows = []; for (let n = 0; ; n++) { const a = Math.floor(n * PHI), b = a + n; if (b >= N) break; rows.push([n, a, b]); }
+        const d = Math.abs(best[0] - best[1]), lo = Math.min(best[0], best[1]);
+        h += `<div><b>왜 그 칸이 후공 승리 칸일까? — 황금비 φ≈1.618</b><br>후공 승리 칸은 <b>(⌊nφ⌋, ⌊nφ²⌋)</b> 쌍과 그 반대 칸이에요. φ² = φ + 1 이라 ⌊nφ²⌋ = ⌊nφ⌋ + n. 즉 <b>두 좌표의 차가 n이면서 작은 쪽이 ⌊nφ⌋</b>이면 후공 승리 칸!<br>`
+          + `${fmt(best)}: 두 좌표의 차 = <b>${d}</b>, 작은 쪽 = <b>${lo}</b>, ${d}×1.618 = ${(d * PHI).toFixed(2)} → 내림 <b>${Math.floor(d * PHI)}</b> ✔</div>`;
+        h += `<table><tr><th>n</th><th>⌊nφ⌋</th><th>⌊nφ²⌋ = ⌊nφ⌋+n</th><th>후공 승리 칸</th></tr>` + rows.map(([n, a, b]) => `<tr${n === d ? ' class="me"' : ''}><td>${n}</td><td>${a}</td><td>${b}</td><td>${n ? `(${a},${b}) (${b},${a})` : '(0,0) 구석'}</td></tr>`).join('') + `</table>`;
+        h += `<div><small>더 자세한 그림은 아래 <b>📐 황금비 그림</b>을 펼쳐 보세요.</small></div>`;
+      } else {
+        h += `<div><b>거꾸로 규칙</b>(구석에 넣으면 패배)이라 후공 승리 칸이 황금비 쌍 (⌊nφ⌋, ⌊nφ²⌋)과 조금 달라요. 설정에서 기본 규칙으로 바꾸면 황금비 표가 보여요.</div>`;
+      }
+      exp.innerHTML = h; exp.hidden = false;
+      // 폰처럼 설명이 화면 밖이면 보이게
+      requestAnimationFrame(() => { const r = ask.getBoundingClientRect(); if (r.top < 0 || r.bottom > innerHeight) ask.scrollIntoView({ behavior: 'smooth', block: 'start' }); });
+    }
+    // 처음 상태: 설정의 판 크기를 따라감
+    wrapAfter('qnStartAnalysis', () => { const v = String(qnAN); if ($('qn-l-size').value !== v) { $('qn-l-size').value = v; L.N = qnAN; if (L.q) qnLNext(); } });
+    apply();
   })();
 </script>
 <script>
