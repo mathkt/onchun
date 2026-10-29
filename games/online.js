@@ -21,7 +21,7 @@ window.Online = (function () {
     storageBucket: "popit-88756.firebasestorage.app",
   };
   const SDK = 'https://www.gstatic.com/firebasejs/10.12.2/';
-  let db = null, game = 'game', roomRef = null, code = '', myNum = 0, handlers = [], applied = 0, gameNo = 0, sub = null, active = false, names = {};
+  let db = null, game = 'game', roomRef = null, code = '', myNum = 0, handlers = [], applied = 0, gameNo = 0, sub = null, active = false, names = {}, seen = new Set();
   const myId = Math.random().toString(36).slice(2, 10);
 
   function loadScript(src) {
@@ -49,7 +49,7 @@ window.Online = (function () {
       if (!r) { if (active) { active = false; emit({ type: 'left', reason: 'closed' }); } return; }
       if (r.gameNo !== lastGameNo) {
         const first = lastGameNo === null;
-        lastGameNo = r.gameNo; gameNo = r.gameNo; applied = 0;
+        lastGameNo = r.gameNo; gameNo = r.gameNo; applied = 0; seen = new Set();
         if (!first) emit({ type: 'reset', settings: r.settings || {} });
       }
       const nn = { 1: r.host && r.host.name, 2: r.guest && r.guest.name };
@@ -60,9 +60,11 @@ window.Online = (function () {
       if (r.left && r.left !== myId) { active = false; emit({ type: 'left', reason: 'opponent' }); return; }
       const moves = (r.moves && r.moves[gameNo]) || {};
       const keys = Object.keys(moves).map(Number).sort((a, b) => a - b);
+      // 번호 순서대로 한 번씩만 처리 (동시에 보낸 수가 다른 번호로 밀려 들어와도 놓치지 않게)
       for (const k of keys) {
-        if (k < applied) continue;
-        const m = moves[k]; applied = k + 1;
+        if (seen.has(k)) continue;
+        const m = moves[k]; if (!m) continue;
+        seen.add(k); if (k + 1 > applied) applied = k + 1;
         if (m.by !== myNum) emit({ type: 'move', move: m.move, by: m.by, idx: k });
       }
     };
@@ -80,7 +82,7 @@ window.Online = (function () {
         const c = newCode(); const ref = base().child(key(c));
         const s = await ref.get();
         if (!s.exists() || (Date.now() - (s.val().createdAt || 0)) > 3 * 3600 * 1000) {
-          code = c; roomRef = ref; myNum = 1; applied = 0; active = true; gameNo = 1;
+          code = c; roomRef = ref; myNum = 1; applied = 0; seen = new Set(); active = true; gameNo = 1;
           await ref.set({ createdAt: TS(), updatedAt: TS(), lobby: null, host: { name: name || '방장', online: true, id: myId }, guest: null });
           await ref.update({ kind: game, settings: settings || {}, gameNo: 1, updatedAt: TS() });
           ref.onDisconnect().update({ left: myId, 'host/online': false, updatedAt: TS() });
@@ -97,7 +99,7 @@ window.Online = (function () {
       if (!s.exists() || !s.val().gameNo) throw new Error('그 번호의 방이 없어요.');
       const r = s.val();
       if (r.guest || r.left) throw new Error('이미 꽉 찼거나 끝난 방이에요.');
-      code = c; roomRef = ref; myNum = 2; applied = 0; active = true; gameNo = r.gameNo;
+      code = c; roomRef = ref; myNum = 2; applied = 0; seen = new Set(); active = true; gameNo = r.gameNo;
       await ref.update({ guest: { name: name || '손님', online: true, id: myId }, updatedAt: TS() });
       ref.onDisconnect().update({ left: myId, 'guest/online': false, updatedAt: TS() });
       listen();
@@ -117,10 +119,23 @@ window.Online = (function () {
       }
       return null;
     },
+    // 내 수 전송: 빈 번호에만 씀(transaction). 두 사람이 같은 번호에 동시에 쓰면(가위바위보·제한시간 켜기 등) 늦은 쪽이 다음 번호로 밀림
     sendMove(move) {
       if (!active || !roomRef) return;
-      const idx = applied; applied = idx + 1;
-      roomRef.update({ ['moves/' + gameNo + '/' + idx]: { by: myNum, move, t: Date.now() }, updatedAt: TS() });
+      const gn = gameNo, ref0 = roomRef, data = { by: myNum, move, t: Date.now() };
+      const tryAt = (idx, n) => {
+        if (idx + 1 > applied) applied = idx + 1;
+        const path = 'moves/' + gn + '/' + idx;
+        const plain = () => ref0.update({ [path]: data, updatedAt: TS() });
+        const ref = ref0.child(path);
+        if (typeof ref.transaction !== 'function') return plain();
+        ref.transaction(cur => (cur === null || cur === undefined) ? data : undefined, (err, ok) => {
+          if (err) { console.warn('sendMove', err); return plain(); }
+          if (!ok) { if (roomRef === ref0 && gameNo === gn && n < 20) tryAt(Math.max(applied, idx + 1), n + 1); return; }
+          ref0.update({ updatedAt: TS() }).catch(() => { });
+        }, false);
+      };
+      tryAt(applied, 0);
     },
     async reset(settings) {
       if (!active || !roomRef || myNum !== 1) return;
@@ -129,7 +144,7 @@ window.Online = (function () {
     },
     leave() {
       if (roomRef) { try { roomRef.off('value', sub); roomRef.onDisconnect().cancel(); if (active) roomRef.update({ left: myId, updatedAt: TS() }); } catch (e) { } }
-      roomRef = null; code = ''; myNum = 0; active = false; applied = 0; gameNo = 0; names = {};
+      roomRef = null; code = ''; myNum = 0; active = false; applied = 0; gameNo = 0; names = {}; seen = new Set();
     },
   };
 })();

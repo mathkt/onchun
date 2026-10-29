@@ -2891,7 +2891,7 @@
 
 
 <script src="../../common.js" data-num="🎮" data-name="메인 게임" data-sub="노탁토 · 돌 가져가기 · 황금비 퀸 · 팝잇" data-home="../../" data-extra="<button class=&quot;bk-btn bk-btn--ghost bk-btn--sm&quot; id=&quot;sound-toggle&quot; onclick=&quot;toggleMute()&quot;><span id=&quot;sound-icon&quot;>🔊</span> <span id=&quot;sound-text&quot;>소리</span></button><button class=&quot;bk-btn bk-btn--sm&quot; id=&quot;top-rules-btn&quot; style=&quot;display:none&quot; onclick=&quot;showRules(true)&quot;>📖 규칙</button>"></script>
-<script src="../online.js?v=5"></script>
+<script src="../online.js?v=6"></script>
 
 <main>
   <!-- ================= 0. 초기 로비 화면 (1번 스타일) ================= -->
@@ -3539,11 +3539,10 @@
       </label>
       <label>한 턴 당 제한시간:
         <select id="set-qn-time">
-          <option value="unlimited">무제한</option>
-          <option value="10">10초</option><option value="20">20초</option><option value="30">30초</option>
+          <option value="3">3초</option><option value="5">5초</option><option value="10">10초</option><option value="20">20초</option><option value="30">30초</option>
         </select>
       </label>
-      <div class="set-note">⏳ 시간이 다 되면 아무 수나 자동으로 둬요.</div>
+      <div class="set-note">⏱ 게임 화면의 <b>제한시간</b> 체크를 켜면 이 시간이 적용돼요. 시간이 다 되면 아무 수나 자동으로 둬요.<br>⚙️ 게임 중에 바꾼 설정은 <b>다음 판부터</b> 적용돼요.</div>
     </div>
     <div style="text-align:center; margin-top:26px;">
       <button class="help-close-btn" onclick="playSfx('click'); saveQnSettings()">저장</button>
@@ -3587,14 +3586,10 @@
       </label>
       <label>한 턴 당 제한시간:
         <select id="set-pp-time">
-          <option value="unlimited">무제한</option>
-          <option value="5">5초</option>
-          <option value="10">10초</option>
-          <option value="20">20초</option>
-          <option value="30">30초</option>
+          <option value="3">3초</option><option value="5">5초</option><option value="10">10초</option><option value="20">20초</option><option value="30">30초</option>
         </select>
       </label>
-      <div class="set-note">⏳ 시간이 다 되면 아무 수나 자동으로 둬요.</div>
+      <div class="set-note">⏱ 게임 화면의 <b>제한시간</b> 체크를 켜면 이 시간이 적용돼요. 시간이 다 되면 아무 수나 자동으로 둬요.<br>⚙️ 게임 중에 바꾼 설정은 <b>다음 판부터</b> 적용돼요.</div>
       <details class="pp-adv" id="set-pp-adv">
         <summary>🔧 심화 설정</summary>
         <label>한 번에 누를 수 있는 개수 (심화):
@@ -3636,7 +3631,7 @@
         <input id="ol-name" maxlength="10" placeholder="비우면 랜덤 별명" style="flex:1; min-width:0; font-size:1rem; padding:8px 10px; border:2px solid #D9CFAE; border-radius:10px; font-family:'Jua',sans-serif;">
         <button class="undo-btn" style="padding:8px 10px; font-size:.85rem;" onclick="document.getElementById('ol-name').value = makeRandomName()">🎲</button>
       </div>
-      <button class="help-close-btn" style="width:100%;" onclick="playSfx('click'); olCreate()">방 만들기 (첫 판 내가 선공)</button>
+      <button class="help-close-btn" style="width:100%;" onclick="playSfx('click'); olCreate()">방 만들기</button>
       <div style="margin:16px 0 8px; color:var(--text-sub);">또는 친구가 알려 준 번호로 들어가기</div>
       <div style="display:flex; gap:8px; justify-content:center;">
         <input id="ol-code" inputmode="numeric" pattern="[0-9]*" maxlength="4" placeholder="4자리 번호" style="width:140px; font-size:1.5rem; text-align:center; letter-spacing:.2em; padding:8px; border:2px solid #D9CFAE; border-radius:12px; font-family:'Jua',sans-serif;">
@@ -3726,14 +3721,10 @@
       </label>
       <label>한 턴 당 제한시간:
         <select id="set-nt-time">
-          <option value="unlimited">무제한</option>
-          <option value="3">3초</option>
-          <option value="5">5초</option>
-          <option value="10">10초</option>
-          <option value="30">30초</option>
+          <option value="3">3초</option><option value="5">5초</option><option value="10">10초</option><option value="20">20초</option><option value="30">30초</option>
         </select>
       </label>
-      <div class="set-note">⏳ 시간이 다 되면 아무 수나 자동으로 둬요.</div>
+      <div class="set-note">⏱ 게임 화면의 <b>제한시간</b> 체크를 켜면 이 시간이 적용돼요. 시간이 다 되면 아무 수나 자동으로 둬요.<br>⚙️ 게임 중에 바꾼 설정은 <b>다음 판부터</b> 적용돼요.</div>
     </div>
     <div style="text-align:center; margin-top:26px;">
       <button class="help-close-btn" onclick="playSfx('click'); saveNtSettings()">저장 및 닫기</button>
@@ -3790,14 +3781,10 @@
       </label>
       <label>한 턴 당 제한시간:
         <select id="set-st-time">
-          <option value="unlimited">무제한</option>
-          <option value="3">3초</option>
-          <option value="5">5초</option>
-          <option value="10">10초</option>
-          <option value="30">30초</option>
+          <option value="3">3초</option><option value="5">5초</option><option value="10">10초</option><option value="20">20초</option><option value="30">30초</option>
         </select>
       </label>
-      <div class="set-note">⏳ 시간이 다 되면 아무 수나 자동으로 둬요.</div>
+      <div class="set-note">⏱ 게임 화면의 <b>제한시간</b> 체크를 켜면 이 시간이 적용돼요. 시간이 다 되면 아무 수나 자동으로 둬요.<br>⚙️ 게임 중에 바꾼 설정은 <b>다음 판부터</b> 적용돼요.</div>
     </div>
     <div style="text-align:center; margin-top:26px;">
       <button class="help-close-btn" onclick="playSfx('click'); saveStSettings()">저장 및 닫기</button>
@@ -4101,10 +4088,10 @@
 
   /* ================= 전역 상태 & 설정 ================= */
   let ntSize = 3;
-  let ntTimeSetting = 'unlimited';
+  let ntTimeSetting = '10';
   let stNSetting = 'random';
   let stLimitSetting = 'random';
-  let stTimeSetting = 'unlimited';
+  let stTimeSetting = '10';
   let stN = 10;
   let stLimit = 3;
   let stModeType = 'bomb';
@@ -4200,7 +4187,7 @@
   /* 선공 정하기: AI 대전은 설정(플레이어/AI/번갈아), 2인은 판마다 번갈아, 온라인은 판 번호(gameNo)로 — 홀수 판 방장, 짝수 판 손님 */
   const startCount = { notakto: 0, stone: 0, popit: 0, queen: 0 };
   function firstPlayer(game, mode) {
-    if (mode === 'online') { const g = (window.Online && Online.gameNo) || 1; return g % 2 === 1 ? 1 : 2; }
+    if (mode === 'online') { if (olFirstNum === 1 || olFirstNum === 2) return olFirstNum; const g = (window.Online && Online.gameNo) || 1; return g % 2 === 1 ? 1 : 2; } // 온라인: 가위바위보로 정한 선공
     const n = startCount[game]++;
     if (mode === 'bot') { if (botFirstTurn === 'bot') return 2; if (botFirstTurn === 'player') return 1; }
     return n % 2 ? 2 : 1;
@@ -4208,6 +4195,7 @@
   // 판 시작 때 "선공: 이름" 잠깐 보여 주기
   let rndNote = null; // 🎲 랜덤 다시하기: 다음 판 시작 안내에 붙일 글(함수) — 판이 만들어진 뒤에 읽음
   function showStartToast(game, first) {
+    if (typeof olRpsBlocking === 'function' && olRpsBlocking()) return; // 가위바위보 중에는 안 띄움 (끝나고 다시 시작할 때 띄움)
     let t = document.getElementById('start-toast');
     if (!t) { t = document.createElement('div'); t.id = 'start-toast'; document.body.appendChild(t); }
     let note = ''; if (typeof rndNote === 'function') { try { note = rndNote(); } catch (e) {} } rndNote = null;
@@ -4272,6 +4260,31 @@
   function undoRead(p) { const v = document.getElementById('set-' + p + '-undo').value; if (UNDO_VALS.includes(v)) { undoSetting[p] = v; undoSave(); } }
   // 무르기 버튼이 보이는가: AI·2인(분석에서 이어 두기 포함)이고 '없음'이 아닐 때 (온라인은 숨김)
   function undoVisible(mode, p) { return (mode === 'bot' || mode === 'solo') && undoSetting[p] !== '0'; }
+
+  /* ===== ⏱ 한 턴 제한시간: 켜기/끄기는 게임 화면 체크(게임별 localStorage), 초는 ⚙️ 설정 (3·5·10·20·30초) =====
+     예전 '무제한' 값은 체크 끔 + 10초로 바꿈. 온라인은 방 설정(t: 초, ton: 켜짐)을 따름 — 방장만 체크를 바꿀 수 있음 */
+  const TM_KEY = 'arcade_timer_v1', TM_SECS = ['3', '5', '10', '20', '30'];
+  var tmPref = { nt: { on: false, s: '10' }, st: { on: false, s: '10' }, qn: { on: false, s: '10' }, pp: { on: false, s: '10' } };
+  try { const o = JSON.parse(localStorage.getItem(TM_KEY) || '{}'); for (const k in tmPref) if (o[k]) { tmPref[k].on = o[k].on === true && TM_SECS.includes(String(o[k].s)); tmPref[k].s = TM_SECS.includes(String(o[k].s)) ? String(o[k].s) : '10'; } } catch (e) {}
+  function tmSave() { try { localStorage.setItem(TM_KEY, JSON.stringify(tmPref)); } catch (e) {} }
+  function tmSan(v) { v = String(v); return TM_SECS.includes(v) ? v : '10'; }
+  var olTmOn = false; // 온라인 방의 제한시간 켜짐 (방 설정 ton · 방장이 체크로 바꿈)
+  function tmModeOf(p) { return p === 'nt' ? ntMode : p === 'st' ? stMode : p === 'pp' ? ppMode : qnMode; }
+  function tmIsOnline(p) { return tmModeOf(p) === 'online'; }
+  function tmEff(p) { return tmIsOnline(p) ? olTmOn : !!tmPref[p].on; }
+  function tmSecs(p) { return parseInt(tmSan(p === 'nt' ? ntTimeSetting : p === 'st' ? stTimeSetting : p === 'pp' ? ppTimeSetting : qnTimeSetting)); }
+  // 지금 이 판에서 시계가 돌아가야 하나: 체크 켜짐 + (온라인이면 연결 중 · 가위바위보 끝남)
+  function tmRunning(p) {
+    if (!tmEff(p)) return false;
+    if (tmIsOnline(p)) { if (!(window.Online && Online.active)) return false; if (typeof olRpsBlocking === 'function' && olRpsBlocking()) return false; }
+    return true;
+  }
+  // 창이 열려 있으면 시간 멈춤 — 온라인은 두 기기 시계를 맞추려고 멈추지 않음
+  function tmPaused(p) { return !tmIsOnline(p) && anyModalOpen(); }
+  // 온라인에서 상대 차례: 시계는 같이 보여 주되, 시간 초과 수는 차례인 사람 기기만 둠 (두 번 두지 않게)
+  function tmNotMine(p, cur) { return tmIsOnline(p) && window.Online && cur !== Online.myNum; }
+  function tmSubText(p) { return tmPref[p].on ? tmSan(p === 'nt' ? ntTimeSetting : p === 'st' ? stTimeSetting : p === 'pp' ? ppTimeSetting : qnTimeSetting) + '초' : '끔'; }
+  ntTimeSetting = tmPref.nt.s; stTimeSetting = tmPref.st.s;
 
   function openNtSettings() {
     document.getElementById('set-nt-size').value = ntSize;
@@ -4474,7 +4487,7 @@
   const qnMenuScreen = document.getElementById('qn-menu-screen');
   const qnGameScreen = document.getElementById('qn-game-screen');
   const QN_PHI = (1 + Math.sqrt(5)) / 2;
-  let qnSizeSetting = '8', qnStartSetting = 'rand', qnWinRule = 'last', qnTimeSetting = 'unlimited';
+  let qnSizeSetting = '8', qnStartSetting = 'rand', qnWinRule = 'last', qnTimeSetting = '10';
   let qnMode = 'bot', qnN = 8, qnQ = null, qnStart = null, qnCur = 1, qnOver = false, qnPhase = 'play', qnLog = [], qnLast = null, qnBotSel = null, qnCold = new Set();
   let qnUndoLeft = { 1: 1, 2: 1 }; // 이번 판 무르기 남은 횟수 (설정값으로 매 판 초기화)
   let qnBotTimeout = null, qnTimerInterval = null, qnTimeLeft = 0, qnScore = { p1Wins: 0, p2Wins: 0 };
@@ -4502,7 +4515,7 @@
   function qnUpdateSubtitle(active) {
     const size = active ? `${qnN}×${qnN}` : (qnSizeSetting === 'random' ? '랜덤' : `${qnSizeSetting}×${qnSizeSetting}`);
     const st = { rand: '난이도 맞춤 시작', pick: '직접 놓기', cold: '도전 위치' }[qnStartSetting];
-    const t = qnTimeSetting === 'unlimited' ? '무제한' : qnTimeSetting + '초';
+    const t = tmSubText('qn');
     document.getElementById('qn-main-subtitle').innerHTML = `<b>퀸을 구석에 넣으면 ${qnWinRule === 'misere' ? '패배' : '승리'}</b> (←·↓·↙ 원하는 만큼)<br><small>${size} · ${st} · 시간 ${t}</small>`;
   }
   let qnSettingsThenRestart = false;
@@ -4549,14 +4562,14 @@
   function qnStopTimer() { if (qnTimerInterval) { clearInterval(qnTimerInterval); qnTimerInterval = null; } document.getElementById('qn-timer-display').innerText = ''; }
   function qnStartTimer() {
     qnStopTimer();
-    if (qnTimeSetting === 'unlimited' || qnOver || qnPhase !== 'play') return;
+    if (!tmRunning('qn') || qnOver || qnPhase !== 'play') return;
     if (qnMode === 'bot' && qnCur === qnBotNum()) return;
-    if (qnMode === 'online' && qnCur !== Online.myNum) return;
-    qnTimeLeft = parseInt(qnTimeSetting);
+    qnTimeLeft = tmSecs('qn');
     const el = document.getElementById('qn-timer-display'); el.innerText = `⏳ 남은 시간: ${qnTimeLeft}초`;
     qnTimerInterval = setInterval(() => {
-      if (anyModalOpen()) return; // 규칙·도움말·설정·전적 창이 열려 있으면 시간 멈춤
+      if (tmPaused('qn')) return; // 규칙·도움말·설정·전적 창이 열려 있으면 시간 멈춤 (온라인은 안 멈춤)
       qnTimeLeft--; el.innerText = `⏳ 남은 시간: ${qnTimeLeft}초`;
+      if (qnTimeLeft <= 0 && tmNotMine('qn', qnCur)) { clearInterval(qnTimerInterval); qnTimerInterval = null; return; } // 온라인 상대 차례: 상대 기기가 시간 초과 수를 보냄
       if (qnTimeLeft <= 0) { qnStopTimer(); const o = qnAiOpts(qnQ), sf = o.moves.filter(m => !o.suicide(m)), m = sf.length ? sf : o.moves; const mv = m[Math.floor(Math.random() * m.length)]; qnPlayerMove(mv[0], mv[1]); }
     }, 1000);
   }
@@ -4956,7 +4969,7 @@
   /* ================= 0. 팝잇 게임 스크립트 ================= */
   const ppMenuScreen = document.getElementById('pp-menu-screen');
   const ppGameScreen = document.getElementById('pp-game-screen');
-  let ppRowsSetting = '3 4 3', ppTimeSetting = 'unlimited', ppWinRule = 'last', ppMaxTake = 0; // ppMaxTake 0 = 제한 없음(심화: 한 번에 최대 n개)
+  let ppRowsSetting = '3 4 3', ppTimeSetting = '10', ppWinRule = 'last', ppMaxTake = 0; // ppMaxTake 0 = 제한 없음(심화: 한 번에 최대 n개)
   let ppMode = 'bot', ppInit = [2, 5, 6], ppRows = [], ppCur = 1, ppOver = false, ppHist = [], ppSelRow = null, ppSel = [];
   // 버블마다 터졌는지 기억 (줄마다 터진 버블 번호 Set) — 게임 이론 계산은 남은 개수(ppRows)로
   let ppPopped = [], ppGlow = null, ppSeq = 0;
@@ -4993,7 +5006,7 @@
   function ppUpdateSubtitle(active) {
     const sub = document.getElementById('pp-main-subtitle');
     const rows = active ? ppInit.join('·') : (ppRowsSetting === 'random' ? '랜덤' : ppParseRows(ppRowsSetting).join('·'));
-    const t = ppTimeSetting === 'unlimited' ? '무제한' : ppTimeSetting + '초';
+    const t = tmSubText('pp');
     sub.innerHTML = `<b>마지막 버블 누르면 ${ppWinRule === 'misere' ? '패배' : '승리'}</b> (한 줄에서 ${ppMaxTake ? '1~' + ppMaxTake + '개' : '원하는 만큼'})<br><small>줄 ${rows}${ppMaxTake ? ' · 한 번에 최대 ' + ppMaxTake + '개' : ''} · 시간 ${t}</small>`;
   }
   let ppSettingsThenRestart = false;
@@ -5048,15 +5061,15 @@
   }
   function ppStartTimer() {
     ppStopTimer();
-    if (ppTimeSetting === 'unlimited' || ppOver) return;
+    if (!tmRunning('pp') || ppOver) return;
     if (ppMode === 'bot' && ppCur === ppBotNum()) return;
-    if (ppMode === 'online' && ppCur !== Online.myNum) return;
-    ppTimeLeft = parseInt(ppTimeSetting);
+    ppTimeLeft = tmSecs('pp');
     const el = document.getElementById('pp-timer-display');
     el.innerText = `⏳ 남은 시간: ${ppTimeLeft}초`;
     ppTimerInterval = setInterval(() => {
-      if (anyModalOpen()) return;
+      if (tmPaused('pp')) return;
       ppTimeLeft--; el.innerText = `⏳ 남은 시간: ${ppTimeLeft}초`;
+      if (ppTimeLeft <= 0 && tmNotMine('pp', ppCur)) { clearInterval(ppTimerInterval); ppTimerInterval = null; return; }
       if (ppTimeLeft <= 0) {
         ppStopTimer();
         ppAutoMove();
@@ -5543,7 +5556,7 @@
   let ntTimeLeft = 0;
 
   function ntUpdateSubtitle() {
-    let timeText = ntTimeSetting === 'unlimited' ? '무제한' : ntTimeSetting + '초';
+    let timeText = tmSubText('nt');
     document.getElementById('nt-main-subtitle').innerHTML = `<b>한 줄 완성하면 패배</b> (둘 다 X)<br><small>${ntSize}×${ntSize} 판 · 시간 ${timeText}</small>`;
   }
 
@@ -5557,19 +5570,21 @@
     ntStopTimer();
     if (ntGameOver) return;
     let isBotTurn = (ntMode === 'bot' && (isBranchPlay ? (ntCurrentPlayer !== branchHumanPlayer) : (ntCurrentPlayer === 2)));
-    if (isBotTurn || ntTimeSetting === 'unlimited') return;
+    if (isBotTurn || !tmRunning('nt')) return;
 
-    ntTimeLeft = parseInt(ntTimeSetting);
+    ntTimeLeft = tmSecs('nt');
     const timerDisplay = document.getElementById('nt-timer-display');
     timerDisplay.style.display = 'block';
     timerDisplay.innerText = `⏳ 남은 시간: ${ntTimeLeft}초`;
 
     ntTimerInterval = setInterval(() => {
-      if (anyModalOpen()) return;
+      if (tmPaused('nt')) return;
       ntTimeLeft--;
       if (ntTimeLeft > 0) {
         if (ntTimeLeft <= 3) playSfx('tick');
         timerDisplay.innerText = `⏳ 남은 시간: ${ntTimeLeft}초`;
+      } else if (tmNotMine('nt', ntCurrentPlayer)) {
+        clearInterval(ntTimerInterval); ntTimerInterval = null; timerDisplay.innerText = '⏳ 남은 시간: 0초';
       } else {
         ntStopTimer();
         ntHandleTimeout();
@@ -6175,7 +6190,7 @@
     let sub = document.getElementById('st-main-subtitle');
     let nText = isGameActive ? stN : (stNSetting === 'random' ? '랜덤' : stNSetting);
     let limitText = isGameActive ? stLimit : (stLimitSetting === 'random' ? '랜덤' : stLimitSetting);
-    let timeText = stTimeSetting === 'unlimited' ? '무제한' : stTimeSetting + '초';
+    let timeText = tmSubText('st');
     let modeName = stModeType === 'gem' ? '보석 모드' : '폭탄 모드';
 
     sub.innerHTML = stModeType === 'gem'
@@ -6193,19 +6208,21 @@
     stStopTimer();
     if (stGameOver) return;
     let isBotTurn = (stMode === 'bot' && (isBranchPlay ? (stCurrentPlayer !== branchHumanPlayer) : (stCurrentPlayer === 2)));
-    if (isBotTurn || stTimeSetting === 'unlimited') return;
+    if (isBotTurn || !tmRunning('st')) return;
 
-    stTimeLeft = parseInt(stTimeSetting);
+    stTimeLeft = tmSecs('st');
     const timerDisplay = document.getElementById('st-timer-display');
     timerDisplay.style.display = 'block';
     timerDisplay.innerText = `⏳ 남은 시간: ${stTimeLeft}초`;
 
     stTimerInterval = setInterval(() => {
-      if (anyModalOpen()) return;
+      if (tmPaused('st')) return;
       stTimeLeft--;
       if (stTimeLeft > 0) {
         if (stTimeLeft <= 3) playSfx('tick');
         timerDisplay.innerText = `⏳ 남은 시간: ${stTimeLeft}초`;
+      } else if (tmNotMine('st', stCurrentPlayer)) {
+        clearInterval(stTimerInterval); stTimerInterval = null; timerDisplay.innerText = '⏳ 남은 시간: 0초';
       } else {
         stStopTimer();
         stHandleTimeout();
@@ -7161,26 +7178,28 @@
   /* ===== 🌐 온라인 대전 (games/online.js) — 네 게임 공통 ===== */
   const OLG = {
     stone:   { p: 'st', mode: () => stMode, over: () => stGameOver, cur: () => stCurrentPlayer, start: () => stStartGame('online'), back: () => stGoBack(),
-               settings: () => { applyStRandomRules(); return { n: stN, limit: stLimit, mode: stModeType }; },
-               apply: s => { stNSetting = String(s.n); stLimitSetting = String(s.limit); stModeType = s.mode || stModeType; stTimeSetting = 'unlimited'; },
+               settings: () => { applyStRandomRules(); return { n: stN, limit: stLimit, mode: stModeType, t: tmSan(stTimeSetting), ton: olTmNow('st') }; },
+               apply: s => { stNSetting = String(s.n); stLimitSetting = String(s.limit); stModeType = s.mode || stModeType; stTimeSetting = tmSan(s.t); olTmOn = !!s.ton; },
                remote: m => { const gid = stGameId; const go = () => { if (gid !== stGameId) return; if (stIsAnimating || stBotTimeout) return setTimeout(go, 150); const k = parseInt(m); if (!stGameOver && stCurrentPlayer !== Online.myNum && k >= 1 && k <= Math.min(stLimit, stStonesArr.length)) stGlowThen(k, kk => stExecuteMove(kk)); }; go(); } },
     notakto: { p: 'nt', mode: () => ntMode, over: () => ntGameOver, cur: () => ntCurrentPlayer, start: () => ntStartGame('online'), back: () => ntGoBack(),
-               settings: () => ({ size: ntSize }), apply: s => { ntSize = s.size || 3; ntTimeSetting = 'unlimited'; },
+               settings: () => ({ size: ntSize, t: tmSan(ntTimeSetting), ton: olTmNow('nt') }), apply: s => { ntSize = s.size || 3; ntTimeSetting = tmSan(s.t); olTmOn = !!s.ton; },
                remote: m => { if (!ntGameOver && ntCurrentPlayer !== Online.myNum && Number.isInteger(m) && !(ntGameBoardMask & (1 << m))) ntGlowThen(m, c => ntExecuteGameMove(c)); } },
     queen:   { p: 'qn', mode: () => qnMode, over: () => qnOver, cur: () => qnCur, start: () => qnStartGame('online', olQnPreset), back: () => qnGoBack(),
-               settings: () => { const size = qnSizeSetting === 'random' ? 6 + Math.floor(Math.random() * 7) : parseInt(qnSizeSetting); qnN = size; qnCold = qnColdSet(size); const start = qnStartSetting === 'pick' ? null : qnPickStart(); return { size, start, rule: qnWinRule, startMode: qnStartSetting }; },
-               apply: s => { olQnPreset = { size: s.size, start: s.start }; qnStartSetting = s.startMode || 'rand'; qnWinRule = s.rule || 'last'; qnTimeSetting = 'unlimited'; },
+               settings: () => { const size = qnSizeSetting === 'random' ? 6 + Math.floor(Math.random() * 7) : parseInt(qnSizeSetting); qnN = size; qnCold = qnColdSet(size); const start = qnStartSetting === 'pick' ? null : qnPickStart(); return { size, start, rule: qnWinRule, startMode: qnStartSetting, t: tmSan(qnTimeSetting), ton: olTmNow('qn') }; },
+               apply: s => { olQnPreset = { size: s.size, start: s.start }; qnStartSetting = s.startMode || 'rand'; qnWinRule = s.rule || 'last'; qnTimeSetting = tmSan(s.t); olTmOn = !!s.ton; },
                remote: m => { if (m.place && qnPhase === 'place') { qnQ = m.place.slice(); qnStart = qnQ.slice(); qnPhase = 'play'; qnRender(); qnUpdateUI(); } else if (m.to && !qnOver && qnCur !== Online.myNum) qnGlowThen(m.to, t => qnExecuteMove(t)); } },
     popit:   { p: 'pp', mode: () => ppMode, over: () => ppOver, cur: () => ppCur, start: () => ppStartGame('online'), back: () => ppGoBack(),
-               settings: () => { ppApplyRules(); return { rows: ppInit.slice(), rule: ppWinRule, max: ppMaxTake }; }, apply: s => { ppRowsSetting = (s.rows || [3, 4, 3]).join(' '); ppWinRule = s.rule || 'last'; ppMaxTake = s.max || 0; ppTimeSetting = 'unlimited'; },
+               settings: () => { ppApplyRules(); return { rows: ppInit.slice(), rule: ppWinRule, max: ppMaxTake, t: tmSan(ppTimeSetting), ton: olTmNow('pp') }; }, apply: s => { ppRowsSetting = (s.rows || [3, 4, 3]).join(' '); ppWinRule = s.rule || 'last'; ppMaxTake = s.max || 0; ppTimeSetting = tmSan(s.t); olTmOn = !!s.ton; },
                remote: m => { if (!ppOver && ppCur !== Online.myNum && m && ppInit[m.row] !== undefined && m.count >= 1) ppGlowThen(m, mv => { if (!ppOver && ppCur !== Online.myNum) ppExecuteMove(mv); }); } },
   };
-  let olGame = null, olOrig = null, olBusy = false, olCur = null, olStarted = false, olQnPreset = null;
+  let olGame = null, olOrig = null, olBusy = false, olCur = null, olStarted = false, olQnPreset = null, olFirstNum = 0;
+  // 방 설정에 넣을 제한시간 켜짐: 방 안에서는 지금 방 상태, 방 만들 때는 방장의 체크 상태
+  function olTmNow(p) { return (window.Online && Online.active && tmModeOf(p) === 'online' && olStarted) ? !!olTmOn : !!tmPref[p].on; }
   const olMsg = t => { document.getElementById('ol-msg').innerText = t || ''; };
   function olHelp() {
     document.getElementById('help-modal-box').classList.remove('pink-modal');
     document.getElementById('help-title').innerText = '🌐 온라인 대전';
-    document.getElementById('help-content').innerHTML = '한 사람이 <b>방 만들기</b>를 눌러 4자리 번호를 받고, 다른 사람이 그 번호를 입력해 <b>입장</b>하면 바로 시작돼요.<br><br>· 첫 판은 방을 만든 사람이 <b>선공</b>, 다음 판부터는 번갈아 선공이에요. 다시하기는 방장이 눌러요.<br>· 방 번호는 게임마다 달라요. 다른 게임 방 번호를 넣으면 그 게임으로 옮겨 줘요.<br>· 판 설정(돌 개수, 팝잇 줄 등)은 방장 설정을 따라요.<br>· 같은 와이파이가 아니어도 되고, 폰·크롬북 어디서나 돼요.<br>· 이름을 넣어 두면 네 게임 모두에서 같은 이름이 쓰여요.';
+    document.getElementById('help-content').innerHTML = '한 사람이 <b>방 만들기</b>를 눌러 4자리 번호를 받고, 다른 사람이 그 번호를 입력해 <b>입장</b>하면 바로 시작돼요.<br><br>· 판마다 <b>가위바위보</b>로 시작해요. 이긴 사람이 선공·후공을 골라요. 다시하기는 방장이 눌러요.<br>· 방 번호는 게임마다 달라요. 다른 게임 방 번호를 넣으면 그 게임으로 옮겨 줘요.<br>· 판 설정(돌 개수, 팝잇 줄, 제한시간 등)은 방장 설정을 따라요. 방장이 게임 중에 바꾼 설정은 다음 판부터 적용돼요.<br>· 같은 와이파이가 아니어도 되고, 폰·크롬북 어디서나 돼요.<br>· 이름을 넣어 두면 네 게임 모두에서 같은 이름이 쓰여요.';
     openModal('help-modal', 'help-modal-box');
   }
   function olSetGameLabel() { const el = document.getElementById('ol-game-label'); if (el) el.innerText = `🎮 ${GAME_NAME[olGame] || ''} 방`; }
@@ -7197,8 +7216,9 @@
     if (!n) { n = makeRandomName(); document.getElementById('ol-name').value = n; }
     setMyName(n); return n;
   }
-  function olSaveOrig() { olOrig = { n: stNSetting, limit: stLimitSetting, rows: ppRowsSetting, rule: ppWinRule, max: ppMaxTake, qnSize: qnSizeSetting, qnStart: qnStartSetting, qnRule: qnWinRule, qnT: qnTimeSetting, stT: stTimeSetting, ntT: ntTimeSetting, ppT: ppTimeSetting, ntSz: ntSize }; }
-  function olRestoreOrig() { if (!olOrig) return; stNSetting = olOrig.n; stLimitSetting = olOrig.limit; ppRowsSetting = olOrig.rows; ppWinRule = olOrig.rule; ppMaxTake = olOrig.max; qnSizeSetting = olOrig.qnSize; qnStartSetting = olOrig.qnStart; qnWinRule = olOrig.qnRule; qnTimeSetting = olOrig.qnT; olQnPreset = null; stTimeSetting = olOrig.stT; ntTimeSetting = olOrig.ntT; ppTimeSetting = olOrig.ppT; if (olOrig.ntSz) ntSize = olOrig.ntSz; olOrig = null; }
+  // 내 원래 설정 지키기: 온라인 방 설정(OLG.apply)이 덮어쓴 값을 방을 나가거나 방장이 다시 시작할 때 되돌림
+  function olSaveOrig() { olOrig = {}; for (const p in SETV) olOrig[p] = SETV[p].get(); }
+  function olRestoreOrig() { if (!olOrig) return; for (const p in SETV) if (olOrig[p]) SETV[p].set(olOrig[p]); olQnPreset = null; olOrig = null; }
   async function olCreate() {
     if (olBusy) return; olBusy = true; olMsg('방을 만드는 중…');
     try {
@@ -7255,7 +7275,9 @@
     olStarted = true;
     closeModal('online-modal', 'ol-modal-box');
     closeVictoryModal(true);
-    OLG[olGame].apply(settings); OLG[olGame].start(); olNames();
+    olFirstNum = 0; rpsPrepare(); // 판 시작 = 가위바위보부터 (그동안 입력·시계·선공 알림 막음)
+    OLG[olGame].apply(settings); OLG[olGame].start(); olNames(); tmRender(OLG[olGame].p);
+    rpsBegin();
   }
   function olNames() {
     const me = Online.myNum, p = OLG[olGame].p, nm = Online.names || {};
@@ -7276,14 +7298,15 @@
   function olEnd(msg) {
     olStarted = false; Online.leave(); olRestoreOrig();
     const g = OLG[olGame], el = document.getElementById(g.p + '-turn-indicator'); if (el) el.innerText = msg;
+    tmStop(g.p); rpsLeftMsg(msg);
     setTimeout(() => { if (g.mode() === 'online') g.back(); }, 1800);
   }
   Online.on(ev => {
     if (!olGame) return;
     if (ev.type === 'joined') { olStart(olCur || OLG[olGame].settings()); }
     else if (ev.type === 'reset') { olStart(ev.settings); }
-    else if (ev.type === 'names') { if (olStarted) olNames(); }
-    else if (ev.type === 'move') { OLG[olGame].remote(ev.move); }
+    else if (ev.type === 'names') { if (olStarted) olNames(); if (olRpsBlocking() && olRps.stage === 'pick') rpsRender(); else if (olRpsBlocking()) rpsNamesOnly(); }
+    else if (ev.type === 'move') { if (olCtl(ev.move, ev.by)) return; OLG[olGame].remote(ev.move); } // 예약 메시지(__rps·__first·__timer)는 게임 수가 아님
     else if (ev.type === 'left') { if (olStarted) { const opp = (Online.names || {})[3 - Online.myNum]; olEnd(opp ? `${josa(opp, '이', '가')} 나갔어요 😢` : '상대가 나갔어요 😢'); } }
   });
   // 입력 막기 + 내 수 전송 (돌·노탁토; 팝잇은 ppConfirm에서 직접 처리)
@@ -7330,9 +7353,10 @@
   qnStartGame = function (m, pre) { _qnStart(m, pre); applyMyName('qn', m); qnUpdateUI(); };
   // 다시하기
   const _ntRestart = ntRestartGame, _stRestart = stRestartGame, _ppRestart = ppRestartGame, _qnRestart = qnRestartGame;
-  function olRestart(g) { if (Online.myNum === 1) { if (ppSettingsJustSaved || qnSettingsJustSaved || stSettingsJustSaved || ntSettingsJustSaved) { olOrig = null; ppSettingsJustSaved = false; } olRestoreOrig(); olSaveOrig(); olCur = OLG[g].settings(); closeVictoryModal(); Online.reset(olCur); /* 시작은 reset 이벤트에서 한 번만 (방장·손님 같은 경로) */ } }
+  // 방장: 내 원래 설정으로 되돌리고 → 게임 중에 ⚙️로 바꿔 둔 설정(다음 판부터)을 얹어서 → 새 판 설정으로 보냄
+  function olRestart(g) { if (Online.myNum === 1) { olRestoreOrig(); pendApply(OLG[g].p); olSaveOrig(); olCur = OLG[g].settings(); closeVictoryModal(); Online.reset(olCur); /* 시작은 reset 이벤트에서 한 번만 (방장·손님 같은 경로) */ } }
   // 🎲 랜덤 다시하기 (온라인): 방장만 — 다시하기와 같은 길(Online.reset)로 이번 판 설정만 바꿔서 보냄 (원래 설정은 olOrig로 지킴)
-  function olRandomRestart(s) { if (Online.myNum !== 1) return; olRestoreOrig(); olSaveOrig(); olCur = s; closeVictoryModal(); Online.reset(s); }
+  function olRandomRestart(s, p) { if (Online.myNum !== 1) return; olRestoreOrig(); if (p) pendApply(p); olSaveOrig(); olCur = typeof s === 'function' ? s() : s; closeVictoryModal(); Online.reset(olCur); }
   let ppSettingsJustSaved = false;
   ntRestartGame = function () { if (ntMode === 'online' && Online.active) return olRestart('notakto'); _ntRestart(); };
   stRestartGame = function () { if (stMode === 'online' && Online.active) return olRestart('stone'); _stRestart(); };
@@ -7340,7 +7364,7 @@
   qnRestartGame = function () { if (qnMode === 'online' && Online.active) return olRestart('queen'); _qnRestart(); };
   // 메뉴로
   const _ntBack = ntGoBack, _stBack = stGoBack, _ppBack = ppGoBack, _qnBack = qnGoBack;
-  function olLeaveIfAny() { if (Online.active) { olStarted = false; Online.leave(); } olRestoreOrig(); }
+  function olLeaveIfAny() { rpsHide(); if (Online.active) { olStarted = false; Online.leave(); } olRestoreOrig(); }
   ntGoBack = function () { olLeaveIfAny(); _ntBack(); };
   stGoBack = function () { olLeaveIfAny(); _stBack(); };
   ppGoBack = function () { olLeaveIfAny(); _ppBack(); };
@@ -7384,9 +7408,10 @@
     const mode = GAME_P[p]();
     if (mode === 'online') {
       if (!(window.Online && Online.active && Online.myNum === 1)) return; // 손님은 못 누름
-      rndNote = R.note; olRandomRestart(R.online()); return;
+      rndNote = R.note; olRandomRestart(R.online, p); return;
     }
     closeVictoryModal();
+    pendApply(p); // ⚙️로 바꿔 둔 설정이 있으면 이번 새 판부터
     rndNote = R.note; R.local(mode);
   }
   /* ===== 게임 중 [다시하기]·[⚙️ 설정 바꿔 다시하기]·[무르기] 버튼 ===== */
@@ -8685,6 +8710,293 @@
     // 뒤로 가기: 튜토리얼이 열려 있으면 그것부터 닫기
     const _amo = anyModalOpen; anyModalOpen = function () { return _amo() || !!TUT; };
   })();
+
+  /* ==========================================================================
+     ⚙️ 설정은 다음 판부터 · ⏱ 제한시간 체크(게임 화면) · ✊ 온라인 가위바위보로 선공 정하기
+     ========================================================================== */
+  qnTimeSetting = tmPref.qn.s; ppTimeSetting = tmPref.pp.s;
+  // 게임별 ⚙️ 설정 묶음 (읽기·쓰기) — 다음 판 예약, 온라인 원래 설정 지키기에 씀
+  var SETV = {
+    nt: { get: () => ({ size: ntSize, t: ntTimeSetting, u: undoSetting.nt }), set: v => { ntSize = v.size; ntTimeSetting = tmSan(v.t); undoSetting.nt = v.u; } },
+    st: { get: () => ({ n: stNSetting, l: stLimitSetting, m: stModeType, t: stTimeSetting, u: undoSetting.st }), set: v => { stNSetting = v.n; stLimitSetting = v.l; stModeType = v.m; stTimeSetting = tmSan(v.t); undoSetting.st = v.u; } },
+    qn: { get: () => ({ size: qnSizeSetting, start: qnStartSetting, rule: qnWinRule, t: qnTimeSetting, u: undoSetting.qn }), set: v => { qnSizeSetting = v.size; qnStartSetting = v.start; qnWinRule = v.rule; qnTimeSetting = tmSan(v.t); undoSetting.qn = v.u; } },
+    pp: { get: () => ({ rows: ppRowsSetting, rule: ppWinRule, max: ppMaxTake, t: ppTimeSetting, u: undoSetting.pp }), set: v => { ppRowsSetting = v.rows; ppWinRule = v.rule; ppMaxTake = v.max; ppTimeSetting = tmSan(v.t); undoSetting.pp = v.u; } },
+  };
+  var setPend = { nt: null, st: null, qn: null, pp: null }; // 게임 중에 저장한 설정 (다음 판 시작 때 적용)
+  const TM_P = ['nt', 'st', 'qn', 'pp'];
+  const TM_OVER = { nt: () => ntGameOver, st: () => stGameOver, qn: () => qnOver, pp: () => ppOver };
+  const TM_START = { nt: () => ntStartTimer(), st: () => stStartTimer(), qn: () => qnStartTimer(), pp: () => ppStartTimer() };
+  const TM_STOP = { nt: () => ntStopTimer(), st: () => stStopTimer(), qn: () => qnStopTimer(), pp: () => ppStopTimer() };
+  const SET_SUB = { nt: () => ntUpdateSubtitle(), st: () => stUpdateSubtitle(false), qn: () => qnUpdateSubtitle(false), pp: () => ppUpdateSubtitle(false) };
+  const SET_SCORE = {
+    nt: [() => ntScore, v => { ntScore = v; }], st: [() => stScore, v => { stScore = v; }],
+    qn: [() => qnScore, v => { qnScore = v; }], pp: [() => ppScore, v => { ppScore = v; }],
+  };
+  const SET_THEN = {
+    nt: [() => ntSettingsThenRestart, v => { ntSettingsThenRestart = v; }], st: [() => stSettingsThenRestart, v => { stSettingsThenRestart = v; }],
+    qn: [() => qnSettingsThenRestart, v => { qnSettingsThenRestart = v; }], pp: [() => ppSettingsThenRestart, v => { ppSettingsThenRestart = v; }],
+  };
+  const P_NAME = { nt: 'Nt', st: 'St', qn: 'Qn', pp: 'Pp' };
+  function tmScreenOn(p) { const el = document.getElementById(p + '-game-screen'); return !!el && !!el.style.display && el.style.display !== 'none'; }
+  function gameInProgress(p) { return tmScreenOn(p) && !TM_OVER[p](); }
+  function tmStop(p) { try { TM_STOP[p](); } catch (e) {} }
+  function showNote(text) {
+    let t = document.getElementById('start-toast');
+    if (!t) { t = document.createElement('div'); t.id = 'start-toast'; document.body.appendChild(t); }
+    t.textContent = text;
+    t.classList.remove('on'); void t.offsetWidth; t.classList.add('on');
+    clearTimeout(t._h); t._h = setTimeout(() => t.classList.remove('on'), 1800);
+  }
+  // 예약해 둔 설정 적용 (새 판 시작 직전·메뉴로 나갈 때). 적용했으면 true
+  function pendApply(p) {
+    const v = setPend[p]; if (!v) return false;
+    setPend[p] = null; SETV[p].set(v); undoSave();
+    tmPref[p].s = tmSan(v.t); tmSave();
+    SET_SCORE[p][1]({ p1Wins: 0, p2Wins: 0 });
+    try { SET_SUB[p](); } catch (e) {}
+    return true;
+  }
+  TM_P.forEach(p => {
+    const N = P_NAME[p];
+    // ⚙️ 창 열기: 예약된 설정이 있으면 그걸, 온라인 방 안이면 방 설정 말고 내 원래 설정을 보여 줌
+    const fo = window['open' + N + 'Settings'];
+    window['open' + N + 'Settings'] = function (...a) {
+      const view = setPend[p] || (tmIsOnline(p) && window.Online && Online.active && olOrig && olOrig[p]) || null;
+      if (!view) return fo.apply(this, a);
+      const live = SETV[p].get(); SETV[p].set(view);
+      try { return fo.apply(this, a); } finally { SETV[p].set(live); }
+    };
+    // ⚙️ 저장: 메뉴에서는 바로 적용 · 게임 화면에서는 다음 판부터 (판이 이미 끝났으면 바로 다음 판 시작)
+    const fs = window['save' + N + 'Settings'];
+    window['save' + N + 'Settings'] = function (...a) {
+      const then = SET_THEN[p][0]();
+      const online = tmIsOnline(p) && window.Online && Online.active && olStarted;
+      if (!then && !online) {
+        setPend[p] = null;
+        const r = fs.apply(this, a);
+        tmPref[p].s = tmSan(SETV[p].get().t); tmSave(); tmRender(p);
+        return r;
+      }
+      const live = SETV[p].get(), sc = SET_SCORE[p][0]();
+      SET_THEN[p][1](false);
+      fs.apply(this, a);                      // 창 닫기·값 읽기 (지금 판 값은 아래에서 되돌림)
+      const nv = SETV[p].get();
+      SETV[p].set(live); SET_SCORE[p][1](sc); try { SET_SUB[p](); } catch (e) {}
+      setPend[p] = nv;
+      if (then && !gameInProgress(p)) { window[p + 'RestartGame'](); return; } // 끝난 판 → 새 판이 곧 '다음 판'
+      showNote('⚙️ 다음 판부터 적용돼요');
+    };
+    // 새 판 시작: 예약된 설정 먼저 적용 (온라인은 방 설정을 따르므로 여기서 안 함 — 방장이 olRestart에서 적용해 보냄)
+    const fst = window[p + 'StartGame'];
+    window[p + 'StartGame'] = function (mode, ...rest) {
+      if (mode !== 'online') pendApply(p);
+      const r = fst.call(this, mode, ...rest);
+      tmRender(p);
+      return r;
+    };
+    const fbp = window[p + 'StartBranchPlay'];
+    if (fbp) window[p + 'StartBranchPlay'] = function (...a) { const r = fbp.apply(this, a); tmRender(p); return r; };
+    // 메뉴로: 판이 없으니 예약 설정은 이제 적용
+    const fb = window[p + 'GoBack'];
+    window[p + 'GoBack'] = function (...a) { const r = fb.apply(this, a); pendApply(p); return r; };
+  });
+
+  /* ---------- ⏱ 제한시간 체크 (게임 화면, 바로 적용) ---------- */
+  (function () {
+    const st = document.createElement('style');
+    st.textContent = `
+      .tm-row { display:flex; justify-content:center; width:100%; margin:0 0 6px; }
+      .tm-chk { display:inline-flex; align-items:center; gap:6px; font:800 .86rem 'Noto Sans KR',sans-serif; color:var(--th-ink, #5F5B55); background:#fff; border:1.5px solid var(--th-line, #E7DFC9); border-radius:999px; padding:4px 12px; min-height:32px; box-sizing:border-box; cursor:pointer; user-select:none; white-space:nowrap; max-width:100%; }
+      .tm-chk input { width:18px; height:18px; margin:0; accent-color:var(--th, #333); cursor:pointer; flex:none; }
+      .tm-chk.dis { opacity:.6; cursor:not-allowed; } .tm-chk.dis input { cursor:not-allowed; }
+      .tm-chk .tm-sec { font-weight:600; color:var(--text-sub, #8a8378); }
+      @media (max-width:640px) { .tm-row { margin-bottom:4px; } .tm-chk { font-size:.8rem; min-height:30px; padding:3px 10px; } }
+      #rps-ov { position:fixed; inset:0; z-index:19000; display:none; align-items:center; justify-content:center; background:rgba(60,45,10,.45); backdrop-filter:blur(3px); padding:16px; box-sizing:border-box; }
+      #rps-ov.on { display:flex; }
+      .rps-box { background:#FFFDF6; border:3px solid var(--th, #E9C46A); border-radius:22px; width:100%; max-width:420px; box-sizing:border-box; padding:18px 14px 16px; text-align:center; font-family:'Jua',sans-serif; box-shadow:0 12px 32px rgba(0,0,0,.2); }
+      .rps-title { font-size:1.3rem; color:var(--th-ink, #3d3a35); margin-bottom:8px; }
+      .rps-vs { display:flex; align-items:center; justify-content:center; gap:10px; margin:4px 0 8px; }
+      .rps-side { flex:1; min-width:0; }
+      .rps-hand { font-size:3.3rem; line-height:1.15; display:inline-block; }
+      .rps-hand.shake { animation:rpsShake .3s ease-in-out 3; }
+      .rps-hand.pop { animation:rpsPop .35s ease-out 1; }
+      .rps-hand.win { filter:drop-shadow(0 0 10px rgba(255,190,0,.9)); }
+      .rps-hand.lose { opacity:.45; }
+      @keyframes rpsShake { 0%,100% { transform:translateY(0) rotate(0); } 50% { transform:translateY(-14px) rotate(-14deg); } }
+      @keyframes rpsPop { 0% { transform:scale(.4); } 70% { transform:scale(1.2); } 100% { transform:scale(1); } }
+      .rps-name { font-size:.95rem; color:#6b655b; overflow:hidden; text-overflow:ellipsis; white-space:nowrap; }
+      .rps-x { font-size:1.1rem; color:#b3aa98; flex:none; }
+      .rps-msg { min-height:1.5em; font-size:1.1rem; color:#3d3a35; margin:4px 0 12px; }
+      .rps-btns { display:flex; gap:10px; justify-content:center; }
+      .rps-btns button { flex:1; min-width:0; min-height:86px; font-family:'Jua',sans-serif; font-size:1.05rem; color:#3d3a35; background:#fff; border:2.5px solid var(--th-line, #E7DFC9); border-radius:16px; cursor:pointer; display:flex; flex-direction:column; align-items:center; justify-content:center; gap:2px; padding:6px 4px; touch-action:manipulation; }
+      .rps-btns button .e { font-size:2.3rem; line-height:1.1; }
+      .rps-btns button:active { transform:scale(.96); }
+      .rps-btns.first button { min-height:64px; font-size:1.25rem; }
+    `;
+    document.head.appendChild(st);
+    TM_P.forEach(p => {
+      const timer = document.getElementById(p + '-timer-display'); if (!timer) return;
+      const row = document.createElement('div'); row.className = 'tm-row'; row.id = p + '-tm-row';
+      row.innerHTML = `<label class="tm-chk" id="${p}-tm-lab"><input type="checkbox" id="${p}-tm-chk" onchange="tmToggle('${p}', this.checked)"> ⏱ 제한시간 <span class="tm-sec" id="${p}-tm-sec"></span></label>`;
+      timer.after(row);
+    });
+  })();
+  function tmRender(p) {
+    const c = document.getElementById(p + '-tm-chk'); if (!c) return;
+    const online = tmIsOnline(p), guest = online && window.Online && Online.myNum !== 1;
+    c.checked = tmEff(p); c.disabled = !!guest;
+    document.getElementById(p + '-tm-lab').classList.toggle('dis', !!guest);
+    document.getElementById(p + '-tm-lab').title = guest ? '온라인에서는 방장만 바꿀 수 있어요' : '켜면 한 턴마다 시간이 줄어요 (초는 ⚙️ 설정)';
+    document.getElementById(p + '-tm-sec').textContent = `(${tmSecs(p)}초)`;
+  }
+  // 지금 판에 바로 반영: 켜면 지금 턴 시계 시작, 끄면 멈춤
+  function tmApplyNow(p) {
+    tmRender(p);
+    if (!tmScreenOn(p) || TM_OVER[p]()) return;
+    if (tmRunning(p)) TM_START[p](); else tmStop(p);
+  }
+  function tmToggle(p, on) {
+    on = !!on;
+    if (tmIsOnline(p)) {
+      if (!(window.Online && Online.active && Online.myNum === 1)) { tmRender(p); return; } // 손님은 못 바꿈
+      olTmOn = on; tmPref[p].on = on; tmSave();
+      Online.sendMove({ __timer: on ? 1 : 0 }); // 손님 기기도 같게
+    } else { tmPref[p].on = on; tmSave(); }
+    try { SET_SUB[p](); } catch (e) {}
+    playSfx('click');
+    tmApplyNow(p);
+  }
+  // 온라인 예약 메시지 처리 — 게임 수 처리기로 가지 않게 먼저 가로챔 (true면 처리 끝)
+  function olCtl(m, by) {
+    if (!m || typeof m !== 'object' || Array.isArray(m)) return false;
+    if ('__rps' in m) { rpsGot(by, m.__rps, m.rd | 0, m.g); return true; }
+    if ('__first' in m) { rpsGotFirst(m.__first === 2 ? 2 : 1); return true; }
+    if ('__timer' in m) { if (by === 1 && olGame) { olTmOn = !!m.__timer; tmApplyNow(OLG[olGame].p); } return true; }
+    return '__' in m;
+  }
+
+  /* ---------- ✊ 온라인 가위바위보: 판마다 선공 정하기 ---------- */
+  const RPS_E = { r: '✊', s: '✌️', p: '✋' }, RPS_K = { r: '바위', s: '가위', p: '보' }, RPS_BEAT = { r: 's', s: 'p', p: 'r' };
+  let olRps = null, rpsEarly = [];
+  function olRpsBlocking() { return !!(olRps && olRps.on); }
+  (function () {
+    const ov = document.createElement('div'); ov.id = 'rps-ov';
+    ov.innerHTML = `<div class="rps-box" role="dialog" aria-modal="true" aria-labelledby="rps-title">
+      <div class="rps-title" id="rps-title">✊ 가위바위보로 선공 정하기</div>
+      <div class="rps-vs"><div class="rps-side"><div class="rps-hand" id="rps-me">❔</div><div class="rps-name" id="rps-me-name">나</div></div>
+        <div class="rps-x">VS</div>
+        <div class="rps-side"><div class="rps-hand" id="rps-op">❔</div><div class="rps-name" id="rps-op-name">상대</div></div></div>
+      <div class="rps-msg" id="rps-msg"></div>
+      <div class="rps-btns" id="rps-btns">
+        <button type="button" data-x="r" onclick="rpsPick('r')"><span class="e">✊</span>바위</button>
+        <button type="button" data-x="s" onclick="rpsPick('s')"><span class="e">✌️</span>가위</button>
+        <button type="button" data-x="p" onclick="rpsPick('p')"><span class="e">✋</span>보</button>
+      </div>
+      <div class="rps-btns first" id="rps-first-btns" style="display:none;">
+        <button type="button" onclick="rpsChoose(true)">🥇 선공</button>
+        <button type="button" onclick="rpsChoose(false)">🥈 후공</button>
+      </div>
+    </div>`;
+    document.body.appendChild(ov);
+  })();
+  const rpsEl = id => document.getElementById(id);
+  function rpsPrepare() { olRps = { on: true, round: 0, picks: {}, stage: 'pick', pendFirst: 0, gno: (window.Online && Online.gameNo) || 0 }; }
+  function rpsBegin() {
+    if (!olRps || !olRps.on) return;
+    rpsEl('rps-ov').classList.add('on');
+    const early = rpsEarly; rpsEarly = [];
+    early.forEach(e => { if (e.g === undefined || e.g === olRps.gno) (olRps.picks[e.rd] = olRps.picks[e.rd] || {})[e.by] = e.x; });
+    rpsRender(); rpsCheck();
+  }
+  function rpsHide() { if (olRps) olRps.on = false; const ov = rpsEl('rps-ov'); if (ov) ov.classList.remove('on'); }
+  function rpsLeftMsg(msg) {
+    const ov = rpsEl('rps-ov'); if (!ov || !ov.classList.contains('on')) return;
+    if (olRps) olRps.stage = 'left';
+    rpsEl('rps-msg').textContent = msg; rpsEl('rps-btns').style.display = 'none'; rpsEl('rps-first-btns').style.display = 'none';
+  }
+  function rpsNamesOnly() { const n = rpsNames(); rpsEl('rps-me-name').textContent = n.me + ' (나)'; rpsEl('rps-op-name').textContent = n.op; }
+  function rpsNames() { const nm = (window.Online && Online.names) || {}, me = Online.myNum; return { me: nm[me] || (me === 1 ? '방장' : '손님'), op: nm[3 - me] || (me === 1 ? '손님' : '방장') }; }
+  function rpsRender() {
+    const R = olRps; if (!R) return;
+    const me = Online.myNum, pk = R.picks[R.round] || {}, n = rpsNames();
+    rpsEl('rps-me-name').textContent = n.me + ' (나)'; rpsEl('rps-op-name').textContent = n.op;
+    const hm = rpsEl('rps-me'), ho = rpsEl('rps-op');
+    const btns = rpsEl('rps-btns'), fb = rpsEl('rps-first-btns'), msg = rpsEl('rps-msg');
+    btns.style.display = 'none'; fb.style.display = 'none';
+    if (R.stage === 'pick') {
+      hm.className = 'rps-hand'; ho.className = 'rps-hand';
+      ho.textContent = '❔';
+      if (pk[me]) { hm.textContent = RPS_E[pk[me]]; msg.textContent = '상대가 고르는 중…'; }
+      else { hm.textContent = '❔'; btns.style.display = ''; msg.textContent = R.round ? '비겼어요! 한 번 더 골라요 🔁' : '하나를 골라요! 이긴 사람이 선공·후공을 정해요'; }
+    } else if (R.stage === 'choose') { msg.textContent = '🎉 이겼어요! 선공·후공을 골라요'; fb.style.display = ''; }
+    else if (R.stage === 'wait') { msg.textContent = `${josa(n.op, '이', '가')} 선공·후공을 고르는 중…`; }
+  }
+  function rpsGot(by, x, rd, g) {
+    if (!RPS_E[x] || (by !== 1 && by !== 2)) return;
+    if (!olRps || !olRps.on) { rpsEarly.push({ by, x, rd, g }); return; }
+    if (g !== undefined && g !== olRps.gno) return;
+    const pk = olRps.picks[rd] = olRps.picks[rd] || {};
+    if (!pk[by]) pk[by] = x;
+    rpsCheck();
+  }
+  function rpsPick(x) {
+    const R = olRps; if (!R || !R.on || R.stage !== 'pick' || !RPS_E[x]) return;
+    const me = Online.myNum, pk = R.picks[R.round] = R.picks[R.round] || {};
+    if (pk[me]) return;
+    pk[me] = x; playSfx('click');
+    Online.sendMove({ __rps: x, rd: R.round, g: R.gno });
+    rpsRender(); rpsCheck();
+  }
+  function rpsCheck() {
+    const R = olRps; if (!R || !R.on || R.stage !== 'pick') return;
+    const pk = R.picks[R.round]; if (!pk || !pk[1] || !pk[2]) return;
+    R.stage = 'reveal';
+    const me = Online.myNum, mine = pk[me], opp = pk[3 - me];
+    const hm = rpsEl('rps-me'), ho = rpsEl('rps-op'), msg = rpsEl('rps-msg');
+    rpsEl('rps-btns').style.display = 'none';
+    hm.textContent = '✊'; ho.textContent = '✊'; hm.className = 'rps-hand shake'; ho.className = 'rps-hand shake';
+    msg.textContent = '가위… 바위… 보!';
+    setTimeout(() => {
+      if (olRps !== R || !R.on) return;
+      hm.textContent = RPS_E[mine]; ho.textContent = RPS_E[opp];
+      hm.className = 'rps-hand pop'; ho.className = 'rps-hand pop';
+      if (mine === opp) {
+        msg.textContent = `둘 다 ${RPS_K[mine]}! 비겼어요 🤝`;
+        setTimeout(() => { if (olRps !== R || !R.on) return; R.round++; R.stage = 'pick'; rpsRender(); rpsCheck(); }, 1100);
+        return;
+      }
+      const iWin = RPS_BEAT[mine] === opp;
+      hm.classList.add(iWin ? 'win' : 'lose'); ho.classList.add(iWin ? 'lose' : 'win');
+      msg.textContent = iWin ? `${RPS_K[mine]}로 이겼어요! 🎉` : `${RPS_K[opp]}에 졌어요…`;
+      playSfx(iWin ? 'click' : 'close_modal');
+      setTimeout(() => {
+        if (olRps !== R || !R.on) return;
+        R.stage = iWin ? 'choose' : 'wait'; rpsRender();
+        if (R.stage === 'wait' && R.pendFirst) rpsFinish(R.pendFirst);
+      }, 900);
+    }, 950);
+  }
+  function rpsChoose(first) {
+    const R = olRps; if (!R || !R.on || R.stage !== 'choose') return;
+    const me = Online.myNum, F = first ? me : 3 - me;
+    R.stage = 'done'; playSfx('click');
+    Online.sendMove({ __first: F });
+    rpsFinish(F);
+  }
+  function rpsGotFirst(F) {
+    const R = olRps; if (!R || !R.on) return;
+    if (R.stage === 'wait') rpsFinish(F); else R.pendFirst = F; // 아직 공개 애니메이션 중이면 끝나고 적용
+  }
+  // 선공 확정 → 같은 방 설정으로 판을 다시 깔고(선공 F) 시작. 두 기기 모두 이 길로 감
+  function rpsFinish(F) {
+    const R = olRps; if (!R) return;
+    R.on = false; R.stage = 'done';
+    rpsEl('rps-ov').classList.remove('on');
+    if (!olGame || !(window.Online && Online.active)) return;
+    olFirstNum = F;
+    const G = OLG[olGame];
+    G.start(); olNames(); tmRender(G.p);
+  }
 </script>
 </body>
 </html>
