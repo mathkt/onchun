@@ -2354,6 +2354,10 @@
   .st-frame .stone-container .stone { position:static !important; left:auto !important; top:auto !important; transform:none !important; width:14px !important; height:14px !important; border-radius:4px; counter-increment:stk; flex:none; }
   .st-frame .stone-container .stone:nth-child(n+11) { position:absolute !important; visibility:hidden; width:0 !important; height:0 !important; border:0 !important; }
   .st-frame .stone-container .stone::before, .st-frame .stone-container .stone::after { display:none; }
+  /* 방금 가져간 돌 (마지막 수): 테두리 빛 + 조금 크게 + "방금 n개" 표시 — 새 돌은 앞쪽에 넣어서 10개 넘어도 보임 */
+  .st-frame .stone-container .stone.st-last { width:17px !important; height:17px !important; margin:0 2px; box-shadow:0 0 0 2px #fff, 0 0 0 4px var(--th, #2F8FC9), 0 0 10px 2px var(--th, #2F8FC9); animation:stLastIn .35s ease-out; }
+  @keyframes stLastIn { 0% { filter:brightness(1.6); } 100% { filter:none; } }
+  .st-frame .stone-container[data-last]::before { content:attr(data-last); flex:none; align-self:center; font:800 .72rem 'Noto Sans KR',sans-serif; line-height:1; color:#fff; background:var(--th, #2F8FC9); border-radius:999px; padding:3px 7px; margin-right:3px; white-space:nowrap; }
   /* 분석 판: 상자 안에서 줄바꿈 */
   #st-analysis-center { grid-template-columns:repeat(auto-fill, 28px) !important; gap:10px !important; padding:20px 18px 56px !important; align-content:start; }
   /* 분석 판 돌 흩뿌리기(stLayoutAnalysis): 절대 좌표, 겹침 없음 */
@@ -2449,6 +2453,8 @@
     .st-frame .stone-container { flex:1; min-width:0; padding:0; }
     .st-frame .stone-container::after { font-size:.9rem; margin-bottom:2px; white-space:nowrap; }
     .st-frame .stone-container .stone { width:11px !important; height:11px !important; border-radius:3px; }
+    .st-frame .stone-container .stone.st-last { width:13px !important; height:13px !important; margin:0 1px; box-shadow:0 0 0 1.5px #fff, 0 0 0 3px var(--th, #2F8FC9), 0 0 6px 1px var(--th, #2F8FC9); }
+    .st-frame .stone-container[data-last]::before { font-size:.64rem; padding:2px 5px; margin-right:2px; }
     #st-center-stones { height:200px; }
     #qn-timer-display:empty, #pp-timer-display:empty { display:none; }
     #qn-timer-display, #pp-timer-display { margin-bottom:4px !important; }
@@ -3580,7 +3586,7 @@
       <label>팝잇 줄 (띄어쓰기로 구분, 최대 7줄·줄당 20개):
         <div style="display:flex; gap:6px; align-items:stretch;">
           <input id="set-pp-rows" type="text" inputmode="numeric" placeholder="예: 3 4 3 (비우면 랜덤)" style="flex:1; min-width:0; box-sizing:border-box; font-size:1.1rem; padding:8px 10px; border:2px solid #D9CFAE; border-radius:10px;">
-          <button type="button" id="set-pp-rows-random" class="pp-rows-random" onclick="ppFillRandomRows()" title="랜덤 (2~5줄, 줄마다 2~8개)">🎲 랜덤</button>
+          <button type="button" id="set-pp-rows-random" class="pp-rows-random" onclick="ppFillRandomRows()" title="랜덤 (3~5줄, 줄마다 2~8개)">🎲 랜덤</button>
         </div>
         <div id="set-pp-rows-preview" style="font-size:.9rem; color:var(--text-sub); font-weight:500;"></div>
       </label>
@@ -4135,6 +4141,11 @@
   // 🎲 랜덤 다시하기: 이번 한 판만 돌 10~30개 · 최대 3~5개 (설정값은 그대로)
   let stOneShot = false, stNGen = null; // stNGen: 이번 판 돌 개수가 랜덤에서 왔으면 그 뽑기 함수 (쉬운 시작용)
   function applyStRandomRules() {
+    if (stOneShot && typeof stOneShot === 'object') { // 🎲 판 다시하기: 같은 돌 개수·최대 개수 그대로 (쉬운 시작 다시 뽑기 없음)
+      const o = stOneShot; stOneShot = false;
+      stNGen = null; stN = o.n; stLimit = o.limit;
+      return;
+    }
     if (stOneShot) {
       stOneShot = false;
       stNGen = () => 10 + Math.floor(Math.random() * 21);
@@ -5015,9 +5026,9 @@
   const PP_COLORS = ['#FF5FA2', '#FF9F1C', '#FFD60A', '#57CC99', '#3DB2FF', '#9B5DE5', '#FF6B6B'];
   const PP_INK    = ['#D6246F', '#C76A00', '#A88600', '#1F8F5F', '#0B78C9', '#6E2FC0', '#D93A3A'];
   function ppParseRows(t) { return String(t).split(/[\s,]+/).map(Number).filter(n => n >= 1).map(n => Math.min(20, Math.floor(n))).slice(0, 7); }
-  function ppRandomRows() { const k = 2 + Math.floor(Math.random() * 4); return Array.from({ length: k }, () => 2 + Math.floor(Math.random() * 7)); }
-  // 🎲 랜덤 다시하기용: 2~5줄, 줄마다 1~7개
-  function ppRandomRows17() { const k = 2 + Math.floor(Math.random() * 4); return Array.from({ length: k }, () => 1 + Math.floor(Math.random() * 7)); }
+  function ppRandomRows() { const k = 3 + Math.floor(Math.random() * 3); return Array.from({ length: k }, () => 2 + Math.floor(Math.random() * 7)); }
+  // 🎲 랜덤 다시하기용: 3~5줄, 줄마다 1~7개
+  function ppRandomRows17() { const k = 3 + Math.floor(Math.random() * 3); return Array.from({ length: k }, () => 1 + Math.floor(Math.random() * 7)); }
   let ppOneShot = null, ppRowsGen = null; // ppOneShot: 이번 한 판만 쓸 줄 뽑기 · ppRowsGen: 이번 판 줄이 랜덤에서 왔으면 그 뽑기 함수
   function ppApplyRules() {
     const gen = ppOneShot || (ppRowsSetting === 'random' ? ppRandomRows : null); ppOneShot = null; ppRowsGen = gen;
@@ -5040,7 +5051,7 @@
   function openPpSettingsAndRestart() { ppSettingsThenRestart = true; openPpSettings(); }
   function ppRowsPreview() {
     const r = ppParseRows(document.getElementById('set-pp-rows').value);
-    document.getElementById('set-pp-rows-preview').innerText = r.length ? `${r.length}줄: ${r.join('개, ')}개` : '비워 두면 판마다 랜덤 (2~5줄, 줄마다 2~8개)';
+    document.getElementById('set-pp-rows-preview').innerText = r.length ? `${r.length}줄: ${r.join('개, ')}개` : '비워 두면 판마다 랜덤 (3~5줄, 줄마다 2~8개)';
   }
   // 🎲 랜덤 버튼: 입력칸에 랜덤 줄을 채워 넣음 (저장하면 그 줄로 고정)
   function ppFillRandomRows() { playSfx('click'); document.getElementById('set-pp-rows').value = ppRandomRows().join(' '); ppRowsPreview(); }
@@ -6361,6 +6372,7 @@
       el.style.transform = `translate3d(${first.left - last.left}px, ${first.top - last.top}px, 0)`;
     });
     cs.getBoundingClientRect();
+    stMarkLast(); // 표시는 이제 남은 기록의 마지막 수로
     moving.forEach(t => { t.el.style.transition = 'transform .45s cubic-bezier(.3,.7,.3,1)'; t.el.style.transform = 'none'; });
     stIsAnimating = true; playTakeStone();
     const gid = stGameId;
@@ -6421,6 +6433,7 @@
     cs.innerHTML = '<div id="st-stone-count-badge" class="st-stone-count-badge"></div>';
     document.getElementById('st-p1-stones').innerHTML = '';
     document.getElementById('st-p2-stones').innerHTML = '';
+    stMarkLast();
 
     stSeed = (Math.random() * 0x7fffffff) | 0; stLayoutN = stN;
     for (let i = 0; i < stN; i++) {
@@ -6482,6 +6495,7 @@
     const p1Box = document.getElementById('st-p1-stones');
     const p2Box = document.getElementById('st-p2-stones');
     p1Box.innerHTML = ''; p2Box.innerHTML = '';
+    stMarkLast();
 
     for (let i = 0; i < stAP1Score; i++) {
       let s = document.createElement('div');
@@ -6603,6 +6617,18 @@
     if (!stIsAnimating && stStonesArr.length >= count) stExecuteMove(count);
   }
 
+  // 방금 가져간 돌 표시: 기록의 마지막 수(가져간 돌이 상자에 들어가 있을 때만)를 표시, 나머지는 보통 돌
+  function stMarkLast() {
+    document.querySelectorAll('#st-game-screen .stone.st-last').forEach(el => el.classList.remove('st-last'));
+    ['st-p1-stones', 'st-p2-stones'].forEach(id => { const b = document.getElementById(id); if (b) b.removeAttribute('data-last'); });
+    const h = stGameHistory[stGameHistory.length - 1];
+    if (!h || !h.taken || !h.taken.length) return;
+    const box = document.getElementById(h.player === 1 ? 'st-p1-stones' : 'st-p2-stones');
+    const els = h.taken.map(t => t.el).filter(el => el.parentNode === box);
+    if (!els.length) return;
+    els.forEach(el => { el.classList.add('st-last'); if (box.firstChild !== el) box.insertBefore(el, box.firstChild); });
+    box.setAttribute('data-last', `방금 ${h.count}개`);
+  }
   function stExecuteMove(count) {
     stStopTimer();
     playTakeStone();
@@ -6614,6 +6640,7 @@
     let taken = stStonesArr.splice(-count, count);
     // 무르기용: 가져가기 전 자리(가운데 판 좌표) 기록
     stGameHistory.push({ player: stCurrentPlayer, count: count, taken: taken.map(el => ({ el, left: el.style.left, top: el.style.top })) });
+    stMarkLast(); // 이전 표시 지우기 (새 돌은 도착하면 표시)
     const badge = document.getElementById('st-stone-count-badge');
     if (badge) badge.innerText = stStonesArr.length > 0 ? stStonesArr.length : '';
     let completed = 0;
@@ -6649,8 +6676,9 @@
         stone.style.left = (10 + destX) + 'px';
         stone.style.top = (10 + destY) + 'px';
         stone.style.transform = 'none';
-        tContainer.appendChild(stone);
+        tContainer.insertBefore(stone, tContainer.firstChild); // 새 돌은 앞쪽 (최대 10개만 보이므로)
         completed++;
+        stMarkLast();
         if (completed === taken.length) { stIsAnimating = false; stCheckWinCondition(); }
       };
       ghost.addEventListener('transitionend', finish, { once: true });
@@ -7500,17 +7528,17 @@
   // 다시하기
   const _ntRestart = ntRestartGame, _stRestart = stRestartGame, _ppRestart = ppRestartGame, _qnRestart = qnRestartGame;
   // 방장: 내 원래 설정으로 되돌리고 → 게임 중에 ⚙️로 바꿔 둔 설정(다음 판부터)을 얹어서 → 새 판 설정으로 보냄
-  function olRestart(g) { if (Online.myNum === 1) { olRestoreOrig(); pendApply(OLG[g].p); olSaveOrig(); olCur = OLG[g].settings(); closeVictoryModal(); Online.reset(olCur); /* 시작은 reset 이벤트에서 한 번만 (방장·손님 같은 경로) */ } }
+  function olRestart(g) { if (Online.myNum === 1) { rndLast[OLG[g].p] = null; olRestoreOrig(); pendApply(OLG[g].p); olSaveOrig(); olCur = OLG[g].settings(); closeVictoryModal(); Online.reset(olCur); /* 시작은 reset 이벤트에서 한 번만 (방장·손님 같은 경로) */ } }
   // 🎲 랜덤 다시하기 (온라인): 방장만 — 다시하기와 같은 길(Online.reset)로 이번 판 설정만 바꿔서 보냄 (원래 설정은 olOrig로 지킴)
-  function olRandomRestart(s, p) { if (Online.myNum !== 1) return; olRestoreOrig(); if (p) pendApply(p); olSaveOrig(); olCur = typeof s === 'function' ? s() : s; if (p && olCur && olCur.u === undefined) olCur.u = undoSetting[p]; closeVictoryModal(); Online.reset(olCur); }
+  function olRandomRestart(s, p) { if (Online.myNum !== 1) return; olRestoreOrig(); if (p) pendApply(p); olSaveOrig(); olCur = typeof s === 'function' ? s() : s; if (p && olCur && olCur.u === undefined) olCur.u = undoSetting[p]; if (p && olCur && olCur.t === undefined) { olCur.t = tmSan(SETV[p].get().t); olCur.ton = olTmNow(p); } closeVictoryModal(); Online.reset(olCur); }
   let ppSettingsJustSaved = false;
-  ntRestartGame = function () { if (ntMode === 'online' && Online.active) return olRestart('notakto'); olAiEnd(); _ntRestart(); };
-  stRestartGame = function () { if (stMode === 'online' && Online.active) return olRestart('stone'); olAiEnd(); _stRestart(); };
-  ppRestartGame = function () { if (ppMode === 'online' && Online.active) return olRestart('popit'); olAiEnd(); _ppRestart(); };
-  qnRestartGame = function () { if (qnMode === 'online' && Online.active) return olRestart('queen'); olAiEnd(); _qnRestart(); };
+  ntRestartGame = function () { if (rndReplay('nt')) return; if (ntMode === 'online' && Online.active) return olRestart('notakto'); olAiEnd(); _ntRestart(); };
+  stRestartGame = function () { if (rndReplay('st')) return; if (stMode === 'online' && Online.active) return olRestart('stone'); olAiEnd(); _stRestart(); };
+  ppRestartGame = function () { if (rndReplay('pp')) return; if (ppMode === 'online' && Online.active) return olRestart('popit'); olAiEnd(); _ppRestart(); };
+  qnRestartGame = function () { if (rndReplay('qn')) return; if (qnMode === 'online' && Online.active) return olRestart('queen'); olAiEnd(); _qnRestart(); };
   // 메뉴로
   const _ntBack = ntGoBack, _stBack = stGoBack, _ppBack = ppGoBack, _qnBack = qnGoBack;
-  function olLeaveIfAny() { rpsHide(); oluReset(); olConnClear(); if (Online.active) { olStarted = false; Online.leave(); } olAiP = null; aiHuman = 1; olRestoreOrig(); }
+  function olLeaveIfAny() { for (const k in rndLast) rndLast[k] = null; rpsHide(); oluReset(); olConnClear(); if (Online.active) { olStarted = false; Online.leave(); } olAiP = null; aiHuman = 1; olRestoreOrig(); }
   ntGoBack = function () { olLeaveIfAny(); _ntBack(); };
   stGoBack = function () { olLeaveIfAny(); _stBack(); };
   ppGoBack = function () { olLeaveIfAny(); _ppBack(); };
@@ -7554,12 +7582,50 @@
     const mode = GAME_P[p]();
     if (mode === 'online') {
       if (!(window.Online && Online.active && Online.myNum === 1)) return; // 손님은 못 누름
-      rndNote = R.note; olRandomRestart(R.online, p); return;
+      rndNote = R.note; olRandomRestart(R.online, p); rndLast[p] = RND_BOARD[p].fromSpec(olCur); return;
     }
     closeVictoryModal();
     if (olAiP) olAiEnd(); // AI가 대신 둔 판 다음은 내 설정으로
     pendApply(p); // ⚙️로 바꿔 둔 설정이 있으면 이번 새 판부터
-    rndNote = R.note; R.local(mode);
+    rndNote = R.note; rndStarting = true;
+    try { R.local(mode); } finally { rndStarting = false; }
+    rndLast[p] = RND_BOARD[p].snap();
+  }
+  /* 🎲 판 다음 [다시하기]: 방금 한 판(줄·돌 개수·판 크기·퀸 시작 칸)을 그대로 다시
+     · ⚙️로 설정을 바꿨으면(저장) 새 설정이 이김 · 메뉴로 나가면 잊음 (메뉴에서 시작하면 저장된 설정) */
+  var rndLast = { nt: null, st: null, qn: null, pp: null }, rndStarting = false;
+  const RND_BOARD = {
+    nt: { snap: () => ({ size: ntBoardSize }), fromSpec: s => ({ size: s.size }), spec: b => ({ size: b.size }),
+          local: (b, mode) => { const keep = ntSize; ntSize = b.size; ntStopTimer(); try { ntStartGame(mode); } finally { ntSize = keep; } } },
+    st: { snap: () => ({ n: stN, limit: stLimit }), fromSpec: s => ({ n: s.n, limit: s.limit }), spec: b => ({ n: b.n, limit: b.limit, mode: stModeType }),
+          local: (b, mode) => { stStopTimer(); stOneShot = { n: b.n, limit: b.limit }; try { stStartGame(mode); } finally { stOneShot = false; } } },
+    qn: { snap: () => ({ size: qnN, start: qnStart ? qnStart.slice() : null, diff: botDifficulty }),
+          fromSpec: s => ({ size: s.size, start: s.start ? s.start.slice() : null, diff: botDifficulty }),
+          spec: b => { let start = null; if (qnStartSetting !== 'pick') { if (b.start) start = b.start.slice(); else { qnN = b.size; qnCold = qnColdSet(b.size); start = qnPickStart(); } } return { size: b.size, start, rule: qnWinRule, startMode: qnStartSetting }; },
+          local: (b, mode) => {
+            qnStopTimer();
+            // AI 대전 · 난이도 맞춤 시작이면: 난이도가 바뀌었을 때만 같은 크기에서 시작 칸을 새로 고름
+            const keepStart = b.start && qnStartSetting !== 'pick' && !(mode === 'bot' && qnStartSetting === 'rand' && b.diff !== botDifficulty);
+            qnStartGame(mode, keepStart ? { size: b.size, start: b.start.slice() } : { size: b.size });
+          } },
+    pp: { snap: () => ({ rows: ppInit.slice() }), fromSpec: s => ({ rows: s.rows.slice() }), spec: b => ({ rows: b.rows.slice(), rule: ppWinRule, max: ppMaxTake }),
+          local: (b, mode) => { ppStopTimer(); ppOneShot = () => b.rows.slice(); try { ppStartGame(mode); } finally { ppOneShot = null; } } },
+  };
+  // [다시하기] 앞에서 부름: 같은 판으로 다시 시작했으면 true
+  function rndReplay(p) {
+    const b = rndLast[p]; if (!b || isBranchPlay) return false;
+    if (setPend[p]) { rndLast[p] = null; return false; } // ⚙️로 바꾼 설정이 있음 → 새 설정으로
+    const R = RND[p], B = RND_BOARD[p], mode = GAME_P[p]();
+    if (mode === 'online') {
+      if (!(window.Online && Online.active && Online.myNum === 1)) return false;
+      rndNote = R.note; olRandomRestart(() => B.spec(b), p); return true;
+    }
+    closeVictoryModal();
+    if (olAiP) olAiEnd();
+    rndNote = R.note; rndStarting = true;
+    try { B.local(b, mode); } finally { rndStarting = false; }
+    rndLast[p] = B.snap(); // 퀸: 시작 칸을 다시 골랐으면 그걸 기억
+    return true;
   }
   /* ===== 게임 중 [다시하기]·[⚙️ 설정 바꿔 다시하기]·[무르기] 버튼 ===== */
   const GAME_P = { nt: () => ntMode, st: () => stMode, pp: () => ppMode, qn: () => qnMode };
@@ -8918,6 +8984,7 @@
     // ⚙️ 저장: 메뉴에서는 바로 적용 · 게임 화면에서는 다음 판부터 (판이 이미 끝났으면 바로 다음 판 시작)
     const fs = window['save' + N + 'Settings'];
     window['save' + N + 'Settings'] = function (...a) {
+      rndLast[p] = null; // ⚙️ 설정을 저장했으면 🎲 판 다시하기는 끝 (새 설정이 이김)
       const then = SET_THEN[p][0]();
       const online = tmIsOnline(p) && window.Online && Online.active && olStarted;
       if (!then && !online) {
@@ -8939,6 +9006,7 @@
     const fst = window[p + 'StartGame'];
     window[p + 'StartGame'] = function (mode, ...rest) {
       if (mode !== 'online') pendApply(p);
+      if (mode !== 'online' && !rndStarting) rndLast[p] = null; // 보통 판이 시작됨 (온라인은 olRestart·나가기에서 지움)
       const r = fst.call(this, mode, ...rest);
       tmRender(p);
       return r;
