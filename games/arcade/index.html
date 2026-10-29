@@ -2045,34 +2045,38 @@
   #qn-learn { width:100%; display:flex; flex-direction:column; gap:10px; }
   .qn-learn-body { display:grid; grid-template-columns:auto minmax(0,1fr); gap:14px; align-items:start; background:#fff; border:2px solid #E7DFC9; border-radius:18px; padding:14px; box-shadow:0 10px 30px rgba(90,70,20,.12); }
   .qn-learn-left { display:flex; flex-direction:column; align-items:center; gap:6px; }
-  #qn-l-boardWrap { width:min(400px, calc(100svh - var(--bk-top-h, 64px) - 290px)) !important; min-width:220px; }
   .qn-learn-right { display:flex; flex-direction:column; gap:8px; min-width:0; }
   .qn-learn-top { display:flex; align-items:center; justify-content:space-between; gap:8px; flex-wrap:wrap; }
   .qn-learn-top label { display:flex; align-items:center; gap:6px; font-weight:700; color:var(--text-sub); }
   .qn-learn-top select { font-size:1rem; padding:6px 8px; border:2px solid #D9CFAE; border-radius:10px; background:#FFF9E8; font-family:'Jua',sans-serif; }
-  #qn-l-ask { flex:none; }
-  .qn-l-exp { background:#FFF9F6; border:1.5px solid #E7DFC9; border-radius:12px; padding:10px 12px; font-size:.9rem; line-height:1.6; display:flex; flex-direction:column; gap:8px; }
-  .qn-l-exp[hidden] { display:none !important; }
-  .qn-l-exp h4 { margin:0; font-family:'Jua',sans-serif; font-weight:400; font-size:1.02rem; color:var(--th-ink, #2C2A26); }
-  .qn-l-exp .ok { color:#1F6B50; } .qn-l-exp .no { color:#A43456; }
-  .qn-l-exp table { border-collapse:collapse; font-family:'IBM Plex Mono',monospace; font-size:.8rem; }
-  .qn-l-exp td, .qn-l-exp th { border:1px solid #E7DFC9; padding:3px 7px; text-align:center; white-space:nowrap; }
-  .qn-l-exp tr.me td { background:var(--th-soft, #FDE8EE); font-weight:700; }
-  .qn-l-exp .chip { display:inline-block; padding:1px 7px; border-radius:8px; background:#fff; border:1.5px solid var(--th-line, #E7DFC9); font-family:'IBM Plex Mono',monospace; font-size:.82rem; margin:1px 2px 1px 0; }
-  .qn-l-exp .chip.near { border-color:var(--th, #E9533F); font-weight:700; }
-  .qn-cell.cold-dot::before { content:""; position:absolute; inset:34%; border-radius:50%; background:var(--th, #E9533F); opacity:.55; z-index:1; }
-  .qn-cell.goal.cold-dot::before { inset:16%; background:transparent; }
-  .qn-cell.l-pick { box-shadow:inset 0 0 0 4px #D93A5E; }
+  .qn-learn-right .qg-basis { font-size:.84rem; padding:5px 10px; }
+  .qn-learn-right .qg-brushes button { flex:1 1 auto; }
+  .qn-learn-right .qg-stepBtns { align-items:center; }
+  .qn-learn-right .qg-btn.small { font-size:.82rem; padding:5px 9px; min-height:32px; box-shadow:0 2px 0 var(--th-dk); }
+  #qg-pLeft { font-family:'IBM Plex Mono',monospace; font-size:.8rem; color:var(--text-sub); font-weight:700; }
+  .qg-tbl { border-collapse:collapse; font-family:'IBM Plex Mono',monospace; font-size:.8rem; }
+  .qg-tbl td, .qg-tbl th { border:1px solid #E7DFC9; padding:3px 7px; text-align:center; white-space:nowrap; }
+  .qg-tbl th { background:var(--th-soft, #FDE8EE); }
+  #qg-done { display:flex; flex-direction:column; gap:8px; align-items:flex-start; }
+  #qg-done[hidden] { display:none !important; }
+  #qg-done .qg-tblWrap { max-width:100%; overflow-x:auto; }
+  .qg-board { position:relative; }
+  .qg-phiOv { position:absolute; inset:0; width:100%; height:100%; pointer-events:none; z-index:5; }
+  .qg-phiOv[hidden] { display:none; }
+  .qg-cell.qg-tgt::after { content:""; position:absolute; inset:0; z-index:2; pointer-events:none; box-shadow:inset 0 0 0 3px var(--qg-ink); animation:qgring 1.2s ease-in-out infinite; }
   .qn-gd { width:100%; background:#fff; border:2px solid #E7DFC9; border-radius:18px; padding:4px 14px; }
   .qn-gd > summary { cursor:pointer; font-family:'Jua',sans-serif; font-size:1.05rem; padding:8px 0; color:var(--th-ink, #2C2A26); }
   .qn-gd[open] > summary { border-bottom:1.5px solid #E7DFC9; }
   @media (max-width:760px) {
-    /* 폰: 문제 글 → 판 → 설명 순서로 한 줄 */
+    /* 폰: 제목 → 안내 → 판 → 붓·버튼 순서로 한 줄 (안내가 판 바로 위에 보이도록) */
     .qn-learn-body { display:flex; flex-direction:column; padding:10px; gap:8px; }
     .qn-learn-left, .qn-learn-right { display:contents; }
-    .qn-learn-top { order:1; } #qn-l-ask { order:2; } #qn-l-boardWrap { order:3; } #qn-l-hint { order:4; } #qn-l-exp { order:5; } .qn-learn-right > .qg-stepBtns { order:6; }
-    #qn-l-boardWrap { width:min(100%, calc(100svh - var(--bk-top-h, 64px) - 330px)) !important; min-width:0; margin:0 auto; }
-    .qn-l-exp table { font-size:.74rem; } .qn-l-exp td, .qn-l-exp th { padding:2px 5px; }
+    .qn-learn-right > .qg-titles { order:1; } .qn-learn-right > .qg-basis { order:2; } .qn-learn-right > .qn-learn-top { order:3; }
+    .qn-learn-right > .qg-panel { order:4; } .qn-learn-left > .qg-boardWrap { order:5; } .qn-learn-left > .qg-legend { order:6; }
+    .qn-learn-right > .qg-brushes { order:7; } .qn-learn-right > .qg-stepBtns { order:8; }
+    .qn-learn-left > .qg-boardWrap { width:min(100%, calc(100svh - var(--bk-top-h, 64px) - 300px)); min-width:0; margin:0 auto; }
+    .qn-learn-left > .qg-legend { justify-content:center; }
+    .qg-tbl { font-size:.74rem; } .qg-tbl td, .qg-tbl th { padding:2px 5px; }
     .qn-gd > summary { font-size:.95rem; }
   }
   .pp-a-setup select { font-size:1rem; padding:6px 8px; border:2px solid #D9CFAE; border-radius:10px; background:#FFF9E8; font-family:'Jua',sans-serif; }
@@ -2675,7 +2679,8 @@
   }
 
   /* --- 📐 황금비 그림 (퀸 섹션 안 화면, 기본 규칙 기준) --- */
-  #qn-golden-screen { display:flex; flex-direction:column; align-items:stretch; width:100%; max-width:1060px; gap:8px; padding-top:10px;
+  #qn-golden-screen { display:flex; flex-direction:column; align-items:stretch; width:100%; max-width:1060px; gap:8px; padding-top:10px; }
+  #qn-golden-screen, #qn-learn {
     --qg-ink:#2C2A26; --qg-muted:#5F5B55; --qg-line:#E7DFC9; --qg-panel:#fff; --qg-sq-l:#FFFAF8; --qg-sq-d:#F8D7CF; --qg-lose:var(--th, #E9533F); --qg-win:#3a9e82; --qg-p0:#2F8FC9; --qg-p1:#E8891B; --qg-mono:'IBM Plex Mono',ui-monospace,monospace; }
   #qn-golden-screen [hidden] { display:none !important; }
   .qg-top { display:flex; align-items:center; gap:10px; flex-wrap:wrap; }
@@ -2703,12 +2708,8 @@
   .qg-ov { position:absolute; inset:0; pointer-events:none; }
   .qg-ov.lose { background:var(--qg-lose); opacity:.85; }
   .qg-ov.win { background:var(--qg-win); opacity:.5; }
-  .qg-mvdot { position:absolute; width:26%; height:26%; border-radius:50%; background:var(--qg-ink); opacity:.45; pointer-events:none; }
-  .qg-lbl { position:absolute; right:6%; bottom:4%; font-size:calc(30cqi / var(--n)); font-weight:700; color:var(--qg-ink); pointer-events:none; line-height:1; }
-  .qg-q { position:absolute; inset:0; display:grid; place-items:center; z-index:2; }
-  .qg-cell.qg-cur::after, .qg-cell.qg-proof::after { content:""; position:absolute; inset:0; z-index:2; pointer-events:none; box-shadow:inset 0 0 0 3px var(--qg-ink); }
-  .qg-cell.qg-proof::after { box-shadow:inset 0 0 0 4px var(--qg-p0); }
-  .qg-cell.qg-cur::after { animation:qgring 1.2s ease-in-out infinite; }
+  .qg-cell.qg-cur::after { content:""; position:absolute; inset:0; z-index:2; pointer-events:none; box-shadow:inset 0 0 0 3px var(--qg-ink); animation:qgring 1.2s ease-in-out infinite; }
+  .qg-brushes { display:flex; flex-wrap:wrap; gap:5px; }
   @keyframes qgring { 50% { box-shadow:inset 0 0 0 5px var(--qg-ink); } }
   .qg-okm { position:absolute; inset:0; display:grid; place-items:center; color:var(--qg-ink); opacity:.75; font-weight:800; font-size:calc(46cqi / var(--n)); z-index:3; pointer-events:none; }
   .qg-bad { position:absolute; inset:0; display:grid; place-items:center; color:#7A0F2A; font-weight:800; font-size:calc(62cqi / var(--n)); z-index:3; pointer-events:none; }
@@ -2717,23 +2718,15 @@
   .qg-legend { display:flex; gap:12px; flex-wrap:wrap; font-size:.8rem; color:var(--qg-muted); }
   .qg-legend span { display:inline-flex; align-items:center; gap:6px; }
   .qg-sw { width:14px; height:14px; border-radius:3px; display:inline-block; flex:none; }
-  .qg-seg { display:inline-flex; flex-wrap:wrap; border:1.5px solid var(--qg-line); border-radius:9px; overflow:hidden; align-self:flex-start; }
-  .qg-seg button { border:0; background:#fff; color:var(--qg-ink); padding:7px 11px; font:inherit; font-size:.84rem; cursor:pointer; }
-  .qg-seg button + button { border-left:1.5px solid var(--qg-line); }
-  .qg-seg button[aria-pressed="true"] { background:var(--th); color:#fff; font-weight:700; }
-  .qg-stepBar { display:flex; justify-content:space-between; align-items:center; gap:8px; flex-wrap:wrap; }
   .qg-stepBtns { display:flex; gap:6px; flex-wrap:wrap; }
   .qg-btn { font-family:'Jua',sans-serif; font-size:.92rem; border-radius:12px; padding:8px 12px; cursor:pointer; border:2px solid var(--th); background:#fff; color:var(--qg-ink); box-shadow:0 3px 0 var(--th-dk); min-height:38px; }
   .qg-btn:active { transform:translateY(2px); box-shadow:0 1px 0 var(--th-dk); }
   .qg-btn.primary { background:var(--th); color:#fff; }
   .qg-btn:disabled { opacity:.4; cursor:default; }
-  .qg-wide { width:100%; }
   .qg-meta { font-family:var(--qg-mono); font-size:.8rem; color:var(--qg-muted); }
   .qg-panel { background:#FFF9F6; border:1.5px solid var(--qg-line); border-radius:12px; padding:10px 12px; display:flex; flex-direction:column; gap:10px; }
   .qg-info { margin:0; font-size:.9rem; line-height:1.6; min-height:3em; }
   .qg-info b { font-family:'Jua',sans-serif; font-weight:400; font-size:1.02rem; }
-  .qg-brushes { display:grid; grid-template-columns:repeat(3,minmax(0,1fr)); gap:5px; }
-  .qg-brushes .qg-span3 { grid-column:span 3; justify-content:center; }
   .qg-bi { width:14px; text-align:center; font-weight:800; color:var(--qg-win); flex:none; }
   .qg-brushes button { font:inherit; font-size:.82rem; display:flex; align-items:center; gap:7px; padding:7px 9px; border-radius:9px; border:1.5px solid var(--qg-line); background:#fff; color:var(--qg-ink); cursor:pointer; text-align:left; }
   .qg-brushes button[aria-pressed="true"] { border-color:var(--qg-ink); font-weight:700; }
@@ -2741,11 +2734,6 @@
   .qg-cmp { display:flex; gap:14px; justify-content:center; flex-wrap:wrap; }
   .qg-cmp figure { margin:0; display:flex; flex-direction:column; align-items:center; gap:4px; }
   .qg-cmp figcaption { font-size:.76rem; color:var(--qg-muted); font-weight:700; }
-  .qg-settings { display:flex; flex-direction:column; gap:8px; }
-  .qg-ctrlRow { display:flex; align-items:center; gap:8px 10px; flex-wrap:wrap; }
-  .qg-lab { font-size:.76rem; color:var(--qg-muted); font-weight:700; min-width:4em; }
-  .qg-sizeVal { font-family:var(--qg-mono); font-weight:600; min-width:4.6em; }
-  .qg-ctrlRow input[type=range] { flex:1; min-width:120px; accent-color:var(--th); }
   .qg-phiFig { display:flex; flex-wrap:wrap; gap:14px; justify-content:center; align-items:flex-end; }
   .qg-phiFig svg { max-width:100%; height:auto; display:block; max-height:calc(100svh - var(--bk-top-h, 64px) - 250px); }
   .qg-phiText h3 { font-family:'Jua',sans-serif; font-weight:400; font-size:1.2rem; margin:0 0 6px; }
@@ -2757,7 +2745,6 @@
   .qg-miniLegend { display:flex; gap:12px; flex-wrap:wrap; justify-content:center; font-size:.78rem; color:var(--qg-muted); margin-top:6px; }
   .qg-miniLegend span { display:inline-flex; align-items:center; gap:5px; }
   .qg-pop { animation:qgfade .45s ease both; animation-delay:var(--d,0ms); }
-  .qg-ov.win.qg-fresh { animation:qgfade .45s ease both; animation-delay:var(--d,0ms); }
   @keyframes qgfade { from { opacity:0; } }
   .qg-draw { stroke-dasharray:1; animation:qgdraw 1.4s ease both; animation-delay:var(--d,0ms); }
   @keyframes qgdraw { from { stroke-dashoffset:1; } }
@@ -3099,38 +3086,53 @@
     <!-- 황금비 퀸 분석 화면 -->
     <div id="qn-analysis-screen">
       <div class="a-head"><h2 style="margin:0;">📊 분석 모드 <span id="qn-a-sub" style="font-size:.9rem; color:var(--text-sub); font-family:'Noto Sans KR',sans-serif;"></span></h2><button class="help-btn a-help" onmouseenter="playSfx('hover')" onclick="qnShowHelp('analysis')" title="도움말">?</button><button class="help-close-btn a-quiz-btn a-lesson-btn" type="button" onclick="playSfx('click'); openLesson('queen')">📘 전략</button></div>
-      <!-- 분석 모드 탭: 🎯 이기는 수 찾기(설명형 퀴즈 + 📐 황금비 그림) / 🔎 자유 분석 / 🏁 퀴즈 풀기(연속·타임어택) -->
+      <!-- 분석 모드 탭: 🎯 이기는 수 찾기(후공 승리 칸 칠하기 튜토리얼 + 📐 황금비 그림) / 🔎 자유 분석 / 🏁 퀴즈 풀기(연속·타임어택) -->
       <div class="qg-tabs qn-atabs" role="tablist" id="qn-atabs">
         <button class="qg-tab" type="button" role="tab" data-t="learn" aria-selected="true" onclick="playSfx('click'); qnATabSet('learn')"><span class="qg-tn">배우기</span><b>🎯 이기는 수 찾기</b></button>
         <button class="qg-tab" type="button" role="tab" data-t="free" aria-selected="false" onclick="playSfx('click'); qnATabSet('free')"><span class="qg-tn">직접 두며 보기</span><b>🔎 자유 분석</b></button>
         <button class="qg-tab" type="button" role="tab" data-t="quiz" aria-selected="false" onclick="playSfx('click'); qnATabSet('quiz')"><span class="qg-tn">연속 · 타임어택</span><b>🏁 퀴즈 풀기</b></button>
       </div>
-      <!-- (a) 🎯 이기는 수 찾기 -->
+      <!-- (a) 🎯 이기는 수 찾기 — 후공 승리 칸을 직접 칠하는 튜토리얼 (기본 규칙 기준) -->
       <div id="qn-learn">
         <div class="qn-learn-body">
           <div class="qn-learn-left">
-            <div class="qn-boardWrap" id="qn-l-boardWrap">
-              <div class="qn-ylab" id="qn-l-ylab"></div>
-              <div class="qn-grid" id="qn-l-grid" role="grid" aria-label="이기는 수 찾기 체스판"></div>
-              <div class="qn-xlab" id="qn-l-xlab"></div>
+            <div class="qg-boardWrap" id="qg-boardWrap">
+              <div class="qg-ylab" id="qg-ylab"></div>
+              <div class="qg-board" id="qg-board" role="grid" aria-label="후공 승리 칸 칠하기 판"></div>
+              <div class="qg-xlab" id="qg-xlab"></div>
             </div>
-            <div class="pp-hint" id="qn-l-hint"></div>
+            <div class="qg-legend"><span><i class="qg-sw" style="background:var(--qg-lose)"></i>후공 승리 칸</span><span><i class="qg-sw" style="background:color-mix(in srgb,var(--qg-win) 60%,var(--qg-sq-l))"></i>이기는 칸</span><span><i class="qg-sw" style="background:var(--qg-sq-l);box-shadow:inset 0 0 0 1px var(--qg-line)"></i>아직 모르는 칸</span></div>
           </div>
           <div class="qn-learn-right">
+            <div class="qg-titles"><h3>후공 승리 칸은 이렇게 생겼어요 — 왜 그런지 직접 칠하며 살펴봅시다</h3><p class="qg-lead">구석 (0,0)은 후공 승리 칸(빨강). 거기서 가로·세로·대각선으로 갈 수 있는 칸은 모두 이기는 칸(초록). 색이 없는 칸 중 가장 안쪽(x+y 가장 작은) 칸이 다음 후공 승리 칸.</p></div>
+            <p class="qg-basis">📌 기본 규칙(구석에 퀸을 넣으면 승리) 기준이에요.</p>
             <div class="qn-learn-top">
-              <label>판 크기 <select id="qn-l-size" onchange="playSfx('click'); qnLSize()"><option value="5">5×5</option><option value="6">6×6</option><option value="7">7×7</option><option value="8" selected>8×8</option><option value="9">9×9</option><option value="10">10×10</option><option value="11">11×11</option><option value="12">12×12</option><option value="13">13×13</option><option value="14">14×14</option><option value="15">15×15</option></select></label>
-              <span class="qg-meta" id="qn-l-score"></span>
+              <label>판 크기 <select id="qn-l-size" onchange="playSfx('click'); qnLSize()"><option value="10">10×10</option><option value="15">15×15</option><option value="20">20×20</option></select></label>
+              <button class="qg-btn small" type="button" id="qg-phiOpen">📐 황금비 그림 보기</button>
             </div>
-            <div id="qn-l-ask" class="a-verdict"></div>
-            <div id="qn-l-exp" class="qn-l-exp" hidden></div>
+            <div class="qg-brushes" id="qg-brush">
+              <button type="button" data-v="R" aria-pressed="true"><span class="qg-bi">✱</span>후공 승리 칸 + 세 줄 모두</button>
+              <button type="button" data-v="E" aria-pressed="false"><i class="qg-sw" style="box-shadow:inset 0 0 0 1.5px var(--qg-muted)"></i>지우개</button>
+            </div>
             <div class="qg-stepBtns">
-              <button class="qg-btn primary" type="button" id="qn-l-next" onclick="playSfx('click'); qnLNext()">다음 문제 ▶</button>
-              <button class="qg-btn" type="button" id="qn-l-show" onclick="playSfx('click'); qnLShow()">정답 보기</button>
+              <button class="qg-btn primary" type="button" id="qg-pCheck" disabled>정답 확인</button>
+              <span id="qg-pLeft"></span>
+              <button class="qg-btn" type="button" id="qg-pHint">힌트</button>
+              <button class="qg-btn" type="button" id="qg-pUndo" disabled>↩ 실행 취소</button>
+              <button class="qg-btn" type="button" id="qg-pClear">다 지우기</button>
+            </div>
+            <div class="qg-panel">
+              <p class="qg-info" id="qg-info"></p>
+              <div class="qg-cmp" id="qg-pCmp" hidden></div>
+              <div id="qg-done" hidden>
+                <div class="qg-tblWrap" id="qg-phiTbl"></div>
+                <button class="qg-btn primary" type="button" id="qg-phiLink">📐 황금비와 연결하기</button>
+              </div>
             </div>
           </div>
         </div>
         <details class="qn-gd" id="qn-golden-box">
-          <summary>📐 황금비 그림 — 후공 승리 칸이 왜 황금비 직선 위에 있을까? (칸 살펴보기 · 후공 승리 칸 찾기 · 황금비 그림)</summary>
+          <summary>📐 황금비 그림 — 후공 승리 칸이 왜 황금비 직선 위에 있을까? (그림 4장)</summary>
           <div id="qn-golden-screen-slot"></div>
         </details>
       </div>
@@ -3169,66 +3171,18 @@
       </div>
     </div>
 
-    <!-- 📐 황금비 그림 (예전 games/queen 분석 화면을 옮겨 옴 · 기본 규칙 기준) -->
+    <!-- 📐 황금비 그림 (예전 games/queen 분석 화면의 3단계만 남김 · 기본 규칙 기준) — 🎯 이기는 수 찾기 탭 아래 접힘 상자 안에 들어감 -->
     <div id="qn-golden-screen">
-      <p class="qg-basis">📌 기본 규칙(구석에 퀸을 넣으면 승리) 기준 그림이에요.</p>
-      <div class="qg-tabs" role="tablist" id="qg-tabs">
-        <button class="qg-tab" type="button" role="tab" data-t="0" aria-selected="true"><span class="qg-tn">1단계</span><b>칸 살펴보기</b></button>
-        <button class="qg-tab" type="button" role="tab" data-t="1" aria-selected="false"><span class="qg-tn">2단계</span><b>후공 승리 칸 찾기</b></button>
-        <button class="qg-tab" type="button" role="tab" data-t="2" aria-selected="false"><span class="qg-tn">3단계</span><b>황금비 그림</b></button>
-      </div>
       <div class="qg-body">
         <div class="qg-left">
-          <div class="qg-boardWrap" id="qg-boardWrap">
-            <div class="qg-ylab" id="qg-ylab"></div>
-            <div class="qg-board" id="qg-board" role="grid" aria-label="분석용 체스판"></div>
-            <div class="qg-xlab" id="qg-xlab"></div>
-          </div>
-          <div id="qg-phiFigWrap" hidden><div class="qg-phiFig" id="qg-phiFig"></div><div id="qg-phiExtra"></div></div>
+          <div id="qg-phiFigWrap"><div class="qg-phiFig" id="qg-phiFig"></div><div id="qg-phiExtra"></div></div>
         </div>
         <div class="qg-right">
-          <div class="qg-titles"><h3 id="qg-title"></h3><p class="qg-lead" id="qg-lead"></p></div>
-          <div id="qg-boardCtrls" style="display:flex; flex-direction:column; gap:8px;">
-            <div class="qg-seg" id="qg-fmode" hidden><button type="button" data-v="watch" aria-pressed="true">▶ 따라가기 · 자동 재생</button><button type="button" data-v="paint" aria-pressed="false">🖌 직접 칠하기</button></div>
-            <div class="qg-legend" id="qg-legend"></div>
-            <div class="qg-stepBar" id="qg-stepCtrls" hidden>
-              <div class="qg-stepBtns">
-                <button class="qg-btn primary" type="button" id="qg-fNext">▶ 첫 번째 후공 승리 칸 찾기</button>
-                <button class="qg-btn" type="button" id="qg-fAuto">자동 재생</button>
-                <button class="qg-btn" type="button" id="qg-fReset">처음부터</button>
-              </div>
-              <span class="qg-meta" id="qg-fProg"></span>
-            </div>
-            <div id="qg-paintCtrls" hidden style="display:flex; flex-direction:column; gap:8px;">
-              <div class="qg-brushes" id="qg-brush">
-                <button type="button" data-v="L" aria-pressed="true"><i class="qg-sw" style="background:var(--qg-lose)"></i>후공 승리 칸</button>
-                <button type="button" data-v="W" aria-pressed="false"><i class="qg-sw" style="background:color-mix(in srgb,var(--qg-win) 60%,var(--qg-sq-l))"></i>이기는 칸</button>
-                <button type="button" data-v="E" aria-pressed="false"><i class="qg-sw" style="box-shadow:inset 0 0 0 1.5px var(--qg-muted)"></i>지우개</button>
-                <button type="button" data-v="H" aria-pressed="false"><span class="qg-bi">→</span>가로줄</button>
-                <button type="button" data-v="V" aria-pressed="false"><span class="qg-bi">↑</span>세로줄</button>
-                <button type="button" data-v="D" aria-pressed="false"><span class="qg-bi">↗</span>대각선</button>
-                <button type="button" data-v="R" aria-pressed="false" class="qg-span3"><span class="qg-bi">✱</span>후공 승리 칸 + 세 줄 모두</button>
-              </div>
-              <p class="qg-help">줄 붓: 누른 칸부터 오른쪽(→), 위쪽(↑), 오른쪽 위(↗)로 끝까지 초록으로 칠해요. 빨간색으로 칠한 후공 승리 칸은 그대로 둡니다.</p>
-              <div class="qg-stepBtns">
-                <button class="qg-btn primary" type="button" id="qg-pCheck">정답 확인</button>
-                <button class="qg-btn" type="button" id="qg-pHint">힌트</button>
-                <button class="qg-btn" type="button" id="qg-pClear">다 지우기</button>
-              </div>
-            </div>
-            <div class="qg-panel"><p class="qg-info" id="qg-info"></p><div class="qg-cmp" id="qg-pCmp" hidden></div></div>
-            <div class="qg-settings" id="qg-settings">
-              <div class="qg-ctrlRow"><span class="qg-lab">판 크기</span><input type="range" id="qg-size" min="4" max="20" value="10" aria-label="분석할 판 크기"><span class="qg-sizeVal" id="qg-sizeVal">10 × 10</span></div>
-              <div class="qg-ctrlRow" id="qg-viewRow"><span class="qg-lab">표시</span>
-                <div class="qg-seg" id="qg-view"><button type="button" data-v="lose" aria-pressed="true">후공 승리 칸</button><button type="button" data-v="all" aria-pressed="false">승·패 모두</button><button type="button" data-v="none" aria-pressed="false">숨김</button></div>
-              </div>
-            </div>
-          </div>
-          <div id="qg-phiTextWrap" hidden style="display:flex; flex-direction:column; gap:10px;">
+          <div class="qg-titles"><h3 id="qg-title">그림으로 보는 황금비</h3><p class="qg-lead" id="qg-lead">정확한 증명 대신, 어떤 식으로 황금비가 나오는지 그림 네 장으로 훑어봐요.</p></div>
+          <div id="qg-phiTextWrap" style="display:flex; flex-direction:column; gap:10px;">
             <div class="qg-phiText" id="qg-phiText"></div>
             <div class="qg-pager"><button class="qg-btn" type="button" id="qg-phiPrev">← 이전 그림</button><div class="qg-pdots" id="qg-phiDots"></div><button class="qg-btn primary" type="button" id="qg-phiNext">다음 그림 →</button></div>
           </div>
-          <button class="qg-btn primary qg-wide" type="button" id="qg-nextTab"></button>
         </div>
       </div>
     </div>
@@ -4556,7 +4510,7 @@
         "- <span style='color:#C9436B; font-weight:bold;'>[나쁜 수]</span>: 상대에게 이길 기회를 주는 수예요. 화살표 뒤 <code>(c,d) 대응</code>은 상대의 최선의 대응이에요. (판에서 빨간색)<br>" +
         "- <b>(승리 확정)/(패배 확정)</b>: 그 수로 퀸이 바로 구석에 들어가요.<br>" +
         '<br><b>[세 가지 탭]</b><br>' +
-        '- <b>🎯 이기는 수 찾기</b>: 문제 자리가 나오면 퀸을 옮길 칸을 고르세요. 고르고 나면 <b>왜</b> 그 칸이 후공 승리 칸인지((⌊nφ⌋, ⌊nφ²⌋) 쌍 표, 두 좌표 차가 n이면서 작은 쪽이 ⌊nφ⌋) 설명이 나오고, 맨 아래 <b>📐 황금비 그림</b>(칸 살펴보기 · 후공 승리 칸 찾기 · 황금비 그림)을 펼쳐 볼 수 있어요.<br>' +
+        '- <b>🎯 이기는 수 찾기</b>: 후공 승리 칸을 <b>직접 칠하며</b> 찾아요. 구석 (0,0)은 후공 승리 칸(빨강), 거기서 가로·세로·대각선으로 갈 수 있는 칸은 이기는 칸(초록). 색이 없는 칸 중 가장 안쪽 칸을 ✱ 붓으로 누르면 다음 후공 승리 칸과 세 줄이 한 번에 칠해져요. 빈칸이 없어지면 [정답 확인] — 다 맞으면 황금비 직선과 (⌊nφ⌋, ⌊nφ²⌋) 표가 나오고, <b>📐 황금비 그림</b>(4장)으로 이어져요. (기본 규칙 기준)<br>' +
         '- <b>🔎 자유 분석</b>: 판 크기를 고르고 📍 직접 놓기·🎲 랜덤으로 시작 위치를 정한 뒤 수를 두며 판정을 보고, “이 포지션에서 AI와 두기”·무르기·처음부터를 쓸 수 있어요.<br>' +
         '- <b>🏁 퀴즈 풀기</b>: 설명 없이 빠르게 — 🔥 연속 정답 기록과 ⏱ 30초 타임어택.<br><br>' +
         '후공 승리 칸 (1,2), (3,5), (4,7)… 은 <b>황금비 φ≈1.618</b> 직선 위에 놓여요. (거꾸로 규칙이면 후공 승리 칸이 조금 달라져요)'] };
@@ -8036,149 +7990,100 @@
   })();
 </script>
 <script>
-  /* ===== 📐 황금비 그림 — 예전 games/queen 분석 3단계를 옮김. 이름은 모두 qg- 로 시작 =====
-     · 기본 규칙(구석에 넣으면 승리) 기준. 분석 모드 [🎯 이기는 수 찾기] 탭 아래 접힘 상자(details) 안에 들어 있음 */
+  /* ===== 🎯 이기는 수 찾기(후공 승리 칸 칠하기 튜토리얼) + 📐 황금비 그림 — 이름은 모두 qg- 로 시작 =====
+     · 기본 규칙(구석에 넣으면 승리) 기준. 분석 모드 [🎯 이기는 수 찾기] 탭에 칠하기 판이 바로 보이고,
+       그 아래 접힘 상자(details) 안에 📐 황금비 그림 4장이 들어 있음 */
   (function () {
     const $q = id => document.getElementById(id);
     const PHI = (1 + Math.sqrt(5)) / 2;
     const scr = $q('qn-golden-screen'), box = $q('qn-golden-box');
     $q('qn-golden-screen-slot').appendChild(scr); // 접힘 상자 안으로 옮김
-    const qgVisible = () => box.open && p3Shown('qn-analysis-screen') && qnAnalysisScreen.classList.contains('qn-tab-learn');
-    const A = { N: 10, view: 'lose', q: null, auto: null, sol: null, tab: 0, ph: 0, card: 0, fmode: 'watch', brush: 'L', paint: new Map(), check: false, hint: null, msg: '', built: 0 };
-    const moves = (x, y) => qnMoves(x, y);
+    const A = { N: innerWidth >= 700 ? 20 : 10, sol: null, card: 0, brush: 'R', paint: new Map(), undo: [], check: false, hint: null, msg: '', built: 0 };
     const fmt = ([x, y]) => `(${x}, ${y})`;
-    function solve(N) {
+    const sumOrder = (a, b) => (a[0] + a[1]) - (b[0] + b[1]) || a[0] - b[0];
+    function solve(N) { // qnIsCold(기본 규칙) 기준 후공 승리 칸
       const lose = new Set();
-      for (let s = 0; s <= 2 * (N - 1); s++) for (let x = 0; x < N; x++) { const y = s - x; if (y < 0 || y >= N) continue; if (!moves(x, y).some(([a, b]) => lose.has(a + ',' + b))) lose.add(x + ',' + y); }
+      for (let x = 0; x < N; x++) for (let y = 0; y < N; y++) if (qnIsCold(x, y, N, 'last')) lose.add(x + ',' + y);
       return { lose };
     }
-    function stopAuto() { if (A.auto) { clearInterval(A.auto); A.auto = null; } }
+    const freshPaint = () => new Map([['0,0', 'L']]); // (0,0)은 미리 칠해져 있고 지울 수 없음
     function buildBoard() {
       const N = A.N; $q('qg-boardWrap').style.setProperty('--n', N);
       const b = $q('qg-board'); b.innerHTML = '';
       for (let y = N - 1; y >= 0; y--) for (let x = 0; x < N; x++) {
         const c = document.createElement('button'); c.type = 'button'; c.className = 'qg-cell' + ((x + y) % 2 === 0 ? ' d' : '');
         c.dataset.x = x; c.dataset.y = y; if (!x && !y) c.classList.add('goal');
-        c.onclick = () => onCell(x, y); b.appendChild(c);
+        c.onclick = () => paintCell(x, y); b.appendChild(c);
       }
+      const ov = document.createElementNS('http://www.w3.org/2000/svg', 'svg'); ov.setAttribute('class', 'qg-phiOv'); ov.id = 'qg-phiOv'; ov.setAttribute('viewBox', `0 0 ${N} ${N}`); ov.setAttribute('aria-hidden', 'true'); ov.hidden = true; b.appendChild(ov);
       $q('qg-ylab').innerHTML = Array.from({ length: N }, (_, i) => `<span>${N - 1 - i}</span>`).join('');
       $q('qg-xlab').innerHTML = Array.from({ length: N }, (_, i) => `<span>${i}</span>`).join('');
       A.built = N;
     }
-    function onCell(x, y) {
-      if (A.tab === 1 && A.fmode === 'paint') { paintCell(x, y); return; }
-      if (A.tab !== 0) return;
-      playSfx('click');
-      A.q = (A.q && A.q[0] === x && A.q[1] === y) ? null : [x, y];
-      renderExplore();
-    }
     const cells = () => $q('qg-board').querySelectorAll('.qg-cell');
 
-    /* 1단계: 칸 살펴보기 */
-    function infoFor([x, y]) {
-      const { lose } = A.sol;
-      if (!x && !y) return '<b>(0, 0) 구석 · 후공 승리 칸</b><br>퀸을 여기로 옮긴 사람이 이미 이겼으니, 이 칸에서 차례를 받은 사람은 진 거예요.';
-      const mv = moves(x, y), w = mv.filter(m => lose.has(m + ''));
-      if (w.length) return `<b>${fmt([x, y])} · 이기는 칸</b><br>파란 테두리 칸 ${w.map(fmt).join(', ')}(으)로 옮기면 상대에게 후공 승리 칸을 넘겨줄 수 있어요.`;
-      return `<b>${fmt([x, y])} · 후공 승리 칸</b><br>점이 찍힌 ${mv.length}개 칸 중 어디로 옮겨도, 상대가 다시 빨간 칸(후공 승리 칸)으로 보낼 수 있어요.`;
-    }
-    function renderExplore() {
-      const { lose } = A.sol, cur = A.q;
-      const mv = cur ? moves(...cur) : [], mvSet = new Set(mv.map(m => m + ''));
-      const proof = new Set(mv.filter(m => lose.has(m + '')).map(m => m + ''));
-      cells().forEach(c => {
-        const x = +c.dataset.x, y = +c.dataset.y, k = x + ',' + y, isCur = cur && cur[0] === x && cur[1] === y;
-        let h = '';
-        if (A.view !== 'none') { if (lose.has(k)) h += '<span class="qg-ov lose"></span>'; else if (A.view === 'all') h += '<span class="qg-ov win"></span>'; }
-        if (mvSet.has(k) && !proof.has(k)) h += '<span class="qg-mvdot"></span>';
-        if (A.view === 'all') h += `<span class="qg-lbl">${lose.has(k) ? '패' : '승'}</span>`;
-        if (isCur) h += '<span class="qg-q">♛</span>';
-        c.innerHTML = h; c.classList.remove('qg-cur');
-        c.classList.toggle('qg-proof', proof.has(k));
-        c.setAttribute('aria-label', `(${x}, ${y})${lose.has(k) ? ' 후공 승리 칸' : ' 이기는 칸'}`);
-      });
-      $q('qg-info').innerHTML = cur ? infoFor(cur) : '아무 칸이나 눌러 보세요. 퀸이 그 칸에 있을 때 차례인 사람이 이기는지, 지는지(=후공 승리 칸) 알려 줍니다.';
-    }
-
-    /* 2단계: 후공 승리 칸 찾기 — 찾고, 그 칸으로 올 수 있는 칸을 칠한다 */
+    /* 직접 칠하기 */
     function pairsOf(N) { const P = [[[0, 0]]]; for (let n = 1; ; n++) { const a = Math.floor(n * PHI), b = a + n; if (b >= N) break; P.push([[a, b], [b, a]]); } return P; }
-    function reachers([a, b], N) { const out = []; for (let k = 1; k < N; k++) { if (a + k < N) out.push([a + k, b, k]); if (b + k < N) out.push([a, b + k, k]); if (a + k < N && b + k < N) out.push([a + k, b + k, k]); } return out; }
-    function renderFind() {
-      const N = A.N, P = pairsOf(N), ph = A.ph, maxPh = P.length * 2;
-      const found = Math.ceil(ph / 2), shaded = Math.floor(ph / 2);
-      const lose = new Set(); P.slice(0, found).forEach(pr => pr.forEach(c => lose.add(c + '')));
-      const old = new Set(), fresh = new Map();
-      for (let i = 0; i < shaded; i++) P[i].forEach(c => reachers(c, N).forEach(([x, y, k]) => {
-        const key = x + ',' + y; if (lose.has(key)) return;
-        if (i < shaded - 1) old.add(key); else if (!old.has(key) && (!fresh.has(key) || fresh.get(key) > k)) fresh.set(key, k);
-      }));
-      const focus = ph > 0 ? new Set(P[found - 1].map(c => c + '')) : new Set();
-      cells().forEach(c => {
-        const x = +c.dataset.x, y = +c.dataset.y, k = x + ',' + y;
-        let h = '';
-        if (lose.has(k)) h += '<span class="qg-ov lose"></span>';
-        else if (old.has(k)) h += '<span class="qg-ov win"></span>';
-        else if (fresh.has(k)) h += `<span class="qg-ov win qg-fresh" style="--d:${fresh.get(k) * 70}ms"></span>`;
-        c.innerHTML = h; c.classList.remove('qg-proof');
-        c.classList.toggle('qg-cur', focus.has(k) && ph < maxPh);
-        c.setAttribute('aria-label', `(${x}, ${y})${lose.has(k) ? ' 후공 승리 칸' : (old.has(k) || fresh.has(k)) ? ' 이기는 칸' : ''}`);
-      });
-      let info;
-      if (ph === 0) info = '<b>준비</b><br>아직 아무것도 모르는 판이에요. 구석부터 시작해서 후공 승리 칸을 하나씩 찾아볼게요.';
-      else if (ph % 2 === 1) {
-        const pr = P[found - 1];
-        if (found === 1) info = '<b>(0, 0) 구석 · 첫 번째 후공 승리 칸</b><br>퀸을 여기로 옮긴 사람이 이기니까, 여기서 차례를 받으면 이미 진 거예요.';
-        else { const [a, b] = pr[0]; info = `<b>${fmt([a, b])}와 ${fmt([b, a])} · 새 후공 승리 칸</b><br>아직 칠해지지 않은 칸 중 구석에 가장 가까운 칸이에요. 여기서는 어디로 가도 초록 칸(이기는 칸)뿐이라 후공 승리 칸이 됩니다. 두 수의 차이는 ${b - a}이에요.`; }
-      } else {
-        const pr = P[shaded - 1];
-        info = `<b>${pr.map(fmt).join('와 ')}로 한 번에 올 수 있는 칸 칠하기</b><br>가로, 세로, 대각선으로 이 칸까지 올 수 있는 칸들은 모두 초록이에요. 거기서 빨간 칸(후공 승리 칸)으로 옮기면 이기니까요.`;
-        if (ph === maxPh) info += `<br><br>모든 칸이 칠해졌어요! 후공 승리 칸은 ${P.slice(1).map(p => fmt(p[0])).join(', ')} 와 그 반대 칸, 그리고 구석입니다. 차이가 1, 2, 3…으로 하나씩 늘어나는 것도 확인해 보세요.`;
-      }
-      $q('qg-info').innerHTML = info;
-      $q('qg-fProg').textContent = `후공 승리 칸 ${found}쌍 찾음`;
-      const nb = $q('qg-fNext');
-      nb.disabled = ph >= maxPh;
-      nb.textContent = ph >= maxPh ? '끝' : ph % 2 === 1 ? '▶ 이 칸으로 올 수 있는 칸 칠하기' : ph === 0 ? '▶ 첫 번째 후공 승리 칸 찾기' : '▶ 다음 후공 승리 칸 찾기';
-      $q('qg-fAuto').textContent = A.auto ? '⏸ 멈추기' : '자동 재생';
-      $q('qg-fAuto').disabled = ph >= maxPh && !A.auto;
+    const GUIDE = 3; // 안내 단계: (0,0) → (1,2)/(2,1) → (3,5)/(5,3)
+    function guide() { // 현재 안내 단계와 눌러야 할 칸
+      const P = pairsOf(A.N);
+      if (A.paint.get('1,0') !== 'W') return { step: 0, pair: P[0], left: P[0] }; // (0,0)은 미리 빨강 — 눌러서 세 줄을 칠해야 1단계 끝
+      for (let i = 1; i < GUIDE && i < P.length; i++) { const left = P[i].filter(c => A.paint.get(c + '') !== 'L'); if (left.length) return { step: i, pair: P[i], left }; }
+      return null;
     }
-    function findStep() { if (!qgVisible()) { stopAuto(); return; } const max = pairsOf(A.N).length * 2; if (A.ph < max) A.ph++; if (A.ph >= max) stopAuto(); renderFind(); }
-
-    /* 2단계: 직접 칠하기 */
+    function snapshot() { A.undo.push(new Map(A.paint)); if (A.undo.length > 200) A.undo.shift(); }
     function paintCell(x, y) {
-      const key = x + ',' + y, N = A.N; A.check = false; A.hint = null; A.msg = '';
+      const key = x + ',' + y, N = A.N;
+      if (A.brush === 'E' && key === '0,0') { playSfx('tick'); A.msg = '<b>(0, 0) 구석은 지울 수 없어요.</b><br>구석은 처음부터 후공 승리 칸이에요.'; renderPaint(); return; }
+      snapshot(); A.check = false; A.hint = null; A.msg = '';
       const green = (a, b) => { const kk = a + ',' + b; if (A.paint.get(kk) !== 'L') A.paint.set(kk, 'W'); };
-      const dirs = { H: [[1, 0]], V: [[0, 1]], D: [[1, 1]], R: [[1, 0], [0, 1], [1, 1]] };
       if (A.brush === 'E') A.paint.delete(key);
-      else if (dirs[A.brush]) {
-        if (A.brush === 'R') A.paint.set(key, 'L');
-        const k0 = A.brush === 'R' ? 1 : 0;
-        dirs[A.brush].forEach(([dx, dy]) => { for (let k = k0; x + dx * k < N && y + dy * k < N; k++) green(x + dx * k, y + dy * k); });
-      }
-      else if (A.paint.get(key) === A.brush) A.paint.delete(key);
-      else A.paint.set(key, A.brush);
+      else { A.paint.set(key, 'L'); [[1, 0], [0, 1], [1, 1]].forEach(([dx, dy]) => { for (let k = 1; x + dx * k < N && y + dy * k < N; k++) green(x + dx * k, y + dy * k); }); }
       playSfx('click'); renderPaint();
     }
     function cellsBySum() { const N = A.N, o = []; for (let s = 0; s <= 2 * (N - 1); s++) for (let x = 0; x < N; x++) { const y = s - x; if (y >= 0 && y < N) o.push([x, y]); } return o; }
     function renderPaint() {
       const { lose } = A.sol; let wrong = 0, right = 0, empty = 0;
+      const g = (A.hint || A.check) ? null : guide(), tgt = new Set(g ? g.left.map(c => c + '') : []);
       cells().forEach(c => {
         const x = +c.dataset.x, y = +c.dataset.y, k = x + ',' + y, p = A.paint.get(k), truth = lose.has(k) ? 'L' : 'W';
         let h = '';
         if (p === 'L') h += '<span class="qg-ov lose"></span>'; else if (p === 'W') h += '<span class="qg-ov win"></span>';
         if (!p) empty++; else if (p === truth) { right++; if (A.check) h += '<span class="qg-okm">✓</span>'; } else { wrong++; if (A.check) h += '<span class="qg-bad">×</span>'; }
-        c.innerHTML = h; c.classList.remove('qg-proof'); c.classList.toggle('qg-cur', A.hint === k);
+        c.innerHTML = h; c.classList.toggle('qg-cur', A.hint === k); c.classList.toggle('qg-tgt', tgt.has(k));
         c.setAttribute('aria-label', `(${x}, ${y})${p === 'L' ? ' 후공 승리 칸으로 칠함' : p === 'W' ? ' 이기는 칸으로 칠함' : ''}`);
       });
-      const total = A.N * A.N;
+      const N = A.N, total = N * N, done = A.check && !wrong && !empty;
       let info = A.msg;
       if (!info) {
-        if (A.check) info = wrong || empty ? `<b>맞은 칸 ${right} / ${total}</b><br>✓ 맞음 ${right}칸 · <span style="color:#A43456;font-weight:700">× 틀림 ${wrong}칸</span> · 빈칸 ${empty}칸. 아래에서 정답과 비교해 보세요.` : '<b>완벽해요!</b><br>모든 칸을 맞게 칠했어요.';
-        else info = '<b>붓을 고르고 칸을 눌러 칠하세요.</b><br>"후공 승리 칸 + 세 줄 모두"로 후공 승리 칸을 누르면, 그 칸으로 한 번에 올 수 있는 칸이 모두 초록으로 칠해져요.';
+        if (A.check) info = done ? `<b>🎉 완벽해요! 맞은 칸 ${right} / ${total}</b><br>후공 승리 칸이 구석에서 뻗은 두 직선 위에 놓였어요. 점선이 바로 황금비 직선 y = φx, y = x/φ (φ ≈ 1.618)이에요. 아래 표에서 좌표를 확인하고, 📐 황금비와 연결해 보세요.`
+          : `<b>맞은 칸 ${right} / ${total}</b><br>✓ 맞음 ${right}칸 · <span style="color:#A43456;font-weight:700">× 틀림 ${wrong}칸</span>. 아래에서 정답과 비교하고, [힌트]로 가장 안쪽의 틀린 칸을 찾아보세요.`;
+        else if (g) {
+          const [a, b] = g.pair[0];
+          if (g.step === 0) info = '<b>1단계</b><br>👉 <b>(0,0)</b>을 눌러 보세요. 구석은 후공 승리 칸(빨강)이에요. 누르면 거기서 가로·세로·대각선으로 갈 수 있는 칸이 모두 초록(이기는 칸)으로 칠해져요.';
+          else if (g.left.length === 2) info = `<b>${g.step + 1}단계</b><br>${g.step === 1 ? '색이 없는 칸 중 가장 안쪽 칸이 다음 후공 승리 칸이에요.' : '또 색이 없는 칸 중 가장 안쪽 칸을 찾아요. 대칭이라 두 칸이 한 쌍이에요.'} 👉 <b>(${a},${b})</b> 또는 <b>(${b},${a})</b>을 눌러 보세요.`;
+          else info = `<b>${g.step + 1}단계</b><br>👉 반대쪽 <b>${fmt(g.left[0])}</b>도 눌러 보세요. 좌표를 바꾼 칸도 똑같이 후공 승리 칸이에요.`;
+        }
+        else info = `<b>이제 끝까지 혼자 칠해 보세요!</b> 빈칸 ${empty}개<br>색이 없는 칸 중 가장 안쪽(x+y가 가장 작은) 칸을 ✱ 붓으로 누르면 돼요. 빈칸이 없어지면 [정답 확인]을 누르세요.`;
       }
       $q('qg-info').innerHTML = info;
-      const cmp = $q('qg-pCmp'); cmp.hidden = !A.check;
-      if (A.check) cmp.innerHTML = `<figure>${miniSvg('mine')}<figcaption>내가 칠한 판</figcaption></figure><figure>${miniSvg('truth')}<figcaption>정답</figcaption></figure>`;
+      const chk = $q('qg-pCheck'); chk.disabled = empty > 0; $q('qg-pLeft').textContent = empty ? `빈칸 ${empty}개 남음` : '';
+      $q('qg-pUndo').disabled = !A.undo.length;
+      const cmp = $q('qg-pCmp'); cmp.hidden = !A.check || done;
+      if (A.check && !done) cmp.innerHTML = `<figure>${miniSvg('mine')}<figcaption>내가 칠한 판</figcaption></figure><figure>${miniSvg('truth')}<figcaption>정답</figcaption></figure>`;
+      $q('qg-done').hidden = !done;
+      if (done) $q('qg-phiTbl').innerHTML = phiTable();
+      drawPhiLines(done);
+    }
+    function drawPhiLines(on) { // 정답일 때 판 위에 y = φx, y = x/φ 점선
+      const ov = $q('qg-phiOv'); if (!ov) return; ov.hidden = !on; if (!on) { ov.innerHTML = ''; return; }
+      const N = A.N, x0 = .5, y0 = N - .5, L = N - .5, t = L / PHI;
+      const ln = (x1, y1, col) => `<line pathLength="100" x1="${x0}" y1="${y0}" x2="${x1}" y2="${y1}" style="stroke:#fff;stroke-width:.26;stroke-dasharray:3 2;stroke-linecap:round"/><line class="qg-pop" pathLength="100" x1="${x0}" y1="${y0}" x2="${x1}" y2="${y1}" style="stroke:${col};stroke-width:.14;stroke-dasharray:3 2;stroke-linecap:round"/>`;
+      ov.innerHTML = ln(x0 + t, y0 - L, 'var(--qg-p0)') + ln(x0 + L, y0 - t, 'var(--qg-p1)');
+    }
+    function phiTable() {
+      const rows = []; for (let n = 0; ; n++) { const a = Math.floor(n * PHI), b = a + n; if (b >= A.N) break; rows.push([n, a, b]); }
+      return `<table class="qg-tbl"><tr><th>n</th><th>⌊nφ⌋</th><th>⌊nφ²⌋ = ⌊nφ⌋+n</th><th>후공 승리 칸</th></tr>` + rows.map(([n, a, b]) => `<tr><td>${n}</td><td>${a}</td><td>${b}</td><td>${n ? `(${a},${b}) (${b},${a})` : '(0,0) 구석'}</td></tr>`).join('') + '</table>';
     }
     function miniSvg(which) {
       const N = A.N, cs = 120 / N, { lose } = A.sol, G = 'color-mix(in srgb,var(--qg-win) 60%,var(--qg-sq-l))';
@@ -8195,17 +8100,21 @@
     function paintHint() {
       const { lose } = A.sol; A.check = false;
       const c = cellsBySum().find(([x, y]) => A.paint.get(x + ',' + y) !== (lose.has(x + ',' + y) ? 'L' : 'W'));
-      if (!c) { A.hint = null; A.msg = '<b>힌트가 필요 없어요.</b><br>이미 모든 칸이 맞아요!'; }
+      if (!c) { A.hint = null; A.msg = '<b>힌트가 필요 없어요.</b><br>이미 모든 칸이 맞아요! [정답 확인]을 눌러 보세요.'; }
       else { A.hint = c + ''; A.msg = `<b>${fmt(c)}${josaPick(String(c[1]), '을', '를')} 생각해 보세요.</b><br>테두리 칸에서 갈 수 있는 칸 중에 후공 승리 칸(빨강)이 있나요? 있으면 이기는 칸, 없으면 후공 승리 칸이에요.`; }
       renderPaint();
     }
-    function setFMode(m) {
-      stopAuto(); A.fmode = m;
-      $q('qg-fmode').querySelectorAll('button').forEach(b => b.setAttribute('aria-pressed', b.dataset.v === m));
-      $q('qg-stepCtrls').hidden = m !== 'watch'; $q('qg-paintCtrls').hidden = m !== 'paint'; $q('qg-pCmp').hidden = true;
-      A.check = false; A.hint = null; A.msg = '';
-      if (m === 'watch') renderFind(); else renderPaint();
-    }
+    function resetPaint() { A.paint = freshPaint(); A.undo = []; A.check = false; A.hint = null; A.msg = ''; }
+    function ensureBuilt() { if (!A.sol || A.built !== A.N) { A.sol = solve(A.N); buildBoard(); resetPaint(); renderPaint(); } }
+    window.qnLEnsure = ensureBuilt; // 🎯 탭을 열 때
+    window.qnLSize = function () { A.N = parseInt($q('qn-l-size').value) || 10; ensureBuilt(); };
+    $q('qn-l-size').value = String(A.N);
+    $q('qg-brush').addEventListener('click', e => { const b = e.target.closest('button'); if (!b) return; playSfx('click'); A.brush = b.dataset.v;
+      $q('qg-brush').querySelectorAll('button').forEach(x => x.setAttribute('aria-pressed', x === b)); });
+    $q('qg-pCheck').onclick = () => { playSfx('click'); A.check = true; A.hint = null; A.msg = ''; renderPaint(); };
+    $q('qg-pHint').onclick = () => { playSfx('click'); paintHint(); };
+    $q('qg-pUndo').onclick = () => { if (!A.undo.length) return; playSfx('click'); A.paint = A.undo.pop(); A.check = false; A.hint = null; A.msg = ''; renderPaint(); };
+    $q('qg-pClear').onclick = () => { playSfx('click'); snapshot(); A.paint = freshPaint(); A.check = false; A.hint = null; A.msg = ''; renderPaint(); };
 
     /* 3단계: 그림으로 보는 황금비 (4장) */
     const svgOpen = (w, h, label) => `<svg viewBox="0 0 ${w} ${h}" width="${w}" role="img" aria-label="${label}">`;
@@ -8287,79 +8196,35 @@
       $q('qg-phiNext').disabled = A.card === CARDS.length - 1;
     }
 
-    /* 단계 전환 */
-    const TABS = [
-      { t: '칸 살펴보기', l: '퀸이 어느 칸에 있을 때 차례인 사람이 지는지(= 후공 승리 칸), 칸을 눌러 확인해 보세요.',
-        lg: [['var(--qg-lose)', '', '후공 승리 칸'], ['', 'inset 0 0 0 3px var(--qg-p0)', '이기는 수'], ['radial-gradient(circle,var(--qg-ink) 30%,transparent 34%)', '', '갈 수 있는 칸']], next: '2단계: 후공 승리 칸 찾기 →' },
-      { t: '후공 승리 칸 찾기', l: '규칙은 두 가지예요. 후공 승리 칸을 찾으면, 그 칸으로 한 번에 올 수 있는 칸은 모두 이기는 칸이 됩니다. 그리고 남은 칸 중 구석에 가장 가까운 칸이 다음 후공 승리 칸이에요.',
-        lg: [['var(--qg-lose)', '', '후공 승리 칸'], ['color-mix(in srgb,var(--qg-win) 60%,var(--qg-sq-l))', '', '이기는 칸'], ['var(--qg-sq-l)', 'inset 0 0 0 1px var(--qg-line)', '아직 모르는 칸']], next: '3단계: 그림으로 보는 황금비 →' },
-      { t: '그림으로 보는 황금비', l: '정확한 증명 대신, 어떤 식으로 황금비가 나오는지 그림 네 장으로 훑어봐요.', lg: [], next: '처음부터 다시 보기' },
-    ];
-    function setTab(t) {
-      stopAuto(); A.tab = t; const T = TABS[t];
-      $q('qg-tabs').querySelectorAll('.qg-tab').forEach(b => b.setAttribute('aria-selected', +b.dataset.t === t));
-      $q('qg-title').textContent = T.t; $q('qg-lead').textContent = T.l; $q('qg-nextTab').textContent = T.next;
-      $q('qg-boardWrap').hidden = t === 2; $q('qg-phiFigWrap').hidden = t !== 2;
-      $q('qg-boardCtrls').hidden = t === 2; $q('qg-phiTextWrap').hidden = t !== 2;
-      $q('qg-stepCtrls').hidden = !(t === 1 && A.fmode === 'watch');
-      $q('qg-paintCtrls').hidden = !(t === 1 && A.fmode === 'paint');
-      $q('qg-fmode').hidden = t !== 1; $q('qg-viewRow').hidden = t !== 0;
-      $q('qg-legend').innerHTML = T.lg.map(([bg, sh, txt]) => `<span><i class="qg-sw" style="background:${bg || 'transparent'};box-shadow:${sh || 'none'}"></i>${txt}</span>`).join('');
-      $q('qg-pCmp').hidden = true;
-      if (t === 0) renderExplore();
-      if (t === 1) { A.ph = 0; setFMode(A.fmode); }
-      if (t === 2) renderCard();
-    }
-    $q('qg-tabs').addEventListener('click', e => { const b = e.target.closest('.qg-tab'); if (b) { playSfx('click'); setTab(+b.dataset.t); } });
-    $q('qg-nextTab').onclick = () => { playSfx('click'); setTab((A.tab + 1) % 3); window.scrollTo(0, 0); };
-    $q('qg-size').addEventListener('input', e => {
-      stopAuto(); A.paint = new Map(); A.check = false; A.hint = null; A.msg = ''; A.N = +e.target.value;
-      $q('qg-sizeVal').textContent = `${A.N} × ${A.N}`; A.sol = solve(A.N); A.q = null; buildBoard(); setTab(A.tab);
-    });
-    $q('qg-view').addEventListener('click', e => { const b = e.target.closest('button'); if (!b) return; playSfx('click');
-      $q('qg-view').querySelectorAll('button').forEach(x => x.setAttribute('aria-pressed', x === b)); A.view = b.dataset.v; renderExplore(); });
-    $q('qg-fNext').onclick = () => { playSfx('click'); stopAuto(); findStep(); };
-    $q('qg-fReset').onclick = () => { playSfx('click'); stopAuto(); A.ph = 0; renderFind(); };
-    $q('qg-fAuto').onclick = () => { playSfx('click'); if (A.auto) { stopAuto(); renderFind(); return; } A.auto = setInterval(findStep, 2600); findStep(); };
-    $q('qg-fmode').addEventListener('click', e => { const b = e.target.closest('button'); if (b) { playSfx('click'); setFMode(b.dataset.v); } });
-    $q('qg-brush').addEventListener('click', e => { const b = e.target.closest('button'); if (!b) return; playSfx('click'); A.brush = b.dataset.v;
-      $q('qg-brush').querySelectorAll('button').forEach(x => x.setAttribute('aria-pressed', x === b)); });
-    $q('qg-pCheck').onclick = () => { playSfx('click'); A.check = true; A.hint = null; A.msg = ''; renderPaint(); };
-    $q('qg-pHint').onclick = () => { playSfx('click'); paintHint(); };
-    $q('qg-pClear').onclick = () => { playSfx('click'); A.paint = new Map(); A.check = false; A.hint = null; A.msg = ''; renderPaint(); };
     $q('qg-phiPrev').onclick = () => { if (A.card > 0) { playSfx('click'); A.card--; renderCard(); } };
     $q('qg-phiNext').onclick = () => { if (A.card < CARDS.length - 1) { playSfx('click'); A.card++; renderCard(); } };
 
-    // 접힘 상자 열기·닫기 (처음 열 때 판을 만듦)
-    function ensureBuilt() { if (!A.sol || A.built !== A.N) { A.sol = solve(A.N); buildBoard(); } }
-    box.addEventListener('toggle', () => { if (box.open) { ensureBuilt(); setTab(A.tab); } else stopAuto(); });
-    window.qgOpen = function () { box.open = true; ensureBuilt(); setTab(A.tab); };
-    window.qgClose = function () { stopAuto(); box.open = false; };
-    window.qgPause = function () { if (A.auto) { stopAuto(); if (A.tab === 1 && A.fmode === 'watch') renderFind(); } };
-    // 퀸 메뉴로 나가면 자동 재생 멈춤
-    const _qnBackG = qnGoBack; qnGoBack = function (...a) { stopAuto(); return _qnBackG(...a); };
+    // 접힘 상자 열기·닫기 (열 때 그림을 그림)
+    box.addEventListener('toggle', () => { if (box.open) renderCard(); });
+    window.qgOpen = function () { if (!box.open) box.open = true; else renderCard(); requestAnimationFrame(() => box.scrollIntoView({ behavior: 'smooth', block: 'start' })); };
+    window.qgClose = function () { box.open = false; };
+    $q('qg-phiOpen').onclick = () => { playSfx('click'); qgOpen(); };
+    $q('qg-phiLink').onclick = () => { playSfx('click'); A.card = 0; qgOpen(); };
   })();
 </script>
 <script>
   /* ===== 📊 황금비 퀸 분석 모드 탭 =====
-     learn: 🎯 이기는 수 찾기(한 문제씩, 고른 뒤 설명 + 📐 황금비 그림 접힘 상자)
+     learn: 🎯 이기는 수 찾기(후공 승리 칸을 직접 칠하는 튜토리얼 + 📐 황금비 그림 접힘 상자 — 위 스크립트 qg-)
      free : 🔎 자유 분석(기존 분석 판 · 판정 줄 · 👀 왜? · 무르기 · AI와 두기 · 내 플레이로 배우기)
      quiz : 🏁 퀴즈 풀기(기존 연속 퀴즈 · 🔥 연속 · ⏱ 30초) — 같은 분석 판을 씀 */
   (function qnTabsInit() {
     const $ = id => document.getElementById(id);
     const scr = $('qn-analysis-screen');
-    const PHI = (1 + Math.sqrt(5)) / 2;
     let tab = 'learn', busy = 0;
     function apply() {
       ['learn', 'free', 'quiz'].forEach(t => scr.classList.toggle('qn-tab-' + t, tab === t));
       $('qn-atabs').querySelectorAll('.qg-tab').forEach(b => b.setAttribute('aria-selected', String(b.dataset.t === tab)));
-      if (tab !== 'learn' && typeof qgPause === 'function') qgPause();
     }
     function leaveQuiz() { if (qnAQuizOn) { qzStopTimer(); qnAQuizOn = false; qnAQuizAnswered = false; } }
     window.qnATabSet = function (t) {
       if (t === tab) return;
       if (typeof p3WhyStop === 'function') p3WhyStop('qn', true);
-      if (t === 'learn') { leaveQuiz(); tab = 'learn'; apply(); busy++; qnAUpdate(); busy--; if (!L.q) qnLNext(); }
+      if (t === 'learn') { leaveQuiz(); tab = 'learn'; apply(); busy++; qnAUpdate(); busy--; qnLEnsure(); }
       else if (t === 'free') { leaveQuiz(); tab = 'free'; apply(); qnAUpdate(); }
       else { tab = 'quiz'; apply(); qnAQuiz(); }
     };
@@ -8375,106 +8240,6 @@
     // 🏁 퀴즈의 [그만] → 자유 분석 탭
     wrapAfter('qzStop', k => { if (k === 'qn' && tab === 'quiz') { tab = 'free'; apply(); } });
 
-    /* ---------- 🎯 이기는 수 찾기 ---------- */
-    const L = { N: 8, built: 0, q: null, answered: false, pick: null, wins: [], solved: 0, right: 0 };
-    const fmt = p => `(${p[0]},${p[1]})`;
-    const cold = (x, y) => qnIsCold(x, y, L.N, qnWinRule);
-    function build() {
-      const N = L.N; $('qn-l-boardWrap').style.setProperty('--n', N);
-      const g = $('qn-l-grid'); g.innerHTML = '';
-      for (let y = N - 1; y >= 0; y--) for (let x = 0; x < N; x++) {
-        const c = document.createElement('button'); c.type = 'button'; c.className = 'qn-cell' + ((x + y) % 2 === 0 ? ' d' : '');
-        c.dataset.x = x; c.dataset.y = y; if (!x && !y) c.classList.add('goal');
-        c.onclick = () => onCell(x, y);
-        c.onmouseenter = () => { if (c.classList.contains('tgt')) playSfx('hover'); };
-        g.appendChild(c);
-      }
-      $('qn-l-ylab').innerHTML = Array.from({ length: N }, (_, i) => `<span>${N - 1 - i}</span>`).join('');
-      $('qn-l-xlab').innerHTML = Array.from({ length: N }, (_, i) => `<span>${i}</span>`).join('');
-      L.built = N;
-    }
-    function onCell(x, y) {
-      if (L.answered || !L.q) return;
-      if (!qnMoves(...L.q).some(([a, b]) => a === x && b === y)) return;
-      answer([x, y]);
-    }
-    window.qnLSize = function () { L.N = parseInt($('qn-l-size').value) || 8; qnLNext(); };
-    window.qnLNext = function () {
-      if (L.built !== L.N) build();
-      L.q = qnARandPos(L.N, true); L.answered = false; L.pick = null;
-      L.wins = qnMoves(...L.q).filter(([a, b]) => cold(a, b));
-      render();
-    };
-    window.qnLShow = function () { if (!L.q || L.answered) return; answer(null); };
-    function answer(to) {
-      L.answered = true; L.pick = to;
-      const ok = !!to && cold(to[0], to[1]);
-      if (to) { L.solved++; if (ok) L.right++; }
-      if (to) { if (ok) playWinSound(); else playLoseSound(); } else playSfx('click');
-      render();
-    }
-    function render() {
-      const N = L.N, q = L.q, mis = qnWinRule === 'misere';
-      const moves = q ? qnMoves(...q) : [], mv = new Set(moves.map(m => m + '')), win = new Set(L.wins.map(m => m + ''));
-      $('qn-l-grid').querySelectorAll('.qn-cell').forEach(c => {
-        const x = +c.dataset.x, y = +c.dataset.y, k = x + ',' + y, isQ = q && q[0] === x && q[1] === y;
-        c.innerHTML = isQ ? '<span class="q">♛</span>' : '';
-        c.classList.toggle('tgt', mv.has(k));
-        c.classList.toggle('quiz', mv.has(k) && !L.answered);
-        c.classList.toggle('cell-win', L.answered && win.has(k));
-        c.classList.toggle('cell-bad', L.answered && !!L.pick && L.pick + '' === k && !win.has(k));
-        c.classList.toggle('l-pick', L.answered && !!L.pick && L.pick + '' === k);
-        c.classList.toggle('cold-dot', L.answered && (x || y) ? cold(x, y) : false);
-        c.disabled = !mv.has(k) || L.answered;
-      });
-      $('qn-l-score').textContent = L.solved ? `맞힘 ${L.right} / ${L.solved}` : '';
-      $('qn-l-show').disabled = !q || L.answered;
-      const ask = $('qn-l-ask'), exp = $('qn-l-exp');
-      if (!q) { ask.className = 'a-verdict'; ask.innerHTML = '[다음 문제]를 누르세요.'; exp.hidden = true; return; }
-      if (!L.answered) {
-        ask.className = 'a-verdict';
-        ask.innerHTML = `<b>🎯 퀸이 ${fmt(q)}에 있어요 — 내 차례!</b><br>상대를 <b>후공 승리 칸</b>으로 보내는 칸을 판에서 눌러 보세요. (색칠된 칸 = 갈 수 있는 칸)`;
-        $('qn-l-hint').textContent = '왼쪽·아래·왼쪽 아래 대각선으로 원하는 만큼 — 이기는 칸을 고르세요';
-        exp.hidden = true; return;
-      }
-      const to = L.pick, ok = !!to && win.has(to + '');
-      ask.className = 'a-verdict ' + (ok ? 'win' : 'lose');
-      if (ok) ask.innerHTML = `<b>정답! 🎉</b> ${fmt(to)}는 후공 승리 칸이에요. 상대가 어디로 옮겨도 다시 후공 승리 칸으로 보낼 수 있어요.`;
-      else if (to) ask.innerHTML = `<b>아쉬워요 😢</b> ${fmt(to)}는 이기는 수가 아니에요. 정답은 초록 칸: ${L.wins.map(fmt).join(', ')}`;
-      else ask.innerHTML = `<b>👀 정답 보기</b> 이기는 수는 초록 칸: ${L.wins.map(fmt).join(', ')}`;
-      $('qn-l-hint').textContent = '초록 = 이기는 수 · 빨간 점 = 후공 승리 칸 · [다음 문제]로 계속';
-      // 설명
-      const best = ok ? to : L.wins[0];
-      let h = '';
-      if (to && !ok) {
-        const resp = (!to[0] && !to[1]) ? null : qnMoves(to[0], to[1]).find(([a, b]) => cold(a, b));
-        const respTxt = (!to[0] && !to[1]) ? (mis ? '구석에 넣는 사람이 지는 규칙이라 바로 패배예요.' : '')
-          : !resp ? '' : (!resp[0] && !resp[1] && !mis) ? `상대가 퀸을 바로 <b>구석 (0,0)</b>에 넣어서 이겨요.` : `상대가 <b>${fmt(resp)}</b>(후공 승리 칸)으로 옮겨서, 내가 다시 지는 자리에서 두게 돼요.`;
-        h += `<div><b class="no">❌ ${fmt(to)}로 가면?</b> ${respTxt}</div>`;
-      }
-      h += `<div><b class="ok">✅ ${fmt(best)}가 이기는 수인 까닭</b> — 상대가 ${fmt(best)}에서 어디로 옮겨도(가로·세로·대각선) 후공 승리 칸이 아니라서, 내가 다시 후공 승리 칸으로 되돌려 보낼 수 있어요.</div>`;
-      // 근처 후공 승리 칸
-      const lim = Math.max(q[0], q[1]), near = [];
-      for (let x = 0; x <= lim && x < N; x++) for (let y = 0; y <= lim && y < N; y++) if (cold(x, y) && (x || y || !mis)) near.push([x, y]);
-      near.sort((a, b) => Math.max(a[0], a[1]) - Math.max(b[0], b[1]) || a[0] - b[0]);
-      h += `<div><b>이 근처 후공 승리 칸</b> (빨간 점): ${near.map(p => `<span class="chip${win.has(p + '') ? ' near' : ''}">${fmt(p)}</span>`).join('')}<br><small>진한 테두리 = 지금 퀸에서 한 번에 갈 수 있는 칸</small></div>`;
-      // 황금비 표
-      if (!mis) {
-        const rows = []; for (let n = 0; ; n++) { const a = Math.floor(n * PHI), b = a + n; if (b >= N) break; rows.push([n, a, b]); }
-        const d = Math.abs(best[0] - best[1]), lo = Math.min(best[0], best[1]);
-        h += `<div><b>왜 그 칸이 후공 승리 칸일까? — 황금비 φ≈1.618</b><br>후공 승리 칸은 <b>(⌊nφ⌋, ⌊nφ²⌋)</b> 쌍과 그 반대 칸이에요. φ² = φ + 1 이라 ⌊nφ²⌋ = ⌊nφ⌋ + n. 즉 <b>두 좌표의 차가 n이면서 작은 쪽이 ⌊nφ⌋</b>이면 후공 승리 칸!<br>`
-          + `${fmt(best)}: 두 좌표의 차 = <b>${d}</b>, 작은 쪽 = <b>${lo}</b>, ${d}×1.618 = ${(d * PHI).toFixed(2)} → 내림 <b>${Math.floor(d * PHI)}</b> ✔</div>`;
-        h += `<table><tr><th>n</th><th>⌊nφ⌋</th><th>⌊nφ²⌋ = ⌊nφ⌋+n</th><th>후공 승리 칸</th></tr>` + rows.map(([n, a, b]) => `<tr${n === d ? ' class="me"' : ''}><td>${n}</td><td>${a}</td><td>${b}</td><td>${n ? `(${a},${b}) (${b},${a})` : '(0,0) 구석'}</td></tr>`).join('') + `</table>`;
-        h += `<div><small>더 자세한 그림은 아래 <b>📐 황금비 그림</b>을 펼쳐 보세요.</small></div>`;
-      } else {
-        h += `<div><b>거꾸로 규칙</b>(구석에 넣으면 패배)이라 후공 승리 칸이 황금비 쌍 (⌊nφ⌋, ⌊nφ²⌋)과 조금 달라요. 설정에서 기본 규칙으로 바꾸면 황금비 표가 보여요.</div>`;
-      }
-      exp.innerHTML = h; exp.hidden = false;
-      // 폰처럼 설명이 화면 밖이면 보이게
-      requestAnimationFrame(() => { const r = ask.getBoundingClientRect(); if (r.top < 0 || r.bottom > innerHeight) ask.scrollIntoView({ behavior: 'smooth', block: 'start' }); });
-    }
-    // 처음 상태: 설정의 판 크기를 따라감
-    wrapAfter('qnStartAnalysis', () => { const v = String(qnAN); if ($('qn-l-size').value !== v) { $('qn-l-size').value = v; L.N = qnAN; if (L.q) qnLNext(); } });
     apply();
   })();
 </script>
