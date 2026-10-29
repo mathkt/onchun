@@ -1,0 +1,192 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+<title>몬티홀 확률 상황판 · 수학 축전</title>
+<link rel="stylesheet" href="../common.css">
+<style>
+  html,body{height:100%}
+  body.bk{margin:0;min-height:100dvh;display:flex;flex-direction:column;overflow:hidden;word-break:keep-all}
+  .mh{flex:1;display:grid;grid-template-columns:1.25fr 1fr;grid-template-rows:auto 1fr auto;gap:14px;
+    max-width:1200px;width:100%;margin:0 auto;padding:14px 16px max(14px,env(safe-area-inset-bottom));box-sizing:border-box;min-height:0}
+  .mh__head{grid-column:1/-1;display:flex;align-items:center;justify-content:space-between;gap:12px;flex-wrap:wrap}
+  .mh__h1{font-family:var(--f-head);font-size:clamp(1.3rem,3vw,2rem);margin:0}
+  .mh__h1 em{font-style:normal;color:var(--bk-orange-deep);background:linear-gradient(transparent 60%,var(--bk-yellow) 60%);padding:0 4px}
+  .mh__total{font-family:var(--f-head);font-size:clamp(1rem,2.4vw,1.4rem);background:#fff;border:2px solid var(--bk-orange);border-radius:999px;padding:6px 16px;color:var(--bk-orange-deep)}
+
+  /* ----- 막대 패널 ----- */
+  .bars{background:#fff;border-radius:var(--bk-radius);box-shadow:var(--bk-shadow);padding:18px 20px 12px;display:flex;flex-direction:column;min-height:0}
+  .bars__area{flex:1;display:grid;grid-template-columns:1fr 1fr;gap:clamp(16px,4vw,48px);align-items:end;position:relative;min-height:220px;padding:0 10px 8px}
+  .bars__area::before{content:"";position:absolute;left:0;right:0;bottom:8px;height:1px;background:var(--bk-line)}
+  .bar{display:flex;flex-direction:column;align-items:center;justify-content:flex-end;height:100%;position:relative;min-height:0}
+  .bar__track{width:min(100%,180px);flex:1;position:relative;border-radius:14px 14px 0 0;background:#f6f1e0;overflow:visible;min-height:0}
+  .bar__fill{position:absolute;left:0;right:0;bottom:0;height:0%;border-radius:14px 14px 0 0;transition:height .6s cubic-bezier(.2,.8,.2,1)}
+  .bar--sw .bar__fill{background:linear-gradient(180deg,#FFC45C,var(--bk-orange))}
+  .bar--st .bar__fill{background:linear-gradient(180deg,#8FD0F2,var(--bk-sky))}
+  .bar__theory{position:absolute;left:-8px;right:-8px;border-top:3px dashed rgba(44,42,38,.45);pointer-events:none;z-index:2}
+  .bar__theory span{position:absolute;right:0;top:-1.35em;font-size:.72rem;color:var(--bk-ink-soft);background:#fff;padding:0 4px;border-radius:6px}
+  .bar__pct{position:absolute;left:0;right:0;text-align:center;font-family:var(--f-head);font-size:clamp(1.8rem,5vw,3.4rem);line-height:1;color:var(--bk-ink);
+    text-shadow:0 2px 0 #fff;transition:bottom .6s cubic-bezier(.2,.8,.2,1);pointer-events:none}
+  .bar__name{font-family:var(--f-head);font-size:clamp(1.1rem,2.6vw,1.5rem);margin-top:10px}
+  .bar--sw .bar__name{color:var(--bk-orange-deep)}
+  .bar--st .bar__name{color:#2f8dbf}
+  .bar__cnt{font-size:clamp(.85rem,1.8vw,1.05rem);color:var(--bk-ink-soft)}
+  .bars__theory{text-align:center;font-size:clamp(.85rem,1.8vw,1rem);color:var(--bk-ink-soft);margin-top:8px;border-top:1px dashed var(--bk-line);padding-top:8px}
+  .bars__theory b{color:var(--bk-ink)}
+
+  /* ----- 입력 패널 ----- */
+  .ctl{display:flex;flex-direction:column;gap:12px;min-height:0}
+  .ctl__grid{display:grid;grid-template-columns:1fr 1fr;grid-template-rows:auto 1fr 1fr;gap:10px;flex:1;min-height:0}
+  .ctl__lab{font-family:var(--f-head);text-align:center;font-size:clamp(1rem,2.2vw,1.3rem);padding:4px 0;border-radius:12px}
+  .ctl__lab--sw{background:#FFF1D6;color:var(--bk-orange-deep)}
+  .ctl__lab--st{background:var(--bk-sky-soft);color:#2f8dbf}
+  .btn{border:0;border-radius:22px;font-family:var(--f-head);font-size:clamp(1.3rem,3.2vw,2rem);color:#fff;cursor:pointer;
+    display:flex;flex-direction:column;align-items:center;justify-content:center;gap:4px;min-height:84px;
+    box-shadow:0 7px 0 rgba(0,0,0,.18);transition:transform .08s;-webkit-tap-highlight-color:transparent;user-select:none;touch-action:manipulation}
+  .btn:active{transform:translateY(5px);box-shadow:0 2px 0 rgba(0,0,0,.18)}
+  .btn small{font-size:.55em;opacity:.9;font-family:var(--f-body);font-weight:700}
+  .btn--win{background:var(--bk-green)}
+  .btn--lose{background:var(--bk-red)}
+  .btn--sw{filter:none}
+  .ctl__row{display:flex;gap:8px}
+  .mini{flex:1;border:2px solid var(--bk-line);background:#fff;border-radius:14px;padding:10px;font-family:var(--f-head);font-size:1rem;color:var(--bk-ink);cursor:pointer;min-height:44px}
+  .mini:active{background:#f6f1e0}
+  .mini--warn{border-color:var(--bk-red);color:var(--bk-red)}
+
+  /* ----- 최근 결과 ----- */
+  .recent{grid-column:1/-1;background:#fff;border-radius:18px;box-shadow:var(--bk-shadow);padding:10px 16px;display:flex;align-items:center;gap:12px;flex-wrap:wrap}
+  .recent__t{font-family:var(--f-head);color:var(--bk-ink-soft);white-space:nowrap}
+  .dots{display:flex;gap:6px;flex-wrap:wrap;flex:1}
+  .dot{width:26px;height:26px;border-radius:50%;display:grid;place-items:center;font-size:.72rem;font-weight:900;color:#fff;animation:pop .35s cubic-bezier(.2,1.6,.4,1)}
+  .dot--win{background:var(--bk-green)}.dot--lose{background:var(--bk-red)}
+  .dot--sw{box-shadow:0 0 0 3px #FFC45C inset}
+  .dot--st{box-shadow:0 0 0 3px #8FD0F2 inset}
+  .dots__empty{color:var(--bk-ink-soft);font-size:.9rem}
+  .legend{font-size:.8rem;color:var(--bk-ink-soft);white-space:nowrap}
+  .legend i{display:inline-block;width:12px;height:12px;border-radius:50%;vertical-align:-1px;margin:0 2px 0 8px}
+  @keyframes pop{from{transform:scale(0)}to{transform:scale(1)}}
+
+  /* 토스트 */
+  .toast{position:fixed;left:50%;bottom:24px;transform:translateX(-50%) translateY(20px);background:var(--bk-ink);color:#fff;padding:10px 18px;border-radius:999px;
+    font-family:var(--f-head);opacity:0;transition:.25s;pointer-events:none;z-index:99}
+  .toast.on{opacity:1;transform:translateX(-50%)}
+
+  /* 폰 세로 */
+  @media(max-width:700px){
+    html,body{height:auto}
+    body.bk{overflow:auto;min-height:100dvh}
+    .mh{grid-template-columns:1fr;grid-template-rows:auto;flex:none}
+    .ctl__grid{grid-template-rows:auto auto auto}
+    .bars__area{min-height:200px}
+    .btn{min-height:70px}
+  }
+  @media(max-height:520px){.bars__area{min-height:150px}.btn{min-height:60px}}
+</style>
+</head>
+<body class="bk">
+<script src="../common.js" data-name="몬티홀 확률 상황판" data-sub="바꿀까, 말까?" data-home="../"></script>
+
+<main class="mh">
+  <div class="mh__head">
+    <h1 class="mh__h1">🚪 문을 <em>바꾸면</em> 정말 더 많이 이길까?</h1>
+    <div class="mh__total">지금까지 <b id="total">0</b>판</div>
+  </div>
+
+  <section class="bars" aria-label="성공률">
+    <div class="bars__area">
+      <div class="bar bar--sw">
+        <div class="bar__track">
+          <div class="bar__theory" style="bottom:66.67%"><span>이론 66.7%</span></div>
+          <div class="bar__fill" id="fillSw"></div>
+          <div class="bar__pct" id="pctSw" style="bottom:0">-</div>
+        </div>
+        <div class="bar__name">🔄 바꿈</div>
+        <div class="bar__cnt" id="cntSw">0승 0패</div>
+      </div>
+      <div class="bar bar--st">
+        <div class="bar__track">
+          <div class="bar__theory" style="bottom:33.33%"><span>이론 33.3%</span></div>
+          <div class="bar__fill" id="fillSt"></div>
+          <div class="bar__pct" id="pctSt" style="bottom:0">-</div>
+        </div>
+        <div class="bar__name">✋ 안 바꿈</div>
+        <div class="bar__cnt" id="cntSt">0승 0패</div>
+      </div>
+    </div>
+    <div class="bars__theory" id="theory">이론: 바꾸면 <b>2/3</b>, 안 바꾸면 <b>1/3</b> · 판이 쌓일수록 점선에 가까워져요</div>
+  </section>
+
+  <section class="ctl" aria-label="결과 입력">
+    <div class="ctl__grid">
+      <div class="ctl__lab ctl__lab--sw">🔄 바꿈</div>
+      <div class="ctl__lab ctl__lab--st">✋ 안 바꿈</div>
+      <button class="btn btn--win" data-sw="1" data-win="1">🎁 성공<small>바꿔서 자동차!</small></button>
+      <button class="btn btn--win" data-sw="0" data-win="1">🎁 성공<small>안 바꾸고 자동차!</small></button>
+      <button class="btn btn--lose" data-sw="1" data-win="0">🐐 실패<small>바꿨는데 염소…</small></button>
+      <button class="btn btn--lose" data-sw="0" data-win="0">🐐 실패<small>안 바꿨는데 염소…</small></button>
+    </div>
+    <div class="ctl__row">
+      <button class="mini" id="undo">↩ 되돌리기</button>
+      <button class="mini" id="sim">🎲 1000판 돌려 보기</button>
+      <button class="mini mini--warn" id="reset">🗑 초기화</button>
+    </div>
+  </section>
+
+  <section class="recent">
+    <span class="recent__t">최근 결과</span>
+    <div class="dots" id="dots"><span class="dots__empty">아직 기록이 없어요. 위 버튼을 눌러 결과를 쌓아 보세요.</span></div>
+    <span class="legend"><i style="background:var(--bk-green)"></i>성공 <i style="background:var(--bk-red)"></i>실패 · 테두리 <i style="box-shadow:0 0 0 3px #FFC45C inset"></i>바꿈 <i style="box-shadow:0 0 0 3px #8FD0F2 inset"></i>안 바꿈</span>
+  </section>
+</main>
+<div class="toast" id="toast"></div>
+
+<script>
+(function(){
+  const KEY='onchun_monty_v1', PIN='1234';
+  let log=[]; // {s:1|0, w:1|0, t}
+  try{ log=JSON.parse(localStorage.getItem(KEY)||'[]'); if(!Array.isArray(log)) log=[]; }catch(e){ log=[]; }
+  const $=id=>document.getElementById(id);
+  const save=()=>{ try{ localStorage.setItem(KEY,JSON.stringify(log)); }catch(e){} };
+  let tt; const toast=m=>{ const t=$('toast'); t.textContent=m; t.classList.add('on'); clearTimeout(tt); tt=setTimeout(()=>t.classList.remove('on'),1400); };
+
+  function render(){
+    const sw=log.filter(x=>x.s), st=log.filter(x=>!x.s);
+    const swW=sw.filter(x=>x.w).length, stW=st.filter(x=>x.w).length;
+    const pSw=sw.length?swW/sw.length*100:0, pSt=st.length?stW/st.length*100:0;
+    $('total').textContent=log.length;
+    $('fillSw').style.height=pSw+'%'; $('fillSt').style.height=pSt+'%';
+    $('pctSw').textContent=sw.length?Math.round(pSw)+'%':'-'; $('pctSt').textContent=st.length?Math.round(pSt)+'%':'-';
+    $('pctSw').style.bottom='calc('+pSw+'% + 6px)'; $('pctSt').style.bottom='calc('+pSt+'% + 6px)';
+    $('cntSw').textContent=`${swW}승 ${sw.length-swW}패 (${sw.length}판)`;
+    $('cntSt').textContent=`${stW}승 ${st.length-stW}패 (${st.length}판)`;
+    const th=$('theory');
+    if(log.length>=6 && sw.length && st.length){
+      th.innerHTML=`이론: 바꾸면 <b>66.7%</b> · 안 바꾸면 <b>33.3%</b> &nbsp;|&nbsp; 지금까지: 바꾸면 <b>${pSw.toFixed(1)}%</b> · 안 바꾸면 <b>${pSt.toFixed(1)}%</b> → 바꾼 쪽이 <b>${(pSt?pSw/pSt:0).toFixed(1)}배</b> 더 이겼어요`;
+    } else th.innerHTML='이론: 바꾸면 <b>2/3</b>, 안 바꾸면 <b>1/3</b> · 판이 쌓일수록 점선에 가까워져요';
+    const d=$('dots'); d.innerHTML='';
+    const last=log.slice(-30);
+    if(!last.length){ d.innerHTML='<span class="dots__empty">아직 기록이 없어요. 위 버튼을 눌러 결과를 쌓아 보세요.</span>'; return; }
+    last.forEach((x,i)=>{ const e=document.createElement('span'); e.className='dot '+(x.w?'dot--win':'dot--lose')+' '+(x.s?'dot--sw':'dot--st'); e.textContent=x.w?'○':'×'; if(i<last.length-1) e.style.animation='none'; d.appendChild(e); });
+  }
+  document.querySelectorAll('.btn').forEach(b=>b.addEventListener('click',()=>{
+    log.push({s:+b.dataset.sw, w:+b.dataset.win, t:Date.now()}); save(); render();
+    toast((b.dataset.sw==='1'?'바꿈':'안 바꿈')+' · '+(b.dataset.win==='1'?'성공 🎁':'실패 🐐')+' 기록');
+  }));
+  $('undo').onclick=()=>{ if(!log.length) return toast('되돌릴 기록이 없어요'); log.pop(); save(); render(); toast('마지막 기록을 지웠어요'); };
+  $('reset').onclick=()=>{ if(!log.length) return; const p=prompt('초기화 비밀번호'); if(p!==PIN) return toast('비밀번호가 달라요'); if(confirm(`기록 ${log.length}판을 모두 지울까요?`)){ log=[]; save(); render(); toast('초기화했어요'); } };
+  // 시뮬레이션: 자동차 위치·선택 무작위, 사회자가 염소 문을 열고, 바꿈/안 바꿈을 번갈아
+  $('sim').onclick=()=>{
+    const N=1000; let i=0; const btn=$('sim'); btn.disabled=true;
+    const step=()=>{ const k=Math.min(50,N-i);
+      for(let j=0;j<k;j++,i++){ const car=Math.random()*3|0, pick=Math.random()*3|0, s=i%2; const w=s?(car!==pick):(car===pick); log.push({s:s?1:0,w:w?1:0,t:Date.now(),sim:1}); }
+      render(); if(i<N) requestAnimationFrame(step); else { save(); btn.disabled=false; toast('1000판 시뮬레이션 완료'); } };
+    step();
+  };
+  // 키보드(크롬북): 1 바꿈성공 2 바꿈실패 3 안바꿈성공 4 안바꿈실패 Backspace 되돌리기
+  document.addEventListener('keydown',e=>{ const m={'1':[1,1],'2':[1,0],'3':[0,1],'4':[0,0]}[e.key]; if(m){ document.querySelector(`.btn[data-sw="${m[0]}"][data-win="${m[1]}"]`).click(); } else if(e.key==='Backspace'){ e.preventDefault(); $('undo').click(); } });
+  render();
+})();
+</script>
+</body>
+</html>
