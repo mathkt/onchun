@@ -2876,6 +2876,14 @@
   .tut-again input { width:16px; height:16px; accent-color:var(--th); }
   .tut-wait { display:inline-flex; align-items:center; gap:6px; font:800 .88rem 'Noto Sans KR',sans-serif; color:var(--th-ink, #333); }
   @media (max-width:640px) { .tut-bubble { padding:10px 12px; } .tut-text { font-size:.9rem; } }
+  /* 게임 화면 버튼 줄: 무르기 · 다시하기 · 🎲 랜덤 다시하기 · ⚙️ 설정 · 메뉴로 — 폰에서는 2줄 (ab-break에서 줄바꿈) */
+  .action-buttons .ab-break { display:none; }
+  @media (max-width:560px) {
+    .action-buttons.ab-game { gap:8px !important; }
+    .action-buttons.ab-game .ab-break { display:block; flex-basis:100%; height:0; }
+    .action-buttons.ab-game > button { flex:1 1 0 !important; min-width:0 !important; padding:8px 6px !important; font-size:.86rem !important; white-space:nowrap; overflow:hidden; text-overflow:ellipsis; }
+    .action-buttons.ab-game .rnd-long { display:none; }
+  }
 </style>
 </head>
 <body class="bk">
@@ -3074,10 +3082,12 @@
           <div class="player-record" id="qn-p2-record">전적: 0승 0패</div>
         </div>
       </div>
-      <div class="action-buttons">
+      <div class="action-buttons ab-game">
         <button class="undo-btn" id="qn-undo-btn" onmouseenter="playSfx('hover')" onclick="playSfx('click'); qnUndo()" style="display:none;">무르기</button>
         <button class="restart-btn" id="qn-restart-btn" onmouseenter="playSfx('hover')" onclick="playSfx('click'); qnRestartGame()" style="display:none;">다시하기</button>
-        <button class="restart-btn" id="qn-restart-set-btn" onmouseenter="playSfx('hover')" onclick="playSfx('click'); openQnSettingsAndRestart()" style="display:none;">⚙️ 설정 바꿔 다시하기</button>
+        <button class="restart-btn rnd-btn" id="qn-restart-rnd-btn" onmouseenter="playSfx('hover')" onclick="playSfx('click'); rndRestart('qn')" style="display:none;">🎲 랜덤<span class="rnd-long"> 다시하기</span></button>
+        <span class="ab-break" aria-hidden="true"></span>
+        <button class="restart-btn" id="qn-restart-set-btn" onmouseenter="playSfx('hover')" onclick="playSfx('click'); openQnSettingsAndRestart()" style="display:none;">⚙️ 설정</button>
         <button class="resume-analysis-btn" id="qn-resume-analysis-btn" onmouseenter="playSfx('hover')" onclick="playSfx('click'); qnResumeAnalysis()" style="display:none;">분석 모드로 복귀</button>
         <button class="back-btn" onmouseenter="playSfx('hover')" onclick="playSfx('click'); qnGoBack()">메뉴로 돌아가기</button>
       </div>
@@ -3237,9 +3247,11 @@
           <div class="player-record" id="pp-p2-record">전적: 0승 0패</div>
         </div>
       </div>
-      <div class="action-buttons">
+      <div class="action-buttons ab-game">
         <button class="restart-btn" id="pp-restart-btn" onmouseenter="playSfx('hover')" onclick="playSfx('click'); ppRestartGame()" style="display:none;">다시하기</button>
-        <button class="restart-btn" id="pp-restart-set-btn" onmouseenter="playSfx('hover')" onclick="playSfx('click'); openPpSettingsAndRestart()" style="display:none;">⚙️ 설정 바꿔 다시하기</button>
+        <button class="restart-btn rnd-btn" id="pp-restart-rnd-btn" onmouseenter="playSfx('hover')" onclick="playSfx('click'); rndRestart('pp')" style="display:none;">🎲 랜덤<span class="rnd-long"> 다시하기</span></button>
+        <span class="ab-break" aria-hidden="true"></span>
+        <button class="restart-btn" id="pp-restart-set-btn" onmouseenter="playSfx('hover')" onclick="playSfx('click'); openPpSettingsAndRestart()" style="display:none;">⚙️ 설정</button>
         <button class="resume-analysis-btn" id="pp-resume-analysis-btn" onmouseenter="playSfx('hover')" onclick="playSfx('click'); ppResumeAnalysis()" style="display:none;">분석 모드로 복귀</button>
         <button class="back-btn" onmouseenter="playSfx('hover')" onclick="playSfx('click'); ppGoBack()">메뉴로 돌아가기</button>
       </div>
@@ -3324,10 +3336,12 @@
           <div class="player-record" id="nt-p2-record">전적: 0승 0패</div>
         </div>
       </div>
-      <div class="action-buttons">
+      <div class="action-buttons ab-game">
         <button class="undo-btn" id="nt-undo-btn" onmouseenter="playSfx('hover')" onclick="playSfx('click'); ntUndo()" style="display:none;">무르기</button>
         <button class="restart-btn" id="nt-restart-btn" onmouseenter="playSfx('hover')" onclick="playSfx('click'); ntRestartGame()" style="display:none;">다시하기</button>
-        <button class="restart-btn" id="nt-restart-set-btn" onmouseenter="playSfx('hover')" onclick="playSfx('click'); openNtSettingsAndRestart()" style="display:none;">⚙️ 설정 바꿔 다시하기</button>
+        <button class="restart-btn rnd-btn" id="nt-restart-rnd-btn" onmouseenter="playSfx('hover')" onclick="playSfx('click'); rndRestart('nt')" style="display:none;">🎲 랜덤<span class="rnd-long"> 다시하기</span></button>
+        <span class="ab-break" aria-hidden="true"></span>
+        <button class="restart-btn" id="nt-restart-set-btn" onmouseenter="playSfx('hover')" onclick="playSfx('click'); openNtSettingsAndRestart()" style="display:none;">⚙️ 설정</button>
         <button class="resume-analysis-btn" id="nt-resume-analysis-btn" onmouseenter="playSfx('hover')" onclick="playSfx('click'); ntResumeAnalysis()" style="display:none;">분석 모드로 복귀</button>
         <button class="back-btn" onmouseenter="playSfx('hover')" onclick="playSfx('click'); ntGoBack()">메뉴로 돌아가기</button>
       </div>
@@ -3411,10 +3425,12 @@
           <div class="player-record" id="st-p2-record">전적: 0승 0패</div>
         </div>
       </div>
-      <div class="action-buttons">
+      <div class="action-buttons ab-game">
         <button class="undo-btn" id="st-undo-btn" onmouseenter="playSfx('hover')" onclick="playSfx('click'); stUndo()" style="display:none;">무르기</button>
         <button class="restart-btn" id="st-restart-btn" onmouseenter="playSfx('hover')" onclick="playSfx('click'); stRestartGame()" style="display:none;">다시하기</button>
-        <button class="restart-btn" id="st-restart-set-btn" onmouseenter="playSfx('hover')" onclick="playSfx('click'); openStSettingsAndRestart()" style="display:none;">⚙️ 설정 바꿔 다시하기</button>
+        <button class="restart-btn rnd-btn" id="st-restart-rnd-btn" onmouseenter="playSfx('hover')" onclick="playSfx('click'); rndRestart('st')" style="display:none;">🎲 랜덤<span class="rnd-long"> 다시하기</span></button>
+        <span class="ab-break" aria-hidden="true"></span>
+        <button class="restart-btn" id="st-restart-set-btn" onmouseenter="playSfx('hover')" onclick="playSfx('click'); openStSettingsAndRestart()" style="display:none;">⚙️ 설정</button>
         <button class="resume-analysis-btn" id="st-resume-analysis-btn" onmouseenter="playSfx('hover')" onclick="playSfx('click'); stResumeAnalysis()" style="display:none;">분석 모드로 복귀</button>
         <button class="back-btn" onmouseenter="playSfx('hover')" onclick="playSfx('click'); stGoBack()">메뉴로 돌아가기</button>
       </div>
@@ -3494,7 +3510,7 @@
       </label>
       <label>퀸 시작 위치:
         <select id="set-qn-start">
-          <option value="rand">무작위</option>
+          <option value="rand">난이도에 맞춤 (기본)</option>
           <option value="pick">직접 놓기 (판에서 칸 고르기)</option>
           <option value="cold">도전 위치 (후공 승리 칸에서 시작)</option>
         </select>
@@ -4104,7 +4120,16 @@
   let isBranchPlay = false;
   let branchHumanPlayer = 1;
 
+  // 🎲 랜덤 다시하기: 이번 한 판만 돌 10~30개 · 최대 3~5개 (설정값은 그대로)
+  let stOneShot = false, stNGen = null; // stNGen: 이번 판 돌 개수가 랜덤에서 왔으면 그 뽑기 함수 (쉬운 시작용)
   function applyStRandomRules() {
+    if (stOneShot) {
+      stOneShot = false;
+      stNGen = () => 10 + Math.floor(Math.random() * 21);
+      stN = stNGen(); stLimit = 3 + Math.floor(Math.random() * 3);
+      return;
+    }
+    stNGen = stNSetting === 'random' ? () => 10 + Math.floor(Math.random() * 16) : null;
     if (stNSetting === 'random') {
       stN = 10 + Math.floor(Math.random() * 16); // 10~25
     } else {
@@ -4181,12 +4206,14 @@
     return n % 2 ? 2 : 1;
   }
   // 판 시작 때 "선공: 이름" 잠깐 보여 주기
+  let rndNote = null; // 🎲 랜덤 다시하기: 다음 판 시작 안내에 붙일 글(함수) — 판이 만들어진 뒤에 읽음
   function showStartToast(game, first) {
     let t = document.getElementById('start-toast');
     if (!t) { t = document.createElement('div'); t.id = 'start-toast'; document.body.appendChild(t); }
-    t.textContent = '선공: ' + pLabel(game, first);
+    let note = ''; if (typeof rndNote === 'function') { try { note = rndNote(); } catch (e) {} } rndNote = null;
+    t.textContent = (note ? note + ' · ' : '') + '선공: ' + pLabel(game, first);
     t.classList.remove('on'); void t.offsetWidth; t.classList.add('on');
-    clearTimeout(t._h); t._h = setTimeout(() => t.classList.remove('on'), 1500);
+    clearTimeout(t._h); t._h = setTimeout(() => t.classList.remove('on'), note ? 2600 : 1500);
   }
 
   // 모달마다 닫힘 예약(200ms 뒤 숨김)을 따로 기억 → 닫자마자 다시 열어도 예약이 새 모달을 숨기지 않게
@@ -4474,7 +4501,7 @@
   function qnMoves(x, y) { const m = []; for (let k = 1; k <= x; k++) m.push([x - k, y]); for (let k = 1; k <= y; k++) m.push([x, y - k]); for (let k = 1; k <= Math.min(x, y); k++) m.push([x - k, y - k]); return m; }
   function qnUpdateSubtitle(active) {
     const size = active ? `${qnN}×${qnN}` : (qnSizeSetting === 'random' ? '랜덤' : `${qnSizeSetting}×${qnSizeSetting}`);
-    const st = { rand: '무작위 시작', pick: '직접 놓기', cold: '도전 위치' }[qnStartSetting];
+    const st = { rand: '난이도 맞춤 시작', pick: '직접 놓기', cold: '도전 위치' }[qnStartSetting];
     const t = qnTimeSetting === 'unlimited' ? '무제한' : qnTimeSetting + '초';
     document.getElementById('qn-main-subtitle').innerHTML = `<b>퀸을 구석에 넣으면 ${qnWinRule === 'misere' ? '패배' : '승리'}</b> (←·↓·↙ 원하는 만큼)<br><small>${size} · ${st} · 시간 ${t}</small>`;
   }
@@ -4533,7 +4560,42 @@
       if (qnTimeLeft <= 0) { qnStopTimer(); const o = qnAiOpts(qnQ), sf = o.moves.filter(m => !o.suicide(m)), m = sf.length ? sf : o.moves; const mv = m[Math.floor(Math.random() * m.length)]; qnPlayerMove(mv[0], mv[1]); }
     }, 1000);
   }
-  function qnPickStart() {
+  /* 남은 수(remoteness) 표: W[x][y] = 지금 둘 사람이 이기는가, R[x][y] = 둘 다 최선일 때 게임이 끝날 때까지 남은 수(양쪽 합)
+     이기는 쪽은 가장 빨리, 지는 쪽은 가장 오래 버팀. 보통 규칙: (0,0)에 넣으면 승리 → (0,0)은 '둘 사람이 진' 자리(R 0)
+     거꾸로 규칙: (0,0)에 넣으면 패배 → (0,0)은 '둘 사람이 이긴' 자리(R 0). 이기는 자리에서 내가 둘 수 = ceil(R/2) */
+  const qnRemCache = {};
+  function qnRemote(N, rule) {
+    const key = N + ':' + rule; if (qnRemCache[key]) return qnRemCache[key];
+    const W = Array.from({ length: N }, () => new Array(N).fill(false)), R = Array.from({ length: N }, () => new Array(N).fill(0));
+    W[0][0] = rule === 'misere';
+    for (let s = 1; s <= 2 * (N - 1); s++) for (let x = 0; x < N; x++) {
+      const y = s - x; if (y < 0 || y >= N) continue;
+      let minL = Infinity, maxW = 0;
+      for (const [a, b] of qnMoves(x, y)) { if (W[a][b]) maxW = Math.max(maxW, R[a][b]); else minL = Math.min(minL, R[a][b]); }
+      if (minL < Infinity) { W[x][y] = true; R[x][y] = 1 + minL; } else { W[x][y] = false; R[x][y] = 1 + maxW; }
+    }
+    return (qnRemCache[key] = { W, R });
+  }
+  // 난이도별 목표: 최선으로 두면 내 몇 번째 수에 끝나는가 (최하·하 2 · 중·상 3 · 최상 4)
+  function qnStartTarget(d) { return d === '최상' ? 4 : (d === '중' || d === '상') ? 3 : 2; }
+  // 목표에 맞는 시작 칸들: 내가 먼저면 '내가 이기는 칸 중 내 수 = 목표', AI가 먼저면 'AI가 지는 칸 중 AI가 어떻게 두든 내 수 ≤ 목표, 최선 방어면 = 목표'
+  function qnFitCells(N, rule, humanFirst, target) {
+    const { W, R } = qnRemote(N, rule), c = [], my = (a, b) => Math.ceil(R[a][b] / 2);
+    for (let x = 0; x < N; x++) for (let y = 0; y < N; y++) {
+      if (!x && !y) continue;
+      if (humanFirst) { if (W[x][y] && my(x, y) === target) c.push([x, y]); }
+      else if (!W[x][y] && Math.max(...qnMoves(x, y).map(([a, b]) => my(a, b))) === target) c.push([x, y]);
+    }
+    return c;
+  }
+  function qnPickStart(forBot) {
+    if (forBot && qnStartSetting === 'rand') { // AI 대전 · 난이도에 맞춤: 판이 작아서 맞는 칸이 없으면 판을 키움(최대 15)
+      const humanFirst = qnCur !== qnBotNum(), target = qnStartTarget(botDifficulty);
+      for (let n = qnN; n <= 15; n++) {
+        const c = qnFitCells(n, qnWinRule, humanFirst, target);
+        if (c.length) { if (n !== qnN) { qnN = n; qnCold = qnColdSet(n); } return c[Math.floor(Math.random() * c.length)]; }
+      }
+    }
     const N = qnN;
     if (qnStartSetting === 'cold') { const c = []; for (let x = 0; x < N; x++) for (let y = 0; y < N; y++) if (x + y >= (qnWinRule === 'misere' ? 2 : 1) && qnIsCold(x, y, N, qnWinRule)) c.push([x, y]); return c[Math.floor(Math.random() * c.length)]; }
     const c = []; for (let x = 1; x < N; x++) for (let y = 1; y < N; y++) if (x !== y) c.push([x, y]);
@@ -4556,7 +4618,7 @@
     if (qnBotTimeout) { clearTimeout(qnBotTimeout); qnBotTimeout = null; }
     if (preset && preset.start) { qnQ = preset.start.slice(); qnPhase = 'play'; }
     else if (qnStartSetting === 'pick') { qnQ = null; qnPhase = 'place'; }
-    else { qnQ = qnPickStart(); qnPhase = 'play'; }
+    else { qnQ = qnPickStart(mode === 'bot'); qnPhase = 'play'; }
     qnStart = qnQ ? qnQ.slice() : null;
     qnUpdateSubtitle(true);
     qnBuildBoard(); qnRender(); qnUpdateUI();
@@ -4914,7 +4976,20 @@
   const PP_INK    = ['#D6246F', '#C76A00', '#A88600', '#1F8F5F', '#0B78C9', '#6E2FC0', '#D93A3A'];
   function ppParseRows(t) { return String(t).split(/[\s,]+/).map(Number).filter(n => n >= 1).map(n => Math.min(20, Math.floor(n))).slice(0, 7); }
   function ppRandomRows() { const k = 2 + Math.floor(Math.random() * 4); return Array.from({ length: k }, () => 2 + Math.floor(Math.random() * 7)); }
-  function ppApplyRules() { const r = ppRowsSetting === 'random' ? ppRandomRows() : ppParseRows(ppRowsSetting); ppInit = r.length ? r : [2, 5, 6]; }
+  // 🎲 랜덤 다시하기용: 2~5줄, 줄마다 1~7개
+  function ppRandomRows17() { const k = 2 + Math.floor(Math.random() * 4); return Array.from({ length: k }, () => 1 + Math.floor(Math.random() * 7)); }
+  let ppOneShot = null, ppRowsGen = null; // ppOneShot: 이번 한 판만 쓸 줄 뽑기 · ppRowsGen: 이번 판 줄이 랜덤에서 왔으면 그 뽑기 함수
+  function ppApplyRules() {
+    const gen = ppOneShot || (ppRowsSetting === 'random' ? ppRandomRows : null); ppOneShot = null; ppRowsGen = gen;
+    const r = gen ? gen() : ppParseRows(ppRowsSetting); ppInit = r.length ? r : [2, 5, 6];
+  }
+  // AI 최하·하: 줄이 랜덤일 때만 — 내가 먼저면 내가 이기는 판, AI가 먼저면 AI가 지는 판으로 다시 뽑기
+  function ppEasyStart() {
+    if (ppMode !== 'bot' || isBranchPlay || !ppRowsGen || !['최하', '하'].includes(botDifficulty)) return;
+    const want = ppCur === 1 ? r => !ppIsLosing(r) : r => ppIsLosing(r);
+    for (let i = 0; i < 500 && !want(ppInit); i++) { const r = ppRowsGen(); if (r.length) ppInit = r; }
+    ppUpdateSubtitle(true);
+  }
   function ppUpdateSubtitle(active) {
     const sub = document.getElementById('pp-main-subtitle');
     const rows = active ? ppInit.join('·') : (ppRowsSetting === 'random' ? '랜덤' : ppParseRows(ppRowsSetting).join('·'));
@@ -4998,6 +5073,7 @@
     switchScreen(ppGameScreen, 'flex');
     highlightWinner(0); updateScoreDisplay();
     ppCur = firstPlayer('popit', mode);
+    ppEasyStart();
     ppOver = false; ppHist = []; ppSelRow = null; ppSel = []; ppUndoLeft = undoInit('pp'); ppGlow = null; ppSeq++; ppRebuild();
     if (ppBotTimeout) { clearTimeout(ppBotTimeout); ppBotTimeout = null; }
     ppRender(); ppUpdateUI();
@@ -6241,6 +6317,7 @@
     updateScoreDisplay();
 
     stCurrentPlayer = firstPlayer('stone', stMode);
+    stEasyStart();
     stGameOver = false; stStonesArr = []; stGameHistory = []; stIsAnimating = false; stGameId++; stUndoLeft = undoInit('st'); stUndoBase = 0;
     if (stBotTimeout) { clearTimeout(stBotTimeout); stBotTimeout = null; }
 
@@ -6260,6 +6337,14 @@
     stLayoutCenter();
     stUpdateUI();
     if (stCurrentPlayer === 2 && stMode === 'bot') stBotTimeout = setTimeout(stBotTurn, 600);
+  }
+
+  // AI 최하·하: 돌 개수가 랜덤일 때만 — 내가 먼저면 내가 이기는 판, AI가 먼저면 AI가 지는 판으로 다시 뽑기
+  function stEasyStart() {
+    if (stMode !== 'bot' || isBranchPlay || !stNGen || !['최하', '하'].includes(botDifficulty)) return;
+    const want = stCurrentPlayer === 1 ? n => !stIsLosingN(n) : n => stIsLosingN(n);
+    for (let i = 0; i < 300 && !want(stN); i++) stN = stNGen();
+    stUpdateSubtitle(true);
   }
 
   function stStartBranchPlay() {
@@ -7112,8 +7197,8 @@
     if (!n) { n = makeRandomName(); document.getElementById('ol-name').value = n; }
     setMyName(n); return n;
   }
-  function olSaveOrig() { olOrig = { n: stNSetting, limit: stLimitSetting, rows: ppRowsSetting, rule: ppWinRule, max: ppMaxTake, qnSize: qnSizeSetting, qnStart: qnStartSetting, qnRule: qnWinRule, qnT: qnTimeSetting, stT: stTimeSetting, ntT: ntTimeSetting, ppT: ppTimeSetting }; }
-  function olRestoreOrig() { if (!olOrig) return; stNSetting = olOrig.n; stLimitSetting = olOrig.limit; ppRowsSetting = olOrig.rows; ppWinRule = olOrig.rule; ppMaxTake = olOrig.max; qnSizeSetting = olOrig.qnSize; qnStartSetting = olOrig.qnStart; qnWinRule = olOrig.qnRule; qnTimeSetting = olOrig.qnT; olQnPreset = null; stTimeSetting = olOrig.stT; ntTimeSetting = olOrig.ntT; ppTimeSetting = olOrig.ppT; olOrig = null; }
+  function olSaveOrig() { olOrig = { n: stNSetting, limit: stLimitSetting, rows: ppRowsSetting, rule: ppWinRule, max: ppMaxTake, qnSize: qnSizeSetting, qnStart: qnStartSetting, qnRule: qnWinRule, qnT: qnTimeSetting, stT: stTimeSetting, ntT: ntTimeSetting, ppT: ppTimeSetting, ntSz: ntSize }; }
+  function olRestoreOrig() { if (!olOrig) return; stNSetting = olOrig.n; stLimitSetting = olOrig.limit; ppRowsSetting = olOrig.rows; ppWinRule = olOrig.rule; ppMaxTake = olOrig.max; qnSizeSetting = olOrig.qnSize; qnStartSetting = olOrig.qnStart; qnWinRule = olOrig.qnRule; qnTimeSetting = olOrig.qnT; olQnPreset = null; stTimeSetting = olOrig.stT; ntTimeSetting = olOrig.ntT; ppTimeSetting = olOrig.ppT; if (olOrig.ntSz) ntSize = olOrig.ntSz; olOrig = null; }
   async function olCreate() {
     if (olBusy) return; olBusy = true; olMsg('방을 만드는 중…');
     try {
@@ -7246,6 +7331,8 @@
   // 다시하기
   const _ntRestart = ntRestartGame, _stRestart = stRestartGame, _ppRestart = ppRestartGame, _qnRestart = qnRestartGame;
   function olRestart(g) { if (Online.myNum === 1) { if (ppSettingsJustSaved || qnSettingsJustSaved || stSettingsJustSaved || ntSettingsJustSaved) { olOrig = null; ppSettingsJustSaved = false; } olRestoreOrig(); olSaveOrig(); olCur = OLG[g].settings(); closeVictoryModal(); Online.reset(olCur); /* 시작은 reset 이벤트에서 한 번만 (방장·손님 같은 경로) */ } }
+  // 🎲 랜덤 다시하기 (온라인): 방장만 — 다시하기와 같은 길(Online.reset)로 이번 판 설정만 바꿔서 보냄 (원래 설정은 olOrig로 지킴)
+  function olRandomRestart(s) { if (Online.myNum !== 1) return; olRestoreOrig(); olSaveOrig(); olCur = s; closeVictoryModal(); Online.reset(s); }
   let ppSettingsJustSaved = false;
   ntRestartGame = function () { if (ntMode === 'online' && Online.active) return olRestart('notakto'); _ntRestart(); };
   stRestartGame = function () { if (stMode === 'online' && Online.active) return olRestart('stone'); _stRestart(); };
@@ -7277,6 +7364,31 @@
     _sv(w, r, l);
   };
 
+  /* ===== 🎲 랜덤 다시하기: 다른 설정은 그대로, 판 조건만 이번 한 판 랜덤 (저장된 설정은 바꾸지 않음) ===== */
+  const RND = {
+    nt: { g: 'notakto', note: () => `🎲 ${ntBoardSize}×${ntBoardSize} 판`,
+          online: () => ({ size: ntBoardSize === 4 ? 3 : 4 }),
+          local: mode => { const keep = ntSize; ntSize = ntBoardSize === 4 ? 3 : 4; ntStopTimer(); try { ntStartGame(mode); } finally { ntSize = keep; } } },
+    st: { g: 'stone', note: () => `🎲 돌 ${stN}개 · 최대 ${stLimit}개`,
+          online: () => ({ n: 10 + Math.floor(Math.random() * 21), limit: 3 + Math.floor(Math.random() * 3), mode: stModeType }),
+          local: mode => { stStopTimer(); stOneShot = true; try { stStartGame(mode); } finally { stOneShot = false; } } },
+    qn: { g: 'queen', note: () => `🎲 ${qnN}×${qnN} 판` + (qnQ ? ` · 퀸 (${qnQ[0]},${qnQ[1]})` : ''),
+          online: () => { const size = 6 + Math.floor(Math.random() * 7); qnN = size; qnCold = qnColdSet(size); return { size, start: qnStartSetting === 'pick' ? null : qnPickStart(), rule: qnWinRule, startMode: qnStartSetting }; },
+          local: mode => { qnStopTimer(); qnStartGame(mode, { size: 6 + Math.floor(Math.random() * 7) }); } },
+    pp: { g: 'popit', note: () => `🎲 줄 ${ppInit.join('·')}` + (ppMaxTake ? ` · 최대 ${ppMaxTake}개` : ''),
+          online: () => ({ rows: ppRandomRows17(), rule: ppWinRule, max: ppMaxTake }),
+          local: mode => { ppStopTimer(); ppOneShot = ppRandomRows17; try { ppStartGame(mode); } finally { ppOneShot = null; } } },
+  };
+  function rndRestart(p) {
+    const R = RND[p]; if (!R || isBranchPlay) return;
+    const mode = GAME_P[p]();
+    if (mode === 'online') {
+      if (!(window.Online && Online.active && Online.myNum === 1)) return; // 손님은 못 누름
+      rndNote = R.note; olRandomRestart(R.online()); return;
+    }
+    closeVictoryModal();
+    rndNote = R.note; R.local(mode);
+  }
   /* ===== 게임 중 [다시하기]·[⚙️ 설정 바꿔 다시하기]·[무르기] 버튼 ===== */
   const GAME_P = { nt: () => ntMode, st: () => stMode, pp: () => ppMode, qn: () => qnMode };
   function syncGameActions(p) {
@@ -7291,6 +7403,13 @@
     if (p === 'nt') ntSyncUndoBtn();
     if (p === 'pp') ppSyncUndoBtn();
   }
+  // 🎲 랜덤 다시하기 버튼은 ⚙️ 설정 버튼과 같이 보이고 숨음 (분석에서 이어 두기·온라인 손님은 숨김)
+  ['nt', 'st', 'qn', 'pp'].forEach(p => {
+    const sb = document.getElementById(p + '-restart-set-btn'), rb = document.getElementById(p + '-restart-rnd-btn');
+    if (!sb || !rb) return;
+    const sync = () => { rb.style.display = sb.style.display; };
+    new MutationObserver(sync).observe(sb, { attributes: true, attributeFilter: ['style'] }); sync();
+  });
   {
     // 전역 함수 선언을 감싸기 (호출부는 이름으로 부르므로 그대로 적용됨)
     const toast = (g, cur) => setTimeout(() => showStartToast(g, cur()), 30);
