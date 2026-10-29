@@ -6,7 +6,7 @@
      Online.init({ game:'stone' });                       // 1회
      Online.create(settings)   → Promise<code>            // 방장(1번)
      Online.join(code)         → Promise<settings>        // 손님(2번)
-     Online.on(ev => ...)      // {type:'joined'} {type:'move', move, by} {type:'reset', settings} {type:'left'}
+     Online.on(ev => ...)      // {type:'joined'} {type:'move', move, by} {type:'reset', settings} {type:'left', reason}  {type:'conn', connected}
      Online.sendMove(move)     // 내 수 전송(아무 JSON)
      Online.reset(settings)    // 방장만: 새 판 시작(설정 갱신 가능)
      Online.leave()
@@ -57,19 +57,37 @@ window.Online = (function () {
       const gid = r.guest && r.guest.id;
       if (myNum === 1 && gid && gid !== lastGuest) { lastGuest = gid; emit({ type: 'joined' }); }
       if (myNum === 2 && lastGuest === null) lastGuest = gid;
-      if (r.left && r.left !== myId) { active = false; emit({ type: 'left', reason: 'opponent' }); return; }
       const moves = (r.moves && r.moves[gameNo]) || {};
       const keys = Object.keys(moves).map(Number).sort((a, b) => a - b);
       // 번호 순서대로 한 번씩만 처리 (동시에 보낸 수가 다른 번호로 밀려 들어와도 놓치지 않게)
+      // 상대가 마지막 수를 두고 바로 나가도 그 수가 먼저 반영되게 'left'보다 먼저 처리
       for (const k of keys) {
         if (seen.has(k)) continue;
         const m = moves[k]; if (!m) continue;
         seen.add(k); if (k + 1 > applied) applied = k + 1;
         if (m.by !== myNum) emit({ type: 'move', move: m.move, by: m.by, idx: k });
       }
+      if (!active) return;
+      if (r.left && r.left !== myId) { active = false; emit({ type: 'left', reason: 'opponent' }); return; }
+      // 상대 접속 표시(online)가 꺼짐 = 나감 (onDisconnect)
+      const opp = myNum === 1 ? r.guest : r.host;
+      if (opp && opp.id && opp.id !== myId && opp.online === false) { active = false; emit({ type: 'left', reason: 'opponent' }); return; }
     };
     roomRef.on('value', sub);
+    watchConn();
   }
+  // 내 연결 상태 (.info/connected): 한 번 연결된 뒤부터 바뀔 때마다 {type:'conn', connected}
+  let connRef = null, connSub = null;
+  function watchConn() {
+    unwatchConn();
+    try {
+      let was = null;
+      connRef = db.ref('.info/connected');
+      connSub = s => { const v = !!(s && s.val()); if (was === null && !v) return; if (v === was) return; was = v; emit({ type: 'conn', connected: v }); };
+      connRef.on('value', connSub);
+    } catch (e) { connRef = null; connSub = null; }
+  }
+  function unwatchConn() { if (connRef) { try { connRef.off('value', connSub); } catch (e) { } } connRef = null; connSub = null; }
 
   return {
     get myNum() { return myNum; }, get active() { return active; }, get code() { return code; }, get names() { return names; }, get gameNo() { return gameNo; },
@@ -143,6 +161,7 @@ window.Online = (function () {
       await roomRef.update({ gameNo: no, settings: settings || {}, ['moves/' + no]: null, updatedAt: TS() });
     },
     leave() {
+      unwatchConn();
       if (roomRef) { try { roomRef.off('value', sub); roomRef.onDisconnect().cancel(); if (active) roomRef.update({ left: myId, updatedAt: TS() }); } catch (e) { } }
       roomRef = null; code = ''; myNum = 0; active = false; applied = 0; gameNo = 0; names = {}; seen = new Set();
     },

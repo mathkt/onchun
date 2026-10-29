@@ -2913,7 +2913,7 @@
 
 
 <script src="../../common.js" data-num="🎮" data-name="메인 게임" data-sub="노탁토 · 돌 가져가기 · 황금비 퀸 · 팝잇" data-home="../../" data-extra="<button class=&quot;bk-btn bk-btn--ghost bk-btn--sm&quot; id=&quot;sound-toggle&quot; onclick=&quot;toggleMute()&quot;><span id=&quot;sound-icon&quot;>🔊</span> <span id=&quot;sound-text&quot;>소리</span></button><button class=&quot;bk-btn bk-btn--sm&quot; id=&quot;top-rules-btn&quot; style=&quot;display:none&quot; onclick=&quot;showRules(true)&quot;>📖 규칙</button>"></script>
-<script src="../online.js?v=6"></script>
+<script src="../online.js?v=7"></script>
 
 <main>
   <!-- ================= 0. 초기 로비 화면 (1번 스타일) ================= -->
@@ -4128,6 +4128,9 @@
   let branchGameType = '';
   let isBranchPlay = false;
   let branchHumanPlayer = 1;
+  // 🌐→🤖 온라인 상대가 나가서 AI가 대신 두는 판: olAiP = 그 게임 코드(nt|st|qn|pp), aiHuman = 이 판에서 사람(나)의 번호(손님이면 2)
+  let aiHuman = 1, olAiP = null;
+  function botSideName(n) { return n === humanNum() ? (olAiP ? (getMyName() || '플레이어') : '플레이어') : (olAiP ? 'AI (대신)' : 'AI'); }
 
   // 🎲 랜덤 다시하기: 이번 한 판만 돌 10~30개 · 최대 3~5개 (설정값은 그대로)
   let stOneShot = false, stNGen = null; // stNGen: 이번 판 돌 개수가 랜덤에서 왔으면 그 뽑기 함수 (쉬운 시작용)
@@ -4202,10 +4205,10 @@
   function pLabel(game, n) {
     const mode = game === 'notakto' ? ntMode : game === 'stone' ? stMode : game === 'popit' ? ppMode : qnMode;
     if (mode === 'online') { const nm = (window.Online && Online.names) || {}; return nm[n] || (n === 1 ? '방장' : '손님'); }
-    if (mode === 'bot') { const hn = isBranchPlay ? branchHumanPlayer : 1; return n === hn ? (getMyName() || '플레이어') : 'AI'; }
+    if (mode === 'bot') { const hn = humanNum(); return n === hn ? (getMyName() || '플레이어') : (olAiP ? 'AI (대신)' : 'AI'); }
     return '플레이어 ' + n;
   }
-  function humanNum() { return isBranchPlay ? branchHumanPlayer : 1; }
+  function humanNum() { return isBranchPlay ? branchHumanPlayer : aiHuman; }
   /* 선공 정하기: AI 대전은 설정(플레이어/AI/번갈아), 2인은 판마다 번갈아, 온라인은 판 번호(gameNo)로 — 홀수 판 방장, 짝수 판 손님 */
   const startCount = { notakto: 0, stone: 0, popit: 0, queen: 0 };
   function firstPlayer(game, mode) {
@@ -4295,7 +4298,7 @@
   var olTmOn = false; // 온라인 방의 제한시간 켜짐 (방 설정 ton · 방장이 체크로 바꿈)
   function tmModeOf(p) { return p === 'nt' ? ntMode : p === 'st' ? stMode : p === 'pp' ? ppMode : qnMode; }
   function tmIsOnline(p) { return tmModeOf(p) === 'online'; }
-  function tmEff(p) { return tmIsOnline(p) ? olTmOn : !!tmPref[p].on; }
+  function tmEff(p) { return (tmIsOnline(p) || olAiP === p) ? olTmOn : !!tmPref[p].on; } // AI가 대신 두는 판은 방의 제한시간 그대로
   function tmSecs(p) { return parseInt(tmSan(p === 'nt' ? ntTimeSetting : p === 'st' ? stTimeSetting : p === 'pp' ? ppTimeSetting : qnTimeSetting)); }
   // 지금 이 판에서 시계가 돌아가야 하나: 체크 켜짐 + (온라인이면 연결 중 · 가위바위보 끝남)
   function tmRunning(p) {
@@ -4516,7 +4519,7 @@
   let qnUndoLeft = { 1: 1, 2: 1 }; // 이번 판 무르기 남은 횟수 (설정값으로 매 판 초기화)
   let qnBotTimeout = null, qnTimerInterval = null, qnTimeLeft = 0, qnScore = { p1Wins: 0, p2Wins: 0 };
   function qnColdSet(N) { const s = new Set(); for (let n = 0; ; n++) { const a = Math.floor(n * QN_PHI), b = a + n; if (a >= N) break; if (b < N) { s.add(a + ',' + b); s.add(b + ',' + a); } } return s; }
-  function qnBotNum() { return isBranchPlay ? 3 - branchHumanPlayer : 2; }
+  function qnBotNum() { return 3 - humanNum(); }
   // 지는 자리(P-position) 표: 보통 규칙은 황금비 후공 승리 칸(qnColdSet), 거꾸로 규칙은 판 전체를 거꾸로 따져서(역방향 귀납) 구함
   const qnColdCache = {}, qnPCache = {};
   function qnColdOf(N) { return qnColdCache[N] || (qnColdCache[N] = qnColdSet(N)); }
@@ -5116,7 +5119,7 @@
     ppRender(); ppUpdateUI();
     if (ppCur === 2 && mode === 'bot') ppScheduleBot();
   }
-  function ppBotNum() { return isBranchPlay ? 3 - branchHumanPlayer : 2; }
+  function ppBotNum() { return 3 - humanNum(); }
   function ppLocked() { return ppOver || (ppMode === 'bot' && ppCur === ppBotNum()) || (ppMode === 'online' && ppCur !== Online.myNum); }
   /* 팝잇 판 그리기 — 터진 버블은 사라지고(팝 .25s) 남은 버블이 왼쪽으로 미끄러져 빈자리를 채움(FLIP .3s).
      DOM을 통째로 다시 만들지 않고 줄마다 "있어야 할 버블(안 터진 것)"과 맞춰 넣고 빼기 때문에
@@ -5645,7 +5648,7 @@
   function ntStartTimer() {
     ntStopTimer();
     if (ntGameOver) return;
-    let isBotTurn = (ntMode === 'bot' && (isBranchPlay ? (ntCurrentPlayer !== branchHumanPlayer) : (ntCurrentPlayer === 2)));
+    let isBotTurn = (ntMode === 'bot' && ntCurrentPlayer !== humanNum());
     if (isBotTurn || !tmRunning('nt')) return;
 
     ntTimeLeft = tmSecs('nt');
@@ -5883,14 +5886,14 @@
   }
 
   function ntScheduleBotTurn() {
-    document.getElementById('nt-turn-indicator').innerText = `AI (${botDifficulty})의 턴`;
+    document.getElementById('nt-turn-indicator').innerText = olAiP === 'nt' ? 'AI (대신)의 턴' : `AI (${botDifficulty})의 턴`;
     ntBotTimeout = setTimeout(ntBotTurn, 420);
   }
 
   function ntRenderGameBoard() {
     const container = document.getElementById('nt-game-board-container');
     container.innerHTML = '';
-    let isBotTurn = (ntMode === 'bot' && (isBranchPlay ? (ntCurrentPlayer !== branchHumanPlayer) : (ntCurrentPlayer === 2)));
+    let isBotTurn = (ntMode === 'bot' && ntCurrentPlayer !== humanNum());
     let totalCells = ntBoardSize * ntBoardSize;
     let dead = ntIsBoardDead(ntGameBoardMask);
     let deadCells = ntGetDeadLineCells(ntGameBoardMask);
@@ -5929,8 +5932,8 @@
     f1.classList.remove('active-turn'); f2.classList.remove('active-turn');
     if (ntCurrentPlayer === 1) f1.classList.add('active-turn'); else f2.classList.add('active-turn');
 
-    let p1Name = isBranchPlay ? (branchHumanPlayer === 1 ? "플레이어 (P1)" : "AI") : (ntMode === 'bot' ? "플레이어" : "플레이어 1");
-    let p2Name = isBranchPlay ? (branchHumanPlayer === 2 ? "플레이어 (P2)" : "AI") : (ntMode === 'bot' ? "AI" : "플레이어 2");
+    let p1Name = isBranchPlay ? (branchHumanPlayer === 1 ? "플레이어 (P1)" : "AI") : (ntMode === 'bot' ? botSideName(1) : "플레이어 1");
+    let p2Name = isBranchPlay ? (branchHumanPlayer === 2 ? "플레이어 (P2)" : "AI") : (ntMode === 'bot' ? botSideName(2) : "플레이어 2");
     document.getElementById('nt-turn-indicator').innerText = `${ntCurrentPlayer === 1 ? p1Name : p2Name}의 턴`;
     ntStartTimer();
   }
@@ -5968,7 +5971,7 @@
     } else {
       ntCurrentPlayer = ntCurrentPlayer === 1 ? 2 : 1;
       ntUpdateGameUI(); ntRenderGameBoard();
-      let isBotCurrent = isBranchPlay ? (ntCurrentPlayer !== branchHumanPlayer) : (ntCurrentPlayer === 2 && ntMode === 'bot');
+      let isBotCurrent = (isBranchPlay || ntMode === 'bot') && ntCurrentPlayer !== humanNum();
       if (isBotCurrent) ntScheduleBotTurn();
     }
   }
@@ -6283,7 +6286,7 @@
   function stStartTimer() {
     stStopTimer();
     if (stGameOver) return;
-    let isBotTurn = (stMode === 'bot' && (isBranchPlay ? (stCurrentPlayer !== branchHumanPlayer) : (stCurrentPlayer === 2)));
+    let isBotTurn = (stMode === 'bot' && stCurrentPlayer !== humanNum());
     if (isBotTurn || !tmRunning('st')) return;
 
     stTimeLeft = tmSecs('st');
@@ -6584,11 +6587,11 @@
       stStopTimer();
       return;
     }
-    let p1Name = isBranchPlay ? (branchHumanPlayer === 1 ? "플레이어 (P1)" : "AI") : (stMode === 'bot' ? "플레이어" : "플레이어 1");
-    let p2Name = isBranchPlay ? (branchHumanPlayer === 2 ? "플레이어 (P2)" : "AI") : (stMode === 'bot' ? "AI" : "플레이어 2");
+    let p1Name = isBranchPlay ? (branchHumanPlayer === 1 ? "플레이어 (P1)" : "AI") : (stMode === 'bot' ? botSideName(1) : "플레이어 1");
+    let p2Name = isBranchPlay ? (branchHumanPlayer === 2 ? "플레이어 (P2)" : "AI") : (stMode === 'bot' ? botSideName(2) : "플레이어 2");
     document.getElementById('st-turn-indicator').innerText = `${stCurrentPlayer === 1 ? p1Name : p2Name}의 턴`;
 
-    let isBotTurn = (stMode === 'bot' && (isBranchPlay ? (stCurrentPlayer !== branchHumanPlayer) : (stCurrentPlayer === 2)));
+    let isBotTurn = (stMode === 'bot' && stCurrentPlayer !== humanNum());
     for (let i = 1; i <= stLimit; i++) {
       const btn = document.getElementById(`st-btn-${i}`);
       if (btn) btn.disabled = stIsAnimating || stStonesArr.length < i || isBotTurn;
@@ -6677,7 +6680,7 @@
     } else {
       stCurrentPlayer = stCurrentPlayer === 1 ? 2 : 1;
       stUpdateUI();
-      let isBotCurrent = isBranchPlay ? (stCurrentPlayer !== branchHumanPlayer) : (stCurrentPlayer === 2 && stMode === 'bot');
+      let isBotCurrent = (isBranchPlay || stMode === 'bot') && stCurrentPlayer !== humanNum();
       if (isBotCurrent) stBotTimeout = setTimeout(stBotTurn, 600);
     }
   }
@@ -7256,7 +7259,7 @@
     stone:   { p: 'st', mode: () => stMode, over: () => stGameOver, cur: () => stCurrentPlayer, start: () => stStartGame('online'), back: () => stGoBack(),
                settings: () => { applyStRandomRules(); return { n: stN, limit: stLimit, mode: stModeType, t: tmSan(stTimeSetting), ton: olTmNow('st'), u: undoSetting.st }; },
                apply: s => { stNSetting = String(s.n); stLimitSetting = String(s.limit); stModeType = s.mode || stModeType; stTimeSetting = tmSan(s.t); olTmOn = !!s.ton; oluApplyU('st', s); },
-               remote: m => { const gid = stGameId; const go = () => { if (gid !== stGameId) return; if (stIsAnimating || stBotTimeout) return setTimeout(go, 150); const k = parseInt(m); if (!stGameOver && stCurrentPlayer !== Online.myNum && k >= 1 && k <= Math.min(stLimit, stStonesArr.length)) stGlowThen(k, kk => stExecuteMove(kk)); }; go(); } },
+               remote: m => { const gid = stGameId; const go = () => { if (gid !== stGameId) return; if (stIsAnimating || stBotTimeout) return setTimeout(go, 150); const k = parseInt(m); if (stMode === 'online' && !stGameOver && stCurrentPlayer !== Online.myNum && k >= 1 && k <= Math.min(stLimit, stStonesArr.length)) stGlowThen(k, kk => stExecuteMove(kk)); }; go(); } },
     notakto: { p: 'nt', mode: () => ntMode, over: () => ntGameOver, cur: () => ntCurrentPlayer, start: () => ntStartGame('online'), back: () => ntGoBack(),
                settings: () => ({ size: ntSize, t: tmSan(ntTimeSetting), ton: olTmNow('nt'), u: undoSetting.nt }), apply: s => { ntSize = s.size || 3; ntTimeSetting = tmSan(s.t); olTmOn = !!s.ton; oluApplyU('nt', s); },
                remote: m => { if (!ntGameOver && ntCurrentPlayer !== Online.myNum && Number.isInteger(m) && !(ntGameBoardMask & (1 << m))) ntGlowThen(m, c => ntExecuteGameMove(c)); } },
@@ -7383,8 +7386,73 @@
     else if (ev.type === 'reset') { olStart(ev.settings); }
     else if (ev.type === 'names') { if (olStarted) olNames(); if (olRpsBlocking() && olRps.stage === 'pick') rpsRender(); else if (olRpsBlocking()) rpsNamesOnly(); }
     else if (ev.type === 'move') { if (olCtl(ev.move, ev.by)) return; oluOppMoved(); OLG[olGame].remote(ev.move); } // 예약 메시지(__rps·__first·__timer)는 게임 수가 아님
-    else if (ev.type === 'left') { if (olStarted) { const opp = (Online.names || {})[3 - Online.myNum]; olEnd(opp ? `${josa(opp, '이', '가')} 나갔어요 😢` : '상대가 나갔어요 😢'); } }
+    else if (ev.type === 'left') { if (olStarted) olOppGone('left'); }
+    else if (ev.type === 'conn') olConn(ev.connected);
   });
+  /* ---------- 🌐→🤖 상대가 나감 / 연결 끊김 → AI가 상대 자리를 이어서 둠 (지금 판 그대로, 남은 내 기기에서 끝까지) ----------
+     · 'left'(나가기·창 닫기 onDisconnect·상대 online=false) → 바로 · 내 연결(.info/connected)이 8초 넘게 끊김 → 그때
+     · 판이 이미 끝났으면 예전처럼 안내만 하고 메뉴로 · 가위바위보 중이면 내가 선공인 새 AI 판
+     · AI 난이도는 '중' 고정(이어 두는 판), 무르기 횟수·제한시간은 방 설정 그대로, 전적은 AI(중) + '온라인→AI' */
+  const OL_AI_SEC = 8;
+  const OLAI = {
+    notakto: { set: () => { ntMode = 'bot'; }, refresh: () => { ntUpdateGameUI(); ntRenderGameBoard(); },
+               tl: [() => ntTimeLeft, v => { ntTimeLeft = v; }], run: () => !!ntTimerInterval,
+               kick: me => { if (!ntGameOver && ntCurrentPlayer !== me && !ntBotTimeout) ntScheduleBotTurn(); }, fresh: () => ntStartGame('bot') },
+    stone:   { set: () => { stMode = 'bot'; }, refresh: () => stUpdateUI(),
+               tl: [() => stTimeLeft, v => { stTimeLeft = v; }], run: () => !!stTimerInterval,
+               kick: me => { if (!stGameOver && stCurrentPlayer !== me && !stBotTimeout && !stIsAnimating) stBotTimeout = setTimeout(stBotTurn, 600); }, fresh: () => stStartGame('bot') },
+    queen:   { set: () => { qnMode = 'bot'; }, refresh: () => { qnRender(); qnUpdateUI(); },
+               tl: [() => qnTimeLeft, v => { qnTimeLeft = v; }], run: () => !!qnTimerInterval,
+               kick: me => { if (qnPhase === 'play' && !qnOver && qnCur !== me && !qnBotTimeout) qnScheduleBot(); }, fresh: () => qnStartGame('bot') },
+    popit:   { set: () => { ppMode = 'bot'; }, refresh: () => { ppRender(); ppUpdateUI(); },
+               tl: [() => ppTimeLeft, v => { ppTimeLeft = v; }], run: () => !!ppTimerInterval,
+               kick: me => { if (!ppOver && ppCur !== me && !ppBotTimeout) ppScheduleBot(); }, fresh: () => ppStartGame('bot') },
+  };
+  let olConnT = null;
+  function olConnClear() { if (olConnT) { clearTimeout(olConnT); olConnT = null; } }
+  // 내 연결: 끊기면 8초 기다렸다가(그새 돌아오면 그대로 온라인) AI로
+  function olConn(on) {
+    olConnClear();
+    if (on || !olStarted || !olGame) return;
+    showNote('📶 연결이 끊겼어요… 다시 연결하는 중', 2500);
+    olConnT = setTimeout(() => { olConnT = null; if (olStarted && olGame && OLG[olGame].mode() === 'online') olOppGone('conn'); }, OL_AI_SEC * 1000);
+  }
+  function olOppGone(why) {
+    olConnClear();
+    const g = olGame, G = g && OLG[g]; if (!G || G.mode() !== 'online') return;
+    const conn = why === 'conn', opp = (Online.names || {})[3 - Online.myNum];
+    if (G.over() && !olRpsBlocking()) { olEnd(conn ? '연결이 끊어졌어요 😢' : opp ? `${josa(opp, '이', '가')} 나갔어요 😢` : '상대가 나갔어요 😢'); return; } // 끝난 판: 예전처럼
+    const who = opp ? josa(opp, '이', '가') : '상대가';
+    if (olRpsBlocking()) { // 아직 판 시작 전(가위바위보) → 내가 선공인 새 AI 판
+      rpsHide(); oluReset(); olStarted = false; Online.leave(); olRestoreOrig();
+      const keepF = aiSetting[g].f; aiSetting[g].f = 'player'; // 저장 안 함 (이번 한 판만)
+      try { botDifficulty = '중'; startCount[g] = 0; SET_SCORE[G.p][1]({ p1Wins: 0, p2Wins: 0 }); OLAI[g].fresh(); } finally { aiSetting[g].f = keepF; }
+      setTimeout(() => showNote(conn ? '연결이 끊어져서 🤖 AI(중)와 새 판을 해요 · 내가 선공' : `${who} 나갔어요 — 🤖 AI(중)와 새 판을 해요 · 내가 선공`, 3200), 80);
+      return;
+    }
+    olAiTakeover(g, conn ? '연결이 끊어져서 AI가 상대를 대신해요' : `${who} 나갔어요 — 🤖 AI(중)가 이어서 둬요`);
+  }
+  function olAiTakeover(g, msg) {
+    const G = OLG[g], A = OLAI[g], p = G.p, me = Online.myNum === 2 ? 2 : 1, nm = Online.names || {};
+    const myName = nm[me] || getMyName() || (me === 1 ? '방장' : '손님');
+    const running = A.run(), left = A.tl[0]();
+    rpsHide(); oluReset();
+    olStarted = false; Online.leave(); // 방에서 떨어짐 (더는 수를 보내지도 받지도 않음) — olOrig(내 설정)는 다음 판·메뉴에서 되돌림
+    olAiP = p; aiHuman = me; botDifficulty = '중';
+    A.set();
+    document.getElementById(`${p}-p${me}-name`).innerText = myName;
+    document.getElementById(`${p}-p${3 - me}-name`).innerText = 'AI (대신)';
+    const rb = document.getElementById(p + '-restart-btn'); if (rb) rb.innerText = '다시하기';
+    A.refresh();
+    // 지금 턴 시계는 그대로 이어서 (refresh가 새로 시작했으면 남은 시간 되돌림)
+    if (running && A.run() && left > 0) { A.tl[1](left); const el = document.getElementById(p + '-timer-display'); if (el) el.innerText = `⏳ 남은 시간: ${left}초`; }
+    syncGameActions(p); tmRender(p);
+    try { aiDiffRender(p); } catch (e) { }
+    A.kick(me);
+    showNote(msg, 3200);
+  }
+  // AI가 대신 둔 판을 끝내고 새 판·메뉴로: 내 원래 설정 되돌림
+  function olAiEnd() { if (!olAiP) return; olAiP = null; aiHuman = 1; olTmOn = false; olRestoreOrig(); }
   // 입력 막기 + 내 수 전송 (돌·노탁토; 팝잇은 ppConfirm에서 직접 처리)
   const _ntHandle = ntHandlePlayerMove;
   ntHandlePlayerMove = function (c) {
@@ -7405,7 +7473,8 @@
   // 턴 표시 + 이름(AI 모드에서 내 이름)
   function myTurnLabel(cur, mode, p) {
     if (mode === 'online') return olTurnLabel(cur);
-    if (mode === 'bot' && !isBranchPlay && cur === 1 && getMyName()) return `${getMyName()}의 턴`;
+    if (mode === 'bot' && !isBranchPlay && olAiP) return `${botSideName(cur)}의 턴`;
+    if (mode === 'bot' && !isBranchPlay && cur === humanNum() && getMyName()) return `${getMyName()}의 턴`;
     return null;
   }
   const _ntUI = ntUpdateGameUI;
@@ -7423,10 +7492,11 @@
   // AI 모드 이름 표시
   const _ntStart = ntStartGame, _stStart = stStartGame, _ppStart = ppStartGame, _qnStart = qnStartGame;
   function applyMyName(p, mode) { if (mode === 'bot' && getMyName()) document.getElementById(p + '-p1-name').innerText = getMyName(); }
-  ntStartGame = function (m) { _ntStart(m); applyMyName('nt', m); ntUpdateGameUI(); };
-  stStartGame = function (m) { _stStart(m); applyMyName('st', m); stUpdateUI(); };
-  ppStartGame = function (m) { _ppStart(m); applyMyName('pp', m); ppUpdateUI(); };
-  qnStartGame = function (m, pre) { _qnStart(m, pre); applyMyName('qn', m); qnUpdateUI(); };
+  const olAiClr = () => { olAiP = null; aiHuman = 1; }; // 새 판은 항상 보통 판 (사람 = 1번)
+  ntStartGame = function (m) { olAiClr(); _ntStart(m); applyMyName('nt', m); ntUpdateGameUI(); };
+  stStartGame = function (m) { olAiClr(); _stStart(m); applyMyName('st', m); stUpdateUI(); };
+  ppStartGame = function (m) { olAiClr(); _ppStart(m); applyMyName('pp', m); ppUpdateUI(); };
+  qnStartGame = function (m, pre) { olAiClr(); _qnStart(m, pre); applyMyName('qn', m); qnUpdateUI(); };
   // 다시하기
   const _ntRestart = ntRestartGame, _stRestart = stRestartGame, _ppRestart = ppRestartGame, _qnRestart = qnRestartGame;
   // 방장: 내 원래 설정으로 되돌리고 → 게임 중에 ⚙️로 바꿔 둔 설정(다음 판부터)을 얹어서 → 새 판 설정으로 보냄
@@ -7434,13 +7504,13 @@
   // 🎲 랜덤 다시하기 (온라인): 방장만 — 다시하기와 같은 길(Online.reset)로 이번 판 설정만 바꿔서 보냄 (원래 설정은 olOrig로 지킴)
   function olRandomRestart(s, p) { if (Online.myNum !== 1) return; olRestoreOrig(); if (p) pendApply(p); olSaveOrig(); olCur = typeof s === 'function' ? s() : s; if (p && olCur && olCur.u === undefined) olCur.u = undoSetting[p]; closeVictoryModal(); Online.reset(olCur); }
   let ppSettingsJustSaved = false;
-  ntRestartGame = function () { if (ntMode === 'online' && Online.active) return olRestart('notakto'); _ntRestart(); };
-  stRestartGame = function () { if (stMode === 'online' && Online.active) return olRestart('stone'); _stRestart(); };
-  ppRestartGame = function () { if (ppMode === 'online' && Online.active) return olRestart('popit'); _ppRestart(); };
-  qnRestartGame = function () { if (qnMode === 'online' && Online.active) return olRestart('queen'); _qnRestart(); };
+  ntRestartGame = function () { if (ntMode === 'online' && Online.active) return olRestart('notakto'); olAiEnd(); _ntRestart(); };
+  stRestartGame = function () { if (stMode === 'online' && Online.active) return olRestart('stone'); olAiEnd(); _stRestart(); };
+  ppRestartGame = function () { if (ppMode === 'online' && Online.active) return olRestart('popit'); olAiEnd(); _ppRestart(); };
+  qnRestartGame = function () { if (qnMode === 'online' && Online.active) return olRestart('queen'); olAiEnd(); _qnRestart(); };
   // 메뉴로
   const _ntBack = ntGoBack, _stBack = stGoBack, _ppBack = ppGoBack, _qnBack = qnGoBack;
-  function olLeaveIfAny() { rpsHide(); oluReset(); if (Online.active) { olStarted = false; Online.leave(); } olRestoreOrig(); }
+  function olLeaveIfAny() { rpsHide(); oluReset(); olConnClear(); if (Online.active) { olStarted = false; Online.leave(); } olAiP = null; aiHuman = 1; olRestoreOrig(); }
   ntGoBack = function () { olLeaveIfAny(); _ntBack(); };
   stGoBack = function () { olLeaveIfAny(); _stBack(); };
   ppGoBack = function () { olLeaveIfAny(); _ppBack(); };
@@ -7458,7 +7528,7 @@
       l = !mine;
       if (G && !isBranchPlay) recAdd(g, 'online', mine, nm[me === 1 ? 2 : 1] || '', rec);
     } else if (G && !isBranchPlay) {
-      if (mode === 'bot') recAdd(g, 'ai:' + botDifficulty, !l, '', rec);
+      if (mode === 'bot') recAdd(g, 'ai:' + botDifficulty, !l, olAiP === G.p ? '온라인→AI' : '', rec); // 상대가 나가 AI가 이어 둔 판은 AI 전적 + '온라인→AI' 표시
       else if (mode === 'solo') recAdd(g, 'solo', wn === 1, '', rec);
     }
     _sv(w, r, l);
@@ -7487,6 +7557,7 @@
       rndNote = R.note; olRandomRestart(R.online, p); return;
     }
     closeVictoryModal();
+    if (olAiP) olAiEnd(); // AI가 대신 둔 판 다음은 내 설정으로
     pendApply(p); // ⚙️로 바꿔 둔 설정이 있으면 이번 새 판부터
     rndNote = R.note; R.local(mode);
   }
@@ -8493,7 +8564,7 @@
 
     /* ---------- 2) 게임 중 AI 난이도 (바로 적용) ---------- */
     function aiNameEls(k) { // AI 이름을 보여 주는 요소들
-      const hn = isBranchPlay ? branchHumanPlayer : 1, ai = 3 - hn;
+      const hn = humanNum(), ai = 3 - hn;
       return { name: $id(`${k}-p${ai}-name`), turn: $id(`${k}-turn-indicator`) };
     }
     function aiDiffRender(k) {
@@ -8507,11 +8578,12 @@
       if (!AI_DIFFS.includes(d) || modeOf(k) !== 'bot') return;
       botDifficulty = d; aiDiffSet(G_OF[k], d);
       const { name, turn } = aiNameEls(k);
-      if (name) name.innerText = `AI (${d})`;
-      if (turn && /^AI/.test(turn.innerText)) turn.innerText = `AI (${d})의 턴`;
+      if (name && olAiP !== k) name.innerText = `AI (${d})`;
+      if (turn && /^AI/.test(turn.innerText) && olAiP !== k) turn.innerText = `AI (${d})의 턴`;
       aiDiffRender(k);
       playSfx('click');
     };
+    window.aiDiffRender = aiDiffRender;
     P3_KEYS.forEach(k => {
       const box = p3Mk('div', 'ai-diff'); box.id = k + '-ai-diff';
       box.innerHTML = `<span class="ai-diff-lab">🤖 AI 난이도</span><div class="ai-diff-seg" role="group" aria-label="AI 난이도">${AI_DIFFS.map(d => `<button type="button" data-d="${d}" onclick="aiDiffChange('${k}', '${d}')">${d}</button>`).join('')}</div>`;
@@ -8817,12 +8889,12 @@
   function tmScreenOn(p) { const el = document.getElementById(p + '-game-screen'); return !!el && !!el.style.display && el.style.display !== 'none'; }
   function gameInProgress(p) { return tmScreenOn(p) && !TM_OVER[p](); }
   function tmStop(p) { try { TM_STOP[p](); } catch (e) {} }
-  function showNote(text) {
+  function showNote(text, ms) {
     let t = document.getElementById('start-toast');
     if (!t) { t = document.createElement('div'); t.id = 'start-toast'; document.body.appendChild(t); }
     t.textContent = text;
     t.classList.remove('on'); void t.offsetWidth; t.classList.add('on');
-    clearTimeout(t._h); t._h = setTimeout(() => t.classList.remove('on'), 1800);
+    clearTimeout(t._h); t._h = setTimeout(() => t.classList.remove('on'), ms || 1800);
   }
   // 예약해 둔 설정 적용 (새 판 시작 직전·메뉴로 나갈 때). 적용했으면 true
   function pendApply(p) {
@@ -8838,7 +8910,7 @@
     // ⚙️ 창 열기: 예약된 설정이 있으면 그걸, 온라인 방 안이면 방 설정 말고 내 원래 설정을 보여 줌
     const fo = window['open' + N + 'Settings'];
     window['open' + N + 'Settings'] = function (...a) {
-      const view = setPend[p] || (tmIsOnline(p) && window.Online && Online.active && olOrig && olOrig[p]) || null;
+      const view = setPend[p] || (((tmIsOnline(p) && window.Online && Online.active) || olAiP === p) && olOrig && olOrig[p]) || null;
       if (!view) return fo.apply(this, a);
       const live = SETV[p].get(); SETV[p].set(view);
       try { return fo.apply(this, a); } finally { SETV[p].set(live); }
@@ -8938,7 +9010,8 @@
       if (!(window.Online && Online.active && Online.myNum === 1)) { tmRender(p); return; } // 손님은 못 바꿈
       olTmOn = on; tmPref[p].on = on; tmSave();
       Online.sendMove({ __timer: on ? 1 : 0 }); // 손님 기기도 같게
-    } else { tmPref[p].on = on; tmSave(); }
+    } else if (olAiP === p) { olTmOn = on; } // AI가 대신 두는 판: 이 판만 (내 저장값은 그대로)
+    else { tmPref[p].on = on; tmSave(); }
     try { SET_SUB[p](); } catch (e) {}
     playSfx('click');
     tmApplyNow(p);
