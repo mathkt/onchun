@@ -1718,6 +1718,28 @@
   #pp-a-moves-box .analysis-move-btn { padding:9px 12px; font-size:.9rem; }
   #pp-a-moves-box .analysis-move-btn.quiz-right { background:#DFF5EE !important; border-color:#3A9E82 !important; }
   #pp-a-moves-box .analysis-move-btn.quiz-wrong { background:#FDE8EE !important; border-color:#E9533F !important; }
+  /* 🎯 퀴즈: 줄마다 [1][2][3]… 누를 개수 고르기 */
+  .pp-pick { display:flex; flex-direction:column; gap:6px; width:100%; box-sizing:border-box; }
+  #pp-a-moves-box > .pp-pick { flex:1 1 100% !important; min-width:0; }
+  .pp-pick__row { display:flex; align-items:center; gap:8px; background:#FFF9E8; border:1px solid #E7DFC9; border-radius:12px; padding:6px 8px; min-width:0; }
+  .pp-pick__lab { flex:none; width:52px; font-weight:800; font-size:.9rem; line-height:1.15; }
+  .pp-pick__lab small { display:block; font-weight:600; font-size:.72rem; color:var(--text-sub); }
+  .pp-pick__btns { flex:1; min-width:0; display:flex; flex-wrap:wrap; gap:5px; }
+  .pp-pick-btn { min-width:38px; height:38px; padding:0 6px; border-radius:10px; border:1.5px solid #E7DFC9; background:#fff; font:800 1rem 'Noto Sans KR',sans-serif; color:#5F5B55; cursor:pointer; touch-action:manipulation; transition:transform .1s, background .15s; }
+  .pp-pick-btn:hover:not(:disabled) { border-color:#F5A623; background:#FFF1D6; transform:translateY(-1px); }
+  .pp-pick-btn:focus-visible { outline:3px solid #F5A623; outline-offset:1px; }
+  .pp-pick-btn.right { background:#DFF5EE !important; border-color:#3A9E82 !important; color:#1f6b55; }
+  .pp-pick-btn.wrong { background:#FDE8EE !important; border-color:#E9533F !important; color:#C9436B; }
+  .pp-pick-btn.wrong:disabled { cursor:not-allowed; opacity:.8; }
+  .pp-pick__empty { color:#b3ad9c; font-size:.85rem; padding:8px 2px; }
+  .pp-pick__foot { display:flex; justify-content:flex-end; }
+  .pp-pick__show { min-height:36px; padding:6px 14px; border-radius:10px; border:1.5px dashed #c9c3b0; background:transparent; color:var(--text-sub); font:700 .85rem 'Noto Sans KR',sans-serif; cursor:pointer; }
+  .pp-pick__show:hover { background:#FFF9E8; }
+  /* 🌐 온라인 무르기 요청 */
+  #olu-box { position:fixed; left:50%; bottom:18px; transform:translateX(-50%); z-index:9000; max-width:calc(100vw - 32px); box-sizing:border-box; background:#fff; border:2px solid #F5A623; border-radius:16px; box-shadow:0 8px 26px rgba(0,0,0,.18); padding:10px 14px; display:none; align-items:center; flex-wrap:wrap; justify-content:center; gap:8px 10px; font:700 .95rem 'Noto Sans KR',sans-serif; color:#5F5B55; }
+  #olu-box.on { display:flex; }
+  #olu-box button { min-height:38px; padding:0 16px; border-radius:10px; border:0; font:800 .95rem 'Noto Sans KR',sans-serif; cursor:pointer; }
+  #olu-box .ok { background:#3A9E82; color:#fff; } #olu-box .no { background:#EEE8DA; color:#5F5B55; }
   @media (max-width:860px) { #pp-analysis-layout { flex-direction:column; } #pp-analysis-left { width:100%; flex:auto; flex-direction:row; flex-wrap:wrap; } #pp-analysis-left .a-player-frame { flex:1; } #pp-a-verdict { flex-basis:100%; } #pp-analysis-right { max-height:none; } }
 
   /* ================= 팝잇 섹션 ================= */
@@ -4247,6 +4269,8 @@
   //  · 2인: 지금 차례 A가 누르면 상대 마지막 수 + A의 그 앞 수 → 다시 A 차례 (수가 하나뿐이면 그 하나만)
   function undoPlan(hist, base, mode, cur) {
     const avail = hist.length - base; if (avail <= 0) return null;
+    // 온라인: 마지막 한 수만(그 수를 둔 사람 것) — 요청한 사람·허락한 사람 기기 모두 같은 계획
+    if (mode === 'online') { const who = hist[hist.length - 1].player; return { n: 1, owner: who, next: who }; }
     if (mode === 'bot') {
       const hn = humanNum(); let i = hist.length - 1;
       while (i >= base && hist[i].player !== hn) i--;
@@ -4259,7 +4283,7 @@
   function undoOpen(p) { document.getElementById('set-' + p + '-undo').value = undoSetting[p]; }
   function undoRead(p) { const v = document.getElementById('set-' + p + '-undo').value; if (UNDO_VALS.includes(v)) { undoSetting[p] = v; undoSave(); } }
   // 무르기 버튼이 보이는가: AI·2인(분석에서 이어 두기 포함)이고 '없음'이 아닐 때 (온라인은 숨김)
-  function undoVisible(mode, p) { return (mode === 'bot' || mode === 'solo') && undoSetting[p] !== '0'; }
+  function undoVisible(mode, p) { return (mode === 'bot' || mode === 'solo' || mode === 'online') && undoSetting[p] !== '0'; } // 온라인은 요청→상대 허락 (olu*)
 
   /* ===== ⏱ 한 턴 제한시간: 켜기/끄기는 게임 화면 체크(게임별 localStorage), 초는 ⚙️ 설정 (3·5·10·20·30초) =====
      예전 '무제한' 값은 체크 끔 + 10초로 바꿈. 온라인은 방 설정(t: 초, ton: 켜짐)을 따름 — 방장만 체크를 바꿀 수 있음 */
@@ -5345,7 +5369,7 @@
 
   /* ---------- 팝잇 분석 모드 ---------- */
   const ppAnalysisScreen = document.getElementById('pp-analysis-screen');
-  let ppARows = [], ppAInit = [], ppATurn = 1, ppAHist = [], ppAQuizOn = false, ppAQuizAnswered = false, ppAQuizSeq = 0, ppAStartTurn = 1;
+  let ppARows = [], ppAInit = [], ppATurn = 1, ppAHist = [], ppAQuizOn = false, ppAQuizAnswered = false, ppAQuizSeq = 0, ppAStartTurn = 1, ppAQuizMiss = false, ppAQuizMsg = null, ppAPopSeq = 0;
   const ppRed = c => ppMaxTake ? c % (ppMaxTake + 1) : c;
   const ppCap = c => ppMaxTake ? Math.min(ppMaxTake, c) : c;
   /* 지금 둘 사람이 지는 판(P-position)인가?  r_i = 줄 개수 (한 번에 최대 n개면 (n+1)로 나눈 나머지)
@@ -5391,7 +5415,7 @@
   function ppAQuiz() {
     // 이기는 수가 있는(=지는 판이 아닌) 랜덤 판 만들기
     for (let t = 0; t < 50; t++) { const r = ppRandomRows(); if (!ppIsLosing(r)) { ppAInit = r; break; } }
-    ppAStartTurn = 1; ppStartAnalysis(true); ppAQuizOn = true; ppAQuizAnswered = false; ppAUpdate();
+    ppAStartTurn = 1; ppStartAnalysis(true); ppAQuizOn = true; ppAQuizAnswered = false; ppAQuizMiss = false; ppAQuizMsg = null; ppAUpdate();
   }
   function ppAApply(mv, fromQuiz) {
     ppAHist.push({ turn: ppATurn, row: mv.row, count: mv.count, rows: ppARows.slice() });
@@ -5439,46 +5463,98 @@
       document.getElementById('pp-a-moves-title').innerText = '합법 수 분석';
       return;
     }
-    document.getElementById('pp-a-moves-title').innerText = ppAQuizOn ? '🎯 이기는 수를 골라 보세요' : '합법 수 분석';
+    const picking = ppAQuizOn && !ppAQuizAnswered; // 퀴즈를 푸는 중 → 줄마다 [1][2]… 고르기
+    document.getElementById('pp-a-moves-title').innerText = picking ? '🎯 이기는 수를 골라 보세요' : '합법 수 분석';
     const moves = ppAMoves();
     const evals = moves.map(mv => { const nr = ppARows.slice(); nr[mv.row] -= mv.count; return { mv, win: ppIsLosing(nr) }; });
     const winMoves = evals.filter(e => e.win);
     const pT = josa('P' + ppATurn, '이', '가');
-    verdict.className = 'a-verdict ' + (ppAQuizOn ? '' : losingNow ? 'lose' : 'win');
-    verdict.innerHTML = ppAQuizOn ? `<b>🎯 ${pT} 둘 차례</b><br>이기는 수를 찾아 목록에서 골라 보세요. (이진법 표를 참고!)` : losingNow
-      ? `<b>${pT} 둘 차례 — 지는 판</b><br>어떻게 둬도 상대가 바르게 두면 집니다. (상대 실수를 기다릴 것!)`
-      : `<b>${pT} 둘 차례 — 이기는 판</b><br>이기는 수 ${winMoves.length}개: ${winMoves.slice(0, 4).map(e => `${e.mv.row + 1}번줄 −${e.mv.count}`).join(', ')}${winMoves.length > 4 ? ' …' : ''}`;
+    if (ppAQuizOn && ppAQuizAnswered && ppAQuizMsg) { verdict.className = 'a-verdict ' + ppAQuizMsg.cls; verdict.innerHTML = ppAQuizMsg.html; }
+    else {
+      verdict.className = 'a-verdict ' + (picking ? '' : losingNow ? 'lose' : 'win');
+      verdict.innerHTML = picking ? `<b>🎯 ${pT} 둘 차례</b><br>몇 번 줄에서 몇 개를 누를지 골라 보세요. (이진법 표를 참고!)` : losingNow
+        ? `<b>${pT} 둘 차례 — 지는 판</b><br>어떻게 둬도 상대가 바르게 두면 집니다. (상대 실수를 기다릴 것!)`
+        : `<b>${pT} 둘 차례 — 이기는 판</b><br>이기는 수 ${winMoves.length}개: ${winMoves.slice(0, 4).map(e => `${e.mv.row + 1}번줄 −${e.mv.count}`).join(', ')}${winMoves.length > 4 ? ' …' : ''}`;
+    }
+    if (picking) { ppARenderPicker(box, evals, verdict); return; }
     evals.forEach(e => {
       const nr = ppARows.slice(); nr[e.mv.row] -= e.mv.count;
       const btn = document.createElement('button');
       let cls = 'analysis-move-btn', tag = '';
       const endsNow = nr.every(c => c === 0); // 이 수로 마지막 버블을 누르게 됨
-      if (!ppAQuizOn) {
-        if (e.win) { cls += ' win-move'; tag = endsNow ? ' [필승 수] (승리 확정)' : ' [필승 수]'; }
-        else { cls += ' bad-move'; tag = endsNow ? ' [나쁜 수] (패배 확정)' : ' [나쁜 수]'; }
-      }
+      if (e.win) { cls += ' win-move'; tag = endsNow ? ' [필승 수] (승리 확정)' : ' [필승 수]'; }
+      else { cls += ' bad-move'; tag = endsNow ? ' [나쁜 수] (패배 확정)' : ' [나쁜 수]'; }
       btn.className = cls;
       btn.innerText = `${e.mv.row + 1}번줄 −${e.mv.count}개 → (${nr.join(', ')})${tag}`;
       btn.onmouseenter = () => { playSfx('hover'); ppAHighlight(e.mv); };
       btn.onmouseleave = () => ppAHighlight(null);
-      btn.onclick = () => {
-        playSfx('click');
-        if (ppAQuizOn && !ppAQuizAnswered) {
-          ppAQuizAnswered = true;
-          btn.classList.add(e.win ? 'quiz-right' : 'quiz-wrong');
-          box.querySelectorAll('.analysis-move-btn').forEach(b => { if (b !== btn && b._win) b.classList.add('quiz-right'); });
-          verdict.className = 'a-verdict ' + (e.win ? 'win' : 'lose');
-          const nrq = ppARows.slice(); nrq[e.mv.row] -= e.mv.count;
-          const endq = ppWinRule === 'misere' && nrq.filter(c => c > 0).every(c => ppRed(c) <= 1);
-          verdict.innerHTML = e.win ? `<b>정답! 🎉</b><br>${e.mv.row + 1}번줄에서 ${e.mv.count}개를 누르면 ${endq ? (ppMaxTake ? '나머지 1인' : '1개짜리') + ' 줄이 홀수 개 남아요(거꾸로 규칙 끝판).' : '모든 자리가 짝수가 돼요.'} 아래 표를 확인해 보세요.` : `<b>아쉬워요 😢</b><br>초록으로 표시된 수가 이기는 수예요. 이진법 표에서 홀수 자리를 짝수로 만드는 수를 찾아보세요.`;
-          qzAnswer('pp', e.win); // 연속 퀴즈: 자동으로 두지 않고 [다음 문제]
-          return;
-        }
-        ppAApply(e.mv);
-      };
+      btn.onclick = () => { playSfx('click'); ppAApply(e.mv); };
       btn._win = e.win; btn._mv = e.mv;
       box.appendChild(btn);
     });
+  }
+  // 🎯 퀴즈 고르기 판: 줄 하나에 한 줄씩 [1][2]…[남은 개수] (최대 n개 규칙이면 n까지)
+  function ppARenderPicker(box, evals, verdict) {
+    const pk = document.createElement('div'); pk.className = 'pp-pick';
+    const winOf = new Map(evals.map(e => [e.mv.row + ':' + e.mv.count, e.win]));
+    ppARows.forEach((c, ri) => {
+      const line = document.createElement('div'); line.className = 'pp-pick__row';
+      const lab = document.createElement('div'); lab.className = 'pp-pick__lab'; lab.style.color = PP_INK[ri % 7];
+      lab.innerHTML = `${ri + 1}번줄<small>${c ? '남은 ' + c + '개' : ''}</small>`;
+      const bs = document.createElement('div'); bs.className = 'pp-pick__btns';
+      if (!c) bs.innerHTML = '<span class="pp-pick__empty">비었음</span>';
+      for (let k = 1; k <= ppCap(c); k++) {
+        const mv = { row: ri, count: k }, b = document.createElement('button');
+        b.type = 'button'; b.className = 'pp-pick-btn'; b.textContent = k;
+        b.title = `${ri + 1}번줄에서 ${k}개 누르기`; b.setAttribute('aria-label', b.title);
+        b._mv = mv; b._win = !!winOf.get(ri + ':' + k);
+        b.onmouseenter = () => { playSfx('hover'); ppAHighlight(mv); };
+        b.onmouseleave = () => ppAHighlight(null);
+        b.onfocus = () => ppAHighlight(mv); b.onblur = () => ppAHighlight(null);
+        b.onclick = () => ppAPick(b, verdict);
+        bs.appendChild(b);
+      }
+      line.append(lab, bs); pk.appendChild(line);
+    });
+    const foot = document.createElement('div'); foot.className = 'pp-pick__foot';
+    const show = document.createElement('button'); show.type = 'button'; show.className = 'pp-pick__show'; show.textContent = '👀 정답 보기';
+    show.onclick = () => {
+      if (ppAQuizAnswered) return; playSfx('click');
+      ppAQuizAnswered = true; ppAMarkWins();
+      ppAQuizMsg = { cls: 'lose', html: '<b>정답은 초록 버튼이에요</b><br>이진법 표에서 홀수 자리를 짝수로 만드는 수를 찾아보세요. 초록 버튼을 누르면 그 수를 둬 볼 수 있어요.' };
+      verdict.className = 'a-verdict lose'; verdict.innerHTML = ppAQuizMsg.html;
+      show.disabled = true;
+      qzAnswer('pp', false, 'show');
+    };
+    foot.appendChild(show); pk.appendChild(foot);
+    box.appendChild(pk);
+  }
+  function ppAMarkWins() { document.querySelectorAll('#pp-a-moves-box .pp-pick-btn').forEach(b => { if (b._win) b.classList.add('right'); }); }
+  function ppAPick(btn, verdict) {
+    const mv = btn._mv;
+    playSfx('click');
+    if (ppAQuizAnswered) { ppAApply(mv); return; } // 정답 보기·시간 초과 뒤: 눌러서 그 수 두기
+    if (!btn._win) {
+      ppAQuizMiss = true; btn.classList.add('wrong'); btn.disabled = true;
+      verdict.className = 'a-verdict lose';
+      verdict.innerHTML = `<b>❌ ${mv.row + 1}번줄 −${mv.count}개는 아니에요. 다시 골라 보세요!</b><br>그렇게 누르면 상대가 이기는 판이 돼요. 이진법 표에서 홀수 자리를 짝수로 만드는 수를 찾아보세요.`;
+      return;
+    }
+    ppAQuizAnswered = true;
+    const nrq = ppARows.slice(); nrq[mv.row] -= mv.count;
+    const endq = ppWinRule === 'misere' && nrq.filter(c => c > 0).every(c => ppRed(c) <= 1);
+    ppAQuizMsg = { cls: 'win', html: `<b>정답! 🎉</b><br>${mv.row + 1}번줄에서 ${mv.count}개를 누르면 ${endq ? (ppMaxTake ? '나머지 1인' : '1개짜리') + ' 줄이 홀수 개 남아요(거꾸로 규칙 끝판).' : '모든 자리가 짝수가 돼요.'} 아래 목록에서 다른 수도 살펴보세요.` };
+    ppAUpdate(); // 고르기 판 → 합법 수 목록으로
+    ppAPopAnim(mv);
+    qzAnswer('pp', !ppAQuizMiss, ppAQuizMiss ? 'retry' : ''); // 연속 퀴즈: 첫 번에 맞혀야 연속 기록이 이어짐 · 자동으로 두지 않고 [다음 문제]
+  }
+  // 정답 수의 버블이 '퐁' 터졌다가 다시 돌아옴 (판은 그대로 — 둔 수가 아님)
+  function ppAPopAnim(mv) {
+    const tk = ++ppAPopSeq;
+    const bs = [...document.querySelectorAll('#pp-a-board .bubble')].filter(b => +b.dataset.row === mv.row && +b.dataset.idx >= ppARows[mv.row] - mv.count);
+    bs.forEach((b, i) => setTimeout(() => { if (tk !== ppAPopSeq || !b.isConnected) return; b.classList.add('popping'); playPlaceStone(); }, i * 90));
+    setTimeout(() => { if (tk !== ppAPopSeq) return; bs.forEach(b => { if (!b.isConnected) return; b.classList.remove('popping'); b.classList.add('popin'); }); }, bs.length * 90 + 900);
+    setTimeout(() => bs.forEach(b => b.classList.remove('popin')), bs.length * 90 + 1300);
   }
   function ppAHighlight(mv) {
     document.querySelectorAll('#pp-a-board .bubble').forEach(b => {
@@ -7178,18 +7254,18 @@
   /* ===== 🌐 온라인 대전 (games/online.js) — 네 게임 공통 ===== */
   const OLG = {
     stone:   { p: 'st', mode: () => stMode, over: () => stGameOver, cur: () => stCurrentPlayer, start: () => stStartGame('online'), back: () => stGoBack(),
-               settings: () => { applyStRandomRules(); return { n: stN, limit: stLimit, mode: stModeType, t: tmSan(stTimeSetting), ton: olTmNow('st') }; },
-               apply: s => { stNSetting = String(s.n); stLimitSetting = String(s.limit); stModeType = s.mode || stModeType; stTimeSetting = tmSan(s.t); olTmOn = !!s.ton; },
+               settings: () => { applyStRandomRules(); return { n: stN, limit: stLimit, mode: stModeType, t: tmSan(stTimeSetting), ton: olTmNow('st'), u: undoSetting.st }; },
+               apply: s => { stNSetting = String(s.n); stLimitSetting = String(s.limit); stModeType = s.mode || stModeType; stTimeSetting = tmSan(s.t); olTmOn = !!s.ton; oluApplyU('st', s); },
                remote: m => { const gid = stGameId; const go = () => { if (gid !== stGameId) return; if (stIsAnimating || stBotTimeout) return setTimeout(go, 150); const k = parseInt(m); if (!stGameOver && stCurrentPlayer !== Online.myNum && k >= 1 && k <= Math.min(stLimit, stStonesArr.length)) stGlowThen(k, kk => stExecuteMove(kk)); }; go(); } },
     notakto: { p: 'nt', mode: () => ntMode, over: () => ntGameOver, cur: () => ntCurrentPlayer, start: () => ntStartGame('online'), back: () => ntGoBack(),
-               settings: () => ({ size: ntSize, t: tmSan(ntTimeSetting), ton: olTmNow('nt') }), apply: s => { ntSize = s.size || 3; ntTimeSetting = tmSan(s.t); olTmOn = !!s.ton; },
+               settings: () => ({ size: ntSize, t: tmSan(ntTimeSetting), ton: olTmNow('nt'), u: undoSetting.nt }), apply: s => { ntSize = s.size || 3; ntTimeSetting = tmSan(s.t); olTmOn = !!s.ton; oluApplyU('nt', s); },
                remote: m => { if (!ntGameOver && ntCurrentPlayer !== Online.myNum && Number.isInteger(m) && !(ntGameBoardMask & (1 << m))) ntGlowThen(m, c => ntExecuteGameMove(c)); } },
     queen:   { p: 'qn', mode: () => qnMode, over: () => qnOver, cur: () => qnCur, start: () => qnStartGame('online', olQnPreset), back: () => qnGoBack(),
-               settings: () => { const size = qnSizeSetting === 'random' ? 6 + Math.floor(Math.random() * 7) : parseInt(qnSizeSetting); qnN = size; qnCold = qnColdSet(size); const start = qnStartSetting === 'pick' ? null : qnPickStart(); return { size, start, rule: qnWinRule, startMode: qnStartSetting, t: tmSan(qnTimeSetting), ton: olTmNow('qn') }; },
-               apply: s => { olQnPreset = { size: s.size, start: s.start }; qnStartSetting = s.startMode || 'rand'; qnWinRule = s.rule || 'last'; qnTimeSetting = tmSan(s.t); olTmOn = !!s.ton; },
+               settings: () => { const size = qnSizeSetting === 'random' ? 6 + Math.floor(Math.random() * 7) : parseInt(qnSizeSetting); qnN = size; qnCold = qnColdSet(size); const start = qnStartSetting === 'pick' ? null : qnPickStart(); return { size, start, rule: qnWinRule, startMode: qnStartSetting, t: tmSan(qnTimeSetting), ton: olTmNow('qn'), u: undoSetting.qn }; },
+               apply: s => { olQnPreset = { size: s.size, start: s.start }; qnStartSetting = s.startMode || 'rand'; qnWinRule = s.rule || 'last'; qnTimeSetting = tmSan(s.t); olTmOn = !!s.ton; oluApplyU('qn', s); },
                remote: m => { if (m.place && qnPhase === 'place') { qnQ = m.place.slice(); qnStart = qnQ.slice(); qnPhase = 'play'; qnRender(); qnUpdateUI(); } else if (m.to && !qnOver && qnCur !== Online.myNum) qnGlowThen(m.to, t => qnExecuteMove(t)); } },
     popit:   { p: 'pp', mode: () => ppMode, over: () => ppOver, cur: () => ppCur, start: () => ppStartGame('online'), back: () => ppGoBack(),
-               settings: () => { ppApplyRules(); return { rows: ppInit.slice(), rule: ppWinRule, max: ppMaxTake, t: tmSan(ppTimeSetting), ton: olTmNow('pp') }; }, apply: s => { ppRowsSetting = (s.rows || [3, 4, 3]).join(' '); ppWinRule = s.rule || 'last'; ppMaxTake = s.max || 0; ppTimeSetting = tmSan(s.t); olTmOn = !!s.ton; },
+               settings: () => { ppApplyRules(); return { rows: ppInit.slice(), rule: ppWinRule, max: ppMaxTake, t: tmSan(ppTimeSetting), ton: olTmNow('pp'), u: undoSetting.pp }; }, apply: s => { ppRowsSetting = (s.rows || [3, 4, 3]).join(' '); ppWinRule = s.rule || 'last'; ppMaxTake = s.max || 0; ppTimeSetting = tmSan(s.t); olTmOn = !!s.ton; oluApplyU('pp', s); },
                remote: m => { if (!ppOver && ppCur !== Online.myNum && m && ppInit[m.row] !== undefined && m.count >= 1) ppGlowThen(m, mv => { if (!ppOver && ppCur !== Online.myNum) ppExecuteMove(mv); }); } },
   };
   let olGame = null, olOrig = null, olBusy = false, olCur = null, olStarted = false, olQnPreset = null, olFirstNum = 0;
@@ -7275,7 +7351,7 @@
     olStarted = true;
     closeModal('online-modal', 'ol-modal-box');
     closeVictoryModal(true);
-    olFirstNum = 0; rpsPrepare(); // 판 시작 = 가위바위보부터 (그동안 입력·시계·선공 알림 막음)
+    olFirstNum = 0; oluReset(); rpsPrepare(); // 판 시작 = 가위바위보부터 (그동안 입력·시계·선공 알림 막음)
     OLG[olGame].apply(settings); OLG[olGame].start(); olNames(); tmRender(OLG[olGame].p);
     rpsBegin();
   }
@@ -7298,7 +7374,7 @@
   function olEnd(msg) {
     olStarted = false; Online.leave(); olRestoreOrig();
     const g = OLG[olGame], el = document.getElementById(g.p + '-turn-indicator'); if (el) el.innerText = msg;
-    tmStop(g.p); rpsLeftMsg(msg);
+    tmStop(g.p); rpsLeftMsg(msg); oluReset();
     setTimeout(() => { if (g.mode() === 'online') g.back(); }, 1800);
   }
   Online.on(ev => {
@@ -7306,7 +7382,7 @@
     if (ev.type === 'joined') { olStart(olCur || OLG[olGame].settings()); }
     else if (ev.type === 'reset') { olStart(ev.settings); }
     else if (ev.type === 'names') { if (olStarted) olNames(); if (olRpsBlocking() && olRps.stage === 'pick') rpsRender(); else if (olRpsBlocking()) rpsNamesOnly(); }
-    else if (ev.type === 'move') { if (olCtl(ev.move, ev.by)) return; OLG[olGame].remote(ev.move); } // 예약 메시지(__rps·__first·__timer)는 게임 수가 아님
+    else if (ev.type === 'move') { if (olCtl(ev.move, ev.by)) return; oluOppMoved(); OLG[olGame].remote(ev.move); } // 예약 메시지(__rps·__first·__timer)는 게임 수가 아님
     else if (ev.type === 'left') { if (olStarted) { const opp = (Online.names || {})[3 - Online.myNum]; olEnd(opp ? `${josa(opp, '이', '가')} 나갔어요 😢` : '상대가 나갔어요 😢'); } }
   });
   // 입력 막기 + 내 수 전송 (돌·노탁토; 팝잇은 ppConfirm에서 직접 처리)
@@ -7356,7 +7432,7 @@
   // 방장: 내 원래 설정으로 되돌리고 → 게임 중에 ⚙️로 바꿔 둔 설정(다음 판부터)을 얹어서 → 새 판 설정으로 보냄
   function olRestart(g) { if (Online.myNum === 1) { olRestoreOrig(); pendApply(OLG[g].p); olSaveOrig(); olCur = OLG[g].settings(); closeVictoryModal(); Online.reset(olCur); /* 시작은 reset 이벤트에서 한 번만 (방장·손님 같은 경로) */ } }
   // 🎲 랜덤 다시하기 (온라인): 방장만 — 다시하기와 같은 길(Online.reset)로 이번 판 설정만 바꿔서 보냄 (원래 설정은 olOrig로 지킴)
-  function olRandomRestart(s, p) { if (Online.myNum !== 1) return; olRestoreOrig(); if (p) pendApply(p); olSaveOrig(); olCur = typeof s === 'function' ? s() : s; closeVictoryModal(); Online.reset(olCur); }
+  function olRandomRestart(s, p) { if (Online.myNum !== 1) return; olRestoreOrig(); if (p) pendApply(p); olSaveOrig(); olCur = typeof s === 'function' ? s() : s; if (p && olCur && olCur.u === undefined) olCur.u = undoSetting[p]; closeVictoryModal(); Online.reset(olCur); }
   let ppSettingsJustSaved = false;
   ntRestartGame = function () { if (ntMode === 'online' && Online.active) return olRestart('notakto'); _ntRestart(); };
   stRestartGame = function () { if (stMode === 'online' && Online.active) return olRestart('stone'); _stRestart(); };
@@ -7364,7 +7440,7 @@
   qnRestartGame = function () { if (qnMode === 'online' && Online.active) return olRestart('queen'); _qnRestart(); };
   // 메뉴로
   const _ntBack = ntGoBack, _stBack = stGoBack, _ppBack = ppGoBack, _qnBack = qnGoBack;
-  function olLeaveIfAny() { rpsHide(); if (Online.active) { olStarted = false; Online.leave(); } olRestoreOrig(); }
+  function olLeaveIfAny() { rpsHide(); oluReset(); if (Online.active) { olStarted = false; Online.leave(); } olRestoreOrig(); }
   ntGoBack = function () { olLeaveIfAny(); _ntBack(); };
   stGoBack = function () { olLeaveIfAny(); _stBack(); };
   ppGoBack = function () { olLeaveIfAny(); _ppBack(); };
@@ -8030,7 +8106,7 @@
     box.hidden = !active; $id(k + '-analysis-screen')?.classList.toggle('p3-qz-on', active);
     if (!active) { if (QZ.k === k) qzStopTimer(); return; }
     const done = QZ.k === k && QZ.done;
-    box.innerHTML = (done ? `<span class="qz-res">${QZ.ok ? '⭕ 정답!' : QZ.why === 'time' ? '⏰ 시간 초과' : '❌ 아쉬워요'}</span>` : '')
+    box.innerHTML = (done ? `<span class="qz-res">${QZ.ok ? '⭕ 정답!' : QZ.why === 'time' ? '⏰ 시간 초과' : QZ.why === 'retry' ? '🔁 다시 풀어 정답' : QZ.why === 'show' ? '👀 정답 봄' : '❌ 아쉬워요'}</span>` : '')
       + `<span class="qz-st">🔥 연속 <b>${qzStreak[k]}</b> · 최고 <b>${qzBest[k] || 0}</b></span>`
       + `<label class="qz-tog" title="한 문제 30초 안에 풀기"><input type="checkbox" ${qzTimeOn ? 'checked' : ''}> ⏱ 30초</label>`
       + (qzTimeOn && !done && QZ.k === k ? `<span class="qz-time${QZ.left <= 5 ? ' hurry' : ''}">⏳ ${QZ.left}초</span>` : '')
@@ -8065,9 +8141,10 @@
       const wins = [...box.querySelectorAll('.analysis-move-btn')].filter(b => b._win).map(b => b._k + '개');
       stSetQuizMsg(`<b>⏰ 시간 초과!</b><br>이기는 수: ${wins.join(', ')} 가져가기 (초록색)`, 'lose');
     } else if (k === 'pp') {
-      ppAQuizAnswered = true;
-      $id('pp-a-moves-box').querySelectorAll('.analysis-move-btn').forEach(b => { if (b._win) b.classList.add('quiz-right'); });
-      const v = $id('pp-a-verdict'); v.className = 'a-verdict lose'; v.innerHTML = '<b>⏰ 시간 초과!</b><br>초록으로 표시된 수가 이기는 수예요. 이진법 표에서 홀수 자리를 짝수로 만드는 수를 찾아보세요.';
+      ppAQuizAnswered = true; ppAMarkWins();
+      const sb = $id('pp-a-moves-box').querySelector('.pp-pick__show'); if (sb) sb.disabled = true;
+      ppAQuizMsg = { cls: 'lose', html: '<b>⏰ 시간 초과!</b><br>초록 버튼이 이기는 수예요. 이진법 표에서 홀수 자리를 짝수로 만드는 수를 찾아보세요.' };
+      const v = $id('pp-a-verdict'); v.className = 'a-verdict lose'; v.innerHTML = ppAQuizMsg.html;
     } else {
       qnAQuizAnswered = true;
       const wins = qnMoves(...qnAQ).filter(([a, b]) => qnIsCold(a, b, qnAN, qnWinRule));
@@ -8494,10 +8571,10 @@
     const P = (h) => `<p>${h}</p>`;
     const LESSONS = {
       notakto: () => [
-        { t: '규칙 다시 보기', h: P('둘 다 <b>X만</b> 번갈아 놓고, 가로·세로·대각선 <b>한 줄을 완성한 사람이 패배</b>해요.') + P('그래서 "이기는 수"란 <b>상대가 어디에 둬도 결국 한 줄을 만들 수밖에 없게</b> 만드는 수예요.'), f: () => fig([[ntFig(3, [0, 1, 2], { lose: true }), '맨 윗줄을 완성 → 패배'], [ntFig(3, [4, 6, 2]), '아직 안전한 판']]) },
+        { t: '규칙 다시 보기', h: P('둘 다 <b>X만</b> 번갈아 놓고, 가로·세로·대각선 <b>한 줄을 완성한 사람이 패배</b>해요.') + P('그래서 "이기는 수"란 <b>상대가 어디에 둬도 결국 한 줄을 만들 수밖에 없게</b> 만드는 수예요.'), f: () => fig([[ntFig(3, [0, 1, 2], { lose: true }), '맨 윗줄을 완성 → 패배'], [ntFig(3, [0, 5, 7]), '아직 한 줄이 없는 판']]) },
         { t: '3×3 선공 전략: 가운데 먼저!', h: P('3×3에서는 <b>선공이 가운데(5번)</b>를 차지하면 이겨요.') + P('가운데 X는 가로·세로·대각선 <b>4개 줄</b>에 걸쳐 있어서, 상대가 어디에 둬도 그 줄은 "위험한 줄"이 되고 안전한 칸이 빠르게 줄어들어요.'), f: () => fig([[ntFig(3, [4], { hl: 4 }), '① 선공: 가운데'], [ntFig(3, [4, 0], { hl: 0 }), '② 후공이 구석에 두면…']]) },
-        { t: '대칭으로 따라 두기', h: P('가운데를 차지한 뒤에는 상대가 둔 칸의 <b>정반대 칸(점대칭)</b>에 두면 돼요. 구석 ↔ 반대 구석, 변 ↔ 반대 변.') + P('예: 상대가 1번에 두면 나는 9번, 상대가 2번이면 나는 8번. 이렇게 하면 <b>먼저 줄을 완성하는 쪽은 항상 상대</b>가 돼요.'), f: () => fig([[ntFig(3, [4, 0, 8], { hl: 8, hl2: 0 }), '1번 ↔ 9번'], [ntFig(3, [4, 0, 8, 1, 7], { hl: 7, hl2: 1 }), '2번 ↔ 8번 … 상대가 막혀요']]) },
-        { t: '죽은 줄 피하기', h: P('이미 X가 2개 있는 줄의 남은 칸은 <b>절대 두면 안 되는 칸</b>이에요(두는 순간 패배).') + P('판이 커질수록(4×4) 중요한 건 <b>"안전한 칸이 몇 개 남았나"</b>예요. 안전한 칸이 <b>홀수</b>로 남게 넘기면 마지막 안전한 칸을 내가 차지하고, 상대가 죽은 칸에 두게 돼요.'), f: () => fig([[ntFig(3, [0, 1, 4, 8], { hl2: 2 }), '3번 칸은 죽은 칸(윗줄 완성)'], [ntFig(4, [0, 5, 10, 3, 12]), '4×4: 안전한 칸 세기']]) },
+        { t: '상대 수에서 ㄱ자(나이트) 칸에 두기', h: P('가운데를 차지한 뒤, 상대가 둔 칸에서 <b>체스 나이트처럼 ㄱ자</b>(한 칸 가고 옆으로 두 칸)로 떨어진 칸에 두세요. 예: 상대가 1번이면 나는 6번 또는 8번, 상대가 2번이면 7번 또는 9번.') + P('⚠️ <b>정반대 칸(대칭)은 절대 안 돼요.</b> 상대 X · 가운데 X · 대칭 칸이 한 줄이라, 두는 순간 내가 줄을 완성해 <b>패배</b>해요.'), f: () => fig([[ntFig(3, [4, 0, 5], { hl: 5, hl2: 0 }), '상대 1번 → 나 6번 (ㄱ자)'], [ntFig(3, [4, 0, 8], { lose: true }), '1번 ↔ 9번 대칭 → 한 줄 완성, 패배']]) },
+        { t: '마지막: 안전한 칸 0개로 넘기기', h: P('이미 X가 2개 있는 줄의 남은 칸은 <b>죽은 칸</b>이에요(두는 순간 패배). 두어도 줄이 안 생기는 칸이 <b>안전한 칸</b>이에요.') + P('끝판에서는 안전한 칸 중 하나를 골라, <b>상대에게 안전한 칸이 하나도 안 남게</b> 넘기면 이겨요. 예: 가운데·1번·6번·7번이 찬 판에서 2번이나 8번에 두면 상대는 죽은 칸밖에 없어요. 4×4도 같은 생각으로 안전한 칸을 세어 보세요.'), f: () => fig([[ntFig(3, [4, 0, 5, 6], { hl: 1 }), '2번에 두면 → 남은 칸 모두 죽은 칸'], [ntFig(4, [0, 5, 10, 3, 12]), '4×4: 안전한 칸 세기']]) },
       ],
       stone: () => [
         { t: '규칙 다시 보기', h: P('번갈아 돌을 <b>1~k개</b> 가져가요. <b>폭탄 모드</b>: 마지막 폭탄 돌을 가져가면 패배. <b>보석 모드</b>: 마지막 보석 돌을 가져가면 승리.') + P('책의 "마지막 카드를 가져라"와 같은 게임이에요. 핵심은 <b>거꾸로 세기</b>!'), f: () => fig([[stFig(7, 'bomb'), '폭탄 모드 (빨강이 폭탄)'], [stFig(7, 'gem'), '보석 모드 (초록이 보석)']]) },
@@ -8627,7 +8704,7 @@
       popit: '<b>한 줄</b>에서 버블을 원하는 만큼 누르고 [선택 완료]. <b>마지막 버블을 누르는 사람이 승리</b>!',
     };
     const TUT_GOAL = {
-      notakto: '한 줄을 <b>만들지 않고 버티는</b> 게임이에요. 상대가 먼저 한 줄을 만들게 유도해 보세요. 3×3이면 <b>가운데 + 대칭</b>이 필승!',
+      notakto: '한 줄을 <b>만들지 않고 버티는</b> 게임이에요. 상대가 먼저 한 줄을 만들게 유도해 보세요. 3×3이면 <b>가운데 + 상대 수에서 ㄱ자(나이트) 칸</b>이 필승! (대칭 칸은 한 줄이 돼서 패배)',
       stone: '상대 차례에 남는 돌을 <b>(k+1)의 배수</b>(보석) 또는 <b>배수+1</b>(폭탄)로 맞추면 이겨요. 남은 돌 수를 늘 세어 보세요!',
       queen: '<b>빨간 후공 승리 칸</b>으로 상대를 보내면 이겨요. (1,2), (3,5), (4,7)… 📘 필승 전략 배우기에서 황금비의 비밀을!',
       popit: '줄마다 개수를 <b>이진법</b>으로 더해 모든 자리를 <b>짝수</b>로 맞추면 이겨요. 📊 분석 모드가 표를 그려 줘요!',
@@ -8872,6 +8949,8 @@
     if ('__rps' in m) { rpsGot(by, m.__rps, m.rd | 0, m.g); return true; }
     if ('__first' in m) { rpsGotFirst(m.__first === 2 ? 2 : 1); return true; }
     if ('__timer' in m) { if (by === 1 && olGame) { olTmOn = !!m.__timer; tmApplyNow(OLG[olGame].p); } return true; }
+    if ('__undoReq' in m) { if (by !== Online.myNum) oluGotReq(m.__undoReq | 0, by); return true; }
+    if ('__undoAns' in m) { if (by !== Online.myNum) oluGotAns(m.n | 0, !!m.__undoAns); return true; }
     return '__' in m;
   }
 
@@ -8997,6 +9076,113 @@
     const G = OLG[olGame];
     G.start(); olNames(); tmRender(G.p);
   }
+
+  /* ---------- ↩ 온라인 무르기: 요청 → 상대 허락/거절 (예약 메시지 {__undoReq:n} · {__undoAns:1|0, n}) ----------
+     · 방금 수를 둔 사람이, 상대가 두기 전에 자기 마지막 수 하나만 무를 수 있음 (팝잇·노탁토·돌·퀸 공통)
+     · n = 요청할 때의 수 개수 → 두 기기가 같은 판일 때만 무름 (어긋나면 무시) — 무른 수는 기록(hist)에서 빠짐
+     · 횟수는 방 설정(u)을 따르고 사람마다 따로, 허락됐을 때만 줄어듦 · 요청 중 상대가 두면 요청 취소 */
+  const OLU = {
+    popit:   { p: 'pp', hist: () => ppHist, base: () => 0, over: () => ppOver, busy: () => !!ppBotTimeout, left: () => ppUndoLeft, undo: 'ppUndo', sync: 'ppSyncUndoBtn', btn: 'pp-undo' },
+    notakto: { p: 'nt', hist: () => ntGameHistory, base: () => ntUndoBase, over: () => ntGameOver, busy: () => !!ntBotTimeout, left: () => ntUndoLeft, undo: 'ntUndo', sync: 'ntSyncUndoBtn', btn: 'nt-undo-btn' },
+    stone:   { p: 'st', hist: () => stGameHistory, base: () => stUndoBase, over: () => stGameOver, busy: () => stIsAnimating || !!stBotTimeout, left: () => stUndoLeft, undo: 'stUndo', sync: 'stSyncUndoBtn', btn: 'st-undo-btn' },
+    queen:   { p: 'qn', hist: () => qnLog, base: () => 0, over: () => qnOver || qnPhase !== 'play', busy: () => !!qnBotTimeout, left: () => qnUndoLeft, undo: 'qnUndo', sync: 'qnSyncUndoBtn', btn: 'qn-undo-btn' },
+  };
+  const olu = { pend: 0, ask: 0, gen: 0, applying: false, t: null };
+  const oluOrig = {};
+  function oluApplyU(p, s) { if (UNDO_VALS.includes(s && s.u)) undoSetting[p] = s.u; } // 방 설정의 무르기 횟수 (없으면 지금 값 유지)
+  function oluOn(g) { return !!(g && OLU[g] && olGame === g && OLG[g].mode() === 'online' && window.Online && Online.active); }
+  function oluCan(g) {
+    if (!oluOn(g) || !olStarted || olRpsBlocking() || olu.pend || olu.ask) return false;
+    const A = OLU[g], h = A.hist(), me = Online.myNum;
+    return undoSetting[A.p] !== '0' && !A.over() && !A.busy() && h.length > A.base() && h[h.length - 1].player === me && OLG[g].cur() !== me && A.left()[me] > 0;
+  }
+  const oluBox = (() => { const d = document.createElement('div'); d.id = 'olu-box'; d.setAttribute('role', 'status'); d.setAttribute('aria-live', 'polite'); document.body.appendChild(d); return d; })();
+  function oluHide() { clearTimeout(olu.t); oluBox.classList.remove('on'); oluBox.innerHTML = ''; }
+  function oluShow(text, ms) {
+    clearTimeout(olu.t); oluBox.innerHTML = ''; const t = document.createElement('span'); t.textContent = text; oluBox.appendChild(t); oluBox.classList.add('on');
+    if (ms) olu.t = setTimeout(oluHide, ms);
+  }
+  function oluAskShow() {
+    clearTimeout(olu.t); oluBox.innerHTML = '';
+    const t = document.createElement('span'); t.textContent = '↩ 상대가 무르기를 요청했어요';
+    const ok = document.createElement('button'); ok.type = 'button'; ok.className = 'ok'; ok.textContent = '허락'; ok.onclick = () => { playSfx('click'); oluAnswer(true); };
+    const no = document.createElement('button'); no.type = 'button'; no.className = 'no'; no.textContent = '거절'; no.onclick = () => { playSfx('click'); oluAnswer(false); };
+    oluBox.append(t, ok, no); oluBox.classList.add('on'); playSfx('click');
+  }
+  function oluSync() { const g = olGame; if (g && OLU[g]) { try { window[OLU[g].sync](); } catch (e) {} } }
+  function oluReset() { olu.pend = 0; olu.ask = 0; olu.gen++; oluHide(); }
+  // 원래 무르기 함수로 한 수 되돌리기 (undoPlan의 online 계획 = 마지막 한 수, 그 수 둔 사람 차례로) — 애니메이션 중이면 잠깐 기다림
+  function oluApply(g, tries) {
+    const A = OLU[g], gen = olu.gen;
+    if (A.busy() && (tries || 0) < 40) { setTimeout(() => { if (gen === olu.gen) oluApply(g, (tries || 0) + 1); }, 120); return; }
+    olu.applying = true; try { oluOrig[g](); } finally { olu.applying = false; }
+    oluSync();
+  }
+  function oluRequest(g) {
+    if (!oluCan(g)) return;
+    const n = OLU[g].hist().length; olu.pend = n;
+    Online.sendMove({ __undoReq: n });
+    oluShow('↩ 무르기를 요청했어요… 상대의 답을 기다려요');
+    oluSync();
+  }
+  function oluGotReq(n, by) {
+    const g = olGame; if (!oluOn(g) || n < 1) return;
+    const gen = olu.gen; let tries = 0;
+    const go = () => {
+      if (gen !== olu.gen || !oluOn(g)) return;
+      const A = OLU[g], h = A.hist();
+      if ((h.length < n || A.busy()) && !A.over()) { if (++tries < 40) setTimeout(go, 150); return; } // 상대 수가 아직 내 화면에 그려지는 중
+      if (A.over() || h.length !== n || h[n - 1].player !== by) return; // 그새 내가 두었음 → 내 수가 가면 상대 쪽 요청이 취소됨
+      olu.ask = n; oluAskShow(); oluSync();
+    };
+    go();
+  }
+  function oluAnswer(yes) {
+    const g = olGame, n = olu.ask; if (!n || !oluOn(g)) { oluHide(); return; }
+    olu.ask = 0; oluHide();
+    const A = OLU[g], h = A.hist(), opp = 3 - Online.myNum;
+    const ok = !!yes && h.length === n && h[n - 1].player === opp && !A.over() && A.left()[opp] > 0;
+    Online.sendMove({ __undoAns: ok ? 1 : 0, n });
+    if (ok) { oluApply(g); oluShow('↩ 무르기를 허락했어요', 1800); }
+    oluSync();
+  }
+  function oluGotAns(n, yes) {
+    const g = olGame; if (!olu.pend || olu.pend !== n || !oluOn(g)) return;
+    olu.pend = 0;
+    const h = OLU[g].hist();
+    if (yes && h.length === n && h[n - 1].player === Online.myNum) { oluApply(g); oluShow('✅ 상대가 허락해서 무르기 했어요', 2000); }
+    else oluShow('🙅 상대가 거절했어요', 2200);
+    oluSync();
+  }
+  // 상대가 수를 둠 → 내 요청은 취소
+  function oluOppMoved() {
+    if (olu.pend) { olu.pend = 0; oluShow('상대가 먼저 두어서 무르기 요청이 취소됐어요', 2400); oluSync(); }
+    if (olu.ask) { olu.ask = 0; oluHide(); }
+  }
+  // 내가 수를 둠(시간 초과 자동 수 포함) → 받은 요청 창은 닫기 (요청한 쪽은 내 수를 받고 취소됨)
+  (function () {
+    const send = Online.sendMove;
+    Online.sendMove = function (m) {
+      const ctl = m && typeof m === 'object' && !Array.isArray(m) && Object.keys(m).some(k => k.startsWith('__'));
+      if (!ctl && olu.ask) { olu.ask = 0; oluHide(); }
+      return send.call(this, m);
+    };
+  })();
+  // 무르기 버튼: 온라인이면 요청 · 라벨은 내 남은 횟수
+  Object.keys(OLU).forEach(g => {
+    const A = OLU[g];
+    oluOrig[g] = window[A.undo];
+    window[A.undo] = function (...a) { if (oluOn(g) && !olu.applying) return oluRequest(g); return oluOrig[g].apply(this, a); };
+    const sy = window[A.sync];
+    window[A.sync] = function (...a) {
+      const r = sy.apply(this, a);
+      if (oluOn(g)) {
+        const b = document.getElementById(A.btn);
+        if (b) { b.innerText = olu.pend ? '무르기 요청 중…' : undoLabel(A.left()[Online.myNum]); b.disabled = !oluCan(g); b.title = '방금 둔 내 수를 상대에게 허락받고 무르기'; }
+      }
+      return r;
+    };
+  });
 </script>
 </body>
 </html>
