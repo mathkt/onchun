@@ -44,10 +44,10 @@
     box-shadow:0 7px 0 rgba(0,0,0,.18);transition:transform .08s;-webkit-tap-highlight-color:transparent;user-select:none;touch-action:manipulation}
   .btn:active{transform:translateY(5px);box-shadow:0 2px 0 rgba(0,0,0,.18)}
   .btn small{font-size:.55em;opacity:.9;font-family:var(--f-body);font-weight:700}
-  .btn--sw-win{background:linear-gradient(180deg,#FFB547,#F28C0F)}
-  .btn--sw-lose{background:linear-gradient(180deg,#B9825A,#8C5A3A)}
-  .btn--st-win{background:linear-gradient(180deg,#6EC3F0,#2F8DBF)}
-  .btn--st-lose{background:linear-gradient(180deg,#7E93A8,#4F6578)}
+  .btn--sw-win{background:#1E7BE0}
+  .btn--st-win{background:#9CC9F5;color:#123A66;box-shadow:0 7px 0 rgba(30,80,140,.18)}
+  .btn--sw-lose{background:#E32F2F}
+  .btn--st-lose{background:#F5A6A6;color:#6B1414;box-shadow:0 7px 0 rgba(140,30,30,.18)}
   .ctl__row{display:flex;gap:8px}
   .mini{flex:1;border:2px solid var(--bk-line);background:#fff;border-radius:14px;padding:10px;font-family:var(--f-head);font-size:1.1rem;color:var(--bk-ink);cursor:pointer;min-height:52px}
   .mini:active{background:#f6f1e0}
@@ -58,8 +58,8 @@
   .recent__t{font-family:var(--f-head);color:var(--bk-ink-soft);white-space:nowrap}
   .dots{display:flex;gap:6px;flex-wrap:wrap;flex:1}
   .dot{width:26px;height:26px;border-radius:50%;display:grid;place-items:center;font-size:.72rem;font-weight:900;color:#fff;animation:pop .35s cubic-bezier(.2,1.6,.4,1)}
-  .dot--sw.dot--win{background:#F28C0F}.dot--sw.dot--lose{background:#8C5A3A}
-  .dot--st.dot--win{background:#2F8DBF}.dot--st.dot--lose{background:#4F6578}
+  .dot--sw.dot--win{background:#1E7BE0}.dot--sw.dot--lose{background:#E32F2F}
+  .dot--st.dot--win{background:#9CC9F5;color:#123A66}.dot--st.dot--lose{background:#F5A6A6;color:#6B1414}
   .dots__empty{color:var(--bk-ink-soft);font-size:.9rem}
   .legend{font-size:.8rem;color:var(--bk-ink-soft);white-space:nowrap}
   .legend i{display:inline-block;width:12px;height:12px;border-radius:50%;vertical-align:-1px;margin:0 2px 0 8px}
@@ -117,10 +117,10 @@
     <div class="ctl__grid">
       <div class="ctl__lab ctl__lab--sw">🔄 바꿈</div>
       <div class="ctl__lab ctl__lab--st">✋ 안 바꿈</div>
-      <button class="btn btn--sw-win" data-sw="1" data-win="1">🎁 성공</button>
-      <button class="btn btn--st-win" data-sw="0" data-win="1">🎁 성공</button>
-      <button class="btn btn--sw-lose" data-sw="1" data-win="0">🐐 실패</button>
-      <button class="btn btn--st-lose" data-sw="0" data-win="0">🐐 실패</button>
+      <button class="btn btn--sw-win" data-sw="1" data-win="1">성공</button>
+      <button class="btn btn--st-win" data-sw="0" data-win="1">성공</button>
+      <button class="btn btn--sw-lose" data-sw="1" data-win="0">실패</button>
+      <button class="btn btn--st-lose" data-sw="0" data-win="0">실패</button>
     </div>
     <div class="ctl__row">
       <button class="mini" id="undo">↩ 되돌리기</button>
@@ -131,7 +131,7 @@
   <section class="recent">
     <span class="recent__t">최근 결과</span>
     <div class="dots" id="dots"><span class="dots__empty">아직 기록이 없어요. 위 버튼을 눌러 결과를 쌓아 보세요.</span></div>
-    <span class="legend"><i style="background:#F28C0F"></i>바꿈·성공 <i style="background:#8C5A3A"></i>바꿈·실패 <i style="background:#2F8DBF"></i>안 바꿈·성공 <i style="background:#4F6578"></i>안 바꿈·실패</span>
+    <span class="legend"><i style="background:#1E7BE0"></i>바꿈·성공 <i style="background:#E32F2F"></i>바꿈·실패 <i style="background:#9CC9F5"></i>안 바꿈·성공 <i style="background:#F5A6A6"></i>안 바꿈·실패</span>
   </section>
 </main>
 <div class="toast" id="toast"></div>
@@ -167,7 +167,7 @@
   }
   document.querySelectorAll('.btn').forEach(b=>b.addEventListener('click',()=>{
     log.push({s:+b.dataset.sw, w:+b.dataset.win, t:Date.now()}); save(); render();
-    toast((b.dataset.sw==='1'?'바꿈':'안 바꿈')+' · '+(b.dataset.win==='1'?'성공 🎁':'실패 🐐')+' 기록');
+    toast((b.dataset.sw==='1'?'바꿈':'안 바꿈')+' · '+(b.dataset.win==='1'?'성공':'실패')+' 기록');
   }));
   $('undo').onclick=()=>{ if(!log.length) return toast('되돌릴 기록이 없어요'); log.pop(); save(); render(); toast('마지막 기록을 지웠어요'); };
   $('reset').onclick=()=>{ if(!log.length) return; const p=prompt('초기화 비밀번호'); if(p!==PIN) return toast('비밀번호가 달라요'); if(confirm(`기록 ${log.length}판을 모두 지울까요?`)){ log=[]; save(); render(); toast('초기화했어요'); } };
