@@ -19,8 +19,9 @@
   .home h1 em{font-style:normal;color:var(--bk-orange-deep);background:linear-gradient(transparent 60%,#fff 60%);padding:0 4px}
   .home p{font-family:var(--f-serif);font-size:clamp(.95rem,2.5vw,1.1rem);color:var(--bk-ink-soft);margin:0;text-align:center;max-width:40ch}
 
-  .tiles{display:grid;grid-template-columns:1fr 1fr;gap:clamp(12px,3vw,26px);width:100%;max-width:820px}
-  .tile{display:flex;flex-direction:column;align-items:center;justify-content:center;gap:10px;text-decoration:none;color:var(--bk-ink);
+  .tiles{display:grid;grid-template-columns:1fr 1fr 1fr;gap:clamp(12px,3vw,26px);width:100%;max-width:1000px}
+  .tile>div{text-align:center}
+  .tile{display:flex;flex-direction:column;align-items:center;justify-content:center;gap:10px;text-align:center;text-decoration:none;color:var(--bk-ink);
     background:#fff;border-radius:28px;box-shadow:0 8px 0 #e3d9b5,var(--bk-shadow);padding:clamp(18px,4vh,36px) 18px;
     min-height:clamp(180px,32vh,300px);border:3px solid transparent;transition:transform .12s;-webkit-tap-highlight-color:transparent}
   .tile:active{transform:translateY(5px);box-shadow:0 3px 0 #e3d9b5}
@@ -31,6 +32,8 @@
   .tile--game .tile__t{color:var(--bk-orange-deep)}
   .tile--book{border-color:var(--bk-sky)}
   .tile--book .tile__t{color:#2f8dbf}
+  .tile--ch{border-color:var(--bk-red)}
+  .tile--ch .tile__t{color:#c93f2e}
 
   .home footer{font-size:.78rem;color:var(--bk-ink-soft);text-align:center}
   /* 폰 세로: 위아래로 */
@@ -38,7 +41,7 @@
     .tiles{grid-template-columns:1fr}
     .tile{flex-direction:row;justify-content:flex-start;text-align:left;min-height:0;padding:18px 20px;gap:16px}
     .tile__icon{font-size:2.8rem}
-    .tile__d{text-align:left}
+    .tile__d{text-align:left}.tile>div{text-align:left}
     .home > p,.tile__d:not(.tile__d--games){display:none}
     .tile{padding:16px 14px;gap:12px}.tile>div{min-width:0}
     .home .tile__d--games{font-size:clamp(.62rem,3.6vw,.85rem);white-space:nowrap;letter-spacing:-.3px}
@@ -60,8 +63,16 @@
       <span class="tile__icon">🎮</span>
       <div>
         <div class="tile__t">메인 게임하기</div>
-        <p class="tile__d tile__d--games">노탁토 · 돌 가져가기 · 황금비 퀸 · 팝잇</p>
+        <p class="tile__d tile__d--games" style="white-space:nowrap">노탁토 · 돌 가져가기 · 황금비 퀸 · 팝잇</p>
         <p class="tile__d">친구와 · 봇과 · 온라인으로</p>
+      </div>
+    </a>
+    <a class="tile tile--ch" href="challenge/index.html">
+      <span class="tile__icon">🏆</span>
+      <div>
+        <div class="tile__t">도전 모드</div>
+        <p class="tile__d tile__d--games">7개 미션 · 도장 5개면 상품!</p>
+        <p class="tile__d">AI를 이기고 도장을 모아요</p>
       </div>
     </a>
     <a class="tile tile--book" href="book/index.html">

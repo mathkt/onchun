@@ -87,7 +87,7 @@
   function condText() {
     if (k === 'nt') return '3×3 · 한 줄을 만들면 패배';
     if (k === 'st') return `돌 ${S.n}개 · ${S.mode === 'bomb' ? '💣 마지막 폭탄 돌을 가져가면 패배' : '💎 마지막 보석 돌을 가져가면 승리'} · 한 번에 1~${limit}개`;
-    if (k === 'qn') { const q = CH.load().qn; return `${q.N}×${q.N} 판 · 퀸을 구석 (0,0)에 넣으면 승리`; }
+    if (k === 'qn') { const q = CH.queenOf(CH.load(), id); return `${q.N}×${q.N} 판 · ${S.target}수 만에 이길 수 있는 자리 · 퀸을 구석 (0,0)에 넣으면 승리`; }
     return `줄 ${S.rows.join('·')} · 마지막 버블을 누르면 승리`;
   }
   function renderBar() {
@@ -106,7 +106,7 @@
     renderBar();
     if (k === 'nt') ntStartGame('bot');
     else if (k === 'st') stStartGame('bot');
-    else if (k === 'qn') { const q = CH.load().qn, s = id === '3-1' ? q.s31 : q.s32; qnStartGame('bot', { size: q.N, start: s.slice() }); }
+    else if (k === 'qn') { const q = CH.queenOf(CH.load(), id); qnStartGame('bot', { size: q.N, start: q.s.slice() }); }
     else ppStartGame('bot');
   }
 
@@ -127,13 +127,24 @@
   function onEnd(win) {
     clearTimeout(resT);
     const fresh = win ? CH.stamp(id) : false; // 기록은 바로 (창이 뜨기 전에 나가도 도장은 남음)
-    resT = setTimeout(() => showRes(win, fresh), win ? 650 : 900);
+    const losses = CH.result(id, win);        // 연속으로 진 횟수 (이기면 0)
+    resT = setTimeout(() => showRes(win, fresh, losses), win ? 650 : 900);
   }
-  function showRes(win, fresh) {
+  // 📘 필승 전략 배우기: 보통 화면을 전략 카드가 열린 채로 (back=ch:단계 → 카드에 "도전으로 돌아가기" 버튼)
+  function goLearn() {
+    clearTimeout(autoT);
+    location.href = `${location.pathname}?game=${encodeURIComponent(G.g)}&lesson=1&back=${encodeURIComponent('ch:' + id)}`;
+  }
+  function showRes(win, fresh, losses) {
     const t = CH.load().stamps[id];
     const btnAgain = `<button type="button" class="ch-btn" data-act="again">↻ 다시하기</button>`;
     const btnBoard = l => `<button type="button" class="ch-btn ch-btn--main" data-act="board">📋 ${l}</button>`;
-    if (win && fresh) {
+    if (!win && losses > 0 && losses % CH.LEARN_EVERY === 0) {
+      // 4번째(8, 12…)로 진 판: 전략 배우러 가기 권유
+      res.innerHTML = `<div class="ch-res-box"><div class="ch-res-ico">😅</div>
+        <h2 class="ch-res-t">${losses}번이나 아쉬웠어요</h2><p class="ch-res-p">필승 전략을 배우러 가볼까요?</p>
+        <div class="ch-res-btns"><button type="button" class="ch-btn ch-btn--main" data-act="learn">📘 필승 전략 배우기</button><button type="button" class="ch-btn" data-act="again">🔁 다시 도전</button></div></div>`;
+    } else if (win && fresh) {
       res.innerHTML = `<div class="ch-res-box"><div class="ch-res-stamp"><span class="ink"></span>${CH.stampSVG({ small: '도전 ' + id })}</div>
         <h2 class="ch-res-t">🎉 도전 ${esc(id)} 성공!</h2><p class="ch-res-p">도장 쾅! ${CH.fmtClock(t)}</p>
         <div class="ch-res-btns">${btnBoard('도장판으로')}</div><div class="ch-auto"><i></i></div></div>`;
@@ -146,7 +157,7 @@
         <h2 class="ch-res-t">아쉬워요!</h2><p class="ch-res-p">다시 도전해 봐요</p>
         <div class="ch-res-btns">${btnAgain}${btnBoard('도장판 보기')}</div></div>`;
     }
-    res.querySelectorAll('[data-act]').forEach(b => b.onclick = () => { try { playSfx('click'); } catch (e) {} if (b.dataset.act === 'again') start(); else goBoard(); });
+    res.querySelectorAll('[data-act]').forEach(b => b.onclick = () => { try { playSfx('click'); } catch (e) {} const a = b.dataset.act; if (a === 'again') start(); else if (a === 'learn') goLearn(); else goBoard(); });
     res.classList.add('on');
     if (win && fresh) {
       const st = res.querySelector('.ch-res-stamp'), box = res.querySelector('.ch-res-box'), au = res.querySelector('.ch-auto');

@@ -271,7 +271,7 @@
       return `<svg viewBox="0 0 100 80">${out}</svg>`;
     }
     if (s.k === 'qn') {
-      const q = rec.qn, N = q.N, st = s.id === '3-1' ? q.s31 : q.s32, c = 72 / N, x0 = 14, y0 = 4;
+      const q = CH.queenOf(rec, s.id), N = q.N, st = q.s, c = 72 / N, x0 = 14, y0 = 4;
       let out = '';
       for (let x = 0; x < N; x++) for (let y = 0; y < N; y++) if ((x + y) % 2 === 0) out += `<rect x="${x0 + x * c}" y="${y0 + (N - 1 - y) * c}" width="${c}" height="${c}" fill="#F3C1C4"/>`;
       out += `<rect x="${x0}" y="${y0 + (N - 1) * c}" width="${c}" height="${c}" fill="#FFD60A"/>`;
@@ -301,7 +301,7 @@
     const g = $('grid'); g.innerHTML = '';
     CH.STAGES.forEach(s => {
       const G = CH.GAME[s.k], t = r.stamps[s.id];
-      const cond = s.k === 'st' ? `${s.cond} · 최대 3~5개(랜덤)` : s.k === 'qn' ? `${r.qn.N}×${r.qn.N} 판 · ${s.cond}` : s.cond;
+      const cond = s.k === 'st' ? `${s.cond} · 최대 3~5개(랜덤)` : s.k === 'qn' ? `${CH.queenOf(r, s.id).N}×${CH.queenOf(r, s.id).N} · ${s.cond}` : s.cond;
       const a = document.createElement('a');
       a.className = `chc chc--${s.k}` + (t ? ' done' : '');
       a.href = GAME_URL + encodeURIComponent(s.id);
