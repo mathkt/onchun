@@ -1,0 +1,424 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+<title>도전 모드 · 부산의 활동수학 축전</title>
+<link rel="stylesheet" href="../common.css">
+<style>
+  :root{
+    --nt:#F5A623; --nt-d:#C76A00; --nt-s:#FFF1DC;
+    --st:#5BB8E8; --st-d:#2A7FB0; --st-s:#E3F3FB;
+    --qn:#E9533F; --qn-d:#B53A2A; --qn-s:#FDE8EC;
+    --pp:#9B6BD6; --pp-d:#6E44AE; --pp-s:#F1E8FB;
+    --ink-red:#D7263D;
+  }
+  *{box-sizing:border-box}
+  html,body{overflow-x:hidden}
+  body.bk{word-break:keep-all;overflow-wrap:anywhere;
+    background-color:var(--bk-cream-2);
+    background-image:linear-gradient(rgba(91,184,232,.14) 1px,transparent 1px),linear-gradient(90deg,rgba(91,184,232,.14) 1px,transparent 1px);
+    background-size:22px 22px;background-position:-1px -1px}
+  .chb{max-width:1240px;margin:0 auto;padding:12px 16px 28px;display:flex;flex-direction:column;gap:12px}
+
+  /* ---------- 머리: 도전자 · 도장 수 · 진행 막대 ---------- */
+  .chb-head{display:flex;align-items:center;gap:14px 22px;background:#fff;border:2.5px solid var(--bk-line);border-radius:22px;padding:10px 18px;
+    box-shadow:0 5px 0 #e9dfbf,var(--bk-shadow);position:relative}
+  .chb-head::before{content:"";position:absolute;left:18px;right:18px;top:-6px;height:6px;border-radius:3px;
+    background:repeating-linear-gradient(90deg,var(--nt) 0 18px,var(--st) 18px 36px,var(--qn) 36px 54px,var(--pp) 54px 72px)}
+  .chb-who{display:flex;align-items:center;gap:10px;min-width:0;flex:0 1 auto}
+  .chb-avatar{width:46px;height:46px;border-radius:50%;background:var(--bk-yellow);display:grid;place-items:center;font-size:1.6rem;flex:none;box-shadow:inset 0 -3px 0 rgba(0,0,0,.08)}
+  .chb-who small{display:block;font-size:.72rem;color:var(--bk-ink-soft);font-weight:700;line-height:1.1}
+  .chb-name{font-family:var(--f-head);font-size:1.45rem;line-height:1.15;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;max-width:14ch;display:block}
+  .chb-edit{flex:none;border:0;background:var(--bk-cream);border-radius:999px;width:36px;height:36px;font-size:1rem;cursor:pointer}
+  .chb-prog{flex:1;min-width:0;display:flex;flex-direction:column;gap:6px}
+  .chb-count{display:flex;align-items:baseline;gap:8px;font-family:var(--f-head);font-size:1.1rem;color:var(--bk-ink-soft);flex-wrap:wrap}
+  .chb-count b{font-size:2rem;color:var(--ink-red);line-height:1}
+  .chb-count .of{font-size:1.25rem;color:var(--bk-ink)}
+  .chb-count .hint{font-family:var(--f-body);font-size:.8rem;font-weight:700;margin-left:auto;color:var(--bk-ink-soft)}
+  .chb-bar{position:relative;height:16px;border-radius:999px;background:#F3EBD3;box-shadow:inset 0 2px 3px rgba(0,0,0,.08);margin-right:14px}
+  .chb-bar i{position:absolute;left:0;top:0;bottom:0;border-radius:999px;background:linear-gradient(90deg,#FF8A65,var(--ink-red));transition:width .6s cubic-bezier(.3,1.3,.5,1);min-width:16px}
+  .chb-bar .tick{position:absolute;top:50%;width:6px;height:6px;margin:-3px 0 0 -3px;border-radius:50%;background:rgba(255,255,255,.85)}
+  .chb-bar .gift{position:absolute;top:50%;transform:translate(-50%,-50%);font-size:1.5rem;line-height:1;filter:drop-shadow(0 2px 0 rgba(0,0,0,.12))}
+  .chb-bar .gift.on{animation:giftBob 1.2s ease-in-out infinite}
+  @keyframes giftBob{0%,100%{transform:translate(-50%,-50%) rotate(-8deg)}50%{transform:translate(-50%,-62%) rotate(8deg)}}
+
+  /* ---------- 상품 띠 ---------- */
+  .chb-banner{display:flex;align-items:center;gap:10px 14px;flex-wrap:wrap;justify-content:center;background:linear-gradient(90deg,#FFE27A,#FFD15C);
+    border:2.5px solid #E8B21B;border-radius:18px;padding:8px 14px;font-family:var(--f-head);font-size:1.15rem;color:#6B4A00;box-shadow:0 4px 0 #D9A514}
+  .chb-banner[hidden]{display:none}
+  .chb-banner .bk-btn{background:#fff;border-color:#E8B21B;box-shadow:0 3px 0 #C99510;color:#6B4A00}
+
+  /* ---------- 도장 칸 (카드) ---------- */
+  .chb-grid{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:14px}
+  .chc{--c:var(--nt);--d:var(--nt-d);--s:var(--nt-s);
+    position:relative;display:flex;flex-direction:column;gap:6px;text-decoration:none;color:var(--bk-ink);background:#fff;border-radius:20px;
+    border:2.5px solid var(--c);box-shadow:0 5px 0 var(--d);padding:10px 12px 10px;min-width:0;-webkit-tap-highlight-color:transparent;
+    transition:transform .12s,box-shadow .12s}
+  .chc:active{transform:translateY(4px);box-shadow:0 1px 0 var(--d)}
+  @media(hover:hover){.chc:hover{transform:translateY(-2px);box-shadow:0 7px 0 var(--d)}}
+  .chc--st{--c:var(--st);--d:var(--st-d);--s:var(--st-s)}
+  .chc--qn{--c:var(--qn);--d:var(--qn-d);--s:var(--qn-s)}
+  .chc--pp{--c:var(--pp);--d:var(--pp-d);--s:var(--pp-s)}
+  .chc-top{display:flex;align-items:center;gap:8px;min-width:0}
+  .chc-id{flex:none;font-family:var(--f-head);font-size:1.05rem;color:#fff;background:var(--c);border-radius:10px;padding:2px 9px;box-shadow:inset 0 -3px 0 rgba(0,0,0,.14)}
+  .chc-game{font-family:var(--f-head);font-size:1.15rem;color:var(--d);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+  .chc-mission{font-weight:900;font-size:.95rem;line-height:1.3}
+  .chc-cond{font-size:.76rem;font-weight:700;color:var(--d);background:var(--s);border-radius:8px;padding:2px 8px;align-self:flex-start;max-width:100%}
+  .chc-body{display:flex;align-items:center;justify-content:space-between;gap:8px;flex:1;min-height:0}
+  .chc-prev{flex:1 1 0;min-width:0;max-width:150px;aspect-ratio:5/4;background:var(--s);border-radius:12px;display:grid;place-items:center;padding:6px}
+  .chc-prev svg{width:100%;height:100%;display:block}
+  .chc-slot{position:relative;flex:none;width:clamp(74px,8.6vw,108px);aspect-ratio:1;border-radius:50%;border:2.5px dashed #D9CDA8;display:grid;place-items:center;
+    color:#CBBE95;font-family:var(--f-head);font-size:.9rem;text-align:center;line-height:1.15;background:rgba(253,246,220,.6)}
+  .chc-slot .ch-stamp-svg{position:absolute;inset:-14%;width:128%;height:128%;transform:rotate(-14deg);opacity:.92;mix-blend-mode:multiply}
+  .chc-foot{display:flex;align-items:center;justify-content:space-between;gap:6px;min-height:34px}
+  .chc-go{font-family:var(--f-head);font-size:1.02rem;color:#fff;background:var(--c);border-radius:999px;padding:5px 14px;box-shadow:0 3px 0 var(--d);white-space:nowrap}
+  .chc-time{font-size:.8rem;font-weight:900;color:var(--ink-red);white-space:nowrap}
+  .chc-again{font-family:var(--f-head);font-size:.85rem;color:var(--d);white-space:nowrap}
+  .chc.done{background:linear-gradient(180deg,#fff 60%,#FFF7F4)}
+  .chc.done .chc-slot{border-color:transparent;background:transparent}
+
+  /* 새로 받은 도장: 쾅 */
+  .chc.fresh .ch-stamp-svg{animation:stampIn .5s cubic-bezier(.2,.8,.3,1.15) both}
+  .chc.fresh{animation:cardThud .35s .3s ease-out}
+  @keyframes stampIn{0%{transform:scale(3) rotate(-35deg);opacity:0}55%{transform:scale(.9) rotate(-14deg);opacity:1}75%{transform:scale(1.05) rotate(-14deg)}100%{transform:scale(1) rotate(-14deg);opacity:.92}}
+  @keyframes cardThud{0%{transform:translate(0,0)}25%{transform:translate(-3px,3px)}50%{transform:translate(3px,-2px)}75%{transform:translate(-2px,1px)}100%{transform:none}}
+
+  /* 8번째 칸: 상품 */
+  .chc--gift{--c:#E8B21B;--d:#C99510;--s:#FFF4C9;cursor:default;align-items:center;justify-content:center;text-align:center;
+    background:repeating-linear-gradient(135deg,#FFFBEA 0 12px,#FFF4C9 12px 24px)}
+  .chc--gift:active{transform:none;box-shadow:0 5px 0 var(--d)}
+  .chc--gift .g-ico{font-size:2.6rem;line-height:1}
+  .chc--gift .g-t{font-family:var(--f-head);font-size:1.2rem;color:#6B4A00}
+  .chc--gift .g-d{font-size:.8rem;font-weight:700;color:#8A6A10}
+  .g-dots{display:flex;gap:6px;justify-content:center}
+  .g-dots i{width:16px;height:16px;border-radius:50%;border:2px dashed #D9B84A;background:#fff}
+  .g-dots i.on{border:0;background:radial-gradient(circle at 35% 35%,#ff6b6b,var(--ink-red));box-shadow:0 0 0 2px #fff,0 0 0 3px var(--ink-red)}
+  .chc--gift.ready{cursor:pointer;animation:glow 1.6s ease-in-out infinite}
+  @keyframes glow{0%,100%{box-shadow:0 5px 0 var(--d),0 0 0 0 rgba(232,178,27,.0)}50%{box-shadow:0 5px 0 var(--d),0 0 0 8px rgba(232,178,27,.28)}}
+
+  /* ---------- 창 ---------- */
+  .chm{position:fixed;inset:0;z-index:200;display:none;align-items:center;justify-content:center;padding:16px;background:rgba(60,45,10,.5);backdrop-filter:blur(3px)}
+  .chm.on{display:flex;animation:fadeIn .2s ease-out}
+  @keyframes fadeIn{from{opacity:0}to{opacity:1}}
+  .chm-box{background:#FFFDF6;border-radius:24px;border:3px solid var(--bk-orange);box-shadow:0 14px 40px rgba(0,0,0,.25);width:100%;max-width:430px;
+    padding:20px 18px 18px;text-align:center;max-height:calc(100dvh - 32px);overflow:auto;animation:popIn .3s cubic-bezier(.3,1.4,.5,1)}
+  @keyframes popIn{from{transform:scale(.85);opacity:0}to{transform:none;opacity:1}}
+  .chm-box h2{font-family:var(--f-head);font-weight:400;font-size:1.6rem;margin:0 0 6px}
+  .chm-box p{margin:0 0 12px;color:var(--bk-ink-soft)}
+  .chm-btns{display:flex;gap:10px;justify-content:center;flex-wrap:wrap;margin-top:14px}
+  .chm-btns .bk-btn{flex:1 1 140px}
+  .chm-input{width:100%;font:900 1.4rem var(--f-body);text-align:center;padding:12px;border:2.5px solid var(--bk-line);border-radius:14px;background:#fff;color:var(--bk-ink)}
+  .chm-input:focus{outline:none;border-color:var(--bk-orange)}
+  .chm-wave{font-size:3rem;line-height:1;margin-bottom:4px}
+
+  /* 상품 창 */
+  #prize .chm-box{max-width:520px;border-color:#E8B21B;background:linear-gradient(180deg,#FFF8DA,#FFFDF6 40%)}
+  .pz-gift{font-size:4rem;line-height:1;animation:giftBob2 1.1s ease-in-out infinite;display:inline-block}
+  @keyframes giftBob2{0%,100%{transform:rotate(-8deg) translateY(0)}50%{transform:rotate(8deg) translateY(-6px)}}
+  .pz-title{font-family:var(--f-head);font-size:clamp(1.6rem,6vw,2.2rem);color:#6B4A00;margin:4px 0 2px;line-height:1.2}
+  .pz-sub{font-family:var(--f-head);font-size:1.15rem;color:var(--bk-ink)}
+  .pz-card{margin:14px 0 4px;background:#fff;border:3px dashed #E8B21B;border-radius:18px;padding:12px 10px}
+  .pz-card small{display:block;font-weight:900;color:var(--bk-ink-soft);font-size:.8rem}
+  .pz-name{font-family:var(--f-head);font-size:clamp(2.1rem,9vw,3.1rem);line-height:1.15;color:var(--bk-ink);word-break:break-all}
+  .pz-meta{display:flex;justify-content:center;gap:8px 18px;flex-wrap:wrap;font-family:var(--f-head);font-size:clamp(1.15rem,4.5vw,1.5rem);color:var(--ink-red);margin-top:4px}
+  .pz-stamps{display:flex;justify-content:center;gap:4px;margin-top:8px;flex-wrap:wrap}
+  .pz-stamps span{font-family:var(--f-head);font-size:.85rem;padding:2px 7px;border-radius:8px;background:#F3EBD3;color:#B9AC86}
+  .pz-stamps span.on{background:#FDE3E3;color:var(--ink-red)}
+  .pz-staff{margin-top:14px;padding-top:12px;border-top:2px dotted #E2D6B0}
+  .pz-staff small{display:block;font-size:.76rem;color:var(--bk-ink-soft);margin-top:6px;font-weight:700}
+  #confetti{position:fixed;inset:0;pointer-events:none;z-index:250}
+
+  /* ---------- 폰 ---------- */
+  @media(max-width:900px){.chb-grid{grid-template-columns:repeat(3,minmax(0,1fr))}}
+  @media(max-width:640px){
+    .chb{padding:10px 12px 22px;gap:10px}
+    .chb-grid{grid-template-columns:repeat(2,minmax(0,1fr));gap:10px}
+    .chb-head{flex-wrap:wrap;padding:10px 12px;gap:8px 12px}
+    .chb-who{flex:1 1 100%}
+    .chb-avatar{width:38px;height:38px;font-size:1.3rem}
+    .chb-name{font-size:1.25rem;max-width:none}
+    .chb-count b{font-size:1.7rem}
+    .chb-count .hint{display:none}
+    .chc{padding:9px 9px 8px;border-radius:16px;gap:5px}
+    .chc-id{font-size:.95rem;padding:1px 7px}
+    .chc-game{font-size:1rem}
+    .chc-mission{font-size:.84rem}
+    .chc-cond{font-size:.7rem;padding:2px 6px}
+    .chc-body{gap:6px}
+    .chc-slot{width:62px;font-size:.75rem}
+    .chc-go{font-size:.9rem;padding:4px 10px}
+    .chc-foot{min-height:30px}
+    .chc-time{font-size:.72rem}
+    .chb-banner{font-size:1rem}
+  }
+  @media(max-width:370px){.chc-slot{width:56px}.chc-game{font-size:.92rem}}
+  /* 크롬북(1366×700 안팎): 한 화면에 7칸이 다 보이게 */
+  @media(min-width:1000px) and (max-height:820px){
+    .chb{padding-top:10px;gap:10px}
+    .chb-head{padding:8px 18px}
+    .chb-grid{gap:12px}
+    .chc{gap:4px;padding:8px 12px 8px}
+    .chc-prev{max-width:118px}
+    .chc-slot{width:94px}
+    .chc-foot{min-height:32px}
+    .chb-banner{padding:4px 14px;font-size:1.02rem}
+    .chb-banner .bk-btn{min-height:34px;padding:4px 12px}
+  }
+  @media(prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important}}
+</style>
+</head>
+<body class="bk">
+<script src="../common.js" data-name="🏆 도전 모드" data-sub="도장 모으기" data-home="../"></script>
+<script src="stages.js"></script>
+
+<main class="chb">
+  <header class="chb-head">
+    <div class="chb-who">
+      <span class="chb-avatar">🙂</span>
+      <div style="min-width:0"><small>도전자</small><b class="chb-name" id="who">-</b></div>
+      <button class="chb-edit" id="who-edit" type="button" title="이름 바꾸기" aria-label="이름 바꾸기">✏️</button>
+    </div>
+    <div class="chb-prog">
+      <div class="chb-count">도장 <b id="cnt">0</b><span class="of">/ 7</span><span class="hint">🎁 도장 5개를 모으면 상품!</span></div>
+      <div class="chb-bar" id="bar"><i id="bar-fill" style="width:0"></i></div>
+    </div>
+  </header>
+
+  <div class="chb-banner" id="banner" hidden>
+    <span>🎉 도장 5개 달성! 부스에서 상품을 받으세요</span>
+    <button class="bk-btn bk-btn--sm" type="button" id="banner-btn">🎁 상품 받기 화면</button>
+  </div>
+
+  <section class="chb-grid" id="grid" aria-label="도장판"></section>
+</main>
+
+<!-- 이름 -->
+<div class="chm" id="name-m" role="dialog" aria-modal="true" aria-labelledby="name-t">
+  <div class="chm-box">
+    <div class="chm-wave" id="name-ico">✍️</div>
+    <h2 id="name-t">도전자 이름</h2>
+    <p id="name-p">도장판에 쓸 이름(별명)을 적어 주세요</p>
+    <input class="chm-input" id="name-in" maxlength="10" placeholder="예: 수학왕" autocomplete="off">
+    <div class="chm-btns"><button class="bk-btn bk-btn--primary" type="button" id="name-ok">도전 시작! ▶</button></div>
+  </div>
+</div>
+
+<!-- 상품 -->
+<div class="chm" id="prize" role="dialog" aria-modal="true" aria-labelledby="pz-t">
+  <div class="chm-box">
+    <div class="pz-gift">🎁</div>
+    <div class="pz-title" id="pz-t">도장 5개 달성!</div>
+    <div class="pz-sub">부스에서 상품 받으러 가세요</div>
+    <div class="pz-card">
+      <small>도전자</small>
+      <div class="pz-name" id="pz-name">-</div>
+      <div class="pz-meta"><span id="pz-cnt">도장 5 / 7</span><span id="pz-time">00:00 달성</span></div>
+      <div class="pz-stamps" id="pz-stamps"></div>
+    </div>
+    <div class="chm-btns"><button class="bk-btn bk-btn--ghost" type="button" id="pz-close">닫기</button></div>
+    <div class="pz-staff">
+      <button class="bk-btn bk-btn--red" type="button" id="pz-give" style="width:100%">🎁 상품 지급 완료</button>
+      <small>부스 선생님·도우미가 상품을 준 뒤 눌러요</small>
+    </div>
+  </div>
+</div>
+
+<!-- 지급 확인 -->
+<div class="chm" id="confirm-m" role="dialog" aria-modal="true" aria-labelledby="cf-t">
+  <div class="chm-box" style="border-color:var(--bk-red)">
+    <div class="chm-wave">🧹</div>
+    <h2 id="cf-t">상품을 지급하고 도장판을 비울까요?</h2>
+    <p>기록이 모두 지워져요</p>
+    <div class="chm-btns">
+      <button class="bk-btn bk-btn--ghost" type="button" id="cf-no">취소</button>
+      <button class="bk-btn bk-btn--red" type="button" id="cf-yes">지급하고 비우기</button>
+    </div>
+  </div>
+</div>
+
+<canvas id="confetti" hidden></canvas>
+
+<script>
+(function () {
+  const $ = id => document.getElementById(id);
+  const GAME_URL = '../games/arcade/index.html?ch=';
+  document.body.insertAdjacentHTML('afterbegin', CH.inkDefs());
+  const esc = s => String(s == null ? '' : s).replace(/[&<>"']/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]));
+  const NAME_ADJ = ['용감한', '씩씩한', '날쌘', '똑똑한', '엉뚱한', '느긋한', '반짝이는', '꼬마', '명랑한'];
+  const NAME_ANIMAL = ['수달', '펭귄', '두더지', '고양이', '여우', '판다', '거북이', '다람쥐', '돌고래', '햄스터'];
+  const randName = () => NAME_ADJ[Math.floor(Math.random() * NAME_ADJ.length)] + ' ' + NAME_ANIMAL[Math.floor(Math.random() * NAME_ANIMAL.length)];
+
+  /* ---------- 판 미리보기 (작은 그림) ---------- */
+  function prevSVG(s, rec) {
+    const G = CH.GAME[s.k];
+    if (s.k === 'nt') {
+      const L = 'stroke="' + G.deep + '" stroke-width="2.4" stroke-linecap="round"';
+      const X = (cx, cy) => `<path d="M${cx - 5.5} ${cy - 5.5}l11 11M${cx + 5.5} ${cy - 5.5}l-11 11" stroke="#2C2A26" stroke-width="3" stroke-linecap="round"/>`;
+      return `<svg viewBox="0 0 100 80"><g ${L}><path d="M39 10v60M61 10v60M18 31.7h64M18 53.3h64"/></g>${X(50, 42.5)}${X(28, 20.8)}</svg>`;
+    }
+    if (s.k === 'st') {
+      const n = s.n, cols = n <= 14 ? 7 : 9, rows = Math.ceil(n / cols), r = n <= 14 ? 5.2 : 4, gx = 92 / cols, gy = 64 / rows;
+      let out = '';
+      for (let i = 0; i < n; i++) {
+        const cx = 4 + gx * (i % cols) + gx / 2 + ((Math.floor(i / cols) % 2) ? gx / 4 : -gx / 4) * .6, cy = 8 + gy * Math.floor(i / cols) + gy / 2;
+        if (i === 0) {
+          out += s.mode === 'bomb'
+            ? `<circle cx="${cx}" cy="${cy}" r="${r + 1.2}" fill="#E9533F" stroke="#9c2b1d" stroke-width="1.2"/><path d="M${cx + r * .6} ${cy - r * .7}q3 -4 6 -3" stroke="#6b4a00" stroke-width="1.4" fill="none"/>`
+            : `<path d="M${cx} ${cy - r - 1.5}l${r + 1.5} ${r + 1.5}l${-r - 1.5} ${r + 1.5}l${-r - 1.5} ${-r - 1.5}z" fill="#3DBE7A" stroke="#1F8F5F" stroke-width="1.2"/>`;
+        } else out += `<circle cx="${cx}" cy="${cy}" r="${r}" fill="#9AA6B2" stroke="#6E7A86" stroke-width="1"/>`;
+      }
+      return `<svg viewBox="0 0 100 80">${out}</svg>`;
+    }
+    if (s.k === 'qn') {
+      const q = rec.qn, N = q.N, st = s.id === '3-1' ? q.s31 : q.s32, c = 72 / N, x0 = 14, y0 = 4;
+      let out = '';
+      for (let x = 0; x < N; x++) for (let y = 0; y < N; y++) if ((x + y) % 2 === 0) out += `<rect x="${x0 + x * c}" y="${y0 + (N - 1 - y) * c}" width="${c}" height="${c}" fill="#F3C1C4"/>`;
+      out += `<rect x="${x0}" y="${y0 + (N - 1) * c}" width="${c}" height="${c}" fill="#FFD60A"/>`;
+      out += `<rect x="${x0}" y="${y0}" width="${N * c}" height="${N * c}" fill="none" stroke="#B53A2A" stroke-width="1.5"/>`;
+      const qx = x0 + st[0] * c + c / 2, qy = y0 + (N - 1 - st[1]) * c + c / 2;
+      out += `<circle cx="${qx}" cy="${qy}" r="${c * .95}" fill="#fff" stroke="#E9533F" stroke-width="1.6"/><text x="${qx}" y="${qy + c * .55}" font-size="${c * 1.5}" text-anchor="middle" fill="#2C2A26">♛</text>`;
+      return `<svg viewBox="0 0 100 80"><rect width="100" height="80" fill="none"/>${out}</svg>`;
+    }
+    const COL = ['#FF5FA2', '#FF9F1C', '#FFD60A', '#57CC99', '#3DB2FF'], rows = s.rows, gy = 72 / rows.length;
+    let out = '';
+    rows.forEach((n, ri) => { const r = Math.min(7.5, gy * .38), w = 2 * r + 4, x0 = 50 - (n * w) / 2 + w / 2; for (let i = 0; i < n; i++) out += `<circle cx="${x0 + i * w}" cy="${4 + gy * ri + gy / 2}" r="${r}" fill="${COL[ri % 5]}" stroke="rgba(0,0,0,.18)" stroke-width="1"/><circle cx="${x0 + i * w - r * .3}" cy="${4 + gy * ri + gy / 2 - r * .3}" r="${r * .3}" fill="rgba(255,255,255,.55)"/>`; });
+    return `<svg viewBox="0 0 100 80">${out}</svg>`;
+  }
+
+  /* ---------- 그리기 ---------- */
+  function render() {
+    const r = CH.load(), n = CH.count(r), done = n >= CH.GOAL;
+    $('who').textContent = r.name || '이름 없음';
+    $('cnt').textContent = n;
+    $('bar-fill').style.width = (n / 7 * 100) + '%';
+    const bar = $('bar');
+    bar.querySelectorAll('.tick,.gift').forEach(e => e.remove());
+    for (let i = 1; i < 7; i++) if (i !== CH.GOAL) bar.insertAdjacentHTML('beforeend', `<span class="tick" style="left:${i / 7 * 100}%"></span>`);
+    bar.insertAdjacentHTML('beforeend', `<span class="gift${done ? ' on' : ''}" style="left:${CH.GOAL / 7 * 100}%">🎁</span>`);
+    $('banner').hidden = !done;
+
+    const g = $('grid'); g.innerHTML = '';
+    CH.STAGES.forEach(s => {
+      const G = CH.GAME[s.k], t = r.stamps[s.id];
+      const cond = s.k === 'st' ? `${s.cond} · 최대 3~5개(랜덤)` : s.k === 'qn' ? `${r.qn.N}×${r.qn.N} 판 · ${s.cond}` : s.cond;
+      const a = document.createElement('a');
+      a.className = `chc chc--${s.k}` + (t ? ' done' : '');
+      a.href = GAME_URL + encodeURIComponent(s.id);
+      a.dataset.id = s.id;
+      a.setAttribute('aria-label', `${s.id} ${G.name} — ${s.mission}${t ? ' (도장 받음)' : ''}`);
+      a.innerHTML = `
+        <div class="chc-top"><span class="chc-id">${s.id}</span><span class="chc-game">${G.name}</span></div>
+        <div class="chc-mission">${s.mission}</div>
+        <div class="chc-cond">${cond}</div>
+        <div class="chc-body"><div class="chc-prev">${prevSVG(s, r)}</div>
+          <div class="chc-slot">${t ? CH.stampSVG({ small: s.id }) : '도장<br>자리'}</div></div>
+        <div class="chc-foot">${t ? `<span class="chc-time">✓ ${CH.fmtTime(t)}</span><span class="chc-again">다시 ↻</span>` : `<span></span><span class="chc-go">도전하기 ▶</span>`}</div>`;
+      g.appendChild(a);
+    });
+    // 8번째 칸: 상품
+    const gift = document.createElement('div');
+    gift.className = 'chc chc--gift' + (done ? ' ready' : '');
+    gift.innerHTML = `<div class="g-ico">🎁</div><div class="g-t">${done ? '상품 받으러 가요!' : `도장 ${CH.GOAL}개 모으면 상품`}</div>
+      <div class="g-dots">${Array.from({ length: CH.GOAL }, (_, i) => `<i class="${i < n ? 'on' : ''}"></i>`).join('')}</div>
+      <div class="g-d">${done ? '눌러서 상품 받기 화면 보기' : `앞으로 ${CH.GOAL - n}개!`}</div>`;
+    if (done) { gift.setAttribute('role', 'button'); gift.tabIndex = 0; gift.onclick = () => openPrize(); }
+    g.appendChild(gift);
+    return r;
+  }
+
+  /* ---------- 창 열고 닫기 ---------- */
+  const openM = id => $(id).classList.add('on');
+  const closeM = id => $(id).classList.remove('on');
+  const anyOpen = () => !!document.querySelector('.chm.on');
+
+  // 이름: next=true면 다음 도전자 (상품 지급 뒤)
+  function openName(next) {
+    const r = CH.load();
+    $('name-ico').textContent = next ? '👋' : '✍️';
+    $('name-t').textContent = next ? '다음 도전자를 기다려요 👋' : '도전자 이름';
+    $('name-p').textContent = next ? '새 도전자의 이름(별명)을 적어 주세요' : '도장판에 쓸 이름(별명)을 적어 주세요';
+    $('name-in').value = next ? '' : (r.name || CH.getName());
+    openM('name-m');
+    if (matchMedia('(hover:hover) and (pointer:fine)').matches) setTimeout(() => { $('name-in').focus(); $('name-in').select(); }, 60);
+  }
+  function nameOk() {
+    let n = $('name-in').value.trim().slice(0, 10);
+    if (!n) n = randName();
+    const r = CH.load(); r.name = n; r.ask = false; CH.save(r);
+    CH.setName(n); // 게임 화면에서도 이 이름으로
+    $('name-in').blur();
+    closeM('name-m'); render(); maybePrize();
+  }
+  $('name-ok').onclick = nameOk;
+  $('name-in').addEventListener('keydown', e => { if (e.key === 'Enter') nameOk(); });
+  $('who-edit').onclick = () => openName(false);
+
+  /* ---------- 상품 ---------- */
+  function fifthTime(r) { const ts = Object.values(r.stamps).filter(Boolean).sort((a, b) => a - b); return ts[CH.GOAL - 1] || ts[ts.length - 1]; }
+  function openPrize() {
+    const r = CH.load(), n = CH.count(r);
+    if (n < CH.GOAL) return;
+    $('pz-name').textContent = r.name || '이름 없음';
+    $('pz-cnt').textContent = `도장 ${n} / 7`;
+    $('pz-time').textContent = `${CH.fmtTime(fifthTime(r))} 달성`;
+    $('pz-stamps').innerHTML = CH.STAGES.map(s => `<span class="${r.stamps[s.id] ? 'on' : ''}">${s.id}</span>`).join('');
+    r.seen = n; CH.save(r);
+    openM('prize'); confetti();
+  }
+  function maybePrize() {
+    const r = CH.load(), n = CH.count(r);
+    if (n >= CH.GOAL && n > (r.seen || 0) && r.name && !anyOpen()) openPrize();
+  }
+  $('banner-btn').onclick = openPrize;
+  $('pz-close').onclick = () => { closeM('prize'); stopConfetti(); };
+  $('pz-give').onclick = () => openM('confirm-m');
+  $('cf-no').onclick = () => closeM('confirm-m');
+  $('cf-yes').onclick = () => {
+    closeM('confirm-m'); closeM('prize'); stopConfetti();
+    CH.clear();
+    const r = CH.load(); r.ask = true; CH.save(r); // 새 기록 (황금비 퀸 자리도 새로)
+    render(); openName(true);
+  };
+
+  /* ---------- 색종이 ---------- */
+  let cfId = 0, cfStop = 0;
+  function confetti() {
+    const cv = $('confetti'), ctx = cv.getContext('2d');
+    cv.hidden = false; cv.width = innerWidth; cv.height = innerHeight;
+    const COL = ['#F5A623', '#5BB8E8', '#E9533F', '#9B6BD6', '#FFD60A', '#57CC99'];
+    const ps = Array.from({ length: 140 }, () => ({ x: Math.random() * cv.width, y: -20 - Math.random() * cv.height * .6, w: 6 + Math.random() * 6, h: 8 + Math.random() * 8,
+      vy: 2 + Math.random() * 3.2, vx: -1.5 + Math.random() * 3, a: Math.random() * 6.28, va: -.2 + Math.random() * .4, c: COL[Math.floor(Math.random() * COL.length)] }));
+    cancelAnimationFrame(cfId); cfStop = performance.now() + 4500;
+    const step = now => {
+      ctx.clearRect(0, 0, cv.width, cv.height);
+      let alive = 0;
+      ps.forEach(p => { p.y += p.vy; p.x += p.vx + Math.sin(p.y / 30) * .6; p.a += p.va; if (p.y < cv.height + 20) alive++; else if (now < cfStop) { p.y = -20; p.x = Math.random() * cv.width; alive++; }
+        ctx.save(); ctx.translate(p.x, p.y); ctx.rotate(p.a); ctx.fillStyle = p.c; ctx.fillRect(-p.w / 2, -p.h / 2, p.w, p.h); ctx.restore(); });
+      if (alive) cfId = requestAnimationFrame(step); else stopConfetti();
+    };
+    if (!matchMedia('(prefers-reduced-motion: reduce)').matches) cfId = requestAnimationFrame(step);
+  }
+  function stopConfetti() { cancelAnimationFrame(cfId); const cv = $('confetti'); cv.getContext('2d').clearRect(0, 0, cv.width, cv.height); cv.hidden = true; }
+
+  /* ---------- 시작 · 게임에서 돌아왔을 때(뒤로 가기 캐시 포함) ---------- */
+  function show() {
+    const r = render();
+    // 방금 받은 도장: 쾅
+    if (r.fresh) {
+      const card = document.querySelector(`.chc[data-id="${r.fresh}"]`);
+      r.fresh = ''; CH.save(r);
+      if (card) { card.classList.add('fresh'); card.scrollIntoView({ block: 'nearest' }); setTimeout(() => card.classList.remove('fresh'), 1200); }
+      setTimeout(maybePrize, card ? 900 : 0);
+    } else maybePrize();
+    if (!r.name && !anyOpen()) openName(!!r.ask);
+  }
+  window.addEventListener('pageshow', () => { if (!anyOpen()) show(); });
+  // 다른 탭(게임)에서 도장이 바뀌면 다시 그림
+  window.addEventListener('storage', e => { if (e.key === CH.KEY && !anyOpen()) render(); });
+  // 뒤로 가기(안드로이드): 열린 창부터 닫기
+  document.addEventListener('keydown', e => { if (e.key === 'Escape') { if ($('confirm-m').classList.contains('on')) closeM('confirm-m'); else if ($('prize').classList.contains('on')) { closeM('prize'); stopConfetti(); } } });
+})();
+</script>
+</body>
+</html>

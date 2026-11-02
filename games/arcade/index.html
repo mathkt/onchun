@@ -7538,7 +7538,7 @@
   qnRestartGame = function () { if (rndReplay('qn')) return; if (qnMode === 'online' && Online.active) return olRestart('queen'); olAiEnd(); _qnRestart(); };
   // 메뉴로
   const _ntBack = ntGoBack, _stBack = stGoBack, _ppBack = ppGoBack, _qnBack = qnGoBack;
-  function olLeaveIfAny() { for (const k in rndLast) rndLast[k] = null; rpsHide(); oluReset(); olConnClear(); if (Online.active) { olStarted = false; Online.leave(); } olAiP = null; aiHuman = 1; olRestoreOrig(); }
+  function olLeaveIfAny() { for (const k in rndLast) rndLast[k] = null; if (typeof rpsHide === 'function') rpsHide(); if (typeof oluReset === 'function') oluReset(); olConnClear(); if (Online.active) { olStarted = false; Online.leave(); } olAiP = null; aiHuman = 1; olRestoreOrig(); }
   ntGoBack = function () { olLeaveIfAny(); _ntBack(); };
   stGoBack = function () { olLeaveIfAny(); _stBack(); };
   ppGoBack = function () { olLeaveIfAny(); _ppBack(); };
@@ -7694,10 +7694,12 @@
   openGameSection = function (g) { _openGameSection(g); syncTopName(g); setGameBg(g); currentGame = g; if (skipRulesOnce) skipRulesOnce = false; else if (nameModalOpen) rulesAfterName = true; else showRules(false); };
   returnToHome = function () { _returnToHome(); syncTopName(null); setGameBg(null); currentGame = null; };
   const entryGame = new URLSearchParams(location.search).get('game');
+  // 🏆 도전 모드(?ch=단계): 이름·규칙 창 없이 ../../challenge/layer.js 가 판을 바로 시작함
+  const CH_ENTRY = new URLSearchParams(location.search).get('ch');
   updateNameChip();
-  const validEntry = ['notakto', 'stone', 'popit', 'queen'].includes(entryGame);
+  const validEntry = ['notakto', 'stone', 'popit', 'queen'].includes(entryGame) && !CH_ENTRY;
   if (validEntry) { currentGame = entryGame; }
-  if (!getMyName()) openNameModal();
+  if (!getMyName() && !CH_ENTRY) openNameModal();
   if (validEntry) openGameSection(entryGame);
   else syncTopName(null);
 
@@ -7713,7 +7715,8 @@
   }
   function navUrl(d) { const u = new URL(location.href); if (d >= 1 && currentGame) u.searchParams.set('game', currentGame); else u.searchParams.delete('game'); return u.pathname + u.search + u.hash; }
   function navState(d) { return { onchun: 1, d, g: currentGame }; }
-  function navSync() { if (navFromPop) return; clearTimeout(navTimer); navTimer = setTimeout(navDoSync, 0); }
+  function navSync() { if (navFromPop || CH_ENTRY) return; // 도전 모드: 화면 안 기록 없음 (뒤로 가기 = 도장판)
+    clearTimeout(navTimer); navTimer = setTimeout(navDoSync, 0); }
   function navDoSync() {
     const ui = navDepthUI();
     try {
@@ -7760,7 +7763,7 @@
     const _sw = switchScreen; switchScreen = function (...a) { _sw(...a); navSync(); };
     const _og = openGameSection; openGameSection = function (...a) { _og(...a); navSync(); };
     const _rh = returnToHome; returnToHome = function (...a) { _rh(...a); navSync(); };
-    try { const st = history.state; if (st && st.onchun) navH = st.d; else { navH = 0; history.replaceState(navState(0), '', navUrl(0)); } } catch (e) {}
+    if (!CH_ENTRY) try { const st = history.state; if (st && st.onchun) navH = st.d; else { navH = 0; history.replaceState(navState(0), '', navUrl(0)); } } catch (e) {}
     navSync();
   }
 </script>
@@ -9325,5 +9328,8 @@
     };
   });
 </script>
+<!-- 🏆 도전 모드 (?ch= 일 때만 동작) -->
+<script src="../../challenge/stages.js"></script>
+<script src="../../challenge/layer.js"></script>
 </body>
 </html>
