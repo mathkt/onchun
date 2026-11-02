@@ -29,7 +29,12 @@
   .chb-who{display:flex;align-items:center;gap:10px;min-width:0;flex:0 1 auto}
   .chb-avatar{width:46px;height:46px;border-radius:50%;background:var(--bk-yellow);display:grid;place-items:center;font-size:1.6rem;flex:none;box-shadow:inset 0 -3px 0 rgba(0,0,0,.08)}
   .chb-who small{display:block;font-size:.72rem;color:var(--bk-ink-soft);font-weight:700;line-height:1.1}
-  .chb-name{font-family:var(--f-head);font-size:1.45rem;line-height:1.15;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;max-width:14ch;display:block}
+  .chb-name{font-family:var(--f-head);font-size:1.45rem;line-height:1.15;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;max-width:14ch;display:inline-block;vertical-align:bottom}
+  .chb-title{display:inline-block;vertical-align:bottom;margin-left:6px;font-family:var(--f-head);font-size:.85rem;color:#6B4A00;background:linear-gradient(90deg,#FFE27A,#FFD15C);border:1.5px solid #E8B21B;border-radius:999px;padding:2px 9px;white-space:nowrap;line-height:1.3;transition:transform .3s}
+  .chb-title.pop{animation:titlePop .7s cubic-bezier(.3,1.5,.5,1)}
+  @keyframes titlePop{0%{transform:scale(.6)}60%{transform:scale(1.25)}100%{transform:none}}
+  .chb-cert{display:none;flex:none;font-family:var(--f-head);font-size:.95rem;color:#6B4A00;background:#fff;border:2px solid #E8B21B;border-radius:999px;padding:5px 12px;cursor:pointer;box-shadow:0 3px 0 #C99510;white-space:nowrap}
+  body.gold .chb-cert{display:inline-block}
   .chb-edit{flex:none;border:0;background:var(--bk-cream);border-radius:999px;width:36px;height:36px;font-size:1rem;cursor:pointer}
   .chb-prog{flex:1;min-width:0;display:flex;flex-direction:column;gap:6px}
   .chb-count{display:flex;align-items:baseline;gap:8px;font-family:var(--f-head);font-size:1.1rem;color:var(--bk-ink-soft);flex-wrap:wrap}
@@ -71,6 +76,9 @@
   .chc-slot{position:relative;flex:none;width:clamp(74px,8.6vw,108px);aspect-ratio:1;border-radius:50%;border:2.5px dashed #D9CDA8;display:grid;place-items:center;
     color:#CBBE95;font-family:var(--f-head);font-size:.9rem;text-align:center;line-height:1.15;background:rgba(253,246,220,.6)}
   .chc-slot .ch-stamp-svg{position:absolute;inset:-14%;width:128%;height:128%;transform:rotate(-14deg);opacity:.92;mix-blend-mode:multiply}
+  .chc-perf{position:absolute;right:-8px;top:-8px;width:30px;height:30px;border-radius:50%;background:#fff;border:2.5px solid #E8B21B;box-shadow:0 2px 6px rgba(0,0,0,.22);display:grid;place-items:center;font-size:1.05rem;transform:rotate(12deg);z-index:2}
+  .chc-try{font-size:.72rem;font-weight:800;color:var(--bk-ink-soft);white-space:nowrap;overflow:hidden;text-overflow:ellipsis;min-width:0}
+  .chc-foot .chc-done-l{display:flex;flex-direction:column;min-width:0;line-height:1.25}
   .chc-foot{display:flex;align-items:center;justify-content:space-between;gap:6px;min-height:34px}
   .chc-go{font-family:var(--f-head);font-size:1.02rem;color:#fff;background:var(--c);border-radius:999px;padding:5px 14px;box-shadow:0 3px 0 var(--d);white-space:nowrap}
   .chc-time{font-size:.8rem;font-weight:900;color:var(--ink-red);white-space:nowrap}
@@ -125,7 +133,76 @@
   .pz-stamps{display:flex;justify-content:center;gap:4px;margin-top:8px;flex-wrap:wrap}
   .pz-stamps span{font-family:var(--f-head);font-size:.85rem;padding:2px 7px;border-radius:8px;background:#F3EBD3;color:#B9AC86}
   .pz-stamps span.on{background:#FDE3E3;color:var(--ink-red)}
+  .pz-praise{font-family:var(--f-head);font-size:1.2rem;color:#B53A2A;margin:2px 0 4px;line-height:1.3}
+  .pz-praise[hidden]{display:none}
+  .pz-title-chip{display:inline-block;margin-top:6px;font-family:var(--f-head);font-size:1.05rem;color:#6B4A00;background:linear-gradient(90deg,#FFE27A,#FFD15C);border:2px solid #E8B21B;border-radius:999px;padding:3px 14px}
   .pz-staff{margin-top:14px;padding-top:12px;border-top:2px dotted #E2D6B0}
+  #pz-cert[hidden]{display:none}
+
+  /* ---------- 축하 창 (새 도장마다 한 번) ---------- */
+  #celeb .chm-box{max-width:460px;border-color:var(--bk-orange);overflow:visible}
+  .cb-ico{font-size:4.6rem;line-height:1;animation:cbBounce 1s ease-in-out infinite;display:inline-block}
+  @keyframes cbBounce{0%,100%{transform:translateY(0) scale(1)}50%{transform:translateY(-10px) scale(1.08)}}
+  .cb-n{font-family:var(--f-head);font-size:1.1rem;color:var(--bk-ink-soft);margin-top:4px}
+  .cb-n b{font-size:2.4rem;color:var(--ink-red);line-height:1;vertical-align:-4px}
+  .cb-msg{font-family:var(--f-head);font-size:clamp(1.35rem,5.5vw,1.8rem);line-height:1.3;color:var(--bk-ink);margin:6px 0 2px}
+  .cb-title{font-size:.95rem;font-weight:800;color:var(--bk-ink-soft);margin-top:6px}
+  .cb-title .chb-title{font-size:1rem;margin-left:4px}
+  .cb-dots{display:flex;gap:7px;justify-content:center;margin-top:10px}
+  .cb-dots i{width:18px;height:18px;border-radius:50%;border:2px dashed #D9B84A;background:#fff}
+  .cb-dots i.on{border:0;background:radial-gradient(circle at 35% 35%,#ff6b6b,var(--ink-red));box-shadow:0 0 0 2px #fff,0 0 0 3px var(--ink-red)}
+  .cb-dots i.gold{background:radial-gradient(circle at 35% 35%,#FFE27A,#D9A514);box-shadow:0 0 0 2px #fff,0 0 0 3px #D9A514}
+  #celeb.big .chm-box{border-color:#E8B21B;background:linear-gradient(180deg,#FFF3C4,#FFFDF6 45%);box-shadow:0 14px 40px rgba(0,0,0,.25),0 0 0 6px rgba(232,178,27,.35)}
+  #celeb.big .cb-ico{font-size:5.6rem}
+
+  /* ---------- 7/7 황금 테마 ---------- */
+  body.gold{background-color:#FFF6D6;background-image:linear-gradient(rgba(217,165,20,.18) 1px,transparent 1px),linear-gradient(90deg,rgba(217,165,20,.18) 1px,transparent 1px)}
+  body.gold .chb-head{border-color:#E8B21B;box-shadow:0 5px 0 #D9A514,0 0 0 4px rgba(255,214,10,.25),var(--bk-shadow);background:linear-gradient(180deg,#FFFBEA,#fff)}
+  body.gold .chb-head::before{background:repeating-linear-gradient(90deg,#FFD60A 0 18px,#E8B21B 18px 36px,#FFE27A 36px 54px,#D9A514 54px 72px)}
+  body.gold .chb-avatar{background:linear-gradient(135deg,#FFE27A,#E8B21B);box-shadow:0 0 0 3px #fff,0 0 0 5px #D9A514}
+  body.gold .chb-count b{color:#B8860B}
+  body.gold .chb-bar i{background:linear-gradient(90deg,#FFD60A,#D9A514)}
+  body.gold .chc.done{border-color:#E8B21B;box-shadow:0 5px 0 #D9A514;background:linear-gradient(180deg,#fff 55%,#FFF4C9)}
+  body.gold .chc.done .chc-id{background:linear-gradient(135deg,#E8B21B,#C99510)}
+  body.gold .chc--gift{animation:none;box-shadow:0 5px 0 var(--d),0 0 0 5px rgba(232,178,27,.35)}
+  body.gold .chb-banner{background:linear-gradient(90deg,#FFD60A,#FFB800);box-shadow:0 4px 0 #B8860B,0 0 18px rgba(255,214,10,.55)}
+
+  /* ---------- 수료증 ---------- */
+  #cert{position:fixed;inset:0;z-index:300;display:none;align-items:center;justify-content:center;padding:12px;background:rgba(40,30,5,.72);backdrop-filter:blur(4px);overflow:auto}
+  #cert.on{display:flex;animation:fadeIn .25s ease-out}
+  .ct-wrap{display:flex;flex-direction:column;align-items:center;gap:12px;width:100%;max-width:720px;margin:auto}
+  .ct{position:relative;width:100%;background:#FFF8E7;color:#3A2A08;border:6px double #C9A227;border-radius:10px;padding:clamp(18px,4vw,38px) clamp(14px,4vw,40px);text-align:center;
+    box-shadow:0 20px 60px rgba(0,0,0,.45),inset 0 0 0 2px #FFF8E7,inset 0 0 0 4px #E6C86A,inset 0 0 60px rgba(201,162,39,.18);
+    background-image:radial-gradient(circle at 50% 0%,rgba(255,255,255,.7),transparent 55%),repeating-linear-gradient(0deg,rgba(201,162,39,.05) 0 2px,transparent 2px 7px);font-family:var(--f-body);word-break:keep-all}
+  .ct::before,.ct::after{content:"❦";position:absolute;font-size:1.6rem;color:#C9A227;top:8px}
+  .ct::before{left:14px}.ct::after{right:14px}
+  .ct-corner{position:absolute;width:34px;height:34px;border:3px solid #C9A227;pointer-events:none}
+  .ct-corner.tl{left:10px;top:10px;border-right:0;border-bottom:0;border-radius:8px 0 0 0}
+  .ct-corner.tr{right:10px;top:10px;border-left:0;border-bottom:0;border-radius:0 8px 0 0}
+  .ct-corner.bl{left:10px;bottom:10px;border-right:0;border-top:0;border-radius:0 0 0 8px}
+  .ct-corner.br{right:10px;bottom:10px;border-left:0;border-top:0;border-radius:0 0 8px 0}
+  .ct-booth{font-family:var(--f-head);font-size:clamp(.85rem,2.8vw,1.05rem);color:#8A6A10;letter-spacing:.06em}
+  .ct-h{font-family:var(--f-head);font-size:clamp(2.2rem,9vw,3.4rem);color:#B8860B;letter-spacing:.35em;text-indent:.35em;line-height:1.15;margin:4px 0 2px;text-shadow:0 2px 0 #FFF8E7,0 3px 0 rgba(184,134,11,.25)}
+  .ct-rule{width:60%;height:2px;margin:6px auto 10px;background:linear-gradient(90deg,transparent,#C9A227,transparent)}
+  .ct-ti{display:inline-block;font-family:var(--f-head);font-size:clamp(1rem,3.5vw,1.2rem);color:#6B4A00;background:linear-gradient(90deg,#FFE27A,#FFD15C);border:2px solid #C9A227;border-radius:999px;padding:3px 16px;margin-bottom:6px}
+  .ct-name{font-family:var(--f-head);font-size:clamp(2.4rem,11vw,4rem);line-height:1.15;color:#2C2A26;margin:2px 0;word-break:break-all}
+  .ct-name::after{content:"";display:block;width:70%;height:2px;background:#C9A227;margin:2px auto 0}
+  .ct-body{font-size:clamp(.92rem,3.2vw,1.1rem);font-weight:700;line-height:1.6;color:#4A3A12;margin:10px auto 4px;max-width:34ch}
+  .ct-stamps{display:flex;justify-content:center;gap:clamp(2px,1vw,8px);margin:10px 0 6px;flex-wrap:nowrap}
+  .ct-stamps span{position:relative;width:clamp(36px,11vw,74px);aspect-ratio:1;display:block;flex:none}
+  .ct-stamps .ch-stamp-svg{position:absolute;inset:-12%;width:124%;height:124%;mix-blend-mode:multiply;opacity:.9}
+  .ct-stamps span:nth-child(odd) .ch-stamp-svg{transform:rotate(-12deg)}
+  .ct-stamps span:nth-child(even) .ch-stamp-svg{transform:rotate(9deg)}
+  .ct-date{font-family:var(--f-head);font-size:clamp(.95rem,3.2vw,1.15rem);color:#4A3A12;margin-top:8px}
+  .ct-org{font-family:var(--f-head);font-size:clamp(1.05rem,3.8vw,1.35rem);color:#2C2A26;margin-top:4px}
+  .ct-seal{position:absolute;right:clamp(10px,4vw,34px);bottom:clamp(8px,3vw,26px);width:clamp(54px,14vw,96px);aspect-ratio:1;opacity:.85;mix-blend-mode:multiply}
+  .ct-seal .ch-stamp-svg{width:100%;height:100%;transform:rotate(-10deg)}
+  .ct-btns{display:flex;gap:10px;flex-wrap:wrap;justify-content:center}
+  .ct-btns .bk-btn{background:#fff;border-color:#C9A227;box-shadow:0 3px 0 #A3801A;color:#6B4A00}
+  .ct-hint{font-size:.8rem;font-weight:700;color:#FFF3C4}
+  @media(max-width:640px){.ct::before,.ct::after{display:none}.ct-seal{position:static;margin:8px auto 0}}
+  @media(min-width:1000px) and (max-height:820px){.ct{padding:16px 36px 20px}.ct-h{font-size:2.3rem;margin:0}.ct-name{font-size:2.6rem}.ct-body{margin:6px auto 2px}.ct-stamps{margin:6px 0 2px}.ct-stamps span{width:60px}.ct-rule{margin:4px auto 6px}}
+
   .pz-staff small{display:block;font-size:.76rem;color:var(--bk-ink-soft);margin-top:6px;font-weight:700}
   #confetti{position:fixed;inset:0;pointer-events:none;z-index:250}
 
@@ -133,9 +210,15 @@
   @media(max-width:900px){.chb-grid{grid-template-columns:repeat(3,minmax(0,1fr))}}
   @media(max-width:640px){
     .chb{padding:10px 12px 22px;gap:10px}
+    .chb-who{flex-wrap:wrap}
     .chb-grid{grid-template-columns:repeat(2,minmax(0,1fr));gap:10px}
     .chb-head{flex-wrap:wrap;padding:10px 12px;gap:8px 12px}
     .chb-who{flex:1 1 100%}
+    .chb-name{max-width:9ch;font-size:1.2rem}
+    .chb-title{font-size:.72rem;padding:1px 7px;margin-left:4px}
+    .chb-cert{font-size:.85rem;padding:4px 10px}
+    .chc-perf{width:24px;height:24px;font-size:.85rem;right:-6px;top:-6px}
+    .chc-try{font-size:.66rem}
     .chb-avatar{width:38px;height:38px;font-size:1.3rem}
     .chb-name{font-size:1.25rem;max-width:none}
     .chb-count b{font-size:1.7rem}
@@ -176,8 +259,9 @@
   <header class="chb-head">
     <div class="chb-who">
       <span class="chb-avatar">🙂</span>
-      <div style="min-width:0"><small>도전자</small><b class="chb-name" id="who">-</b></div>
+      <div style="min-width:0"><small>도전자</small><b class="chb-name" id="who">-</b><span class="chb-title" id="who-title">🌱 수학 새싹</span></div>
       <button class="chb-edit" id="who-edit" type="button" title="이름 바꾸기" aria-label="이름 바꾸기">✏️</button>
+      <button class="chb-cert" id="cert-btn" type="button">🎓 수료증 보기</button>
     </div>
     <div class="chb-prog">
       <div class="chb-count">도장 <b id="cnt">0</b><span class="of">/ 7</span><span class="hint">🎁 도장 5개를 모으면 상품!</span></div>
@@ -207,16 +291,18 @@
 <!-- 상품 -->
 <div class="chm" id="prize" role="dialog" aria-modal="true" aria-labelledby="pz-t">
   <div class="chm-box">
-    <div class="pz-gift">🎁</div>
+    <div class="pz-gift" id="pz-ico">🎁</div>
     <div class="pz-title" id="pz-t">도장 5개 달성!</div>
+    <div class="pz-praise" id="pz-praise" hidden></div>
     <div class="pz-sub">부스에서 상품 받으러 가세요</div>
     <div class="pz-card">
       <small>도전자</small>
       <div class="pz-name" id="pz-name">-</div>
+      <div class="pz-title-chip" id="pz-title">🌱 수학 새싹</div>
       <div class="pz-meta"><span id="pz-cnt">도장 5 / 7</span><span id="pz-time">00:00 달성</span></div>
       <div class="pz-stamps" id="pz-stamps"></div>
     </div>
-    <div class="chm-btns"><button class="bk-btn bk-btn--ghost" type="button" id="pz-close">닫기</button></div>
+    <div class="chm-btns"><button class="bk-btn bk-btn--ghost" type="button" id="pz-close">닫기</button><button class="bk-btn" type="button" id="pz-cert" hidden>🎓 수료증 보기</button></div>
     <div class="pz-staff">
       <button class="bk-btn bk-btn--red" type="button" id="pz-give" style="width:100%">🎁 상품 지급 완료</button>
       <small>부스 선생님·도우미가 상품을 준 뒤 눌러요</small>
@@ -234,6 +320,39 @@
       <button class="bk-btn bk-btn--ghost" type="button" id="cf-no">취소</button>
       <button class="bk-btn bk-btn--red" type="button" id="cf-yes">지급하고 비우기</button>
     </div>
+  </div>
+</div>
+
+<!-- 축하 (새 도장마다 한 번) -->
+<div class="chm" id="celeb" role="dialog" aria-modal="true" aria-labelledby="cb-msg">
+  <div class="chm-box">
+    <div class="cb-ico" id="cb-ico">🎉</div>
+    <div class="cb-n">도장 <b id="cb-n">1</b> / 7</div>
+    <div class="cb-msg" id="cb-msg">첫 도장! 시작이 반이에요</div>
+    <div class="cb-title" id="cb-title"></div>
+    <div class="cb-dots" id="cb-dots"></div>
+    <div class="chm-btns" id="cb-btns"></div>
+  </div>
+</div>
+
+<!-- 수료증 (7/7) -->
+<div id="cert" role="dialog" aria-modal="true" aria-label="수료증">
+  <div class="ct-wrap">
+    <div class="ct" id="ct-paper">
+      <i class="ct-corner tl"></i><i class="ct-corner tr"></i><i class="ct-corner bl"></i><i class="ct-corner br"></i>
+      <div class="ct-booth">디지털 속 활동수학 · 2026 부산수학축전</div>
+      <div class="ct-h">수료증</div>
+      <div class="ct-rule"></div>
+      <div class="ct-ti" id="ct-title">🏆 필즈상 후보</div>
+      <div class="ct-name" id="ct-name">-</div>
+      <div class="ct-body">위 사람은 디지털 속 활동수학 부스의 도전 7가지를<br>선공으로 AI를 모두 이겨 완수하였기에 이 증서를 드립니다.</div>
+      <div class="ct-stamps" id="ct-stamps"></div>
+      <div class="ct-date" id="ct-date">-</div>
+      <div class="ct-org">온천중학교 수학과</div>
+      <div class="ct-seal" id="ct-seal"></div>
+    </div>
+    <div class="ct-btns"><button class="bk-btn" type="button" id="ct-close">닫기</button></div>
+    <div class="ct-hint">📸 화면을 캡처해서 간직하세요</div>
   </div>
 </div>
 
@@ -288,8 +407,10 @@
 
   /* ---------- 그리기 ---------- */
   function render() {
-    const r = CH.load(), n = CH.count(r), done = n >= CH.GOAL;
+    const r = CH.load(), n = CH.count(r), done = n >= CH.GOAL, all = n >= 7;
     $('who').textContent = r.name || '이름 없음';
+    const ti = CH.title(n); if ($('who-title').textContent !== ti.text) { $('who-title').textContent = ti.text; $('who-title').classList.remove('pop'); void $('who-title').offsetWidth; $('who-title').classList.add('pop'); }
+    document.body.classList.toggle('gold', all);
     $('cnt').textContent = n;
     $('bar-fill').style.width = (n / 7 * 100) + '%';
     const bar = $('bar');
@@ -302,6 +423,7 @@
     CH.STAGES.forEach(s => {
       const G = CH.GAME[s.k], t = r.stamps[s.id];
       const cond = s.k === 'st' ? `${s.cond} · 최대 3~5개(랜덤)` : s.k === 'qn' ? `${CH.queenOf(r, s.id).N}×${CH.queenOf(r, s.id).N} · ${s.cond}` : s.cond;
+      const tryT = CH.tryText(r, s.id);
       const a = document.createElement('a');
       a.className = `chc chc--${s.k}` + (t ? ' done' : '');
       a.href = GAME_URL + encodeURIComponent(s.id);
@@ -312,8 +434,8 @@
         <div class="chc-mission">${s.mission}</div>
         <div class="chc-cond">${cond}</div>
         <div class="chc-body"><div class="chc-prev">${prevSVG(s, r)}</div>
-          <div class="chc-slot">${t ? CH.stampSVG({ small: s.id }) : '도장<br>자리'}</div></div>
-        <div class="chc-foot">${t ? `<span class="chc-time">✓ ${CH.fmtTime(t)}</span><span class="chc-again">다시 ↻</span>` : `<span></span><span class="chc-go">도전하기 ▶</span>`}</div>`;
+          <div class="chc-slot">${t ? CH.stampSVG({ stage: s.id }) + (r.perfect[s.id] ? '<span class="chc-perf" title="최소 수로 이김">⚡</span>' : '') : '도장<br>자리'}</div></div>
+        <div class="chc-foot">${t ? `<span class="chc-done-l"><span class="chc-time">✓ ${CH.fmtTime(t)}</span><span class="chc-try">${esc(tryT)}</span></span><span class="chc-again">다시 ↻</span>` : `<span class="chc-try">${esc(tryT)}</span><span class="chc-go">도전하기 ▶</span>`}</div>`;
       g.appendChild(a);
     });
     // 8번째 칸: 상품
@@ -348,7 +470,7 @@
     const r = CH.load(); r.name = n; r.ask = false; CH.save(r);
     CH.setName(n); // 게임 화면에서도 이 이름으로
     $('name-in').blur();
-    closeM('name-m'); render(); maybePrize();
+    closeM('name-m'); render(); afterShow();
   }
   $('name-ok').onclick = nameOk;
   $('name-in').addEventListener('keydown', e => { if (e.key === 'Enter') nameOk(); });
@@ -356,49 +478,110 @@
 
   /* ---------- 상품 ---------- */
   function fifthTime(r) { const ts = Object.values(r.stamps).filter(Boolean).sort((a, b) => a - b); return ts[CH.GOAL - 1] || ts[ts.length - 1]; }
-  function openPrize() {
+  // praise: 축하 말(도장 5개째 축하를 상품 창에 합침)
+  function openPrize(praise) {
     const r = CH.load(), n = CH.count(r);
     if (n < CH.GOAL) return;
+    $('pz-ico').textContent = praise ? praise[0] : '🎁';
+    $('pz-t').textContent = n >= 7 ? '도장 7개 모두 달성!' : `도장 ${n}개 달성!`;
+    $('pz-praise').hidden = !praise; $('pz-praise').textContent = praise ? praise[1] : '';
     $('pz-name').textContent = r.name || '이름 없음';
+    $('pz-title').textContent = CH.title(n).text;
     $('pz-cnt').textContent = `도장 ${n} / 7`;
     $('pz-time').textContent = `${CH.fmtTime(fifthTime(r))} 달성`;
-    $('pz-stamps').innerHTML = CH.STAGES.map(s => `<span class="${r.stamps[s.id] ? 'on' : ''}">${s.id}</span>`).join('');
+    $('pz-stamps').innerHTML = CH.STAGES.map(s => `<span class="${r.stamps[s.id] ? 'on' : ''}">${s.id}${r.perfect[s.id] ? '⚡' : ''}</span>`).join('');
+    $('pz-cert').hidden = n < 7;
     r.seen = n; CH.save(r);
-    openM('prize'); confetti();
+    openM('prize'); fireworks(praise ? 5 : 3);
   }
   function maybePrize() {
     const r = CH.load(), n = CH.count(r);
     if (n >= CH.GOAL && n > (r.seen || 0) && r.name && !anyOpen()) openPrize();
   }
-  $('banner-btn').onclick = openPrize;
+
+  /* ---------- 축하: 새 도장 수마다 한 번 (celebrated 에 본 개수 저장) ---------- */
+  function maybeCelebrate() {
+    const r = CH.load(), n = CH.count(r);
+    if (!r.name || anyOpen() || !(n > (r.celebrated || 0)) || !CH.CELEB[n]) return false;
+    r.celebrated = n;
+    if (n === CH.GOAL) { CH.save(r); openPrize(CH.CELEB[n]); return true; } // 5개: 상품 창에 합침
+    if (n >= CH.GOAL) r.seen = n; // 6·7개: 상품 창은 띠 버튼으로 (바로 또 뜨지 않게)
+    CH.save(r);
+    const [ico, msg] = CH.CELEB[n], ti = CH.title(n);
+    $('cb-ico').textContent = ico; $('cb-n').textContent = n; $('cb-msg').textContent = msg;
+    $('cb-title').innerHTML = `칭호 <span class="chb-title">${esc(ti.text)}</span>`;
+    $('cb-dots').innerHTML = Array.from({ length: 7 }, (_, i) => `<i class="${i < n ? (n >= 7 ? 'gold' : 'on') : ''}"></i>`).join('');
+    const btns = [];
+    if (n >= 7) btns.push(`<button class="bk-btn bk-btn--primary" type="button" data-act="cert">🎓 수료증 보기</button>`);
+    if (n >= CH.GOAL) btns.push(`<button class="bk-btn" type="button" data-act="prize">🎁 상품 받기 화면</button>`);
+    btns.push(`<button class="bk-btn ${n >= 7 ? 'bk-btn--ghost' : 'bk-btn--primary'}" type="button" data-act="close">${n >= 7 ? '닫기' : n >= CH.GOAL ? '닫기' : '다음 도전! ▶'}</button>`);
+    $('cb-btns').innerHTML = btns.join('');
+    $('cb-btns').querySelectorAll('[data-act]').forEach(b => b.onclick = () => {
+      closeM('celeb'); stopConfetti();
+      if (b.dataset.act === 'cert') openCert(); else if (b.dataset.act === 'prize') openPrize();
+    });
+    $('celeb').classList.toggle('big', n >= 6);
+    openM('celeb'); fireworks(n);
+    return true;
+  }
+  // 도장판을 그린 뒤: 축하 → (없으면) 상품 창
+  function afterShow() { if (!maybeCelebrate()) maybePrize(); }
+
+  /* ---------- 수료증 (7/7) ---------- */
+  function openCert() {
+    const r = CH.load(), n = CH.count(r);
+    if (n < 7) return;
+    $('ct-name').textContent = r.name || '이름 없음';
+    $('ct-title').textContent = CH.title(n).text;
+    $('ct-stamps').innerHTML = CH.STAGES.map(s => `<span>${CH.stampSVG({ stage: s.id })}</span>`).join('');
+    $('ct-seal').innerHTML = CH.stampSVG({ big: '미션 클리어', small: '7 / 7' });
+    const last = Math.max(...Object.values(r.stamps).filter(Boolean)), d = new Date(last), p = x => String(x).padStart(2, '0');
+    $('ct-date').textContent = `${d.getFullYear()}년 ${d.getMonth() + 1}월 ${d.getDate()}일 ${p(d.getHours())}:${p(d.getMinutes())}`;
+    openM('cert');
+  }
+  $('cert-btn').onclick = () => openCert();
+  $('pz-cert').onclick = () => { closeM('prize'); stopConfetti(); openCert(); };
+  $('ct-close').onclick = () => closeM('cert');
+  $('banner-btn').onclick = () => openPrize();
   $('pz-close').onclick = () => { closeM('prize'); stopConfetti(); };
   $('pz-give').onclick = () => openM('confirm-m');
   $('cf-no').onclick = () => closeM('confirm-m');
   $('cf-yes').onclick = () => {
     closeM('confirm-m'); closeM('prize'); stopConfetti();
     CH.clear();
-    const r = CH.load(); r.ask = true; CH.save(r); // 새 기록 (황금비 퀸 자리도 새로)
+    const r = CH.load(); r.ask = true; CH.save(r); // 새 기록 (도장·축하·⚡·도전 횟수·황금비 퀸 자리 모두 새로)
     render(); openName(true);
   };
 
-  /* ---------- 색종이 ---------- */
+  /* ---------- 색종이 + 불꽃 (level 1~7: 클수록 많이·오래) ---------- */
   let cfId = 0, cfStop = 0;
-  function confetti() {
+  function fireworks(level) {
+    level = Math.max(1, Math.min(7, level | 0));
     const cv = $('confetti'), ctx = cv.getContext('2d');
     cv.hidden = false; cv.width = innerWidth; cv.height = innerHeight;
-    const COL = ['#F5A623', '#5BB8E8', '#E9533F', '#9B6BD6', '#FFD60A', '#57CC99'];
-    const ps = Array.from({ length: 140 }, () => ({ x: Math.random() * cv.width, y: -20 - Math.random() * cv.height * .6, w: 6 + Math.random() * 6, h: 8 + Math.random() * 8,
-      vy: 2 + Math.random() * 3.2, vx: -1.5 + Math.random() * 3, a: Math.random() * 6.28, va: -.2 + Math.random() * .4, c: COL[Math.floor(Math.random() * COL.length)] }));
-    cancelAnimationFrame(cfId); cfStop = performance.now() + 4500;
+    const COL = level >= 7 ? ['#FFD60A', '#E8B21B', '#FFE27A', '#fff', '#FF8A65', '#F5A623'] : ['#F5A623', '#5BB8E8', '#E9533F', '#9B6BD6', '#FFD60A', '#57CC99'];
+    const pick = () => COL[Math.floor(Math.random() * COL.length)];
+    const nConf = 40 + level * 22, dur = 2200 + level * 450, bursts = level <= 2 ? 0 : level <= 4 ? 2 : level === 5 ? 4 : level === 6 ? 6 : 10;
+    const ps = Array.from({ length: nConf }, () => ({ x: Math.random() * cv.width, y: -20 - Math.random() * cv.height * .6, w: 6 + Math.random() * 6, h: 8 + Math.random() * 8,
+      vy: 2 + Math.random() * 3.2, vx: -1.5 + Math.random() * 3, a: Math.random() * 6.28, va: -.2 + Math.random() * .4, c: pick() }));
+    const sparks = []; let left = bursts, nextBurst = performance.now() + 150;
+    const burst = () => { const x = cv.width * (.15 + Math.random() * .7), y = cv.height * (.12 + Math.random() * .4), c = pick(), n = level >= 6 ? 54 : 38;
+      for (let i = 0; i < n; i++) { const a = i / n * 6.283, v = 2.2 + Math.random() * 3.4; sparks.push({ x, y, vx: Math.cos(a) * v, vy: Math.sin(a) * v, life: 1, c: level >= 7 && i % 3 === 0 ? '#fff' : c }); } };
+    cancelAnimationFrame(cfId); cfStop = performance.now() + dur;
     const step = now => {
       ctx.clearRect(0, 0, cv.width, cv.height);
+      if (left > 0 && now >= nextBurst) { burst(); left--; nextBurst = now + (level >= 7 ? 260 : 420); }
       let alive = 0;
       ps.forEach(p => { p.y += p.vy; p.x += p.vx + Math.sin(p.y / 30) * .6; p.a += p.va; if (p.y < cv.height + 20) alive++; else if (now < cfStop) { p.y = -20; p.x = Math.random() * cv.width; alive++; }
         ctx.save(); ctx.translate(p.x, p.y); ctx.rotate(p.a); ctx.fillStyle = p.c; ctx.fillRect(-p.w / 2, -p.h / 2, p.w, p.h); ctx.restore(); });
-      if (alive) cfId = requestAnimationFrame(step); else stopConfetti();
+      for (let i = sparks.length - 1; i >= 0; i--) { const q = sparks[i]; q.x += q.vx; q.y += q.vy; q.vy += .06; q.vx *= .985; q.vy *= .985; q.life -= .016;
+        if (q.life <= 0) { sparks.splice(i, 1); continue; } alive++;
+        ctx.globalAlpha = Math.max(0, q.life); ctx.fillStyle = q.c; ctx.beginPath(); ctx.arc(q.x, q.y, 2.2 + q.life * 1.8, 0, 6.283); ctx.fill(); ctx.globalAlpha = 1; }
+      if (alive || left > 0) cfId = requestAnimationFrame(step); else stopConfetti();
     };
     if (!matchMedia('(prefers-reduced-motion: reduce)').matches) cfId = requestAnimationFrame(step);
   }
+  const confetti = () => fireworks(3);
   function stopConfetti() { cancelAnimationFrame(cfId); const cv = $('confetti'); cv.getContext('2d').clearRect(0, 0, cv.width, cv.height); cv.hidden = true; }
 
   /* ---------- 시작 · 게임에서 돌아왔을 때(뒤로 가기 캐시 포함) ---------- */
@@ -409,15 +592,15 @@
       const card = document.querySelector(`.chc[data-id="${r.fresh}"]`);
       r.fresh = ''; CH.save(r);
       if (card) { card.classList.add('fresh'); card.scrollIntoView({ block: 'nearest' }); setTimeout(() => card.classList.remove('fresh'), 1200); }
-      setTimeout(maybePrize, card ? 900 : 0);
-    } else maybePrize();
+      setTimeout(afterShow, card ? 900 : 0);
+    } else afterShow();
     if (!r.name && !anyOpen()) openName(!!r.ask);
   }
   window.addEventListener('pageshow', () => { if (!anyOpen()) show(); });
   // 다른 탭(게임)에서 도장이 바뀌면 다시 그림
   window.addEventListener('storage', e => { if (e.key === CH.KEY && !anyOpen()) render(); });
   // 뒤로 가기(안드로이드): 열린 창부터 닫기
-  document.addEventListener('keydown', e => { if (e.key === 'Escape') { if ($('confirm-m').classList.contains('on')) closeM('confirm-m'); else if ($('prize').classList.contains('on')) { closeM('prize'); stopConfetti(); } } });
+  document.addEventListener('keydown', e => { if (e.key === 'Escape') { if ($('cert').classList.contains('on')) closeM('cert'); else if ($('confirm-m').classList.contains('on')) closeM('confirm-m'); else if ($('prize').classList.contains('on')) { closeM('prize'); stopConfetti(); } else if ($('celeb').classList.contains('on')) { closeM('celeb'); stopConfetti(); } } });
 })();
 </script>
 </body>

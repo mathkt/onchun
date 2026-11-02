@@ -8,17 +8,26 @@
     qn: { name: '황금비 퀸', g: 'queen', color: '#E9533F', deep: '#B53A2A' },
     pp: { name: '팝잇', g: 'popit', color: '#9B6BD6', deep: '#6E44AE' },
   };
-  // mission: 카드 한 줄 · cond: 조건 칩
+  // mission: 카드 제목(판 이름) · cond: 조건 칩 · glyph: 도장 가운데 그림 종류
   const STAGES = [
-    { id: '1-1', k: 'nt', mission: '선공으로 AI를 이겨라', cond: '3×3 판' },
-    { id: '2-1', k: 'st', mission: '선공으로 AI를 이겨라', cond: '돌 14개 · 💣 폭탄', n: 14, mode: 'bomb' },
-    { id: '2-2', k: 'st', mission: '선공으로 AI를 이겨라', cond: '돌 26개 · 💎 보석', n: 26, mode: 'gem' },
+    { id: '1-1', k: 'nt', mission: '3×3 노탁토', cond: '3×3 판', glyph: 'x' },
+    { id: '2-1', k: 'st', mission: '폭탄 모드 14개', cond: '돌 14개 · 💣 폭탄', n: 14, mode: 'bomb', glyph: 'bomb' },
+    { id: '2-2', k: 'st', mission: '보석 모드 26개', cond: '돌 26개 · 💎 보석', n: 26, mode: 'gem', glyph: 'gem' },
     // 황금비 퀸: size 판 크기(그런 칸이 없으면 더 큰 판) · target 최선으로 두면 내 몇 번째 수에 구석에 넣는가 — 칩에는 "N×N · " 가 앞에 붙음
-    { id: '3-1', k: 'qn', mission: '선공으로 AI를 이겨라', cond: '3수 만에 이길 수 있는 자리', size: 8, target: 3 },
-    { id: '3-2', k: 'qn', mission: '선공으로 AI를 이겨라', cond: '4수 만에 이길 수 있는 자리', size: 12, target: 4 },
-    { id: '4-1', k: 'pp', mission: '선공으로 AI를 이겨라', cond: '줄 3·4·3', rows: [3, 4, 3] },
-    { id: '4-2', k: 'pp', mission: '선공으로 AI를 이겨라', cond: '줄 3·4·5', rows: [3, 4, 5] },
+    { id: '3-1', k: 'qn', mission: '8×8 황금비 퀸', cond: '3수 만에 이길 수 있는 자리', size: 8, target: 3, glyph: 'queen' },
+    { id: '3-2', k: 'qn', mission: '12×12 황금비 퀸', cond: '4수 만에 이길 수 있는 자리', size: 12, target: 4, glyph: 'queenstar' },
+    { id: '4-1', k: 'pp', mission: '팝잇 3·4·3', cond: '줄 3·4·3', rows: [3, 4, 3], glyph: 'bubble' },
+    { id: '4-2', k: 'pp', mission: '팝잇 3·4·5', cond: '줄 3·4·5', rows: [3, 4, 5], glyph: 'bubbles' },
   ];
+  const SUB = '선공 · AI를 이기면 도장'; // 게임 화면 미션 줄 둘째 토막
+  // 칭호(도장 수) · 축하 말(새 도장 수마다 한 번)
+  const TITLES = [[6, '🏆', '필즈상 후보'], [4, '🧠', '수학자'], [2, '🔥', '전략가'], [0, '🌱', '수학 새싹']];
+  function title(n) { const t = TITLES.find(t => n >= t[0]); return { ico: t[1], name: t[2], text: t[1] + ' ' + t[2] }; }
+  const CELEB = { 1: ['🎉', '첫 도장! 시작이 반이에요'], 2: ['✨', '감 잡았네요!'], 3: ['🔥', 'AI가 긴장하기 시작했어요'], 4: ['💪', '하나만 더! 상품이 보여요'],
+    5: ['🎆', '전략가시네요! 🎁 상품 받으러 가세요'], 6: ['🏅', '수학자예요? AI가 두 손 들었어요'], 7: ['🏆', '미래 필즈상 대상자입니다! 전 미션 클리어'] };
+  // AI의 한마디
+  const AI_SAY = { win: ['졌다… 다음엔 안 봐줘 😤', '어떻게 알았지?!', '내 계산이 틀렸다고…?', '인정. 잘 뒀어 👏'], lose: ['아직 멀었어 😏', '한 수 더 생각해 봐', '이 판은 내가 가져갈게', '필승 전략, 알고 있어?'] };
+  function aiSay(win) { const a = AI_SAY[win ? 'win' : 'lose']; return a[Math.floor(Math.random() * a.length)]; }
   const GOAL = 5; // 도장 5개면 상품
 
   /* ---------- 황금비 퀸: 남은 수(remoteness) — 메인 게임 qnRemote와 같은 계산 (기본 규칙 'last') ---------- */
@@ -61,29 +70,44 @@
 
   /* ---------- 기록 ---------- */
   let mem = null; // localStorage를 못 쓰면 메모리에만
-  function blank() { return { v: 1, name: '', stamps: {}, loss: {}, qn: pickQueen(), created: Date.now(), seen: 0, fresh: '' }; }
+  // stamps[id] 도장 찍은 시각 · loss[id] 연속으로 진 횟수 · att[id] 끝까지 둔 판 수 · winAt[id] 몇 번째 판에 도장 · sec[id] 도장 받은 판의 걸린 초 · perfect[id] 최소 수 승리
+  // celebrated 축하창을 띄운 도장 수 · seen 상품창을 본 도장 수
+  function blank() { return { v: 1, name: '', stamps: {}, loss: {}, att: {}, winAt: {}, sec: {}, perfect: {}, celebrated: 0, qn: pickQueen(), created: Date.now(), seen: 0, fresh: '' }; }
   function load() {
     let r = null;
     try { r = JSON.parse(localStorage.getItem(KEY) || 'null'); } catch (e) { r = mem; }
     if (!r || typeof r !== 'object' || r.v !== 1) { r = blank(); save(r); }
     if (!r.stamps || typeof r.stamps !== 'object') r.stamps = {};
     if (!r.qn || !Array.isArray(r.qn.s31) || !Array.isArray(r.qn.s32) || !(r.qn.N >= 8) || !(r.qn.N2 >= 12)) { r.qn = pickQueen(); save(r); }
-    if (!r.loss || typeof r.loss !== 'object') r.loss = {};
+    for (const k of ['loss', 'att', 'winAt', 'sec', 'perfect']) if (!r[k] || typeof r[k] !== 'object') r[k] = {};
+    if (!(r.celebrated >= 0)) r.celebrated = 0;
     return r;
   }
-  // 승패 뒤 연속으로 진 횟수 (이기면 0) — 돌려주는 값: 지금까지 연속으로 진 횟수
+  // 승패 뒤 연속으로 진 횟수 (이기면 0) — 돌려주는 값: 지금까지 연속으로 진 횟수. 끝까지 둔 판 수(att)도 하나 올림
   function result(id, win) {
     const r = load();
     r.loss[id] = win ? 0 : (r.loss[id] || 0) + 1;
+    r.att[id] = (r.att[id] || 0) + 1;
     save(r); return r.loss[id];
   }
   function save(r) { mem = r; try { localStorage.setItem(KEY, JSON.stringify(r)); } catch (e) {} }
   function clear() { mem = null; try { localStorage.removeItem(KEY); } catch (e) {} }
   function count(r) { return STAGES.filter(s => r.stamps[s.id]).length; }
-  // 도장 찍기: 새로 찍었으면 true
-  function stamp(id) {
+  // 도장 찍기: 새로 찍었으면 true. o: { sec 걸린 초, perfect 최소 수 승리, att 몇 번째 판 } — result() 보다 먼저 불리므로 att는 +1 해서 받음
+  function stamp(id, o) {
     const r = load(); if (r.stamps[id]) return false;
-    r.stamps[id] = Date.now(); r.fresh = id; save(r); return true;
+    o = o || {};
+    r.stamps[id] = Date.now(); r.fresh = id;
+    r.winAt[id] = o.att || (r.att[id] || 0) + 1;
+    if (o.sec >= 0) r.sec[id] = Math.round(o.sec);
+    if (o.perfect) r.perfect[id] = true;
+    save(r); return true;
+  }
+  // 도전 횟수·시간 글 — 카드·수료증용. "2번 만에 성공 · 1분 20초" / "도전 3회" / ''
+  function fmtSec(sec) { sec = Math.max(0, Math.round(sec || 0)); const m = Math.floor(sec / 60), s = sec % 60; return m ? `${m}분 ${s}초` : `${s}초`; }
+  function tryText(r, id) {
+    if (r.stamps[id]) { const a = r.winAt[id] || 1, t = r.sec[id]; return `${a}번 만에 성공` + (t >= 0 ? ` · ${fmtSec(t)}` : ''); }
+    return r.att[id] ? `도전 ${r.att[id]}회` : '';
   }
   function stage(id) { return STAGES.find(s => s.id === id) || null; }
   function getName() { try { return (localStorage.getItem(NAME_KEY) || '').trim(); } catch (e) { return ''; } }
@@ -105,21 +129,33 @@
       <path id="chArcBot" d="M 22 62 A 38 38 0 0 0 98 62"/>
     </defs></svg>`;
   }
-  // big: 가운데 큰 글씨 · small: 아래 작은 글씨(단계 번호 등)
+  // 도장 가운데 그림 (단계마다 다름) — 빨간 단색, 잉크 번짐 필터 안
+  const GLYPH = {
+    x: `<path d="M44 42l32 32M76 42l-32 32" stroke-width="9" stroke-linecap="round"/>`,
+    bomb: `<circle cx="58" cy="63" r="19" fill="#D7263D" stroke="none"/><path d="M68 48l6-8" stroke-width="5" stroke-linecap="round"/><path d="M72 40q4-6 10-3" stroke-width="3.5" stroke-linecap="round"/><circle cx="84" cy="34" r="3" fill="#D7263D" stroke="none"/><path d="M50 57q2-7 9-9" stroke="#FFFDF6" stroke-width="3" stroke-linecap="round" opacity=".8"/>`,
+    gem: `<path d="M44 52l8-11h16l8 11-16 23z" fill="#D7263D" stroke="none"/><path d="M44 52h32M52 41l6 11 2-11M68 41l-6 11-2-11M52 52l8 23M68 52l-8 23" stroke="#FFFDF6" stroke-width="1.8" opacity=".75"/>`,
+    queen: `<text x="60" y="76" text-anchor="middle" font-family="'Noto Sans KR','Segoe UI Symbol',sans-serif" font-size="42" fill="#D7263D" stroke="none">♛</text>`,
+    queenstar: `<text x="60" y="78" text-anchor="middle" font-family="'Noto Sans KR','Segoe UI Symbol',sans-serif" font-size="38" fill="#D7263D" stroke="none">♛</text><path d="M60 30l3.2 6.6 7.3 1-5.3 5.1 1.3 7.2-6.5-3.4-6.5 3.4 1.3-7.2-5.3-5.1 7.3-1z" fill="#D7263D" stroke="none"/>`,
+    bubble: `<circle cx="60" cy="60" r="19" fill="#D7263D" stroke="none"/><circle cx="53" cy="53" r="5" fill="#FFFDF6" stroke="none" opacity=".8"/>`,
+    bubbles: `<circle cx="43" cy="61" r="11" fill="#D7263D" stroke="none"/><circle cx="60" cy="61" r="11" fill="#D7263D" stroke="none"/><circle cx="77" cy="61" r="11" fill="#D7263D" stroke="none"/><circle cx="39" cy="57" r="3" fill="#FFFDF6" stroke="none" opacity=".8"/><circle cx="56" cy="57" r="3" fill="#FFFDF6" stroke="none" opacity=".8"/><circle cx="73" cy="57" r="3" fill="#FFFDF6" stroke="none" opacity=".8"/>`,
+  };
+  // stage: 단계 번호(그림 종류·아래 글씨) · big: 그림 대신 가운데 큰 글씨 · small: 아래 작은 글씨
   function stampSVG(o) {
     o = o || {};
-    const big = o.big || '참 잘했어요', small = o.small || '';
+    const st = o.stage ? stage(o.stage) : null;
+    const small = o.small != null ? o.small : (st ? '도전 ' + st.id : '');
+    const mid = st && GLYPH[st.glyph] ? GLYPH[st.glyph]
+      : `<text x="60" y="58" text-anchor="middle" font-family="Jua, 'Noto Sans KR', sans-serif" font-size="17" fill="#D7263D" stroke="none">${o.big || '참 잘했어요'}</text><path d="M47 71 l8 8 l19 -17" stroke-width="4.5" stroke-linecap="round" stroke-linejoin="round"/>`;
     return `<svg class="ch-stamp-svg" viewBox="0 0 120 120" aria-hidden="true">
       <g filter="url(#chInk)" fill="none" stroke="#D7263D">
         <circle cx="60" cy="60" r="55" stroke-width="5"/>
         <circle cx="60" cy="60" r="47" stroke-width="1.6"/>
         <text font-family="Jua, 'Noto Sans KR', sans-serif" font-size="11" fill="#D7263D" stroke="none" letter-spacing="1.5"><textPath href="#chArcTop" startOffset="50%" text-anchor="middle">★ 부산 활동수학 축전 ★</textPath></text>
-        <text x="60" y="58" text-anchor="middle" font-family="Jua, 'Noto Sans KR', sans-serif" font-size="17" fill="#D7263D" stroke="none">${big}</text>
-        <path d="M47 71 l8 8 l19 -17" stroke-width="4.5" stroke-linecap="round" stroke-linejoin="round"/>
+        ${mid}
         ${small ? `<text x="60" y="98" text-anchor="middle" font-family="Jua, 'Noto Sans KR', sans-serif" font-size="10" fill="#D7263D" stroke="none">${small}</text>` : ''}
       </g>
     </svg>`;
   }
 
-  window.CH = { KEY, GAME, STAGES, GOAL, LEARN_EVERY: 4, stage, load, save, clear, count, stamp, result, pickQueen, queenOf, fitCells, getName, setName, fmtTime, fmtClock, inkDefs, stampSVG };
+  window.CH = { KEY, GAME, STAGES, GOAL, SUB, CELEB, LEARN_EVERY: 4, stage, title, aiSay, load, save, clear, count, stamp, result, tryText, fmtSec, pickQueen, queenOf, fitCells, getName, setName, fmtTime, fmtClock, inkDefs, stampSVG };
 })();

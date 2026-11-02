@@ -26,6 +26,7 @@
       background:#fff; border:2.5px solid ${G.color}; border-radius:16px; padding:6px 12px; box-shadow:0 3px 0 ${G.deep}; font-family:'Noto Sans KR',sans-serif; }
     .ch-bar .ch-id { font-family:'Jua',sans-serif; font-size:1.05rem; color:#fff; background:${G.color}; border-radius:9px; padding:1px 9px; box-shadow:inset 0 -3px 0 rgba(0,0,0,.14); flex:none; }
     .ch-bar .ch-m { font-family:'Jua',sans-serif; font-size:1.1rem; color:#2C2A26; }
+    .ch-bar .ch-s { font-size:.85rem; font-weight:900; color:#D7263D; white-space:nowrap; }
     .ch-bar .ch-c { font-size:.85rem; font-weight:800; color:${G.deep}; }
     .ch-bar .ch-done { font-size:.8rem; font-weight:900; color:#D7263D; white-space:nowrap; }
     .ch-actions { display:flex; gap:10px; justify-content:center; flex-wrap:wrap; width:100%; margin:8px 0 4px; }
@@ -54,6 +55,15 @@
     .ch-res-ico { font-size:4.2rem; line-height:1; margin:6px 0 8px; }
     .ch-res-t { font-family:'Jua',sans-serif; font-size:2rem; line-height:1.2; margin:0 0 4px; color:#2C2A26; }
     .ch-res-p { font-family:'Jua',sans-serif; font-size:1.15rem; color:#5F5B55; margin:0; }
+    .ch-res-perf { display:inline-block; margin-top:8px; font-family:'Jua',sans-serif; font-size:1.05rem; color:#6B4A00; background:linear-gradient(90deg,#FFE27A,#FFD15C); border:2px solid #E8B21B; border-radius:999px; padding:4px 14px; box-shadow:0 3px 0 #D9A514; animation:chPerf .6s .5s cubic-bezier(.3,1.4,.5,1) both; }
+    @keyframes chPerf { from { transform:scale(.4); opacity:0 } to { transform:none; opacity:1 } }
+    .ch-res-stamp .ch-perf-badge { position:absolute; right:8px; top:14px; width:46px; height:46px; border-radius:50%; background:#fff; border:3px solid #E8B21B; box-shadow:0 3px 8px rgba(0,0,0,.25); display:grid; place-items:center; font-size:1.6rem; transform:rotate(12deg); z-index:2; }
+    /* AI의 한마디 */
+    .ch-ai { display:flex; align-items:flex-start; gap:8px; margin:14px auto 0; max-width:340px; text-align:left; }
+    .ch-ai .ch-ai-ico { flex:none; width:38px; height:38px; border-radius:50%; background:#EEF4FA; border:2px solid #C9D7E6; display:grid; place-items:center; font-size:1.35rem; }
+    .ch-ai .ch-ai-bub { position:relative; flex:1; background:#fff; border:2px solid #C9D7E6; border-radius:14px; border-top-left-radius:4px; padding:8px 12px; font-size:.98rem; font-weight:800; color:#2C2A26; line-height:1.35; }
+    .ch-ai .ch-ai-bub::before { content:""; position:absolute; left:-9px; top:10px; border:5px solid transparent; border-right-color:#C9D7E6; border-left:0; }
+    .ch-ai .ch-ai-bub small { display:block; font-size:.7rem; color:#7A8A9A; font-weight:700; margin-bottom:1px; }
     .ch-res-btns { display:flex; gap:10px; justify-content:center; flex-wrap:wrap; margin-top:16px; }
     .ch-res-btns .ch-btn { flex:1 1 150px; justify-content:center; }
     .ch-auto { height:6px; border-radius:3px; background:#F1E8CF; margin-top:12px; overflow:hidden; }
@@ -61,7 +71,7 @@
     .ch-auto.run i { width:100%; transition:width var(--t,2.8s) linear; }
     @media (max-width:640px) {
       .ch-bar { padding:5px 8px; gap:4px 8px; margin-bottom:4px; }
-      .ch-bar .ch-m { font-size:1rem; } .ch-bar .ch-c { font-size:.78rem; }
+      .ch-bar .ch-m { font-size:1rem; } .ch-bar .ch-c, .ch-bar .ch-s { font-size:.78rem; }
       .ch-btn { font-size:1rem; min-height:46px; padding:8px 16px; }
       .ch-res-stamp { width:160px; height:160px; } .ch-res-t { font-size:1.7rem; }
     }
@@ -81,9 +91,15 @@
   // 승패: 원래 결과 창(전적 기록 포함) 대신 도전 결과
   showVictoryModal = function (w, r, isLoss) { onEnd(!isLoss); };
   showStartToast = function () {};                                                         // 미션 줄이 있으니 "선공" 알림은 생략
+  // AI가 실제로 둔 횟수 세기 → 내 수 = AI 수 + (내가 이겼으면 1). 황금비 퀸 ⚡ 최소 수 판정에 씀
+  let aiMoves = 0;
+  const _qb = qnBotTurn; qnBotTurn = function () { if (!qnOver && qnCur === qnBotNum() && qnPhase === 'play' && qnMode === 'bot') aiMoves++; return _qb.apply(this, arguments); };
+  const _pb = ppBotTurn; ppBotTurn = function () { if (!ppOver && ppCur === ppBotNum() && ppMode === 'bot') aiMoves++; return _pb.apply(this, arguments); };
+  const _nb = ntBotTurn; ntBotTurn = function () { if (!ntGameOver) aiMoves++; return _nb.apply(this, arguments); };
+  const _sb = stBotTurn; stBotTurn = function () { if (!stGameOver && !stIsAnimating) aiMoves++; return _sb.apply(this, arguments); };
 
   /* ---------- 판 시작 ---------- */
-  let resT = null, autoT = null, limit = 0;
+  let resT = null, autoT = null, limit = 0, startAt = 0;
   function condText() {
     if (k === 'nt') return '3×3 · 한 줄을 만들면 패배';
     if (k === 'st') return `돌 ${S.n}개 · ${S.mode === 'bomb' ? '💣 마지막 폭탄 돌을 가져가면 패배' : '💎 마지막 보석 돌을 가져가면 승리'} · 한 번에 1~${limit}개`;
@@ -92,10 +108,11 @@
   }
   function renderBar() {
     const done = CH.load().stamps[id];
-    bar.innerHTML = `<span class="ch-id">${esc(id)}</span><span class="ch-m">${esc(S.mission)}</span><span class="ch-c">${esc(condText())}</span>${done ? '<span class="ch-done">✓ 도장 받음</span>' : ''}`;
+    bar.innerHTML = `<span class="ch-id">${esc(id)}</span><span class="ch-m">${esc(S.mission)}</span><span class="ch-s">${esc(CH.SUB)}</span><span class="ch-c">${esc(condText())}</span>${done ? '<span class="ch-done">✓ 도장 받음</span>' : ''}`;
   }
   function start() {
     hideRes();
+    aiMoves = 0; startAt = Date.now();
     botDifficulty = '최상'; isBranchPlay = false; aiHuman = 1; olAiP = null;
     try { rndLast[k] = null; } catch (e) {}
     try { window[k + 'StopTimer'](); } catch (e) {}
@@ -126,35 +143,41 @@
   function hideRes() { clearTimeout(resT); clearTimeout(autoT); res.classList.remove('on'); res.innerHTML = ''; }
   function onEnd(win) {
     clearTimeout(resT);
-    const fresh = win ? CH.stamp(id) : false; // 기록은 바로 (창이 뜨기 전에 나가도 도장은 남음)
+    const my = aiMoves + (win ? 1 : 0);                       // 내가 둔 수
+    const perfect = win && k === 'qn' && my === S.target;     // 황금비 퀸: 최소 수로 이김 ⚡
+    const sec = (Date.now() - startAt) / 1000;
+    const fresh = win ? CH.stamp(id, { sec, perfect, att: (CH.load().att[id] || 0) + 1 }) : false; // 기록은 바로 (창이 뜨기 전에 나가도 도장은 남음)
     const losses = CH.result(id, win);        // 연속으로 진 횟수 (이기면 0)
-    resT = setTimeout(() => showRes(win, fresh, losses), win ? 650 : 900);
+    resT = setTimeout(() => showRes(win, fresh, losses, perfect), win ? 650 : 900);
   }
   // 📘 필승 전략 배우기: 보통 화면을 전략 카드가 열린 채로 (back=ch:단계 → 카드에 "도전으로 돌아가기" 버튼)
   function goLearn() {
     clearTimeout(autoT);
     location.href = `${location.pathname}?game=${encodeURIComponent(G.g)}&lesson=1&back=${encodeURIComponent('ch:' + id)}`;
   }
-  function showRes(win, fresh, losses) {
-    const t = CH.load().stamps[id];
+  function showRes(win, fresh, losses, perfect) {
+    const rec = CH.load(), t = rec.stamps[id];
+    const ai = `<div class="ch-ai"><span class="ch-ai-ico">🤖</span><div class="ch-ai-bub"><small>AI의 한마디</small>${esc(CH.aiSay(win))}</div></div>`;
+    const perf = perfect ? `<div class="ch-res-perf">⚡ 완벽한 수! 최소 수로 이겼어요</div>` : '';
+    const badge = (perfect || (win && rec.perfect[id])) ? '<span class="ch-perf-badge">⚡</span>' : '';
     const btnAgain = `<button type="button" class="ch-btn" data-act="again">↻ 다시하기</button>`;
     const btnBoard = l => `<button type="button" class="ch-btn ch-btn--main" data-act="board">📋 ${l}</button>`;
     if (!win && losses > 0 && losses % CH.LEARN_EVERY === 0) {
       // 4번째(8, 12…)로 진 판: 전략 배우러 가기 권유
       res.innerHTML = `<div class="ch-res-box"><div class="ch-res-ico">😅</div>
-        <h2 class="ch-res-t">${losses}번이나 아쉬웠어요</h2><p class="ch-res-p">필승 전략을 배우러 가볼까요?</p>
+        <h2 class="ch-res-t">${losses}번이나 아쉬웠어요</h2><p class="ch-res-p">필승 전략을 배우러 가볼까요?</p>${ai}
         <div class="ch-res-btns"><button type="button" class="ch-btn ch-btn--main" data-act="learn">📘 필승 전략 배우기</button><button type="button" class="ch-btn" data-act="again">🔁 다시 도전</button></div></div>`;
     } else if (win && fresh) {
-      res.innerHTML = `<div class="ch-res-box"><div class="ch-res-stamp"><span class="ink"></span>${CH.stampSVG({ small: '도전 ' + id })}</div>
-        <h2 class="ch-res-t">🎉 도전 ${esc(id)} 성공!</h2><p class="ch-res-p">도장 쾅! ${CH.fmtClock(t)}</p>
+      res.innerHTML = `<div class="ch-res-box"><div class="ch-res-stamp"><span class="ink"></span>${CH.stampSVG({ stage: id })}${badge}</div>
+        <h2 class="ch-res-t">🎉 도전 ${esc(id)} 성공!</h2><p class="ch-res-p">도장 쾅! ${CH.fmtClock(t)}</p>${perf}${ai}
         <div class="ch-res-btns">${btnBoard('도장판으로')}</div><div class="ch-auto"><i></i></div></div>`;
     } else if (win) {
-      res.innerHTML = `<div class="ch-res-box"><div class="ch-res-stamp old">${CH.stampSVG({ small: '도전 ' + id })}</div>
-        <h2 class="ch-res-t">🎉 이겼어요!</h2><p class="ch-res-p">이미 도장을 받았어요${t ? ` (${CH.fmtClock(t)})` : ''}</p>
+      res.innerHTML = `<div class="ch-res-box"><div class="ch-res-stamp old">${CH.stampSVG({ stage: id })}${badge}</div>
+        <h2 class="ch-res-t">🎉 이겼어요!</h2><p class="ch-res-p">이미 도장을 받았어요${t ? ` (${CH.fmtClock(t)})` : ''}</p>${perf}${ai}
         <div class="ch-res-btns">${btnAgain}${btnBoard('도장판 보기')}</div></div>`;
     } else {
       res.innerHTML = `<div class="ch-res-box"><div class="ch-res-ico">😢</div>
-        <h2 class="ch-res-t">아쉬워요!</h2><p class="ch-res-p">다시 도전해 봐요</p>
+        <h2 class="ch-res-t">아쉬워요!</h2><p class="ch-res-p">다시 도전해 봐요</p>${ai}
         <div class="ch-res-btns">${btnAgain}${btnBoard('도장판 보기')}</div></div>`;
     }
     res.querySelectorAll('[data-act]').forEach(b => b.onclick = () => { try { playSfx('click'); } catch (e) {} const a = b.dataset.act; if (a === 'again') start(); else if (a === 'learn') goLearn(); else goBoard(); });
@@ -167,7 +190,7 @@
         setTimeout(() => { try { playWinSound(); } catch (e) {} }, 420);
         au.style.setProperty('--t', '2.6s'); requestAnimationFrame(() => au.classList.add('run'));
       });
-      autoT = setTimeout(goBoard, 3200); // 쾅(0.5초) + 2.6초 뒤 도장판으로
+      autoT = setTimeout(goBoard, 3200); // 쾅(0.5초) + 2.6초 뒤 도장판으로 (축하는 도장판에서)
     } else if (!win) { try { playLoseSound(); } catch (e) {} }
     else { try { playWinSound(); } catch (e) {} }
   }
