@@ -7758,7 +7758,9 @@
   else syncTopName(null);
   if (CH_BACK) { // 🏆 도전으로 돌아가기: 카드 안 버튼 + 화면 아래 작은 떠 있는 버튼 (카드가 닫혀 있을 때)
     const chUrl = CH_BACK === 'board' ? '../../challenge/index.html' : 'index.html?ch=' + encodeURIComponent(CH_BACK);
-    const chLbl = CH_BACK === 'board' ? '🏆 도장판으로 돌아가기' : `🏆 도전 ${CH_BACK}로 돌아가기`;
+    // 단계 이름: id 'N-1' → 'N(중)', 'N-2' → 'N(상)' (challenge/stages.js의 label과 같음 — 그 파일은 이 뒤에 실리므로 여기서 계산)
+    const chStageLabel = id => { const [a, b] = id.split('-'); return `${a}(${b === '2' ? '상' : '중'})`; };
+    const chLbl = CH_BACK === 'board' ? '🏆 도장판으로 돌아가기' : `🏆 도전 ${chStageLabel(CH_BACK)}으로 돌아가기`;
     const b = document.getElementById('lesson-chback'); if (b) { b.hidden = false; b.querySelector('button').textContent = chLbl; b.querySelector('button').onclick = () => { playSfx('click'); location.href = chUrl; }; }
     const f = document.createElement('a'); f.id = 'ch-float'; f.href = chUrl; f.textContent = chLbl;
     f.addEventListener('click', () => playSfx('click'));

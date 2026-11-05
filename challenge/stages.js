@@ -8,18 +8,21 @@
     qn: { name: '황금비 퀸', g: 'queen', color: '#E9533F', deep: '#B53A2A' },
     pp: { name: '팝잇', g: 'popit', color: '#9B6BD6', deep: '#6E44AE' },
   };
-  // mission: 카드 제목(판 이름) · cond: 조건 칩 · glyph: 도장 가운데 그림 종류
+  // label: 카드·상단바에 보이는 단계 이름(중/상) — id는 저장 호환용으로 그대로 · glyph: 도장 가운데 그림 종류
+  // 돌 가져가기: n 돌 개수(없으면 nRange에서 랜덤) · mode 폭탄/보석 — 최대 개수는 판마다 3~5 랜덤, 선공(나)이 이기는 판만
+  // 황금비 퀸: size 판 크기(그런 칸이 없으면 더 큰 판) · target 최선으로 두면 내 몇 번째 수에 구석에 넣는가
+  // 팝잇: rows 고정 줄 · hard: 첫 판만 rows, 그 뒤엔 어려운 랜덤 판(선공 승리)
   const STAGES = [
-    { id: '1-1', k: 'nt', mission: '3×3 노탁토', cond: '3×3 판', glyph: 'x' },
-    { id: '2-1', k: 'st', mission: '폭탄 모드 14개', cond: '돌 14개 · 💣 폭탄', n: 14, mode: 'bomb', glyph: 'bomb' },
-    { id: '2-2', k: 'st', mission: '보석 모드 26개', cond: '돌 26개 · 💎 보석', n: 26, mode: 'gem', glyph: 'gem' },
-    // 황금비 퀸: size 판 크기(그런 칸이 없으면 더 큰 판) · target 최선으로 두면 내 몇 번째 수에 구석에 넣는가 — 칩에는 "N×N · " 가 앞에 붙음
-    { id: '3-1', k: 'qn', mission: '8×8 황금비 퀸', cond: '3수 만에 이길 수 있는 자리', size: 8, target: 3, glyph: 'queen' },
-    { id: '3-2', k: 'qn', mission: '12×12 황금비 퀸', cond: '4수 만에 이길 수 있는 자리', size: 12, target: 4, glyph: 'queenstar' },
-    { id: '4-1', k: 'pp', mission: '팝잇 3·4·3', cond: '줄 3·4·3', rows: [3, 4, 3], glyph: 'bubble' },
-    { id: '4-2', k: 'pp', mission: '팝잇 3·4·5', cond: '줄 3·4·5', rows: [3, 4, 5], glyph: 'bubbles' },
+    { id: '1-1', label: '1(중)', k: 'nt', glyph: 'x' },
+    { id: '2-1', label: '2(중)', k: 'st', n: 14, mode: 'bomb', glyph: 'bomb' },
+    { id: '2-2', label: '2(상)', k: 'st', nRange: [20, 30], mode: 'gem', glyph: 'gem' },
+    { id: '3-1', label: '3(중)', k: 'qn', size: 8, target: 3, glyph: 'queen' },
+    { id: '3-2', label: '3(상)', k: 'qn', size: 12, target: 4, glyph: 'queenstar' },
+    { id: '4-1', label: '4(중)', k: 'pp', rows: [3, 4, 3], glyph: 'bubble' },
+    { id: '4-2', label: '4(상)', k: 'pp', rows: [3, 4, 5], hard: true, glyph: 'bubbles' },
   ];
-  const SUB = '선공 · AI를 이기면 도장'; // 게임 화면 미션 줄 둘째 토막
+  function label(id) { const S = stage(id); return S ? S.label : String(id); }
+  function cardTitle(id) { const S = stage(id); return S ? `${S.label} ${GAME[S.k].name}` : String(id); }
   // 칭호(도장 수) · 축하 말(새 도장 수마다 한 번)
   const TITLES = [[6, '🏆', '필즈상 후보'], [4, '🧠', '수학자'], [2, '🔥', '전략가'], [0, '🌱', '수학 새싹']];
   function title(n) { const t = TITLES.find(t => n >= t[0]); return { ico: t[1], name: t[2], text: t[1] + ' ' + t[2] }; }
@@ -67,14 +70,43 @@
     r.qn[id] = q.s.slice(); save(r);
     return { N: q.N, s: q.s.slice() };
   }
-  // 단계의 판 크기 (카드 칩용)
-  function queenSize(id) { const S = stage(id); return S && S.size || 8; }
+
+  /* ---------- 돌 가져가기: 판마다 돌 개수·최대 개수 뽑기 (선공이 이기는 판만) ---------- */
+  // 지는 개수: 폭탄 (n-1) % (L+1) === 0 · 보석 n % (L+1) === 0 — 메인 게임 stIsLosingN과 같음
+  function stLosing(n, L, mode) { return mode === 'bomb' ? (n - 1) % (L + 1) === 0 : n % (L + 1) === 0; }
+  function nextStone(id) {
+    const S = stage(id), rnd = (a, b) => a + Math.floor(Math.random() * (b - a + 1));
+    let n = S.n || 20, limit = 3;
+    for (let i = 0; i < 200; i++) {
+      n = S.n || rnd(S.nRange[0], S.nRange[1]); limit = rnd(3, 5);
+      if (!stLosing(n, limit, S.mode)) break;
+    }
+    return { n, limit };
+  }
+
+  /* ---------- 팝잇: 첫 판은 정해진 줄, 그 뒤엔 어려운 랜덤 판 (선공 승리 = XOR ≠ 0) ---------- */
+  // 3~4줄 · 줄마다 3~7개 · XOR ≠ 0 · 서로 다른 값 3개 이상 · 합 12 이상 (두 줄 같고 하나 남는 뻔한 모양은 뺌)
+  function hardRows() {
+    for (let i = 0; i < 1000; i++) {
+      const k = 3 + Math.floor(Math.random() * 2), rows = Array.from({ length: k }, () => 3 + Math.floor(Math.random() * 5));
+      const x = rows.reduce((a, b) => a ^ b, 0), total = rows.reduce((a, b) => a + b, 0);
+      if (x !== 0 && new Set(rows).size >= 3 && total >= 12) return rows;
+    }
+    return [3, 4, 5];
+  }
+  function nextPopit(id) {
+    const S = stage(id);
+    if (!S.hard) return S.rows.slice();
+    const r = load();
+    if (!r.pp42seen) { r.pp42seen = true; save(r); return S.rows.slice(); } // 이 단계의 맨 첫 판만 정해진 줄
+    return hardRows();
+  }
 
   /* ---------- 기록 ---------- */
   let mem = null; // localStorage를 못 쓰면 메모리에만
   // stamps[id] 도장 찍은 시각 · loss[id] 연속으로 진 횟수 · att[id] 끝까지 둔 판 수 · winAt[id] 몇 번째 판에 도장 · sec[id] 도장 받은 판의 걸린 초 · perfect[id] 최소 수 승리
-  // celebrated 축하창을 띄운 도장 수 · seen 상품창을 본 도장 수 · qn[id] 황금비 퀸 바로 전 판의 시작 칸 · guided 첫 안내 창을 봄
-  function blank() { return { v: 1, name: '', stamps: {}, loss: {}, att: {}, winAt: {}, sec: {}, perfect: {}, celebrated: 0, qn: {}, created: Date.now(), seen: 0, fresh: '', guided: false }; }
+  // celebrated 축하창을 띄운 도장 수 · seen 상품창을 본 도장 수 · qn[id] 황금비 퀸 바로 전 판의 시작 칸 · guided 첫 안내 창을 봄 · pp42seen 4(상) 첫 판(3·4·5)을 시작함
+  function blank() { return { v: 1, name: '', stamps: {}, loss: {}, att: {}, winAt: {}, sec: {}, perfect: {}, celebrated: 0, qn: {}, created: Date.now(), seen: 0, fresh: '', guided: false, pp42seen: false }; }
   function load() {
     let r = null;
     try { r = JSON.parse(localStorage.getItem(KEY) || 'null'); } catch (e) { r = mem; }
@@ -104,12 +136,6 @@
     if (o.sec >= 0) r.sec[id] = Math.round(o.sec);
     if (o.perfect) r.perfect[id] = true;
     save(r); return true;
-  }
-  // 도전 횟수·시간 글 — 카드·수료증용. "2번 만에 성공 · 1분 20초" / "도전 3회" / ''
-  function fmtSec(sec) { sec = Math.max(0, Math.round(sec || 0)); const m = Math.floor(sec / 60), s = sec % 60; return m ? `${m}분 ${s}초` : `${s}초`; }
-  function tryText(r, id) {
-    if (r.stamps[id]) { const a = r.winAt[id] || 1, t = r.sec[id]; return `${a}번 만에 성공` + (t >= 0 ? ` · ${fmtSec(t)}` : ''); }
-    return r.att[id] ? `도전 ${r.att[id]}회` : '';
   }
   function stage(id) { return STAGES.find(s => s.id === id) || null; }
   function getName() { try { return (localStorage.getItem(NAME_KEY) || '').trim(); } catch (e) { return ''; } }
@@ -145,7 +171,7 @@
   function stampSVG(o) {
     o = o || {};
     const st = o.stage ? stage(o.stage) : null;
-    const small = o.small != null ? o.small : (st ? '도전 ' + st.id : '');
+    const small = o.small != null ? o.small : (st ? '도전 ' + st.label : '');
     const mid = st && GLYPH[st.glyph] ? GLYPH[st.glyph]
       : `<text x="60" y="58" text-anchor="middle" font-family="Jua, 'Noto Sans KR', sans-serif" font-size="17" fill="#D7263D" stroke="none">${o.big || '참 잘했어요'}</text><path d="M47 71 l8 8 l19 -17" stroke-width="4.5" stroke-linecap="round" stroke-linejoin="round"/>`;
     return `<svg class="ch-stamp-svg" viewBox="0 0 120 120" aria-hidden="true">
@@ -159,5 +185,5 @@
     </svg>`;
   }
 
-  window.CH = { KEY, GAME, STAGES, GOAL, SUB, CELEB, LEARN_EVERY: 4, stage, title, aiSay, load, save, clear, count, stamp, result, tryText, fmtSec, nextQueen, queenSize, fitCells, getName, setName, fmtTime, fmtClock, inkDefs, stampSVG };
+  window.CH = { KEY, GAME, STAGES, GOAL, CELEB, LEARN_EVERY: 4, stage, label, cardTitle, title, aiSay, load, save, clear, count, stamp, result, nextQueen, nextStone, nextPopit, hardRows, fitCells, getName, setName, fmtTime, fmtClock, inkDefs, stampSVG };
 })();

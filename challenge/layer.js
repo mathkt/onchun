@@ -93,7 +93,7 @@
   const _sb = stBotTurn; stBotTurn = function () { if (!stGameOver && !stIsAnimating) aiMoves++; return _sb.apply(this, arguments); };
 
   /* ---------- 판 시작 ---------- */
-  let resT = null, autoT = null, limit = 0, startAt = 0;
+  let resT = null, autoT = null, startAt = 0;
   function start() {
     hideRes();
     aiMoves = 0; startAt = Date.now();
@@ -101,9 +101,9 @@
     try { rndLast[k] = null; } catch (e) {}
     try { window[k + 'StopTimer'](); } catch (e) {}
     if (k === 'nt') { ntSize = 3; }
-    else if (k === 'st') { limit = 3 + Math.floor(Math.random() * 3); stNSetting = String(S.n); stLimitSetting = String(limit); stModeType = S.mode; stOneShot = false; }
+    else if (k === 'st') { const o = CH.nextStone(id); stNSetting = String(o.n); stLimitSetting = String(o.limit); stModeType = S.mode; stOneShot = false; } // 판마다 돌·최대 개수 새로 (선공 승리 판만)
     else if (k === 'qn') { qnWinRule = 'last'; qnStartSetting = 'rand'; }
-    else { ppRowsSetting = S.rows.join(' '); ppWinRule = 'last'; ppMaxTake = 0; ppOneShot = null; }
+    else { ppRowsSetting = CH.nextPopit(id).join(' '); ppWinRule = 'last'; ppMaxTake = 0; ppOneShot = null; } // 4(상): 첫 판 3·4·5, 그 뒤 어려운 랜덤 판
     if (k === 'nt') ntStartGame('bot');
     else if (k === 'st') stStartGame('bot');
     else if (k === 'qn') { const q = CH.nextQueen(id); qnStartGame('bot', { size: q.N, start: q.s }); } // 판마다 새 시작 칸
@@ -182,7 +182,7 @@
     if (!win && losses > 0 && losses % CH.LEARN_EVERY === 0) { showLearn(losses); return; }
     if (win && fresh) {
       res.innerHTML = `<div class="ch-res-box"><div class="ch-res-stamp"><span class="ink"></span>${CH.stampSVG({ stage: id })}${badge}</div>
-        <h2 class="ch-res-t">🎉 도전 ${esc(id)} 성공!</h2><p class="ch-res-p">도장 쾅! ${CH.fmtClock(t)}</p>${perf}${ai}
+        <h2 class="ch-res-t">🎉 도전 ${esc(S.label)} 성공!</h2><p class="ch-res-p">도장 쾅! ${CH.fmtClock(t)}</p>${perf}${ai}
         <div class="ch-res-btns">${btnBoard('도장판으로')}</div><div class="ch-auto"><i></i></div></div>`;
     } else if (win) {
       res.innerHTML = `<div class="ch-res-box"><div class="ch-res-stamp old">${CH.stampSVG({ stage: id })}${badge}</div>
@@ -215,9 +215,9 @@
   $('ch-again').onclick = () => { try { playSfx('click'); } catch (e) {} restart(); };
   $('ch-board').onclick = () => { try { playSfx('click'); } catch (e) {} goBoard(); };
 
-  /* ---------- 상단바: "도전 2-1 폭탄 모드 14개" + ⬆ 도장판 ---------- */
+  /* ---------- 상단바: "도전 2(상) 돌 가져가기" + ⬆ 도장판 ---------- */
   function topBar() {
-    const nm = document.querySelector('.bk-top__name'); if (nm) nm.textContent = `도전 ${id} ${S.mission}`;
+    const nm = document.querySelector('.bk-top__name'); if (nm) nm.textContent = `도전 ${S.label} ${G.name}`;
     const num = document.querySelector('.bk-top__num'); if (num) num.textContent = '🏆';
     if (!$('ch-up')) {
       const up = document.createElement('a'); up.id = 'ch-up'; up.className = 'bk-top__home bk-top__up'; up.href = BOARD; up.title = '도장판으로';
@@ -225,7 +225,7 @@
       up.addEventListener('click', e => { e.preventDefault(); goBoard(); });
       document.querySelector('.bk-top__home')?.after(up);
     }
-    document.title = `도전 ${id} ${S.mission} · 부산의 활동수학 축전`;
+    document.title = `도전 ${S.label} ${G.name} · 부산의 활동수학 축전`;
   }
 
   /* ---------- 들어가기 ---------- */

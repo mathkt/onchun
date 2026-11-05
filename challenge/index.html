@@ -19,7 +19,7 @@
     background-color:var(--bk-cream-2);
     background-image:linear-gradient(rgba(91,184,232,.14) 1px,transparent 1px),linear-gradient(90deg,rgba(91,184,232,.14) 1px,transparent 1px);
     background-size:22px 22px;background-position:-1px -1px}
-  .chb{max-width:1240px;margin:0 auto;padding:12px 16px 28px;display:flex;flex-direction:column;gap:12px}
+  .chb{max-width:720px;margin:0 auto;padding:12px 16px 28px;display:flex;flex-direction:column;gap:12px}
 
   /* ---------- 머리: 도전자 · 도장 수 · 진행 막대 ---------- */
   .chb-head{display:flex;align-items:center;gap:14px 22px;background:#fff;border:2.5px solid var(--bk-line);border-radius:22px;padding:10px 18px;
@@ -54,11 +54,11 @@
   .chb-banner[hidden]{display:none}
   .chb-banner .bk-btn{background:#fff;border-color:#E8B21B;box-shadow:0 3px 0 #C99510;color:#6B4A00}
 
-  /* ---------- 도장 칸 (카드) ---------- */
-  .chb-grid{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:14px}
+  /* ---------- 도장 칸 (카드): 제목만 + [도전하기] (받은 칸은 도장이 카드를 덮음) — 모든 화면 2열 4줄, 첫 칸은 🎁 ---------- */
+  .chb-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:14px}
   .chc{--c:var(--nt);--d:var(--nt-d);--s:var(--nt-s);
     position:relative;display:flex;flex-direction:column;gap:6px;text-decoration:none;color:var(--bk-ink);background:#fff;border-radius:20px;
-    border:2.5px solid var(--c);box-shadow:0 5px 0 var(--d);padding:10px 12px 10px;min-width:0;-webkit-tap-highlight-color:transparent;
+    border:2.5px solid var(--c);box-shadow:0 5px 0 var(--d);padding:12px 14px 12px;min-width:0;min-height:124px;-webkit-tap-highlight-color:transparent;
     transition:transform .12s,box-shadow .12s}
   .chc:active{transform:translateY(4px);box-shadow:0 1px 0 var(--d)}
   @media(hover:hover){.chc:hover{transform:translateY(-2px);box-shadow:0 7px 0 var(--d)}}
@@ -66,25 +66,16 @@
   .chc--qn{--c:var(--qn);--d:var(--qn-d);--s:var(--qn-s)}
   .chc--pp{--c:var(--pp);--d:var(--pp-d);--s:var(--pp-s)}
   .chc-top{display:flex;align-items:center;gap:8px;min-width:0}
-  .chc-id{flex:none;font-family:var(--f-head);font-size:1.05rem;color:#fff;background:var(--c);border-radius:10px;padding:2px 9px;box-shadow:inset 0 -3px 0 rgba(0,0,0,.14)}
-  .chc-game{font-family:var(--f-head);font-size:1.15rem;color:var(--d);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
-  .chc-mission{font-weight:900;font-size:.95rem;line-height:1.3}
-  .chc-cond{font-size:.76rem;font-weight:700;color:var(--d);background:var(--s);border-radius:8px;padding:2px 8px;align-self:flex-start;max-width:100%}
-  .chc-body{display:flex;align-items:center;justify-content:center;flex:1;min-height:0}
-  .chc-prev{width:100%;max-width:120px;height:88px;background:var(--s);border-radius:12px;display:grid;place-items:center;padding:5px}
-  .chc-prev svg{width:100%;height:100%;display:block}
+  .chc-id{flex:none;font-family:var(--f-head);font-size:1.15rem;color:#fff;background:var(--c);border-radius:10px;padding:2px 10px;box-shadow:inset 0 -3px 0 rgba(0,0,0,.14);white-space:nowrap}
+  .chc-game{font-family:var(--f-head);font-size:1.3rem;color:var(--d);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
   /* 도장: 받은 칸은 카드 전체를 덮는 반투명 빨간 도장 (제목은 비쳐 보임) */
   .chc-stamp{position:absolute;inset:0;display:grid;place-items:center;pointer-events:none;z-index:1;border-radius:inherit}
   .chc-stamp .ch-stamp-svg{height:100%;width:auto;max-width:100%;aspect-ratio:1;transform:rotate(-14deg);opacity:.74;mix-blend-mode:multiply}
   .chc-perf{position:absolute;right:-8px;top:-8px;width:30px;height:30px;border-radius:50%;background:#fff;border:2.5px solid #E8B21B;box-shadow:0 2px 6px rgba(0,0,0,.22);display:grid;place-items:center;font-size:1.05rem;transform:rotate(12deg);z-index:2}
-  .chc-try{font-size:.72rem;font-weight:800;color:var(--bk-ink-soft);white-space:nowrap;overflow:hidden;text-overflow:ellipsis;min-width:0}
-  .chc-foot .chc-done-l{display:flex;flex-direction:column;min-width:0;line-height:1.25}
-  .chc-foot{display:flex;align-items:center;justify-content:space-between;gap:6px;min-height:34px;margin-top:auto}
-  .chc-go{font-family:var(--f-head);font-size:1.02rem;color:#fff;background:var(--c);border-radius:999px;padding:5px 14px;box-shadow:0 3px 0 var(--d);white-space:nowrap}
-  .chc-time{font-size:.8rem;font-weight:900;color:var(--ink-red);white-space:nowrap}
-  .chc-again{font-family:var(--f-head);font-size:.85rem;color:var(--d);white-space:nowrap}
+  .chc-foot{display:flex;align-items:center;justify-content:flex-end;gap:6px;min-height:34px;margin-top:auto}
+  .chc-go{font-family:var(--f-head);font-size:1.05rem;color:#fff;background:var(--c);border-radius:999px;padding:5px 16px;box-shadow:0 3px 0 var(--d);white-space:nowrap}
+  .chc-again{font-family:var(--f-head);font-size:.9rem;color:var(--d);white-space:nowrap}
   .chc.done{background:linear-gradient(180deg,#fff 60%,#FFF7F4)}
-  .chc.done .chc-prev{opacity:.3}
 
   /* 새로 받은 도장: 쾅 */
   .chc.fresh .ch-stamp-svg{animation:stampIn .5s cubic-bezier(.2,.8,.3,1.15) both}
@@ -92,12 +83,14 @@
   @keyframes stampIn{0%{transform:scale(3) rotate(-35deg);opacity:0}55%{transform:scale(.9) rotate(-14deg);opacity:1}75%{transform:scale(1.05) rotate(-14deg)}100%{transform:scale(1) rotate(-14deg);opacity:.74}}
   @keyframes cardThud{0%{transform:translate(0,0)}25%{transform:translate(-3px,3px)}50%{transform:translate(3px,-2px)}75%{transform:translate(-2px,1px)}100%{transform:none}}
 
-  /* 8번째 칸: 상품 */
+  /* 첫 칸: 상품 */
   .chc--gift{--c:#E8B21B;--d:#C99510;--s:#FFF4C9;cursor:default;align-items:center;justify-content:center;text-align:center;
     background:repeating-linear-gradient(135deg,#FFFBEA 0 12px,#FFF4C9 12px 24px)}
   .chc--gift:active{transform:none;box-shadow:0 5px 0 var(--d)}
-  .chc--gift .g-ico{font-size:2.6rem;line-height:1}
-  .chc--gift .g-t{font-family:var(--f-head);font-size:1.2rem;color:#6B4A00}
+  .chc--gift{gap:8px}
+  .g-row{display:flex;align-items:center;justify-content:center;gap:8px;min-width:0}
+  .chc--gift .g-ico{font-size:1.9rem;line-height:1}
+  .chc--gift .g-t{font-family:var(--f-head);font-size:1.2rem;color:#6B4A00;line-height:1.2}
   .chc--gift .g-d{font-size:.8rem;font-weight:700;color:#8A6A10}
   .g-dots{display:flex;gap:6px;justify-content:center}
   .g-dots i{width:16px;height:16px;border-radius:50%;border:2px dashed #D9B84A;background:#fff}
@@ -206,12 +199,10 @@
   .pz-staff small{display:block;font-size:.76rem;color:var(--bk-ink-soft);margin-top:6px;font-weight:700}
   #confetti{position:fixed;inset:0;pointer-events:none;z-index:250}
 
-  /* ---------- 폰 ---------- */
-  @media(max-width:900px){.chb-grid{grid-template-columns:repeat(3,minmax(0,1fr))}}
-  /* 폰(360×740): 머리 작게 · 2열 4줄 · 카드는 제목+칩+횟수만 (미리보기 없음) → 스크롤 없이 한 화면 */
+  /* ---------- 폰(360×740): 머리 작게 · 2열 4줄 · 카드는 제목+[도전하기]만 → 도장 0~4개면 스크롤 없이 한 화면 ---------- */
   @media(max-width:640px){
     .chb{padding:8px 10px 10px;gap:8px}
-    .chb-grid{grid-template-columns:repeat(2,minmax(0,1fr));gap:8px}
+    .chb-grid{gap:8px}
     .chb-head{flex-wrap:wrap;padding:7px 10px 8px;gap:4px 8px;border-radius:16px}
     .chb-head::before{left:14px;right:14px;top:-5px;height:5px}
     .chb-who{flex:1 1 100%;gap:7px}
@@ -229,37 +220,35 @@
     .chb-bar .gift{font-size:1.2rem}
     .chb-banner{font-size:.95rem;padding:5px 10px;gap:6px 10px;border-radius:14px}
     .chb-banner .bk-btn{min-height:32px;padding:3px 10px;font-size:.9rem}
-    .chc{padding:7px 8px 7px;border-radius:14px;gap:4px}
+    .chc{padding:9px 10px 9px;border-radius:14px;gap:4px;min-height:116px}
     .chc-top{gap:6px}
-    .chc-id{font-size:.9rem;padding:1px 6px;border-radius:8px}
-    .chc-game{font-size:.95rem}
-    .chc-mission{font-size:.84rem;line-height:1.2}
-    .chc-cond{font-size:.66rem;padding:1px 6px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
-    .chc-body{display:none}
-    .chc-go{font-size:.86rem;padding:3px 10px}
-    .chc-foot{min-height:26px;gap:4px}
-    .chc-time{font-size:.7rem}
+    .chc-id{font-size:.98rem;padding:1px 7px;border-radius:8px}
+    .chc-game{font-size:1.08rem}
+    .chc-go{font-size:.9rem;padding:4px 12px}
+    .chc-foot{min-height:28px;gap:4px}
     .chc-again{font-size:.8rem}
-    .chc-try{font-size:.64rem}
     .chc-perf{width:24px;height:24px;font-size:.85rem;right:-6px;top:-6px}
     .chc-stamp .ch-stamp-svg{height:112%;opacity:.7}
-    .chc--gift .g-ico{font-size:1.7rem}
+    .chc--gift{gap:5px}
+    .chc--gift .g-ico{font-size:1.4rem}
     .chc--gift .g-t{font-size:.98rem}
     .chc--gift .g-d{font-size:.72rem}
     .g-dots{gap:4px}.g-dots i{width:12px;height:12px}
   }
-  @media(max-width:370px){.chc-game{font-size:.9rem}.chc-mission{font-size:.8rem}}
-  /* 크롬북(1366×700 안팎): 한 화면에 7칸이 다 보이게 */
+  @media(max-width:370px){.chc-game{font-size:1rem}.chc-id{font-size:.92rem}}
+  /* 크롬북(1366×700 안팎): 가운데 720px · 2열 4줄이 한 화면에 */
   @media(min-width:1000px) and (max-height:820px){
-    .chb{padding-top:10px;gap:10px}
+    .chb{padding-top:10px;padding-bottom:14px;gap:10px}
     .chb-head{padding:7px 18px}
     .chb-avatar{width:40px;height:40px;font-size:1.4rem}
     .chb-count b{font-size:1.7rem}
     .chb-bar{height:13px}
     .chb-grid{gap:12px}
-    .chc{gap:4px;padding:8px 12px 8px}
-    .chc-prev{max-width:110px;height:78px}
+    .chc{gap:4px;padding:10px 14px 10px;min-height:118px}
     .chc-foot{min-height:32px}
+    /* 상품 띠가 보이면(도장 5개~) 칸을 조금 낮춰 그래도 한 화면에 */
+    .chb:has(.chb-banner:not([hidden])) .chc{min-height:100px}
+    .chb:has(.chb-banner:not([hidden])) .chb-grid{gap:10px}
     .chb-banner{padding:4px 14px;font-size:1.02rem}
     .chb-banner .bk-btn{min-height:34px;padding:4px 12px}
   }
@@ -413,44 +402,6 @@
   const NAME_ANIMAL = ['수달', '펭귄', '두더지', '고양이', '여우', '판다', '거북이', '다람쥐', '돌고래', '햄스터'];
   const randName = () => NAME_ADJ[Math.floor(Math.random() * NAME_ADJ.length)] + ' ' + NAME_ANIMAL[Math.floor(Math.random() * NAME_ANIMAL.length)];
 
-  /* ---------- 판 미리보기 (작은 그림) ---------- */
-  function prevSVG(s, rec) {
-    const G = CH.GAME[s.k];
-    if (s.k === 'nt') {
-      const L = 'stroke="' + G.deep + '" stroke-width="2.4" stroke-linecap="round"';
-      const X = (cx, cy) => `<path d="M${cx - 5.5} ${cy - 5.5}l11 11M${cx + 5.5} ${cy - 5.5}l-11 11" stroke="#2C2A26" stroke-width="3" stroke-linecap="round"/>`;
-      return `<svg viewBox="0 0 100 80"><g ${L}><path d="M39 10v60M61 10v60M18 31.7h64M18 53.3h64"/></g>${X(50, 42.5)}${X(28, 20.8)}</svg>`;
-    }
-    if (s.k === 'st') {
-      const n = s.n, cols = n <= 14 ? 7 : 9, rows = Math.ceil(n / cols), r = n <= 14 ? 5.2 : 4, gx = 92 / cols, gy = 64 / rows;
-      let out = '';
-      for (let i = 0; i < n; i++) {
-        const cx = 4 + gx * (i % cols) + gx / 2 + ((Math.floor(i / cols) % 2) ? gx / 4 : -gx / 4) * .6, cy = 8 + gy * Math.floor(i / cols) + gy / 2;
-        if (i === 0) {
-          out += s.mode === 'bomb'
-            ? `<circle cx="${cx}" cy="${cy}" r="${r + 1.2}" fill="#E9533F" stroke="#9c2b1d" stroke-width="1.2"/><path d="M${cx + r * .6} ${cy - r * .7}q3 -4 6 -3" stroke="#6b4a00" stroke-width="1.4" fill="none"/>`
-            : `<path d="M${cx} ${cy - r - 1.5}l${r + 1.5} ${r + 1.5}l${-r - 1.5} ${r + 1.5}l${-r - 1.5} ${-r - 1.5}z" fill="#3DBE7A" stroke="#1F8F5F" stroke-width="1.2"/>`;
-        } else out += `<circle cx="${cx}" cy="${cy}" r="${r}" fill="#9AA6B2" stroke="#6E7A86" stroke-width="1"/>`;
-      }
-      return `<svg viewBox="0 0 100 80">${out}</svg>`;
-    }
-    if (s.k === 'qn') {
-      // 시작 칸은 판마다 새로 뽑으므로 미리보기는 판 모양만 (구석 = 목표, 물음표 = 어디서 시작할지 모름)
-      const N = s.size, c = 72 / N, x0 = 14, y0 = 4;
-      let out = '';
-      for (let x = 0; x < N; x++) for (let y = 0; y < N; y++) if ((x + y) % 2 === 0) out += `<rect x="${x0 + x * c}" y="${y0 + (N - 1 - y) * c}" width="${c}" height="${c}" fill="#F3C1C4"/>`;
-      out += `<rect x="${x0}" y="${y0 + (N - 1) * c}" width="${c}" height="${c}" fill="#FFD60A"/>`;
-      out += `<rect x="${x0}" y="${y0}" width="${N * c}" height="${N * c}" fill="none" stroke="#B53A2A" stroke-width="1.5"/>`;
-      const qx = x0 + N * c * .68, qy = y0 + N * c * .34;
-      out += `<circle cx="${qx}" cy="${qy}" r="${N * c * .17}" fill="#fff" stroke="#E9533F" stroke-width="1.6" stroke-dasharray="3 2"/><text x="${qx}" y="${qy + N * c * .085}" font-size="${N * c * .24}" text-anchor="middle" fill="#2C2A26">♛?</text>`;
-      return `<svg viewBox="0 0 100 80"><rect width="100" height="80" fill="none"/>${out}</svg>`;
-    }
-    const COL = ['#FF5FA2', '#FF9F1C', '#FFD60A', '#57CC99', '#3DB2FF'], rows = s.rows, gy = 72 / rows.length;
-    let out = '';
-    rows.forEach((n, ri) => { const r = Math.min(7.5, gy * .38), w = 2 * r + 4, x0 = 50 - (n * w) / 2 + w / 2; for (let i = 0; i < n; i++) out += `<circle cx="${x0 + i * w}" cy="${4 + gy * ri + gy / 2}" r="${r}" fill="${COL[ri % 5]}" stroke="rgba(0,0,0,.18)" stroke-width="1"/><circle cx="${x0 + i * w - r * .3}" cy="${4 + gy * ri + gy / 2 - r * .3}" r="${r * .3}" fill="rgba(255,255,255,.55)"/>`; });
-    return `<svg viewBox="0 0 100 80">${out}</svg>`;
-  }
-
   /* ---------- 그리기 ---------- */
   function render() {
     const r = CH.load(), n = CH.count(r), done = n >= CH.GOAL, all = n >= 7;
@@ -466,32 +417,28 @@
     $('banner').hidden = !done;
 
     const g = $('grid'); g.innerHTML = '';
-    CH.STAGES.forEach(s => {
-      const G = CH.GAME[s.k], t = r.stamps[s.id];
-      const cond = s.k === 'st' ? `${s.cond} · 최대 3~5개(랜덤)` : s.k === 'qn' ? `${CH.queenSize(s.id)}×${CH.queenSize(s.id)} · ${s.cond}` : s.cond;
-      const tryT = CH.tryText(r, s.id);
-      const a = document.createElement('a');
-      a.className = `chc chc--${s.k}` + (t ? ' done' : '');
-      a.href = GAME_URL + encodeURIComponent(s.id);
-      a.dataset.id = s.id;
-      a.setAttribute('aria-label', `${s.id} ${G.name} — ${s.mission}${t ? ' (도장 받음)' : ''}`);
-      a.innerHTML = `
-        <div class="chc-top"><span class="chc-id">${s.id}</span><span class="chc-game">${G.name}</span></div>
-        <div class="chc-mission">${s.mission}</div>
-        <div class="chc-cond">${cond}</div>
-        <div class="chc-body"><div class="chc-prev">${prevSVG(s, r)}</div></div>
-        <div class="chc-foot">${t ? `<span class="chc-done-l"><span class="chc-time">✓ ${CH.fmtTime(t)}</span><span class="chc-try">${esc(tryT)}</span></span><span class="chc-again">다시 ↻</span>` : `<span class="chc-try">${esc(tryT)}</span><span class="chc-go">도전하기 ▶</span>`}</div>
-        ${t ? `<div class="chc-stamp" aria-hidden="true">${CH.stampSVG({ stage: s.id })}${r.perfect[s.id] ? '<span class="chc-perf" title="최소 수로 이김">⚡</span>' : ''}</div>` : ''}`;
-      g.appendChild(a);
-    });
-    // 8번째 칸: 상품
+    // 첫 칸: 상품
     const gift = document.createElement('div');
     gift.className = 'chc chc--gift' + (done ? ' ready' : '');
-    gift.innerHTML = `<div class="g-ico">🎁</div><div class="g-t">${done ? '상품 받으러 가요!' : `도장 ${CH.GOAL}개 모으면 상품`}</div>
+    gift.innerHTML = `<div class="g-row"><span class="g-ico">🎁</span><span class="g-t">${done ? '상품 받으러 가요!' : `도장 ${CH.GOAL}개 모으면 상품`}</span></div>
       <div class="g-dots">${Array.from({ length: CH.GOAL }, (_, i) => `<i class="${i < n ? 'on' : ''}"></i>`).join('')}</div>
       <div class="g-d">${done ? '눌러서 상품 받기 화면 보기' : `앞으로 ${CH.GOAL - n}개!`}</div>`;
     if (done) { gift.setAttribute('role', 'button'); gift.tabIndex = 0; gift.onclick = () => openPrize(); }
     g.appendChild(gift);
+    // 단계 칸: 제목(단계 이름 + 게임)만 — 받은 칸은 도장이 덮음
+    CH.STAGES.forEach(s => {
+      const G = CH.GAME[s.k], t = r.stamps[s.id];
+      const a = document.createElement('a');
+      a.className = `chc chc--${s.k}` + (t ? ' done' : '');
+      a.href = GAME_URL + encodeURIComponent(s.id);
+      a.dataset.id = s.id;
+      a.setAttribute('aria-label', `${s.label} ${G.name}${t ? ' (도장 받음)' : ''}`);
+      a.innerHTML = `
+        <div class="chc-top"><span class="chc-id">${esc(s.label)}</span><span class="chc-game">${G.name}</span></div>
+        <div class="chc-foot">${t ? `<span class="chc-again">다시 ↻</span>` : `<span class="chc-go">도전하기 ▶</span>`}</div>
+        ${t ? `<div class="chc-stamp" aria-hidden="true">${CH.stampSVG({ stage: s.id })}${r.perfect[s.id] ? '<span class="chc-perf" title="최소 수로 이김">⚡</span>' : ''}</div>` : ''}`;
+      g.appendChild(a);
+    });
     return r;
   }
 
@@ -535,7 +482,7 @@
     $('pz-title').textContent = CH.title(n).text;
     $('pz-cnt').textContent = `도장 ${n} / 7`;
     $('pz-time').textContent = `${CH.fmtTime(fifthTime(r))} 달성`;
-    $('pz-stamps').innerHTML = CH.STAGES.map(s => `<span class="${r.stamps[s.id] ? 'on' : ''}">${s.id}${r.perfect[s.id] ? '⚡' : ''}</span>`).join('');
+    $('pz-stamps').innerHTML = CH.STAGES.map(s => `<span class="${r.stamps[s.id] ? 'on' : ''}">${esc(s.label)}${r.perfect[s.id] ? '⚡' : ''}</span>`).join('');
     $('pz-cert').hidden = n < 7;
     r.seen = n; CH.save(r);
     openM('prize'); fireworks(praise ? 5 : 3);
