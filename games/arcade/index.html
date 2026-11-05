@@ -1843,6 +1843,12 @@
     #st-board, #nt-board, #pp-board { gap:10px; }
     #st-turn-indicator, #nt-turn-indicator, #pp-turn-indicator { font-size:1.3rem !important; margin:2px 0 !important; }
     .controls button { padding:10px 0; font-size:1rem; }
+    /* 세로 배치(폰)에서는 상대(AI·P2) 패널이 위, 나(P1·Online.myNum) 패널이 아래 — 게임 로직은 그대로, CSS order만 바꿈 (panelOrder) */
+    #nt-frame-p2, #st-frame-p2, #pp-frame-p2, #qn-frame-p2 { order:1; }
+    #nt-board > .nt-center-area, #st-board > .st-center-area, #pp-board > .pp-center, #qn-board > .qn-center { order:2; }
+    #nt-frame-p1, #st-frame-p1, #pp-frame-p1, #qn-frame-p1 { order:3; }
+    .me-p2 > #nt-frame-p1, .me-p2 > #st-frame-p1, .me-p2 > #pp-frame-p1, .me-p2 > #qn-frame-p1 { order:1; }
+    .me-p2 > #nt-frame-p2, .me-p2 > #st-frame-p2, .me-p2 > #pp-frame-p2, .me-p2 > #qn-frame-p2 { order:3; }
     .st-stone-count-badge { font-size:1.7rem; bottom:8px; left:12px; }
     .action-buttons { margin-top:10px !important; }
     .action-buttons button { padding:8px 14px !important; font-size:.9rem !important; }
@@ -2665,7 +2671,9 @@
 
   /* --- 폰: 판 → 판정 줄 → 수 버튼(가로 칩) → 나머지 --- */
   @media (max-width:640px) {
-    #qn-board .qn-boardWrap { width:min(100%, calc(100svh - var(--bk-top-h, 52px) - 404px)) !important; }
+    /* 퀸 판: 폰 폭을 꽉 채움 (아주 낮은 화면에서만 높이 제한) · 좌표 글자 칸은 좁게 → 12×12도 칸 ≥ 26px */
+    #qn-board .qn-boardWrap { width:min(100%, calc(100svh - var(--bk-top-h, 52px) - 200px)) !important; grid-template-columns:.85em 1fr; grid-template-rows:auto .85em; gap:2px; }
+    #qn-board .qn-ylab, #qn-board .qn-xlab { font-size:.6rem; }
     #nt-analysis-layout, #st-analysis-layout, #pp-analysis-layout, #qn-analysis-layout { flex-direction:row !important; flex-wrap:wrap !important; align-items:flex-start !important; align-content:flex-start; gap:8px !important; padding:10px !important; }
     #nt-analysis-left, #st-analysis-left, #pp-analysis-left, #qn-analysis-left,
     #nt-analysis-right, #st-analysis-right, #pp-analysis-right, #qn-analysis-right,
@@ -2876,6 +2884,10 @@
   .ls-nav .ls-next { flex:1; border:0; background:var(--th, #333); color:#fff; }
   .ls-nav .ls-close { flex:0 0 auto; padding:0 12px; border:1.5px solid #E7DFC9; background:#fff; color:var(--text-sub); }
   /* 🏆 도전에서 배우러 왔을 때: 카드 아래 "도전으로 돌아가기" + 화면 아래 떠 있는 버튼 */
+  .ls-analysis { margin-top:10px; }
+  .ls-analysis[hidden] { display:none; }
+  .ls-analysis button { width:100%; min-height:44px; border-radius:12px; border:2px solid var(--th, #333); background:#fff; color:var(--th-ink, #2C2A26); font:800 .95rem 'Noto Sans KR',sans-serif; cursor:pointer; }
+  .ls-analysis button:hover { background:var(--th, #333); color:#fff; }
   .ls-chback { margin-top:10px; }
   .ls-chback[hidden] { display:none; }
   .ls-chback button { width:100%; min-height:46px; border-radius:12px; border:2.5px solid #E9533F; background:#FFF3F0; color:#B53A2A; font:800 1rem 'Noto Sans KR',sans-serif; cursor:pointer; box-shadow:0 3px 0 #B53A2A; }
@@ -3388,10 +3400,13 @@
     <div id="nt-analysis-screen">
       <div style="display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:8px; width:100%; margin-bottom:10px;">
         <div class="a-head" style="margin:0;"><h2 style="margin:0;">📊 분석 모드 (<span id="nt-a-initial-info"></span>)</h2><button class="help-btn a-help" onmouseenter="playSfx('hover')" onclick="ntShowHelp('analysis')" title="도움말">?</button><button class="help-close-btn a-quiz-btn a-lesson-btn" type="button" onclick="playSfx('click'); openLesson('notakto')">📘 전략</button><button class="help-close-btn a-quiz-btn" id="nt-a-quiz-btn" onclick="playSfx('click'); ntAQuiz()">🎯 퀴즈</button></div>
-        <label class="eval-toggle-label" style="display:inline-flex; align-items:center; gap:8px; cursor:pointer; font-size:0.95rem; font-weight:700; padding:8px 14px; border-radius:10px;">
-          <input type="checkbox" id="nt-eval-color-toggle" checked onchange="playSfx('click'); ntToggleEvalColors()" style="cursor:pointer; width:18px; height:18px; accent-color:var(--th);">
-          <span>판에 수 평가 색상 표시</span>
-        </label>
+        <div style="display:inline-flex; align-items:center; gap:10px; flex-wrap:wrap;">
+          <div class="ai-diff-seg nt-a-size" id="nt-a-size" role="group" aria-label="분석 판 크기"><button type="button" data-n="3" class="on" onclick="playSfx('click'); ntASetSize(3)">3×3</button><button type="button" data-n="4" onclick="playSfx('click'); ntASetSize(4)">4×4</button></div>
+          <label class="eval-toggle-label" style="display:inline-flex; align-items:center; gap:8px; cursor:pointer; font-size:0.95rem; font-weight:700; padding:8px 14px; border-radius:10px;">
+            <input type="checkbox" id="nt-eval-color-toggle" checked onchange="playSfx('click'); ntToggleEvalColors()" style="cursor:pointer; width:18px; height:18px; accent-color:var(--th);">
+            <span>판에 수 평가 색상 표시</span>
+          </label>
+        </div>
       </div>
       <div id="nt-analysis-layout">
         <div id="nt-analysis-left">
@@ -3852,6 +3867,7 @@
     <div class="ls-dots" id="lesson-dots"></div>
     <div id="lesson-card"></div>
     <div class="ls-nav"><button type="button" class="ls-prev" id="lesson-prev" onclick="playSfx('click'); lsGo(LS.i - 1)">◀ 이전</button><button type="button" class="ls-next" id="lesson-next" onclick="playSfx('click'); lsGo(LS.i + 1)">다음 ▶</button><button type="button" class="ls-close" onclick="playSfx('close_modal'); lsClose()">닫기</button></div>
+    <div class="ls-analysis" id="lesson-analysis"><button type="button" id="lesson-analysis-btn" onclick="playSfx('click'); lsAnalysis()">📊 분석 모드에서 해 보기</button></div>
     <div class="ls-chback" id="lesson-chback" hidden><button type="button">🏆 도전으로 돌아가기</button></div>
   </div>
 </div>
@@ -4230,6 +4246,11 @@
     return '플레이어 ' + n;
   }
   function humanNum() { return isBranchPlay ? branchHumanPlayer : aiHuman; }
+  /* 플레이어 패널 순서: 폰(세로)에서 상대가 위, 내가 아래. p = nt|st|pp|qn, mode = bot|solo|online. 내 번호: 온라인 = Online.myNum, AI = humanNum(), 2인 = 1 */
+  function panelOrder(p, mode) {
+    const me = mode === 'online' ? ((window.Online && Online.myNum) || 1) : mode === 'bot' ? humanNum() : 1;
+    const b = document.getElementById(p + '-board'); if (b) b.classList.toggle('me-p2', me === 2);
+  }
   /* 선공 정하기: AI 대전은 설정(플레이어/AI/번갈아), 2인은 판마다 번갈아, 온라인은 판 번호(gameNo)로 — 홀수 판 방장, 짝수 판 손님 */
   const startCount = { notakto: 0, stone: 0, popit: 0, queen: 0 };
   function firstPlayer(game, mode) {
@@ -4663,7 +4684,7 @@
     return c[Math.floor(Math.random() * c.length)];
   }
   function qnStartGame(mode, preset) {
-    qnMode = mode; isBranchPlay = false;
+    qnMode = mode; isBranchPlay = false; panelOrder('qn', mode);
     qnN = preset && preset.size ? preset.size : (qnSizeSetting === 'random' ? 6 + Math.floor(Math.random() * 7) : parseInt(qnSizeSetting));
     qnCold = qnColdSet(qnN);
     document.getElementById('qn-p1-name').innerText = mode === 'bot' ? '플레이어' : '플레이어 1';
@@ -4991,7 +5012,7 @@
     openBranchBotModal('queen');
   }
   function qnStartBranchPlay() {
-    qnMode = 'bot'; isBranchPlay = true;
+    qnMode = 'bot'; isBranchPlay = true; panelOrder('qn', 'bot');
     qnN = qnAN; qnCold = qnColdSet(qnN);
     document.getElementById('qn-p1-name').innerText = branchHumanPlayer === 1 ? '플레이어 (P1)' : `AI (${botDifficulty})`;
     document.getElementById('qn-p2-name').innerText = branchHumanPlayer === 2 ? '플레이어 (P2)' : `AI (${botDifficulty})`;
@@ -5125,7 +5146,7 @@
     }, 1000);
   }
   function ppStartGame(mode) {
-    ppMode = mode; ppApplyRules(); ppUpdateSubtitle(true); isBranchPlay = false;
+    ppMode = mode; ppApplyRules(); ppUpdateSubtitle(true); isBranchPlay = false; panelOrder('pp', mode);
     document.getElementById('pp-p1-name').innerText = mode === 'bot' ? '플레이어' : '플레이어 1';
     document.getElementById('pp-p2-name').innerText = mode === 'bot' ? `AI (${botDifficulty})` : '플레이어 2';
     document.getElementById('pp-restart-btn').style.display = 'none';
@@ -5620,7 +5641,7 @@
   let ppBranch = null;
   const _ppStartRaw = ppStartGame;
   function ppStartBranchPlay() {
-    ppMode = 'bot'; isBranchPlay = true;
+    ppMode = 'bot'; isBranchPlay = true; panelOrder('pp', 'bot');
     ppInit = ppBranch.rows.slice();
     document.getElementById('pp-p1-name').innerText = branchHumanPlayer === 1 ? '플레이어 (P1)' : `AI (${botDifficulty})`;
     document.getElementById('pp-p2-name').innerText = branchHumanPlayer === 2 ? '플레이어 (P2)' : `AI (${botDifficulty})`;
@@ -5847,7 +5868,7 @@
   function ntStartGame(selectedMode) {
     ntInitBoardGeometry(ntSize);
     ntActionCounter++; ntMode = selectedMode;
-    isBranchPlay = false;
+    isBranchPlay = false; panelOrder('nt', ntMode);
     let firstTurn = ntMode === 'bot' ? botFirstTurn : 'player';
 
     document.getElementById('nt-p1-name').innerText = ntMode === 'bot' ? '플레이어' : '플레이어 1';
@@ -5873,7 +5894,7 @@
   function ntStartBranchPlay() {
     ntActionCounter++;
     ntMode = 'bot';
-    isBranchPlay = true;
+    isBranchPlay = true; panelOrder('nt', 'bot');
 
     ntGameBoardMask = ntABoardMask; ntFlash = -1;
     ntCurrentPlayer = ntATurn;
@@ -6080,12 +6101,22 @@
 
   let ntABoardMask = 0, ntATurn = 1, ntAHistory = [];
   let ntAStart = { mask: 0, turn: 1, hist: [] }, ntAQuizOn = false, ntAQuizAnswered = false;
+  // 분석 판 크기(3|4): 메뉴에서 들어올 땐 게임 설정(ntSize)을 따르고, 분석 화면의 3×3|4×4 스위치로 바꿈 (게임 설정은 안 건드림)
+  let ntASize = 3;
+  function ntAOn() { return ntAnalysisScreen.style.display === 'flex'; }
+  function ntASetSize(n) {
+    n = n === 4 ? 4 : 3; if (n === ntASize && ntAOn()) return;
+    ntASize = n; ntAStart = { mask: 0, turn: 1, hist: [] }; ntStartAnalysis(true);
+  }
+  function ntARenderSize() { document.querySelectorAll('#nt-a-size button').forEach(b => b.classList.toggle('on', parseInt(b.dataset.n) === ntASize)); }
   function ntStartAnalysis(reset) {
-    if (!reset || ntBoardSize !== ntSize) ntAStart = { mask: 0, turn: 1, hist: [] };
-    ntInitBoardGeometry(ntSize);
+    if (!reset) ntASize = ntSize;
+    if (!reset || ntBoardSize !== ntASize) ntAStart = { mask: 0, turn: 1, hist: [] };
+    ntInitBoardGeometry(ntASize);
     ntActionCounter++;
     ntMenuScreen.style.display = 'none'; ntGameScreen.style.display = 'none';
     switchScreen(ntAnalysisScreen, 'flex');
+    ntARenderSize();
     document.getElementById('nt-a-initial-info').innerText = `${ntBoardSize}×${ntBoardSize} 판`;
     ntABoardMask = ntAStart.mask; ntATurn = ntAStart.turn; ntAHistory = ntAStart.hist.map(h => ({ ...h }));
     ntAQuizOn = false; ntAQuizAnswered = false; ntSetQuizMsg('');
@@ -6097,8 +6128,9 @@
   }
   // 🎯 퀴즈: 이기는 수가 있는 랜덤 판(아직 한 줄이 안 된 판)
   function ntAQuiz() {
-    ntInitBoardGeometry(ntSize);
-    const N = ntSize, total = N * N, lo = N === 3 ? 2 : 4, hi = N === 3 ? 4 : 7;
+    if (!ntAOn()) ntASize = ntSize; // 메뉴·전략 카드에서 바로 퀴즈: 게임 설정 크기
+    ntInitBoardGeometry(ntASize);
+    const N = ntASize, total = N * N, lo = N === 3 ? 2 : 4, hi = N === 3 ? 4 : 7;
     let pick = null;
     for (let t = 0; t < 300 && !pick; t++) {
       const k = lo + Math.floor(Math.random() * (hi - lo + 1));
@@ -6417,7 +6449,7 @@
     stMode = selectedMode;
     applyStRandomRules();
     stUpdateSubtitle(true);
-    isBranchPlay = false;
+    isBranchPlay = false; panelOrder('st', stMode);
     let firstTurn = stMode === 'bot' ? botFirstTurn : 'player';
 
     document.getElementById('st-p1-name').innerText = stMode === 'bot' ? '플레이어' : '플레이어 1';
@@ -6468,7 +6500,7 @@
 
   function stStartBranchPlay() {
     stMode = 'bot';
-    isBranchPlay = true;
+    isBranchPlay = true; panelOrder('st', 'bot');
     stUpdateSubtitle(true);
 
     if (branchHumanPlayer === 1) {
@@ -7709,7 +7741,8 @@
   const CH_ENTRY = new URLSearchParams(location.search).get('ch');
   // 📘 ?lesson=1: 들어오자마자 필승 전략 카드 열기 (규칙 창 생략) · ?back=ch:단계: 도전에서 배우러 온 것 → "도전으로 돌아가기" 버튼
   const LESSON_ENTRY = new URLSearchParams(location.search).get('lesson') === '1';
-  const CH_BACK = (m => m && /^[0-9]-[0-9]$/.test(m[1]) ? m[1] : '')(/^ch:(.+)$/.exec(new URLSearchParams(location.search).get('back') || ''));
+  // back=ch:단계 → 그 도전 판으로 · back=ch (단계 없음) → 도장판으로
+  const CH_BACK = (v => v === 'ch' ? 'board' : (m => m && /^[0-9]-[0-9]$/.test(m[1]) ? m[1] : '')(/^ch:(.+)$/.exec(v)))(new URLSearchParams(location.search).get('back') || '');
   let lessonAfterName = false;
   function lessonEntryOpen() { const go = () => { if (typeof openLesson === 'function') openLesson(entryGame); else setTimeout(go, 50); }; setTimeout(go, 0); }
   updateNameChip();
@@ -7724,9 +7757,10 @@
   if (validEntry) openGameSection(entryGame);
   else syncTopName(null);
   if (CH_BACK) { // 🏆 도전으로 돌아가기: 카드 안 버튼 + 화면 아래 작은 떠 있는 버튼 (카드가 닫혀 있을 때)
-    const chUrl = 'index.html?ch=' + encodeURIComponent(CH_BACK);
-    const b = document.getElementById('lesson-chback'); if (b) { b.hidden = false; b.querySelector('button').textContent = `🏆 도전 ${CH_BACK}로 돌아가기`; b.querySelector('button').onclick = () => { playSfx('click'); location.href = chUrl; }; }
-    const f = document.createElement('a'); f.id = 'ch-float'; f.href = chUrl; f.textContent = `🏆 도전 ${CH_BACK}로 돌아가기`;
+    const chUrl = CH_BACK === 'board' ? '../../challenge/index.html' : 'index.html?ch=' + encodeURIComponent(CH_BACK);
+    const chLbl = CH_BACK === 'board' ? '🏆 도장판으로 돌아가기' : `🏆 도전 ${CH_BACK}로 돌아가기`;
+    const b = document.getElementById('lesson-chback'); if (b) { b.hidden = false; b.querySelector('button').textContent = chLbl; b.querySelector('button').onclick = () => { playSfx('click'); location.href = chUrl; }; }
+    const f = document.createElement('a'); f.id = 'ch-float'; f.href = chUrl; f.textContent = chLbl;
     f.addEventListener('click', () => playSfx('click'));
     document.body.appendChild(f);
   }
@@ -8123,7 +8157,7 @@
     closeVictoryModal(true); p3TipHide(k);
     $id('start-toast')?.classList.remove('on');
     p3Rev = { k, rec, notes: p3Annotate(rec), idx: 0, off: false, fromGame: !recIn };
-    if (k === 'nt') { ntAStart = { mask: 0, turn: rec.first, hist: [] }; if (ntSize !== rec.N) ntSize = rec.N; ntStartAnalysis(true); }
+    if (k === 'nt') { ntAStart = { mask: 0, turn: rec.first, hist: [] }; if (ntSize !== rec.N) ntSize = rec.N; ntASize = rec.N; ntStartAnalysis(true); }
     else if (k === 'st') { stN = rec.n0; stLimit = rec.L; stModeType = rec.mode; stAStartTurn = rec.first; stStartAnalysis(true); }
     else if (k === 'pp') { ppWinRule = rec.rule; ppMaxTake = rec.M; ppAInit = rec.init.slice(); ppAStartTurn = rec.first; ppStartAnalysis(true); }
     else {
@@ -8808,6 +8842,17 @@
       $id('lesson-box').scrollTop = 0;
     };
     window.lsClose = function () { closeModal('lesson-modal', 'lesson-box'); };
+    // 📊 전략 카드 → 그 게임의 분석 모드 (도전에서 배우러 온 back=ch… 땐 버튼 숨김: 도전으로 돌아가기만)
+    window.lsAnalysis = function () {
+      const game = LS.game; if (!game) return;
+      lsClose();
+      setTimeout(() => {
+        if (currentGame !== game) { skipRulesOnce = true; openGameSection(game); }
+        if (game === 'notakto') ntStartAnalysis(); else if (game === 'stone') stStartAnalysis(); else if (game === 'popit') ppStartAnalysis(); else qnStartAnalysis();
+        window.scrollTo(0, 0);
+      }, 220);
+    };
+    wrapAfter('openLesson', () => { const a = $id('lesson-analysis'); if (a) a.hidden = !!((typeof CH_BACK !== 'undefined' && CH_BACK) || (typeof CH_ENTRY !== 'undefined' && CH_ENTRY)); });
     // 저장된 판을 분석 모드 복기로 열기 (전략을 놓친 수 ⚠️ 표시)
     window.lsReview = function (game, rec) {
       if (currentGame !== game) { skipRulesOnce = true; openGameSection(game); }

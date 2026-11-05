@@ -22,13 +22,6 @@
     body.ch-mode .action-buttons.ab-game, body.ch-mode #pp-undo, body.ch-mode [id$="-undo-btn"],
     body.ch-mode #top-rules-btn, body.ch-mode #top-up-games, body.ch-mode .bk-top__sub, body.ch-mode #victory-modal,
     body.ch-mode #stars-canvas, body.ch-mode #victory-canvas { display:none !important; }
-    .ch-bar { display:flex; align-items:center; justify-content:center; gap:6px 10px; flex-wrap:wrap; width:100%; max-width:760px; margin:0 auto 6px; box-sizing:border-box;
-      background:#fff; border:2.5px solid ${G.color}; border-radius:16px; padding:6px 12px; box-shadow:0 3px 0 ${G.deep}; font-family:'Noto Sans KR',sans-serif; }
-    .ch-bar .ch-id { font-family:'Jua',sans-serif; font-size:1.05rem; color:#fff; background:${G.color}; border-radius:9px; padding:1px 9px; box-shadow:inset 0 -3px 0 rgba(0,0,0,.14); flex:none; }
-    .ch-bar .ch-m { font-family:'Jua',sans-serif; font-size:1.1rem; color:#2C2A26; }
-    .ch-bar .ch-s { font-size:.85rem; font-weight:900; color:#D7263D; white-space:nowrap; }
-    .ch-bar .ch-c { font-size:.85rem; font-weight:800; color:${G.deep}; }
-    .ch-bar .ch-done { font-size:.8rem; font-weight:900; color:#D7263D; white-space:nowrap; }
     .ch-actions { display:flex; gap:10px; justify-content:center; flex-wrap:wrap; width:100%; margin:8px 0 4px; }
     .ch-btn { font-family:'Jua',sans-serif; font-size:1.12rem; min-height:50px; padding:10px 22px; border-radius:16px; cursor:pointer; border:2.5px solid ${G.color};
       background:#fff; color:#2C2A26; box-shadow:0 4px 0 ${G.deep}; display:inline-flex; align-items:center; gap:6px; -webkit-tap-highlight-color:transparent; }
@@ -70,15 +63,16 @@
     .ch-auto i { display:block; height:100%; width:0; background:${G.color}; }
     .ch-auto.run i { width:100%; transition:width var(--t,2.8s) linear; }
     @media (max-width:640px) {
-      .ch-bar { padding:5px 8px; gap:4px 8px; margin-bottom:4px; }
-      .ch-bar .ch-m { font-size:1rem; } .ch-bar .ch-c, .ch-bar .ch-s { font-size:.78rem; }
       .ch-btn { font-size:1rem; min-height:46px; padding:8px 16px; }
+      /* 황금비 퀸: 판이 폰 폭을 꽉 채우게 (옆 여백 최소) */
+      body.ch-mode.ch-qn main { padding-left:8px !important; padding-right:8px !important; }
+      body.ch-mode.ch-qn #qn-board .qn-boardWrap { width:100% !important; }
       .ch-res-stamp { width:160px; height:160px; } .ch-res-t { font-size:1.7rem; }
     }
     @media (prefers-reduced-motion:reduce) { .ch-res-stamp.go .ch-stamp-svg, .ch-res-box.shake, .ch-res-stamp.go .ink { animation:none !important; } }
   `;
   document.head.appendChild(css);
-  document.body.classList.add('ch-mode');
+  document.body.classList.add('ch-mode', 'ch-' + k);
   document.body.insertAdjacentHTML('afterbegin', CH.inkDefs());
 
   /* ---------- 보통 설정을 이번 페이지에서만 덮어쓰기 (localStorage 저장 함수는 부르지 않음) ---------- */
@@ -90,7 +84,7 @@
   getMyName = function () { try { return CH.load().name || _gn(); } catch (e) { return _gn(); } };
   // 승패: 원래 결과 창(전적 기록 포함) 대신 도전 결과
   showVictoryModal = function (w, r, isLoss) { onEnd(!isLoss); };
-  showStartToast = function () {};                                                         // 미션 줄이 있으니 "선공" 알림은 생략
+  showStartToast = function () {};                                                         // 도전은 늘 선공 — "선공" 알림 생략
   // AI가 실제로 둔 횟수 세기 → 내 수 = AI 수 + (내가 이겼으면 1). 황금비 퀸 ⚡ 최소 수 판정에 씀
   let aiMoves = 0;
   const _qb = qnBotTurn; qnBotTurn = function () { if (!qnOver && qnCur === qnBotNum() && qnPhase === 'play' && qnMode === 'bot') aiMoves++; return _qb.apply(this, arguments); };
@@ -100,16 +94,6 @@
 
   /* ---------- 판 시작 ---------- */
   let resT = null, autoT = null, limit = 0, startAt = 0;
-  function condText() {
-    if (k === 'nt') return '3×3 · 한 줄을 만들면 패배';
-    if (k === 'st') return `돌 ${S.n}개 · ${S.mode === 'bomb' ? '💣 마지막 폭탄 돌을 가져가면 패배' : '💎 마지막 보석 돌을 가져가면 승리'} · 한 번에 1~${limit}개`;
-    if (k === 'qn') { const q = CH.queenOf(CH.load(), id); return `${q.N}×${q.N} 판 · ${S.target}수 만에 이길 수 있는 자리 · 퀸을 구석 (0,0)에 넣으면 승리`; }
-    return `줄 ${S.rows.join('·')} · 마지막 버블을 누르면 승리`;
-  }
-  function renderBar() {
-    const done = CH.load().stamps[id];
-    bar.innerHTML = `<span class="ch-id">${esc(id)}</span><span class="ch-m">${esc(S.mission)}</span><span class="ch-s">${esc(CH.SUB)}</span><span class="ch-c">${esc(condText())}</span>${done ? '<span class="ch-done">✓ 도장 받음</span>' : ''}`;
-  }
   function start() {
     hideRes();
     aiMoves = 0; startAt = Date.now();
@@ -120,11 +104,29 @@
     else if (k === 'st') { limit = 3 + Math.floor(Math.random() * 3); stNSetting = String(S.n); stLimitSetting = String(limit); stModeType = S.mode; stOneShot = false; }
     else if (k === 'qn') { qnWinRule = 'last'; qnStartSetting = 'rand'; }
     else { ppRowsSetting = S.rows.join(' '); ppWinRule = 'last'; ppMaxTake = 0; ppOneShot = null; }
-    renderBar();
     if (k === 'nt') ntStartGame('bot');
     else if (k === 'st') stStartGame('bot');
-    else if (k === 'qn') { const q = CH.queenOf(CH.load(), id); qnStartGame('bot', { size: q.N, start: q.s.slice() }); }
+    else if (k === 'qn') { const q = CH.nextQueen(id); qnStartGame('bot', { size: q.N, start: q.s }); } // 판마다 새 시작 칸
     else ppStartGame('bot');
+  }
+  // 판이 끝났나 · 한 수라도 뒀나 (다시하기를 "포기"로 셀지 판단)
+  function isOver() { try { return k === 'nt' ? !!ntGameOver : k === 'st' ? !!stGameOver : k === 'qn' ? !!qnOver : !!ppOver; } catch (e) { return true; } }
+  function hasMoved() {
+    try {
+      if (aiMoves > 0) return true;
+      if (k === 'nt') return ntGameBoardMask !== 0;
+      if (k === 'st') return stStonesArr.length !== stN;
+      if (k === 'qn') return qnQ + '' !== qnStart + '';
+      return ppRows.join() !== ppInit.join();
+    } catch (e) { return false; }
+  }
+  // [다시하기]: 두다 만 판은 진 걸로 셈 → 4번째(8, 12…)면 바로 다시 시작하지 않고 "배우러 갈래요?" 창
+  function restart() {
+    if (!isOver() && hasMoved()) {
+      const losses = CH.result(id, false);
+      if (losses > 0 && losses % CH.LEARN_EVERY === 0) { showLearn(losses); return; }
+    }
+    start();
   }
 
   /* ---------- 도장판으로 (도장판에서 왔으면 뒤로 가기 — 기록이 쌓이지 않게) ---------- */
@@ -144,7 +146,7 @@
   function onEnd(win) {
     clearTimeout(resT);
     const my = aiMoves + (win ? 1 : 0);                       // 내가 둔 수
-    const perfect = win && k === 'qn' && my === S.target;     // 황금비 퀸: 최소 수로 이김 ⚡
+    const perfect = win && k === 'qn' && my <= S.target;      // 황금비 퀸: 최소 수(이하)로 이김 ⚡ — AI가 지는 자리에서 조금씩 움직이면 더 빨리 끝날 수도 있음
     const sec = (Date.now() - startAt) / 1000;
     const fresh = win ? CH.stamp(id, { sec, perfect, att: (CH.load().att[id] || 0) + 1 }) : false; // 기록은 바로 (창이 뜨기 전에 나가도 도장은 남음)
     const losses = CH.result(id, win);        // 연속으로 진 횟수 (이기면 0)
@@ -155,19 +157,30 @@
     clearTimeout(autoT);
     location.href = `${location.pathname}?game=${encodeURIComponent(G.g)}&lesson=1&back=${encodeURIComponent('ch:' + id)}`;
   }
+  const aiBub = win => `<div class="ch-ai"><span class="ch-ai-ico">🤖</span><div class="ch-ai-bub"><small>AI의 한마디</small>${esc(CH.aiSay(win))}</div></div>`;
+  function bindRes() {
+    res.querySelectorAll('[data-act]').forEach(b => b.onclick = () => { try { playSfx('click'); } catch (e) {} const a = b.dataset.act; if (a === 'again') start(); else if (a === 'learn') goLearn(); else goBoard(); });
+    res.classList.add('on');
+  }
+  // 4번째(8, 12…)로 진 판(두다 만 판 포함): 전략 배우러 가기 권유
+  function showLearn(losses) {
+    clearTimeout(resT); clearTimeout(autoT);
+    try { window[k + 'StopTimer'](); } catch (e) {}
+    res.innerHTML = `<div class="ch-res-box"><div class="ch-res-ico">😅</div>
+      <h2 class="ch-res-t">${losses}번이나 아쉬웠어요</h2><p class="ch-res-p">필승 전략을 배우러 가볼까요?</p>${aiBub(false)}
+      <div class="ch-res-btns"><button type="button" class="ch-btn ch-btn--main" data-act="learn">📘 필승 전략 배우기</button><button type="button" class="ch-btn" data-act="again">🔁 다시 도전</button></div></div>`;
+    bindRes();
+    try { playLoseSound(); } catch (e) {}
+  }
   function showRes(win, fresh, losses, perfect) {
     const rec = CH.load(), t = rec.stamps[id];
-    const ai = `<div class="ch-ai"><span class="ch-ai-ico">🤖</span><div class="ch-ai-bub"><small>AI의 한마디</small>${esc(CH.aiSay(win))}</div></div>`;
+    const ai = aiBub(win);
     const perf = perfect ? `<div class="ch-res-perf">⚡ 완벽한 수! 최소 수로 이겼어요</div>` : '';
     const badge = (perfect || (win && rec.perfect[id])) ? '<span class="ch-perf-badge">⚡</span>' : '';
     const btnAgain = `<button type="button" class="ch-btn" data-act="again">↻ 다시하기</button>`;
     const btnBoard = l => `<button type="button" class="ch-btn ch-btn--main" data-act="board">📋 ${l}</button>`;
-    if (!win && losses > 0 && losses % CH.LEARN_EVERY === 0) {
-      // 4번째(8, 12…)로 진 판: 전략 배우러 가기 권유
-      res.innerHTML = `<div class="ch-res-box"><div class="ch-res-ico">😅</div>
-        <h2 class="ch-res-t">${losses}번이나 아쉬웠어요</h2><p class="ch-res-p">필승 전략을 배우러 가볼까요?</p>${ai}
-        <div class="ch-res-btns"><button type="button" class="ch-btn ch-btn--main" data-act="learn">📘 필승 전략 배우기</button><button type="button" class="ch-btn" data-act="again">🔁 다시 도전</button></div></div>`;
-    } else if (win && fresh) {
+    if (!win && losses > 0 && losses % CH.LEARN_EVERY === 0) { showLearn(losses); return; }
+    if (win && fresh) {
       res.innerHTML = `<div class="ch-res-box"><div class="ch-res-stamp"><span class="ink"></span>${CH.stampSVG({ stage: id })}${badge}</div>
         <h2 class="ch-res-t">🎉 도전 ${esc(id)} 성공!</h2><p class="ch-res-p">도장 쾅! ${CH.fmtClock(t)}</p>${perf}${ai}
         <div class="ch-res-btns">${btnBoard('도장판으로')}</div><div class="ch-auto"><i></i></div></div>`;
@@ -180,8 +193,7 @@
         <h2 class="ch-res-t">아쉬워요!</h2><p class="ch-res-p">다시 도전해 봐요</p>${ai}
         <div class="ch-res-btns">${btnAgain}${btnBoard('도장판 보기')}</div></div>`;
     }
-    res.querySelectorAll('[data-act]').forEach(b => b.onclick = () => { try { playSfx('click'); } catch (e) {} const a = b.dataset.act; if (a === 'again') start(); else if (a === 'learn') goLearn(); else goBoard(); });
-    res.classList.add('on');
+    bindRes();
     if (win && fresh) {
       const st = res.querySelector('.ch-res-stamp'), box = res.querySelector('.ch-res-box'), au = res.querySelector('.ch-auto');
       requestAnimationFrame(() => {
@@ -195,19 +207,17 @@
     else { try { playWinSound(); } catch (e) {} }
   }
 
-  /* ---------- 게임 화면 꾸미기: 미션 줄 + [다시하기] [📋 도장판 보기] ---------- */
+  /* ---------- 게임 화면 꾸미기: [다시하기] [📋 도장판 보기] (미션 줄 없음 — 제목은 상단바에) ---------- */
   const scr = $(k + '-game-screen');
-  const bar = document.createElement('div'); bar.className = 'ch-bar'; bar.id = 'ch-bar';
-  scr.insertBefore(bar, scr.firstChild);
   const acts = document.createElement('div'); acts.className = 'ch-actions'; acts.id = 'ch-actions';
   acts.innerHTML = `<button type="button" class="ch-btn" id="ch-again">↻ 다시하기</button><button type="button" class="ch-btn ch-btn--main" id="ch-board">📋 도장판 보기</button>`;
   const ab = scr.querySelector('.action-buttons'); if (ab) ab.after(acts); else scr.appendChild(acts);
-  $('ch-again').onclick = () => { try { playSfx('click'); } catch (e) {} start(); };
+  $('ch-again').onclick = () => { try { playSfx('click'); } catch (e) {} restart(); };
   $('ch-board').onclick = () => { try { playSfx('click'); } catch (e) {} goBoard(); };
 
-  /* ---------- 상단바: "도전 1-1 노탁토" + ⬆ 도장판 ---------- */
+  /* ---------- 상단바: "도전 2-1 폭탄 모드 14개" + ⬆ 도장판 ---------- */
   function topBar() {
-    const nm = document.querySelector('.bk-top__name'); if (nm) nm.textContent = `도전 ${id} ${G.name}`;
+    const nm = document.querySelector('.bk-top__name'); if (nm) nm.textContent = `도전 ${id} ${S.mission}`;
     const num = document.querySelector('.bk-top__num'); if (num) num.textContent = '🏆';
     if (!$('ch-up')) {
       const up = document.createElement('a'); up.id = 'ch-up'; up.className = 'bk-top__home bk-top__up'; up.href = BOARD; up.title = '도장판으로';
@@ -215,7 +225,7 @@
       up.addEventListener('click', e => { e.preventDefault(); goBoard(); });
       document.querySelector('.bk-top__home')?.after(up);
     }
-    document.title = `도전 ${id} ${G.name} · 부산의 활동수학 축전`;
+    document.title = `도전 ${id} ${S.mission} · 부산의 활동수학 축전`;
   }
 
   /* ---------- 들어가기 ---------- */
@@ -225,5 +235,5 @@
   topBar();
   start();
   // 뒤로 가기 캐시로 돌아왔을 때(드묾): 끝난 판이면 새로
-  window.addEventListener('pageshow', e => { if (e.persisted) { topBar(); renderBar(); } });
+  window.addEventListener('pageshow', e => { if (e.persisted) topBar(); });
 })();

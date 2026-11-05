@@ -59,26 +59,28 @@
     }
     return null;
   }
-  // 3-1: 8×8 · 3수 (N, s31) · 3-2: 12×12 · 4수 (N2, s32) — 3-2는 3-1과 다른 칸
-  function pickQueen() {
-    const a = pickCell(stage('3-1').size, stage('3-1').target) || { N: 8, s: [3, 6] };
-    const b = pickCell(stage('3-2').size, stage('3-2').target, a.s) || { N: 12, s: [4, 9] };
-    return { N: a.N, s31: a.s, N2: b.N, s32: b.s };
+  // 판을 시작할 때마다 새 시작 칸 — 바로 전 판의 칸(과 그 대칭)은 피함. 고른 칸은 r.qn[id]에 적어 둠 (다음 판에서 피하려고)
+  const QN_FALLBACK = { '3-1': { N: 8, s: [3, 6] }, '3-2': { N: 12, s: [4, 9] } };
+  function nextQueen(id) {
+    const S = stage(id), r = load(), prev = Array.isArray(r.qn[id]) ? r.qn[id] : null;
+    const q = pickCell(S.size, S.target, prev) || QN_FALLBACK[id];
+    r.qn[id] = q.s.slice(); save(r);
+    return { N: q.N, s: q.s.slice() };
   }
-  // 단계별 판 크기·시작 칸
-  function queenOf(r, id) { return id === '3-2' ? { N: r.qn.N2, s: r.qn.s32 } : { N: r.qn.N, s: r.qn.s31 }; }
+  // 단계의 판 크기 (카드 칩용)
+  function queenSize(id) { const S = stage(id); return S && S.size || 8; }
 
   /* ---------- 기록 ---------- */
   let mem = null; // localStorage를 못 쓰면 메모리에만
   // stamps[id] 도장 찍은 시각 · loss[id] 연속으로 진 횟수 · att[id] 끝까지 둔 판 수 · winAt[id] 몇 번째 판에 도장 · sec[id] 도장 받은 판의 걸린 초 · perfect[id] 최소 수 승리
-  // celebrated 축하창을 띄운 도장 수 · seen 상품창을 본 도장 수
-  function blank() { return { v: 1, name: '', stamps: {}, loss: {}, att: {}, winAt: {}, sec: {}, perfect: {}, celebrated: 0, qn: pickQueen(), created: Date.now(), seen: 0, fresh: '' }; }
+  // celebrated 축하창을 띄운 도장 수 · seen 상품창을 본 도장 수 · qn[id] 황금비 퀸 바로 전 판의 시작 칸 · guided 첫 안내 창을 봄
+  function blank() { return { v: 1, name: '', stamps: {}, loss: {}, att: {}, winAt: {}, sec: {}, perfect: {}, celebrated: 0, qn: {}, created: Date.now(), seen: 0, fresh: '', guided: false }; }
   function load() {
     let r = null;
     try { r = JSON.parse(localStorage.getItem(KEY) || 'null'); } catch (e) { r = mem; }
     if (!r || typeof r !== 'object' || r.v !== 1) { r = blank(); save(r); }
     if (!r.stamps || typeof r.stamps !== 'object') r.stamps = {};
-    if (!r.qn || !Array.isArray(r.qn.s31) || !Array.isArray(r.qn.s32) || !(r.qn.N >= 8) || !(r.qn.N2 >= 12)) { r.qn = pickQueen(); save(r); }
+    if (!r.qn || typeof r.qn !== 'object' || Array.isArray(r.qn)) r.qn = {};
     for (const k of ['loss', 'att', 'winAt', 'sec', 'perfect']) if (!r[k] || typeof r[k] !== 'object') r[k] = {};
     if (!(r.celebrated >= 0)) r.celebrated = 0;
     return r;
@@ -157,5 +159,5 @@
     </svg>`;
   }
 
-  window.CH = { KEY, GAME, STAGES, GOAL, SUB, CELEB, LEARN_EVERY: 4, stage, title, aiSay, load, save, clear, count, stamp, result, tryText, fmtSec, pickQueen, queenOf, fitCells, getName, setName, fmtTime, fmtClock, inkDefs, stampSVG };
+  window.CH = { KEY, GAME, STAGES, GOAL, SUB, CELEB, LEARN_EVERY: 4, stage, title, aiSay, load, save, clear, count, stamp, result, tryText, fmtSec, nextQueen, queenSize, fitCells, getName, setName, fmtTime, fmtClock, inkDefs, stampSVG };
 })();
