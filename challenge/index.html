@@ -54,7 +54,7 @@
   .chb-banner[hidden]{display:none}
   .chb-banner .bk-btn{background:#fff;border-color:#E8B21B;box-shadow:0 3px 0 #C99510;color:#6B4A00}
 
-  /* ---------- 도장 칸 (카드): 제목만 + [도전하기] (받은 칸은 도장이 카드를 덮음) — 모든 화면 2열 4줄, 첫 칸은 🎁 ---------- */
+  /* ---------- 도장 칸 (카드): 제목 + 판 미리보기 그림 + [도전하기] (받은 칸은 도장이 카드를 덮음, 글 없음) — 모든 화면 2열 4줄, 첫 칸은 🎁 ---------- */
   .chb-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:14px}
   .chc{--c:var(--nt);--d:var(--nt-d);--s:var(--nt-s);
     position:relative;display:flex;flex-direction:column;gap:6px;text-decoration:none;color:var(--bk-ink);background:#fff;border-radius:20px;
@@ -68,6 +68,10 @@
   .chc-top{display:flex;align-items:center;gap:8px;min-width:0}
   .chc-id{flex:none;font-family:var(--f-head);font-size:1.15rem;color:#fff;background:var(--c);border-radius:10px;padding:2px 10px;box-shadow:inset 0 -3px 0 rgba(0,0,0,.14);white-space:nowrap}
   .chc-game{font-family:var(--f-head);font-size:1.3rem;color:var(--d);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+  /* 판 미리보기: 제목 오른쪽 (폰에서는 제목 아래 줄) */
+  .chc-prev{flex:none;margin-left:auto;height:64px;aspect-ratio:5/4;background:var(--s);border-radius:12px;display:grid;place-items:center;padding:4px}
+  .chc-prev svg{width:100%;height:100%;display:block}
+  .chc.done .chc-prev{opacity:.3}
   /* 도장: 받은 칸은 카드 전체를 덮는 반투명 빨간 도장 (제목은 비쳐 보임) */
   .chc-stamp{position:absolute;inset:0;display:grid;place-items:center;pointer-events:none;z-index:1;border-radius:inherit}
   .chc-stamp .ch-stamp-svg{height:100%;width:auto;max-width:100%;aspect-ratio:1;transform:rotate(-14deg);opacity:.74;mix-blend-mode:multiply}
@@ -199,7 +203,7 @@
   .pz-staff small{display:block;font-size:.76rem;color:var(--bk-ink-soft);margin-top:6px;font-weight:700}
   #confetti{position:fixed;inset:0;pointer-events:none;z-index:250}
 
-  /* ---------- 폰(360×740): 머리 작게 · 2열 4줄 · 카드는 제목+[도전하기]만 → 도장 0~4개면 스크롤 없이 한 화면 ---------- */
+  /* ---------- 폰(360×740): 머리 작게 · 2열 4줄 · 카드는 제목 / 작은 미리보기 / [도전하기] → 도장 0~4개면 스크롤 없이 한 화면 ---------- */
   @media(max-width:640px){
     .chb{padding:8px 10px 10px;gap:8px}
     .chb-grid{gap:8px}
@@ -220,12 +224,14 @@
     .chb-bar .gift{font-size:1.2rem}
     .chb-banner{font-size:.95rem;padding:5px 10px;gap:6px 10px;border-radius:14px}
     .chb-banner .bk-btn{min-height:32px;padding:3px 10px;font-size:.9rem}
-    .chc{padding:9px 10px 9px;border-radius:14px;gap:4px;min-height:116px}
-    .chc-top{gap:6px}
+    .chc{padding:8px 10px 8px;border-radius:14px;gap:3px;min-height:116px}
+    .chc-top{gap:6px;flex-wrap:wrap}
+    .chc-prev{flex:0 0 100%;margin:0;height:48px;aspect-ratio:auto;padding:0;background:none;border-radius:0;justify-items:center}
+    .chc-prev svg{width:auto;height:100%;aspect-ratio:5/4;background:var(--s);border-radius:10px;padding:3px;box-sizing:border-box}
     .chc-id{font-size:.98rem;padding:1px 7px;border-radius:8px}
     .chc-game{font-size:1.08rem}
-    .chc-go{font-size:.9rem;padding:4px 12px}
-    .chc-foot{min-height:28px;gap:4px}
+    .chc-go{font-size:.88rem;padding:3px 11px}
+    .chc-foot{min-height:26px;gap:4px}
     .chc-again{font-size:.8rem}
     .chc-perf{width:24px;height:24px;font-size:.85rem;right:-6px;top:-6px}
     .chc-stamp .ch-stamp-svg{height:112%;opacity:.7}
@@ -244,10 +250,13 @@
     .chb-count b{font-size:1.7rem}
     .chb-bar{height:13px}
     .chb-grid{gap:12px}
-    .chc{gap:4px;padding:10px 14px 10px;min-height:118px}
-    .chc-foot{min-height:32px}
+    .chc{gap:3px;padding:8px 14px 8px;min-height:118px}
+    .chc-prev{height:60px}
+    .chc-foot{min-height:30px}
     /* 상품 띠가 보이면(도장 5개~) 칸을 조금 낮춰 그래도 한 화면에 */
     .chb:has(.chb-banner:not([hidden])) .chc{min-height:100px}
+    .chb:has(.chb-banner:not([hidden])) .chc-prev{height:54px}
+    .chb:has(.chb-banner:not([hidden])) .chc-foot{min-height:26px}
     .chb:has(.chb-banner:not([hidden])) .chb-grid{gap:10px}
     .chb-banner{padding:4px 14px;font-size:1.02rem}
     .chb-banner .bk-btn{min-height:34px;padding:4px 12px}
@@ -402,6 +411,44 @@
   const NAME_ANIMAL = ['수달', '펭귄', '두더지', '고양이', '여우', '판다', '거북이', '다람쥐', '돌고래', '햄스터'];
   const randName = () => NAME_ADJ[Math.floor(Math.random() * NAME_ADJ.length)] + ' ' + NAME_ANIMAL[Math.floor(Math.random() * NAME_ANIMAL.length)];
 
+  /* ---------- 판 미리보기 (작은 그림) ---------- */
+  function prevSVG(s) {
+    const G = CH.GAME[s.k];
+    if (s.k === 'nt') {
+      const L = 'stroke="' + G.deep + '" stroke-width="2.4" stroke-linecap="round"';
+      const X = (cx, cy) => `<path d="M${cx - 5.5} ${cy - 5.5}l11 11M${cx + 5.5} ${cy - 5.5}l-11 11" stroke="#2C2A26" stroke-width="3" stroke-linecap="round"/>`;
+      return `<svg viewBox="0 0 100 80"><g ${L}><path d="M39 10v60M61 10v60M18 31.7h64M18 53.3h64"/></g>${X(50, 42.5)}${X(28, 20.8)}</svg>`;
+    }
+    if (s.k === 'st') {
+      const n = s.n || Math.round((s.nRange[0] + s.nRange[1]) / 2), cols = n <= 14 ? 7 : 9, rows = Math.ceil(n / cols), r = n <= 14 ? 5.2 : 4, gx = 92 / cols, gy = 64 / rows;
+      let out = '';
+      for (let i = 0; i < n; i++) {
+        const cx = 4 + gx * (i % cols) + gx / 2 + ((Math.floor(i / cols) % 2) ? gx / 4 : -gx / 4) * .6, cy = 8 + gy * Math.floor(i / cols) + gy / 2;
+        if (i === 0) {
+          out += s.mode === 'bomb'
+            ? `<circle cx="${cx}" cy="${cy}" r="${r + 1.2}" fill="#E9533F" stroke="#9c2b1d" stroke-width="1.2"/><path d="M${cx + r * .6} ${cy - r * .7}q3 -4 6 -3" stroke="#6b4a00" stroke-width="1.4" fill="none"/>`
+            : `<path d="M${cx} ${cy - r - 1.5}l${r + 1.5} ${r + 1.5}l${-r - 1.5} ${r + 1.5}l${-r - 1.5} ${-r - 1.5}z" fill="#3DBE7A" stroke="#1F8F5F" stroke-width="1.2"/>`;
+        } else out += `<circle cx="${cx}" cy="${cy}" r="${r}" fill="#9AA6B2" stroke="#6E7A86" stroke-width="1"/>`;
+      }
+      return `<svg viewBox="0 0 100 80">${out}</svg>`;
+    }
+    if (s.k === 'qn') {
+      // 시작 칸은 판마다 새로 뽑으므로 미리보기는 판 모양만 (구석 = 목표, 물음표 = 어디서 시작할지 모름)
+      const N = s.size, c = 72 / N, x0 = 14, y0 = 4;
+      let out = '';
+      for (let x = 0; x < N; x++) for (let y = 0; y < N; y++) if ((x + y) % 2 === 0) out += `<rect x="${x0 + x * c}" y="${y0 + (N - 1 - y) * c}" width="${c}" height="${c}" fill="#F3C1C4"/>`;
+      out += `<rect x="${x0}" y="${y0 + (N - 1) * c}" width="${c}" height="${c}" fill="#FFD60A"/>`;
+      out += `<rect x="${x0}" y="${y0}" width="${N * c}" height="${N * c}" fill="none" stroke="#B53A2A" stroke-width="1.5"/>`;
+      const qx = x0 + N * c * .68, qy = y0 + N * c * .34;
+      out += `<circle cx="${qx}" cy="${qy}" r="${N * c * .17}" fill="#fff" stroke="#E9533F" stroke-width="1.6" stroke-dasharray="3 2"/><text x="${qx}" y="${qy + N * c * .085}" font-size="${N * c * .24}" text-anchor="middle" fill="#2C2A26">♛?</text>`;
+      return `<svg viewBox="0 0 100 80"><rect width="100" height="80" fill="none"/>${out}</svg>`;
+    }
+    const COL = ['#FF5FA2', '#FF9F1C', '#FFD60A', '#57CC99', '#3DB2FF'], rows = s.rows, gy = 72 / rows.length;
+    let out = '';
+    rows.forEach((n, ri) => { const r = Math.min(7.5, gy * .38), w = 2 * r + 4, x0 = 50 - (n * w) / 2 + w / 2; for (let i = 0; i < n; i++) out += `<circle cx="${x0 + i * w}" cy="${4 + gy * ri + gy / 2}" r="${r}" fill="${COL[ri % 5]}" stroke="rgba(0,0,0,.18)" stroke-width="1"/><circle cx="${x0 + i * w - r * .3}" cy="${4 + gy * ri + gy / 2 - r * .3}" r="${r * .3}" fill="rgba(255,255,255,.55)"/>`; });
+    return `<svg viewBox="0 0 100 80">${out}</svg>`;
+  }
+
   /* ---------- 그리기 ---------- */
   function render() {
     const r = CH.load(), n = CH.count(r), done = n >= CH.GOAL, all = n >= 7;
@@ -425,7 +472,7 @@
       <div class="g-d">${done ? '눌러서 상품 받기 화면 보기' : `앞으로 ${CH.GOAL - n}개!`}</div>`;
     if (done) { gift.setAttribute('role', 'button'); gift.tabIndex = 0; gift.onclick = () => openPrize(); }
     g.appendChild(gift);
-    // 단계 칸: 제목(단계 이름 + 게임)만 — 받은 칸은 도장이 덮음
+    // 단계 칸: 제목(단계 이름 + 게임) + 판 미리보기 + [도전하기] — 받은 칸은 도장이 덮고 '다시 ↻'만 (보조 글 없음)
     CH.STAGES.forEach(s => {
       const G = CH.GAME[s.k], t = r.stamps[s.id];
       const a = document.createElement('a');
@@ -434,7 +481,7 @@
       a.dataset.id = s.id;
       a.setAttribute('aria-label', `${s.label} ${G.name}${t ? ' (도장 받음)' : ''}`);
       a.innerHTML = `
-        <div class="chc-top"><span class="chc-id">${esc(s.label)}</span><span class="chc-game">${G.name}</span></div>
+        <div class="chc-top"><span class="chc-id">${esc(s.label)}</span><span class="chc-game">${G.name}</span><div class="chc-prev" aria-hidden="true">${prevSVG(s)}</div></div>
         <div class="chc-foot">${t ? `<span class="chc-again">다시 ↻</span>` : `<span class="chc-go">도전하기 ▶</span>`}</div>
         ${t ? `<div class="chc-stamp" aria-hidden="true">${CH.stampSVG({ stage: s.id })}${r.perfect[s.id] ? '<span class="chc-perf" title="최소 수로 이김">⚡</span>' : ''}</div>` : ''}`;
       g.appendChild(a);
