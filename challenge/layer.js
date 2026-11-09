@@ -70,6 +70,11 @@
       .ch-res-stamp { width:160px; height:160px; } .ch-res-t { font-size:1.7rem; }
     }
     @media (prefers-reduced-motion:reduce) { .ch-res-stamp.go .ch-stamp-svg, .ch-res-box.shake, .ch-res-stamp.go .ink { animation:none !important; } }
+    /* 크롬북처럼 가로·세로가 넉넉하면(700px↑): 상단바 아래 남는 공간 가운데에 판(상대 패널 + 판 + 내 패널 + 버튼)을 세로로 가운데 맞춤 — 폰(좁은 화면)은 그대로 */
+    @media (min-height:700px) and (min-width:700px) {
+      body.ch-mode main { min-height:calc(100dvh - var(--bk-top-h, 56px)); box-sizing:border-box; justify-content:center; padding-top:16px !important; padding-bottom:16px !important; }
+      body.ch-mode .game-section { flex:0 0 auto; }
+    }
   `;
   document.head.appendChild(css);
   document.body.classList.add('ch-mode', 'ch-' + k);
@@ -103,7 +108,7 @@
     if (k === 'nt') { ntSize = 3; }
     else if (k === 'st') { const o = CH.nextStone(id); stNSetting = String(o.n); stLimitSetting = String(o.limit); stModeType = S.mode; stOneShot = false; } // 판마다 돌·최대 개수 새로 (선공 승리 판만)
     else if (k === 'qn') { qnWinRule = 'last'; qnStartSetting = 'rand'; }
-    else { ppRowsSetting = CH.nextPopit(id).join(' '); ppWinRule = 'last'; ppMaxTake = 0; ppOneShot = null; } // 4(상): 첫 판 3·4·5, 그 뒤 어려운 랜덤 판
+    else { ppRowsSetting = CH.nextPopit(id).join(' '); ppWinRule = 'last'; ppMaxTake = 0; ppOneShot = null; } // 4(상): 판마다 어려운 랜덤 판 (이기는 수 1~2개)
     if (k === 'nt') ntStartGame('bot');
     else if (k === 'st') stStartGame('bot');
     else if (k === 'qn') { const q = CH.nextQueen(id); qnStartGame('bot', { size: q.N, start: q.s }); } // 판마다 새 시작 칸

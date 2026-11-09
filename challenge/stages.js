@@ -11,7 +11,7 @@
   // label: 카드·상단바에 보이는 단계 이름(중/상) — id는 저장 호환용으로 그대로 · glyph: 도장 가운데 그림 종류
   // 돌 가져가기: n 돌 개수(없으면 nRange에서 랜덤) · mode 폭탄/보석 — 최대 개수는 판마다 3~5 랜덤, 선공(나)이 이기는 판만
   // 황금비 퀸: size 판 크기(그런 칸이 없으면 더 큰 판) · target 최선으로 두면 내 몇 번째 수에 구석에 넣는가
-  // 팝잇: rows 고정 줄 · hard: 첫 판만 rows, 그 뒤엔 어려운 랜덤 판(선공 승리)
+  // 팝잇: rows 고정 줄(hard면 도장판 카드 그림에만 씀) · hard: 판마다 어려운 랜덤 판(선공 승리, 이기는 수 1~2개)
   const STAGES = [
     { id: '1-1', label: '1(중)', k: 'nt', glyph: 'x' },
     { id: '2-1', label: '2(중)', k: 'st', n: 14, mode: 'bomb', glyph: 'bomb' },
@@ -84,29 +84,33 @@
     return { n, limit };
   }
 
-  /* ---------- 팝잇: 첫 판은 정해진 줄, 그 뒤엔 어려운 랜덤 판 (선공 승리 = XOR ≠ 0) ---------- */
-  // 3~4줄 · 줄마다 3~7개 · XOR ≠ 0 · 서로 다른 값 3개 이상 · 합 12 이상 (두 줄 같고 하나 남는 뻔한 모양은 뺌)
+  /* ---------- 팝잇 4(상): 판마다(첫 판·다시하기 모두) 어려운 랜덤 판 (선공 승리 = XOR ≠ 0) ---------- */
+  // 선공이 이기는 수(줄 i에서 k개 가져가면 XOR이 0이 되는 수)의 개수 — 메인 게임의 필승 수 판정과 같음
+  function ppWinMoves(rows) {
+    const x = rows.reduce((a, b) => a ^ b, 0); let c = 0;
+    for (let i = 0; i < rows.length; i++) for (let k = 1; k <= rows[i]; k++) if ((x ^ rows[i] ^ (rows[i] - k)) === 0) c++;
+    return c;
+  }
+  // 3~5줄 · 줄마다 2~7개 · XOR ≠ 0 · 서로 다른 값 3개 이상 · 합 12 이상 · "어려움" = 이기는 수가 1~2개뿐
+  // (조건을 만족하는 판이 전체의 약 10%라 금방 뽑힘 · 못 뽑으면 3·4·5 — XOR 2, 이기는 수 1개로 조건 만족)
   function hardRows() {
-    for (let i = 0; i < 1000; i++) {
-      const k = 3 + Math.floor(Math.random() * 2), rows = Array.from({ length: k }, () => 3 + Math.floor(Math.random() * 5));
+    for (let i = 0; i < 2000; i++) {
+      const k = 3 + Math.floor(Math.random() * 3), rows = Array.from({ length: k }, () => 2 + Math.floor(Math.random() * 6));
       const x = rows.reduce((a, b) => a ^ b, 0), total = rows.reduce((a, b) => a + b, 0);
-      if (x !== 0 && new Set(rows).size >= 3 && total >= 12) return rows;
+      if (x !== 0 && new Set(rows).size >= 3 && total >= 12 && ppWinMoves(rows) <= 2) return rows;
     }
     return [3, 4, 5];
   }
   function nextPopit(id) {
     const S = stage(id);
-    if (!S.hard) return S.rows.slice();
-    const r = load();
-    if (!r.pp42seen) { r.pp42seen = true; save(r); return S.rows.slice(); } // 이 단계의 맨 첫 판만 정해진 줄
-    return hardRows();
+    return S.hard ? hardRows() : S.rows.slice();
   }
 
   /* ---------- 기록 ---------- */
   let mem = null; // localStorage를 못 쓰면 메모리에만
   // stamps[id] 도장 찍은 시각 · loss[id] 연속으로 진 횟수 · att[id] 끝까지 둔 판 수 · winAt[id] 몇 번째 판에 도장 · sec[id] 도장 받은 판의 걸린 초 · perfect[id] 최소 수 승리
-  // celebrated 축하창을 띄운 도장 수 · seen 상품창을 본 도장 수 · qn[id] 황금비 퀸 바로 전 판의 시작 칸 · guided 첫 안내 창을 봄 · pp42seen 4(상) 첫 판(3·4·5)을 시작함
-  function blank() { return { v: 1, name: '', stamps: {}, loss: {}, att: {}, winAt: {}, sec: {}, perfect: {}, celebrated: 0, qn: {}, created: Date.now(), seen: 0, fresh: '', guided: false, pp42seen: false }; }
+  // celebrated 축하창을 띄운 도장 수 · seen 상품창을 본 도장 수 · qn[id] 황금비 퀸 바로 전 판의 시작 칸 · guided 첫 안내 창을 봄
+  function blank() { return { v: 1, name: '', stamps: {}, loss: {}, att: {}, winAt: {}, sec: {}, perfect: {}, celebrated: 0, qn: {}, created: Date.now(), seen: 0, fresh: '', guided: false }; }
   function load() {
     let r = null;
     try { r = JSON.parse(localStorage.getItem(KEY) || 'null'); } catch (e) { r = mem; }
@@ -185,5 +189,5 @@
     </svg>`;
   }
 
-  window.CH = { KEY, GAME, STAGES, GOAL, CELEB, LEARN_EVERY: 4, stage, label, cardTitle, title, aiSay, load, save, clear, count, stamp, result, nextQueen, nextStone, nextPopit, hardRows, fitCells, getName, setName, fmtTime, fmtClock, inkDefs, stampSVG };
+  window.CH = { KEY, GAME, STAGES, GOAL, CELEB, LEARN_EVERY: 4, stage, label, cardTitle, title, aiSay, load, save, clear, count, stamp, result, nextQueen, nextStone, nextPopit, hardRows, ppWinMoves, fitCells, getName, setName, fmtTime, fmtClock, inkDefs, stampSVG };
 })();
