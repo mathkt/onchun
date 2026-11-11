@@ -2071,7 +2071,7 @@
   #qn-analysis-screen.qn-tab-learn :is(#qn-analysis-layout, .pp-a-setup, #qn-p3-rev, .qn-free-only), #qn-analysis-screen.qn-tab-quiz :is(.pp-a-setup, .qn-free-only) { display:none !important; }
   #qn-analysis-screen:not(.qn-tab-learn) #qn-learn { display:none !important; }
   #qn-learn { width:100%; display:flex; flex-direction:column; gap:10px; }
-  /* 🎯 배우기: 안내 한 줄 → 큰 칠하기 판(20×20) → 버튼 두 개. 판 크기는 JS(qnFitBoards)가 화면에 맞춰 정함 */
+  /* 🎯 배우기: 안내 한 줄(+ 판 크기 10·15·20) → 큰 칠하기 판 → 버튼 줄. 판 픽셀 크기는 JS(qnFitBoards)가 화면에 맞춰 정함 */
   .qn-learn-body { display:flex; flex-direction:column; align-items:center; gap:8px; background:#fff; border:2px solid #E7DFC9; border-radius:18px; padding:10px 12px 12px; box-shadow:0 10px 30px rgba(90,70,20,.12); }
   .qg-info { margin:0; width:100%; text-align:center; font-size:.95rem; line-height:1.4; min-height:0; color:var(--qg-ink); }
   .qg-info.bad { color:#A43456; }
@@ -2079,6 +2079,15 @@
   .qg-meta { font-family:var(--qg-mono); font-size:.8rem; color:var(--qg-muted); }
   .qg-stepBtns { display:flex; gap:8px; flex-wrap:wrap; justify-content:center; align-items:center; width:100%; }
   .qg-btn.small { font-size:.82rem; padding:5px 9px; min-height:32px; box-shadow:0 2px 0 var(--th-dk); }
+  /* 🎯 배우기 판 크기 고르기(10·15·20) — 안내 줄 왼쪽의 작은 분할 버튼 (넓은 화면: 안내 글은 가운데 그대로 · 폰: 안내 글 아래 한 줄) */
+  .qg-infoRow { display:flex; align-items:center; justify-content:center; gap:8px; width:100%; }
+  .qg-infoRow > .qg-info { flex:0 0 auto; min-width:0; max-width:calc(100% - var(--segw, 0px) - 8px); }
+  .qg-infoRow::after { content:""; flex:0 1 var(--segw, 0px); min-width:0; } /* 분할 버튼만큼 오른쪽 여백 → 안내 글이 판 가운데에. 글이 길면 이 여백부터 줄어듦 */
+  .qg-seg { display:inline-flex; flex:none; border:1.5px solid var(--th); border-radius:10px; overflow:hidden; background:#fff; }
+  .qg-seg button { font-family:'Jua',sans-serif; font-size:.8rem; line-height:1; padding:6px 8px; min-height:30px; border:0; background:transparent; color:var(--qg-ink); cursor:pointer; }
+  .qg-seg button + button { border-left:1.5px solid var(--th); }
+  .qg-seg button.on { background:var(--th); color:#fff; }
+  .qg-seg button .qn-lg { font-size:.72rem; opacity:.9; }
   .qg-tbl { border-collapse:collapse; font-family:'IBM Plex Mono',monospace; font-size:.8rem; }
   .qg-tbl td, .qg-tbl th { border:1px solid #E7DFC9; padding:3px 7px; text-align:center; white-space:nowrap; }
   .qg-tbl th { background:var(--th-soft, #FDE8EE); }
@@ -2110,6 +2119,11 @@
     .qg-info { font-size:.88rem; }
     .qg-tbl { font-size:.74rem; } .qg-tbl td, .qg-tbl th { padding:2px 5px; }
     .qg-ylab, .qg-xlab { font-size:.5rem; }
+    .qg-infoRow { flex-direction:column; gap:5px; }
+    .qg-infoRow > .qg-info { flex:none; width:100%; max-width:none; }
+    .qg-infoRow::after { display:none; }
+    .qg-seg { order:1; }
+    .qg-seg button { padding:5px 9px; min-height:28px; }
   }
   #qn-golden-modal-box { max-width:960px; width:min(96vw, 960px); padding:16px 18px 18px; }
   #qn-golden-modal-box .a-head { justify-content:space-between; margin-bottom:6px; }
@@ -3172,7 +3186,10 @@
       <!-- (a) 🎯 이기는 수 찾기 — 후공 승리 칸을 직접 칠하는 튜토리얼 (기본 규칙 기준) -->
       <div id="qn-learn">
         <div class="qn-learn-body">
-          <p class="qg-info" id="qg-info"></p>
+          <div class="qg-infoRow" id="qg-infoRow">
+            <div class="qg-seg" id="qg-size" role="group" aria-label="판 크기"><button type="button" data-n="10" onclick="playSfx('click'); qnLSize(10)">10<span class="qn-lg">×10</span></button><button type="button" data-n="15" onclick="playSfx('click'); qnLSize(15)">15<span class="qn-lg">×15</span></button><button type="button" data-n="20" onclick="playSfx('click'); qnLSize(20)">20<span class="qn-lg">×20</span></button></div>
+            <p class="qg-info" id="qg-info"></p>
+          </div>
           <div class="qg-boardWrap" id="qg-boardWrap">
             <div class="qg-ylab" id="qg-ylab"></div>
             <div class="qg-board" id="qg-board" role="grid" aria-label="후공 승리 칸 칠하기 판"></div>
@@ -8404,8 +8421,8 @@
     const PHI = (1 + Math.sqrt(5)) / 2;
     const scr = $q('qn-golden-screen');
     $q('qn-golden-modal-slot').appendChild(scr); // 📐 황금비 그림 창 안으로 옮김
-    // 🎯 배우기 판: 20×20 고정. 시작은 (0,0) 빨강 + 거기서 갈 수 있는 세 줄 초록. 색이 없는 칸 중 가장 안쪽 칸(= 후공 승리 칸)을 누르면 칠해짐
-    const A = { N: 20, sol: null, card: 0, paint: new Map(), undo: [], hint: null, hintT: null, msg: '', bad: false, anim: null, built: 0 };
+    // 🎯 배우기 판: 10·15·20 중 고름(기본: 넓은 화면 20, 폰 10). 시작은 (0,0) 빨강 + 거기서 갈 수 있는 세 줄 초록. 색이 없는 칸 중 가장 안쪽 칸(= 후공 승리 칸)을 누르면 칠해짐
+    const A = { N: innerWidth >= 700 ? 20 : 10, sol: null, card: 0, paint: new Map(), undo: [], hint: null, hintT: null, msg: '', bad: false, anim: null, built: 0 };
     function solve(N) { // qnIsCold(기본 규칙) 기준 후공 승리 칸
       const lose = new Set();
       for (let x = 0; x < N; x++) for (let y = 0; y < N; y++) if (qnIsCold(x, y, N, 'last')) lose.add(x + ',' + y);
@@ -8492,9 +8509,12 @@
       renderPaint();
     }
     function resetPaint() { clearHint(); A.paint = freshPaint(); A.undo = []; A.msg = ''; A.bad = false; }
-    function ensureBuilt() { if (!A.sol || A.built !== A.N) { A.sol = solve(A.N); buildBoard(); resetPaint(); } renderPaint(); }
+    function syncSeg() { const seg = $q('qg-size'); seg.querySelectorAll('button').forEach(b => { const on = +b.dataset.n === A.N; b.classList.toggle('on', on); b.setAttribute('aria-pressed', String(on)); }); $q('qg-infoRow').style.setProperty('--segw', seg.offsetWidth + 'px'); }
+    function ensureBuilt() { if (!A.sol || A.built !== A.N) { A.sol = solve(A.N); buildBoard(); resetPaint(); } syncSeg(); renderPaint(); }
     window.qnLEnsure = ensureBuilt; // 🎯 탭을 열 때 (칠한 내용은 탭을 오가도 유지)
-    window.qnLSize = function () { ensureBuilt(); }; // (판 크기 고르기는 없어짐 · 20×20 고정)
+    window.qnLSize = function (n) { n = +n; if (![10, 15, 20].includes(n) || (n === A.N && A.built === n)) return; A.N = n; ensureBuilt(); }; // 판 크기 바꾸기 → 처음부터 다시(색·실행 취소 초기화)
+    window.qnLN = () => A.N;
+    addEventListener('resize', () => { if (A.built) syncSeg(); });
     window.qnLPaintAll = function () { clearHint(); A.msg = ''; A.bad = false; snapshot(); let c; while ((c = nextCold())) paintLines(A.paint, c[0], c[1], null); renderPaint(); }; // 확인용: 끝까지 칠하기
     $q('qg-pHint').onclick = () => { playSfx('click'); paintHint(); };
     $q('qg-pUndo').onclick = () => { if (!A.undo.length) return; playSfx('click'); clearHint(); A.paint = A.undo.pop(); A.msg = ''; A.bad = false; renderPaint(); };

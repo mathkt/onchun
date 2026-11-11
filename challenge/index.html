@@ -29,6 +29,11 @@
   .chb-who{display:flex;align-items:center;gap:10px;min-width:0;flex:0 1 auto}
   .chb-avatar{width:46px;height:46px;border-radius:50%;background:var(--bk-yellow);display:grid;place-items:center;font-size:1.6rem;flex:none;box-shadow:inset 0 -3px 0 rgba(0,0,0,.08)}
   .chb-who small{display:block;font-size:.72rem;color:var(--bk-ink-soft);font-weight:700;line-height:1.1}
+  /* 이름 + 칭호 한 줄: 자리가 모자라면 이름부터 …로 줄어듦 (머리 줄이 두 줄로 늘지 않게) */
+  .chb-nm{min-width:0;flex:0 1 auto}
+  .chb-nmRow{display:flex;align-items:baseline;min-width:0}
+  .chb-nmRow .chb-name{flex:0 1 auto;min-width:0}
+  .chb-nmRow .chb-title{flex:none}
   .chb-name{font-family:var(--f-head);font-size:1.45rem;line-height:1.15;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;max-width:14ch;display:inline-block;vertical-align:bottom}
   .chb-title{display:inline-block;vertical-align:bottom;margin-left:6px;font-family:var(--f-head);font-size:.85rem;color:#6B4A00;background:linear-gradient(90deg,#FFE27A,#FFD15C);border:1.5px solid #E8B21B;border-radius:999px;padding:2px 9px;white-space:nowrap;line-height:1.3;transition:transform .3s}
   .chb-title.pop{animation:titlePop .7s cubic-bezier(.3,1.5,.5,1)}
@@ -36,11 +41,15 @@
   .chb-cert{display:none;flex:none;font-family:var(--f-head);font-size:.95rem;color:#6B4A00;background:#fff;border:2px solid #E8B21B;border-radius:999px;padding:5px 12px;cursor:pointer;box-shadow:0 3px 0 #C99510;white-space:nowrap}
   body.gold .chb-cert{display:inline-block}
   .chb-edit{flex:none;border:0;background:var(--bk-cream);border-radius:999px;width:36px;height:36px;font-size:1rem;cursor:pointer}
-  .chb-prog{flex:1;min-width:0;display:flex;flex-direction:column;gap:6px}
-  .chb-count{display:flex;align-items:baseline;gap:8px;font-family:var(--f-head);font-size:1.1rem;color:var(--bk-ink-soft);flex-wrap:wrap}
+  /* 🗑 초기화: 머리 줄 안의 작은 흐린 버튼 (다음 도전자로 바꿀 때 — 상품 창을 거치지 않아도 됨) */
+  .chb-reset{flex:none;font-family:var(--f-head);font-size:.82rem;color:var(--bk-ink-soft);background:transparent;border:1.5px solid var(--bk-line);border-radius:999px;height:30px;padding:0 10px;cursor:pointer;white-space:nowrap;opacity:.75}
+  .chb-reset:hover{opacity:1;background:var(--bk-cream)}
+  body.gold .chb-reset .lg{display:none} /* 7/7(수료증 버튼이 함께 보일 때)은 아이콘만 — 이름 자리 확보 */
+  .chb-prog{flex:1;min-width:170px;display:flex;flex-direction:column;gap:6px} /* 최소 폭을 두어 이름 쪽(.chb-who)이 먼저 줄어들게 */
+  .chb-count{display:flex;align-items:baseline;gap:8px;font-family:var(--f-head);font-size:1.1rem;color:var(--bk-ink-soft);flex-wrap:nowrap;white-space:nowrap}
   .chb-count b{font-size:2rem;color:var(--ink-red);line-height:1}
   .chb-count .of{font-size:1.25rem;color:var(--bk-ink)}
-  .chb-count .hint{font-family:var(--f-body);font-size:.8rem;font-weight:700;margin-left:auto;color:var(--bk-ink-soft)}
+  .chb-count .hint{font-family:var(--f-body);font-size:.8rem;font-weight:700;margin-left:auto;color:var(--bk-ink-soft);flex:0 1 auto;min-width:0;white-space:nowrap;overflow:hidden;text-overflow:ellipsis} /* 자리가 모자라면 줄을 바꾸지 않고 … (머리 줄 높이 고정 → 한 화면 유지) */
   .chb-bar{position:relative;height:16px;border-radius:999px;background:#F3EBD3;box-shadow:inset 0 2px 3px rgba(0,0,0,.08);margin-right:14px}
   .chb-bar i{position:absolute;left:0;top:0;bottom:0;border-radius:999px;background:linear-gradient(90deg,#FF8A65,var(--ink-red));transition:width .6s cubic-bezier(.3,1.3,.5,1);min-width:16px}
   .chb-bar .tick{position:absolute;top:50%;width:6px;height:6px;margin:-3px 0 0 -3px;border-radius:50%;background:rgba(255,255,255,.85)}
@@ -216,6 +225,8 @@
     .chb-title{font-size:.7rem;padding:1px 7px;margin-left:4px}
     .chb-cert{font-size:.8rem;padding:3px 9px}
     .chb-edit{width:30px;height:30px;font-size:.9rem}
+    .chb-reset{height:28px;padding:0 7px;font-size:.78rem}
+    .chb-reset .lg{display:none}
     .chb-prog{flex-direction:row;align-items:center;gap:10px}
     .chb-count{font-size:.95rem;gap:5px;flex:none;flex-wrap:nowrap}
     .chb-count b{font-size:1.45rem}
@@ -281,8 +292,9 @@
   <header class="chb-head">
     <div class="chb-who">
       <span class="chb-avatar">🙂</span>
-      <div style="min-width:0"><small>도전자</small><b class="chb-name" id="who">-</b><span class="chb-title" id="who-title">🌱 수학 새싹</span></div>
+      <div class="chb-nm"><small>도전자</small><div class="chb-nmRow"><b class="chb-name" id="who">-</b><span class="chb-title" id="who-title">🌱 수학 새싹</span></div></div>
       <button class="chb-edit" id="who-edit" type="button" title="이름 바꾸기" aria-label="이름 바꾸기">✏️</button>
+      <button class="chb-reset" id="who-reset" type="button" title="도장판 비우기 (다음 도전자)" aria-label="도장판 초기화">🗑<span class="lg"> 초기화</span></button>
       <button class="chb-cert" id="cert-btn" type="button">🎓 수료증 보기</button>
     </div>
     <div class="chb-prog">
@@ -358,7 +370,7 @@
   <div class="chm-box" style="border-color:var(--bk-red)">
     <div class="chm-wave">🧹</div>
     <h2 id="cf-t">상품을 지급하고 도장판을 비울까요?</h2>
-    <p>기록이 모두 지워져요</p>
+    <p id="cf-p">기록이 모두 지워져요</p>
     <div class="chm-btns">
       <button class="bk-btn bk-btn--ghost" type="button" id="cf-no">취소</button>
       <button class="bk-btn bk-btn--red" type="button" id="cf-yes">지급하고 비우기</button>
@@ -601,7 +613,16 @@
   $('ct-close').onclick = () => closeM('cert');
   $('banner-btn').onclick = () => openPrize();
   $('pz-close').onclick = () => { closeM('prize'); stopConfetti(); };
-  $('pz-give').onclick = () => openM('confirm-m');
+  // 비우기 확인 창: 상품 창(from='prize')과 머리 줄 🗑 초기화(from='reset')가 같은 창을 씀 — 글만 다름
+  function openConfirm(from) {
+    const prize = from === 'prize';
+    $('cf-t').textContent = prize ? '상품을 지급하고 도장판을 비울까요?' : '도장판을 비울까요?';
+    $('cf-p').textContent = '기록이 모두 지워져요';
+    $('cf-yes').textContent = prize ? '지급하고 비우기' : '비우기';
+    openM('confirm-m');
+  }
+  $('pz-give').onclick = () => openConfirm('prize');
+  $('who-reset').onclick = () => { if (anyOpen()) return; openConfirm('reset'); };
   $('cf-no').onclick = () => closeM('confirm-m');
   $('cf-yes').onclick = () => {
     closeM('confirm-m'); closeM('prize'); stopConfetti();
