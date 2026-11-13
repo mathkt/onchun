@@ -2,7 +2,7 @@
    부산의 활동수학 · 수학 축전 공통 테마
    책(부산활동수학) 지면을 그대로 옮긴 색/글꼴 토큰
    =================================================================== */
-@import url('https://fonts.googleapis.com/css2?family=Jua&family=Gowun+Batang:wght@400;700&family=Noto+Sans+KR:wght@400;500;700;900&display=swap');
+/* 글꼴은 common.js(또는 각 페이지 head)가 화면을 막지 않게 따로 불러옴 */
 
 :root{
   /* 바탕 */

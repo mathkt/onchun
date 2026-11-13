@@ -5,12 +5,13 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
 <title>부산의 활동수학 · 수학 축전</title>
 <link rel="stylesheet" href="common.css">
+<link rel="stylesheet" data-bkfont="1" href="https://fonts.googleapis.com/css2?family=Jua&amp;family=Gowun+Batang:wght@400;700&amp;family=Noto+Sans+KR:wght@400;500;700;900&amp;display=swap" media="print" onload="this.media='all'">
 <style>
   /* ===== 첫 화면: 스크롤 없이 한 화면 ===== */
   html,body{height:100%}
   body{word-break:keep-all;overflow-wrap:anywhere}
-  body.bk{margin:0;min-height:100dvh;display:flex;flex-direction:column;overflow:hidden;
-    background:var(--bk-cream-2) url("img/ch02.jpg") center 30%/cover no-repeat}
+  body.bk{margin:0;min-height:100dvh;display:flex;flex-direction:column;overflow-x:hidden;overflow-y:auto;
+    background:var(--bk-cream-2) url("img/home-bg.jpg") center 30%/cover no-repeat}
   body.bk::before{content:"";position:fixed;inset:0;background:linear-gradient(180deg,rgba(251,240,200,.94) 0%,rgba(251,240,200,.86) 45%,rgba(251,240,200,.96) 100%);z-index:0}
   .home{position:relative;z-index:1;flex:1;display:flex;flex-direction:column;align-items:center;justify-content:center;
     gap:clamp(14px,3vh,30px);padding:max(16px,env(safe-area-inset-top)) 16px max(16px,env(safe-area-inset-bottom));max-width:1000px;margin:0 auto;width:100%;box-sizing:border-box}
@@ -47,9 +48,19 @@
     .home .tile__d--games{font-size:clamp(.62rem,3.6vw,.85rem);white-space:nowrap;letter-spacing:-.3px}
   }
   /* 낮은 화면(크롬북 가로 등) */
-  @media(max-height:560px){
-    .home{gap:10px}.home > p{display:none}.tile{min-height:150px;gap:6px}.tile__icon{font-size:2.6rem}
+  @media(max-height:560px) and (min-width:561px){
+    .home{gap:10px}.home > p{display:none}.tile{min-height:130px;gap:6px;padding:12px 14px}.tile__icon{font-size:2.4rem}
+    .home h1{font-size:clamp(1.4rem,4vw,2.2rem)}.home h1 br{display:none}
   }
+  /* 낮은 폰 화면(카카오톡·네이버 안에서 열 때 등): 작게 줄이고, 그래도 넘치면 스크롤 */
+  @media(max-height:620px) and (max-width:560px){
+    .home{gap:8px}.home h1{font-size:1.45rem}.home__eyebrow{padding:4px 12px;font-size:.85rem}
+    .tile{padding:10px 14px;gap:10px}.tile__icon{font-size:2.1rem}.tile__t{font-size:1.25rem}
+  }
+  /* 가운데 정렬하되 넘칠 때 위가 잘리지 않게 */
+  .home{justify-content:flex-start}
+  .home > :first-child{margin-top:auto}
+  .home > :last-child{margin-bottom:auto}
 </style>
 </head>
 <body class="bk">

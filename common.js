@@ -35,6 +35,8 @@
   if (document.body) mount(); else document.addEventListener('DOMContentLoaded', mount);
 
   // 오프라인 대비: 서비스 워커 등록 (사이트 루트의 sw.js)
+  // 글꼴: 화면 표시를 막지 않게 뒤에서 불러옴 (늦으면 기본 글꼴로 먼저 보임)
+  try { if (!document.querySelector('link[data-bkfont]')) { const fl = document.createElement('link'); fl.rel = 'stylesheet'; fl.setAttribute('data-bkfont', '1'); fl.href = 'https://fonts.googleapis.com/css2?family=Jua&family=Gowun+Batang:wght@400;700&family=Noto+Sans+KR:wght@400;500;700;900&display=swap'; document.head.appendChild(fl); } } catch (e) {}
   if ('serviceWorker' in navigator) {
     try { navigator.serviceWorker.register(new URL(home + 'sw.js', location.href).pathname).catch(() => {}); } catch (e) {}
   }
