@@ -221,6 +221,8 @@
     arcadeReady().catch(() => {}).then(() => { if (replace) location.replace(url); else location.href = url; setTimeout(() => { going = false; document.body.classList.remove('ta-going'); }, 3000); });
   }
 
+  window.addEventListener('pageshow', () => { going = false; document.body.classList.remove('ta-going'); });   // 뒤로 가기로 돌아왔을 때 버튼이 잠겨 있지 않게
+
   /* ---------- 도전자: 조교 방으로 ---------- */
   function join(c, replace) {
     if (!myName()) { askName(() => join(c, replace)); return; }

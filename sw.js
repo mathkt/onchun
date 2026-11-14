@@ -2,7 +2,7 @@
    - 받아 둔 파일은 캐시에서 즉시 열기(네트워크를 기다리지 않음)
    - 처음에는 꼭 필요한 파일만 미리 받고, 나머지는 열 때 받아서 저장
    - 새 버전은 파일이 바뀌면 VERSION 이 바뀌어 다음 방문부터 적용 */
-const VERSION = 'onchun-35750fab64';
+const VERSION = 'onchun-7a9e5899df';
 const PRECACHE = ["index.html", "common.css", "common.js", "games/arcade/index.html", "games/online.js", "challenge/index.html", "challenge/stages.js", "challenge/layer.js", "ta/index.html", "ta/qrs.js", "ta/layer.js", "ta/promo.html"];
 self.addEventListener('install', e => {
   e.waitUntil(caches.open(VERSION).then(c => Promise.allSettled(PRECACHE.map(u => fetch(new Request(u, { cache: 'reload' })).then(r => { if (r && r.ok) return c.put(new URL(u, self.registration.scope).href, r); }).catch(() => {})))).then(() => self.skipWaiting()));

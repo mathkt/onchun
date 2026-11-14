@@ -138,7 +138,7 @@
     #ta-promo.on { display:block; }
     #ta-promo iframe { position:absolute; inset:0; width:100%; height:100%; border:0; }
     #ta-promo .ta-promo-x { position:absolute; inset:0; cursor:pointer; background:transparent; border:0; padding:0; width:100%; height:100%; }
-    .ta-set-row { display:flex !important; flex-direction:row !important; align-items:center; gap:10px; cursor:pointer; }
+    .ta-set-row { display:flex !important; flex-direction:row !important; justify-content:flex-start !important; align-items:center; gap:10px; cursor:pointer; }
     .ta-set-row input { width:22px; height:22px; flex:none; accent-color:#F5A623; }
 
     @media (max-width:760px) {
