@@ -1,0 +1,114 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+<title>조교에게 도전하세요! · 부산의 활동수학 축전</title>
+<link rel="stylesheet" href="../common.css">
+<link rel="stylesheet" data-bkfont="1" href="https://fonts.googleapis.com/css2?family=Jua&amp;family=Gowun+Batang:wght@400;700&amp;family=Noto+Sans+KR:wght@400;500;700;900&amp;display=swap" media="print" onload="this.media='all'">
+<style>
+  :root{ --nt:#F5A623; --nt-d:#C76A00; --st:#5BB8E8; --st-d:#2A7FB0; --qn:#E9533F; --qn-d:#B53A2A; --pp:#9B6BD6; --pp-d:#6E44AE; }
+  *{box-sizing:border-box}
+  html,body{height:100%}
+  body.bk{margin:0;min-height:100dvh;overflow-x:hidden;word-break:keep-all;overflow-wrap:anywhere;cursor:pointer;-webkit-tap-highlight-color:transparent;
+    background-color:var(--bk-cream-2);
+    background-image:linear-gradient(rgba(91,184,232,.2) 1.5px,transparent 1.5px),linear-gradient(90deg,rgba(91,184,232,.2) 1.5px,transparent 1.5px),
+      linear-gradient(rgba(91,184,232,.09) 1px,transparent 1px),linear-gradient(90deg,rgba(91,184,232,.09) 1px,transparent 1px);
+    background-size:120px 120px,120px 120px,24px 24px,24px 24px;background-position:-1px -1px}
+  .pr{position:relative;min-height:100dvh;max-width:1320px;margin:0 auto;padding:clamp(14px,3.2vh,34px) clamp(16px,3.4vw,48px);
+    display:grid;grid-template-columns:minmax(0,1.5fr) minmax(0,1fr);align-items:center;gap:clamp(16px,3vw,48px)}
+  .pr-l{display:flex;flex-direction:column;align-items:flex-start;gap:clamp(10px,2.2vh,22px);min-width:0}
+
+  .pr-eye{display:inline-flex;align-items:center;gap:8px;background:#fff;border:2.5px solid var(--bk-ink);border-radius:999px;padding:4px 16px 3px;
+    font-family:var(--f-head);font-size:clamp(.9rem,1.5vw,1.2rem);color:var(--bk-ink);box-shadow:3px 3px 0 var(--bk-ink);transform:rotate(-2deg)}
+  /* 굵은 외곽선 제목 */
+  .pr-h{margin:0;font-family:var(--f-head);font-weight:400;line-height:1.08;font-size:clamp(2.5rem,6.2vw,5.6rem);color:var(--bk-red);letter-spacing:-.01em;
+    -webkit-text-stroke:clamp(6px,.8vw,11px) var(--bk-ink);paint-order:stroke fill;text-shadow:clamp(4px,.5vw,7px) clamp(4px,.5vw,7px) 0 var(--bk-yellow);padding:.06em .1em .02em 0}
+  .pr-h b{font-weight:400;color:var(--bk-orange)}
+  .pr-h .fire{-webkit-text-stroke:0;text-shadow:none;display:inline-block;animation:prFire 1.1s ease-in-out infinite alternate;transform-origin:50% 90%}
+  @keyframes prFire{from{transform:scale(1) rotate(-5deg)}to{transform:scale(1.14) rotate(5deg)}}
+  .pr-sub{margin:0;font-family:var(--f-head);font-size:clamp(1.05rem,2.2vw,1.9rem);color:var(--bk-ink);line-height:1.3}
+  .pr-sub mark{background:linear-gradient(transparent 55%,var(--bk-yellow) 55%);padding:0 4px;color:inherit}
+  .pr-sub .gift{display:inline-block;background:var(--bk-red);color:#fff;border-radius:999px;padding:1px 14px 0;border:2.5px solid var(--bk-ink);box-shadow:3px 3px 0 var(--bk-ink);transform:rotate(-3deg);margin-left:4px;white-space:nowrap}
+
+  .pr-steps{list-style:none;margin:0;padding:0;display:flex;flex-direction:column;gap:clamp(6px,1.3vh,12px);width:100%}
+  .pr-steps li{display:flex;align-items:center;gap:12px;background:#fff;border:2.5px solid var(--bk-ink);border-radius:18px;padding:clamp(6px,1.2vh,11px) 16px clamp(5px,1vh,9px) 10px;
+    font-family:var(--f-head);font-size:clamp(.98rem,1.75vw,1.5rem);line-height:1.25;color:var(--bk-ink);box-shadow:4px 4px 0 rgba(44,42,38,.18)}
+  .pr-steps .no{flex:none;display:grid;place-items:center;width:clamp(34px,3.3vw,46px);height:clamp(34px,3.3vw,46px);border-radius:50%;background:var(--bk-sky);color:#fff;border:2.5px solid var(--bk-ink);font-size:1.1em;padding-top:2px}
+  .pr-steps li:nth-child(2) .no{background:var(--bk-orange)} .pr-steps li:nth-child(3) .no{background:var(--bk-red)}
+  .pr-steps em{font-style:normal;color:#c93f2e}
+  .pr-steps .nums{display:inline-block;letter-spacing:.04em;color:#1e6f9c;white-space:nowrap}
+
+  .pr-games{display:flex;flex-wrap:wrap;gap:8px 10px}
+  .pr-games span{--c:var(--nt);--d:var(--nt-d);font-family:var(--f-head);font-size:clamp(.95rem,1.6vw,1.35rem);color:#fff;background:var(--c);border:2.5px solid var(--bk-ink);border-radius:999px;padding:3px 16px 1px;box-shadow:0 4px 0 var(--d);white-space:nowrap}
+  .pr-games span:nth-child(2){--c:var(--st);--d:var(--st-d)} .pr-games span:nth-child(3){--c:var(--qn);--d:var(--qn-d)} .pr-games span:nth-child(4){--c:var(--pp);--d:var(--pp-d)}
+
+  .pr-r{display:flex;flex-direction:column;align-items:center;gap:clamp(8px,1.6vh,16px);min-width:0}
+  .pr-qr{position:relative;background:#fff;border:4px solid var(--bk-ink);border-radius:30px;padding:clamp(10px,1.6vw,20px);box-shadow:8px 8px 0 var(--bk-orange);transform:rotate(2deg)}
+  .pr-qr svg{display:block;width:min(52vh,30vw,400px);height:auto}
+  .pr-qr::before{content:"📱 찍어 보세요!";position:absolute;left:-18px;top:-20px;background:var(--bk-yellow);border:2.5px solid var(--bk-ink);border-radius:999px;padding:3px 14px 1px;
+    font-family:var(--f-head);font-size:clamp(.9rem,1.4vw,1.2rem);color:var(--bk-ink);transform:rotate(-8deg);box-shadow:3px 3px 0 var(--bk-ink);white-space:nowrap}
+  .pr-url{font-family:var(--f-head);font-size:clamp(.95rem,1.7vw,1.45rem);color:#1e6f9c;background:#fff;border:2.5px solid var(--bk-sky);border-radius:999px;padding:4px 18px 2px;max-width:100%;text-align:center}
+  .pr-me{display:none;font-family:var(--f-head);font-size:clamp(1.2rem,2.4vw,2rem);color:var(--bk-ink);text-align:center;line-height:1.2}
+  .pr-me b{font-weight:400;color:#c93f2e;letter-spacing:.08em}
+  body.embed .pr-me{display:block;margin-bottom:clamp(8px,1.6vh,16px)}
+  body.embed .pr-qr svg{width:min(46vh,28vw,360px)}
+  .pr-foot{position:fixed;right:14px;bottom:8px;font-size:.74rem;color:var(--bk-ink-soft);opacity:.75;pointer-events:none}
+
+  /* 폰 · 세로 화면: 한 줄로 쌓기 */
+  @media(max-width:760px){
+    .pr{grid-template-columns:1fr;align-content:center;gap:14px;padding:16px 16px 30px}
+    .pr-l{align-items:center;text-align:center;gap:10px}
+    .pr-h{font-size:clamp(2.2rem,11.5vw,3.4rem);-webkit-text-stroke-width:5px;padding-right:0}
+    .pr-steps li{text-align:left;font-size:.98rem;padding-right:12px}
+    .pr-games{justify-content:center}
+    .pr-qr{transform:none;border-radius:22px;box-shadow:5px 5px 0 var(--bk-orange)}
+    .pr-qr svg{width:min(40vw,23vh,220px)}
+    .pr-qr::before{left:-10px;top:-16px}
+  }
+  /* 낮은 가로 화면 */
+  @media(max-height:560px) and (min-width:761px){ .pr-games{display:none} .pr-h{font-size:clamp(2.2rem,5vw,3.6rem)} }
+  @media(prefers-reduced-motion:reduce){ .pr-h .fire{animation:none} }
+</style>
+</head>
+<body class="bk">
+<div class="pr" id="pr">
+  <div class="pr-l">
+    <span class="pr-eye">🎪 수학 축전 · 온천중학교 부스</span>
+    <h1 class="pr-h"><span class="fire">🔥</span> <b>조교</b>에게<br>도전하세요!</h1>
+    <p class="pr-sub"><mark>온천중 조교 4명과 1:1 전략 대결</mark> <span class="gift">이기면 보상 🎁</span></p>
+    <ol class="pr-steps">
+      <li><span class="no">1</span><span>QR을 찍거나 사이트 접속 → <em>「조교와의 대결」</em></span></li>
+      <li><span class="no">2</span><span>조교 번호를 누르기 <span class="nums">(1111 · 2222 · 3333 · 4444)</span></span></li>
+      <li><span class="no">3</span><span>하고 싶은 게임을 조교에게 말하기 → 가위바위보 → <em>대결!</em></span></li>
+    </ol>
+    <div class="pr-games" aria-label="대결 게임"><span>노탁토</span><span>돌 가져가기</span><span>황금비 퀸</span><span>팝잇</span></div>
+  </div>
+  <div class="pr-r">
+    <div class="pr-me" id="pr-me"></div>
+    <div class="pr-qr" id="pr-qr"></div>
+    <div class="pr-url" id="pr-url">mathkt.github.io/onchun/ta</div>
+  </div>
+</div>
+<div class="pr-foot" id="pr-foot">F11 전체 화면 · 화면을 누르면 조교와의 대결로</div>
+<script src="qrs.js"></script>
+<script>
+(function () {
+  const q = new URLSearchParams(location.search);
+  const embed = q.get('embed') === '1', c = (q.get('c') || '').trim();
+  const CODES = ['1111', '2222', '3333', '4444'], mine = embed && CODES.includes(c);
+  // 조교 대기 화면 안(embed): 그 조교 번호로 바로 들어오는 QR · 누르면 대기 화면으로 돌아감
+  document.getElementById('pr-qr').innerHTML = window.TA_QR_SVG ? TA_QR_SVG(mine ? c : 'home') : '';
+  if (embed) {
+    document.body.classList.add('embed');
+    if (mine) document.getElementById('pr-me').innerHTML = '이 자리는 조교 ' + (CODES.indexOf(c) + 1) + ' · 번호 <b>' + c + '</b>';
+    document.getElementById('pr-foot').textContent = '화면을 누르면 조교 대기 화면으로';
+  }
+  function go() { if (embed) { try { parent.postMessage('ta-promo-close', location.origin); } catch (e) {} } else location.href = 'index.html'; }
+  document.addEventListener('click', go);
+  document.addEventListener('keydown', e => { if (e.key === 'F11' || /^F\d+$/.test(e.key) || e.ctrlKey || e.metaKey || e.altKey) return; go(); });
+})();
+</script>
+<script>if (!/[?&]embed=1/.test(location.search) && 'serviceWorker' in navigator) navigator.serviceWorker.register('../sw.js').catch(() => {});</script>
+</body>
+</html>

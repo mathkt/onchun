@@ -15,7 +15,8 @@ h=hashlib.md5()
 for f in files: h.update(open(os.path.join(root,f),'rb').read())
 ver=h.hexdigest()[:10]
 # 처음 접속 때 미리 받는 것은 꼭 필요한 작은 파일만 (사진·책 페이지는 열 때 받음)
-CORE=['index.html','common.css','common.js','games/arcade/index.html','games/online.js','challenge/index.html','challenge/stages.js','challenge/layer.js']
+CORE=['index.html','common.css','common.js','games/arcade/index.html','games/online.js','challenge/index.html','challenge/stages.js','challenge/layer.js',
+      'ta/index.html','ta/qrs.js','ta/layer.js','ta/promo.html']   # 🎓 조교와의 대결
 core=[f for f in CORE if f in files]
 sw=f"""/* 부산의 활동수학 축전 · 서비스 워커 (tools/build-sw.py 가 생성)
    - 받아 둔 파일은 캐시에서 즉시 열기(네트워크를 기다리지 않음)

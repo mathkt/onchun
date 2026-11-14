@@ -1,0 +1,278 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+<title>조교와의 대결 · 부산의 활동수학 축전</title>
+<link rel="stylesheet" href="../common.css">
+<style>
+  :root{
+    --nt:#F5A623; --nt-d:#C76A00; --st:#5BB8E8; --st-d:#2A7FB0; --qn:#E9533F; --qn-d:#B53A2A; --pp:#9B6BD6; --pp-d:#6E44AE;
+  }
+  *{box-sizing:border-box}
+  html,body{overflow-x:hidden}
+  body.bk{word-break:keep-all;overflow-wrap:anywhere;min-height:100dvh;display:flex;flex-direction:column;
+    background-color:var(--bk-cream-2);
+    background-image:linear-gradient(rgba(91,184,232,.14) 1px,transparent 1px),linear-gradient(90deg,rgba(91,184,232,.14) 1px,transparent 1px);
+    background-size:22px 22px;background-position:-1px -1px}
+  .ta{flex:1;width:100%;max-width:860px;margin:0 auto;padding:clamp(10px,2.4vh,22px) 16px max(14px,env(safe-area-inset-bottom));
+    display:flex;flex-direction:column;align-items:center;gap:clamp(10px,2.2vh,20px)}
+  .ta > :first-child{margin-top:auto}
+  .ta > :last-child{margin-bottom:auto}
+
+  .ta-hero{text-align:center}
+  .ta-hero h1{font-family:var(--f-head);font-weight:400;font-size:clamp(1.9rem,6.4vw,3.2rem);line-height:1.15;margin:0;color:var(--bk-ink)}
+  .ta-hero h1 em{font-style:normal;color:#c93f2e;background:linear-gradient(transparent 58%,var(--bk-yellow) 58%);padding:0 4px}
+  .ta-hero p{margin:6px 0 0;font-family:var(--f-head);font-size:clamp(.98rem,2.8vw,1.25rem);color:var(--bk-ink-soft)}
+
+  .ta-name{display:inline-flex;align-items:center;gap:8px;max-width:100%;background:#fff;border:2px solid var(--bk-line);border-radius:999px;padding:4px 6px 4px 14px;
+    font-family:var(--f-head);font-size:1rem;color:var(--bk-ink)}
+  .ta-name b{font-weight:400;color:#2f8dbf;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;max-width:11em}
+  .ta-name button{font-family:var(--f-head);font-size:.86rem;border:0;border-radius:999px;background:var(--bk-sky-soft);color:#1e6f9c;min-height:34px;padding:0 12px;cursor:pointer}
+
+  .ta-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:clamp(10px,2vw,18px);width:100%}
+  .ta-go{--c:var(--nt);--d:var(--nt-d);position:relative;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:2px;
+    min-height:clamp(118px,24vh,190px);padding:12px 8px;border-radius:26px;border:3px solid var(--c);background:#fff;color:var(--bk-ink);cursor:pointer;
+    box-shadow:0 7px 0 var(--d),var(--bk-shadow);font-family:var(--f-head);-webkit-tap-highlight-color:transparent;transition:transform .12s,box-shadow .12s;overflow:hidden}
+  .ta-go::before{content:"";position:absolute;left:0;right:0;top:0;height:10px;background:var(--c)}
+  .ta-go:active{transform:translateY(5px);box-shadow:0 2px 0 var(--d)}
+  .ta-go .i{font-size:clamp(1.9rem,5vw,2.6rem);line-height:1.1}
+  .ta-go .t{font-size:clamp(1.5rem,4.6vw,2.1rem);line-height:1.15}
+  .ta-go .n{font-size:clamp(.95rem,2.6vw,1.15rem);color:var(--d);letter-spacing:.14em;background:color-mix(in srgb,var(--c) 14%,#fff);border-radius:999px;padding:1px 12px 0 14px}
+  .ta-go:nth-child(2){--c:var(--st);--d:var(--st-d)}
+  .ta-go:nth-child(3){--c:var(--qn);--d:var(--qn-d)}
+  .ta-go:nth-child(4){--c:var(--pp);--d:var(--pp-d)}
+
+  .ta-code{display:flex;align-items:center;justify-content:center;gap:8px;flex-wrap:wrap;background:#fff;border:2px dashed var(--bk-line);border-radius:18px;padding:8px 12px;max-width:100%}
+  .ta-code label{font-family:var(--f-head);font-size:1rem;color:var(--bk-ink-soft)}
+  .ta-code input{width:104px;min-height:46px;font-family:var(--f-head);font-size:1.5rem;text-align:center;letter-spacing:.18em;border:2px solid var(--bk-line);border-radius:12px;padding:2px 4px 0;color:var(--bk-ink);background:#FFFDF6}
+  .ta-code input::placeholder{letter-spacing:.06em;font-size:1.05rem;color:#b9b19b}
+  .ta-code input:focus{outline:3px solid rgba(91,184,232,.45);border-color:var(--bk-sky)}
+  .ta-msg{flex-basis:100%;text-align:center;font-size:.86rem;font-weight:700;color:#c93f2e;min-height:0}
+  .ta-msg:empty{display:none}
+
+  .ta-how{display:flex;flex-wrap:wrap;justify-content:center;gap:6px 8px;margin:0;padding:0;list-style:none;font-family:var(--f-head);font-size:clamp(.82rem,2.3vw,1rem);color:var(--bk-ink-soft)}
+  .ta-how li{display:inline-flex;align-items:center;gap:6px;background:rgba(255,255,255,.85);border-radius:999px;padding:3px 12px 3px 4px}
+  .ta-how b{display:grid;place-items:center;width:24px;height:24px;border-radius:50%;background:var(--bk-sky);color:#fff;font-weight:400;font-size:.9rem;flex:none}
+
+  .ta-foot{font-size:.76rem;color:var(--bk-ink-soft)}
+  .ta-foot button{font:inherit;color:inherit;background:none;border:0;text-decoration:underline;cursor:pointer;padding:8px 10px;opacity:.75}
+
+  /* ---------- 창 (닉네임 · 조교 비밀번호 · 조교 준비) ---------- */
+  .ta-ov{position:fixed;inset:0;z-index:200;display:none;align-items:center;justify-content:center;padding:16px;background:rgba(60,45,10,.45);backdrop-filter:blur(3px)}
+  .ta-ov.on{display:flex;animation:taFade .18s ease-out}
+  @keyframes taFade{from{opacity:0}to{opacity:1}}
+  .ta-box{width:100%;max-width:400px;max-height:calc(100dvh - 32px);overflow:auto;background:#FFFDF6;border:3px solid var(--bk-orange);border-radius:24px;padding:20px 18px 18px;text-align:center;
+    box-shadow:0 16px 44px rgba(0,0,0,.28);font-family:var(--f-body)}
+  .ta-box h2{font-family:var(--f-head);font-weight:400;font-size:1.5rem;margin:0 0 4px;color:var(--bk-ink)}
+  .ta-box p{margin:0 0 12px;font-size:.92rem;color:var(--bk-ink-soft)}
+  .ta-box input[type=text],.ta-box input[type=password],.ta-box input[type=tel]{width:100%;min-height:50px;font-family:var(--f-head);font-size:1.25rem;text-align:center;border:2px solid var(--bk-line);border-radius:14px;padding:4px 10px 0;color:var(--bk-ink);background:#fff}
+  .ta-box input:focus{outline:3px solid rgba(245,166,35,.4);border-color:var(--bk-orange)}
+  .ta-box .pw{letter-spacing:.5em;font-size:1.6rem;-webkit-text-security:disc}
+  .ta-box .err{min-height:1.4em;margin:6px 0 0;font-size:.9rem;font-weight:800;color:#c93f2e}
+  .ta-box .row{display:flex;gap:10px;justify-content:center;margin-top:12px}
+  .ta-box .row .bk-btn{flex:1 1 0;min-width:0}
+  .ta-box.shake{animation:taShake .4s ease-out}
+  @keyframes taShake{0%{transform:translateX(0)}15%{transform:translateX(-9px)}30%{transform:translateX(8px)}45%{transform:translateX(-6px)}60%{transform:translateX(5px)}80%{transform:translateX(-2px)}100%{transform:none}}
+  .ta-seg{display:grid;grid-template-columns:repeat(4,1fr);gap:8px;margin:0 0 12px}
+  .ta-seg button{font-family:var(--f-head);font-size:1.05rem;min-height:58px;border-radius:14px;border:2.5px solid var(--bk-line);background:#fff;color:var(--bk-ink-soft);cursor:pointer;line-height:1.15;padding:4px 2px}
+  .ta-seg button small{display:block;font-size:.72rem;letter-spacing:.08em;opacity:.8}
+  .ta-seg button[aria-pressed=true]{border-color:var(--bk-orange);background:var(--bk-orange);color:#fff;box-shadow:0 4px 0 var(--bk-orange-deep)}
+  .ta-box .lab{display:block;text-align:left;font-size:.82rem;font-weight:800;color:var(--bk-ink-soft);margin:0 0 4px 4px}
+  .ta-box .sub-link{display:inline-block;margin-top:12px;font-size:.88rem;color:#2f8dbf}
+
+  @media(max-width:620px){
+    .ta-grid{grid-template-columns:1fr 1fr}
+    .ta-go{min-height:clamp(96px,16vh,150px);padding:10px 8px 8px}
+    .ta-go .i{font-size:1.7rem}
+    .ta-code{gap:6px;padding:8px 8px}
+    .ta-code label{font-size:.92rem}
+    .ta-how{gap:4px 6px}
+    .ta-foot button{padding:4px 10px}
+  }
+  @media(max-height:560px){ .ta-how{display:none} .ta-go{min-height:92px} }
+  body.ta-going{cursor:progress} body.ta-going .ta-go,body.ta-going .bk-btn{opacity:.6;pointer-events:none}
+  @media(prefers-reduced-motion:reduce){ .ta-box.shake,.ta-ov.on{animation:none} }
+</style>
+</head>
+<body class="bk">
+<script src="../common.js" data-num="🎓" data-name="조교와의 대결" data-home="../"></script>
+
+<main class="ta">
+  <div class="ta-hero">
+    <h1><em>조교</em>에게 도전!</h1>
+    <p>조교를 골라 1:1 전략 대결 · 이기면 보상 🎁</p>
+  </div>
+
+  <div class="ta-name" id="name-row" hidden>👤 <b id="name-text"></b><button type="button" id="name-edit">바꾸기</button></div>
+
+  <div class="ta-grid" id="grid">
+    <button type="button" class="ta-go" data-c="1111"><span class="i">🎓</span><span class="t">조교 1</span><span class="n">1111</span></button>
+    <button type="button" class="ta-go" data-c="2222"><span class="i">🎓</span><span class="t">조교 2</span><span class="n">2222</span></button>
+    <button type="button" class="ta-go" data-c="3333"><span class="i">🎓</span><span class="t">조교 3</span><span class="n">3333</span></button>
+    <button type="button" class="ta-go" data-c="4444"><span class="i">🎓</span><span class="t">조교 4</span><span class="n">4444</span></button>
+  </div>
+
+  <form class="ta-code" id="code-form" autocomplete="off">
+    <label for="code">번호로 들어가기</label>
+    <input id="code" inputmode="numeric" pattern="[0-9]*" maxlength="4" placeholder="4자리" aria-describedby="code-msg">
+    <button class="bk-btn bk-btn--primary bk-btn--sm" type="submit">입장</button>
+    <div class="ta-msg" id="code-msg" role="alert"></div>
+  </form>
+
+  <ol class="ta-how">
+    <li><b>1</b> 조교 고르기</li>
+    <li><b>2</b> 하고 싶은 게임을 조교에게 말하기</li>
+    <li><b>3</b> 가위바위보 → 대결!</li>
+  </ol>
+
+  <div class="ta-foot"><button type="button" id="ta-staff">조교용</button></div>
+</main>
+
+<!-- 닉네임 -->
+<div class="ta-ov" id="ov-name" role="dialog" aria-modal="true" aria-labelledby="nm-title">
+  <form class="ta-box" id="nm-form" autocomplete="off">
+    <h2 id="nm-title">👋 닉네임을 정해 주세요</h2>
+    <p>대결 화면에 보이는 이름이에요. 비우면 랜덤 별명!</p>
+    <input type="text" id="nm-input" maxlength="10" placeholder="닉네임 (10자까지)" enterkeyhint="done">
+    <div class="row"><button class="bk-btn bk-btn--ghost" type="button" id="nm-rand">🎲 랜덤</button><button class="bk-btn bk-btn--primary" type="submit">확인</button></div>
+  </form>
+</div>
+
+<!-- 조교 비밀번호 -->
+<div class="ta-ov" id="ov-pw" role="dialog" aria-modal="true" aria-labelledby="pw-title">
+  <form class="ta-box" id="pw-form" autocomplete="off">
+    <h2 id="pw-title">🔒 조교용</h2>
+    <p>조교 비밀번호 4자리를 넣어 주세요.</p>
+    <input class="pw" type="tel" id="pw-input" inputmode="numeric" pattern="[0-9]*" maxlength="4" autocomplete="off" aria-describedby="pw-err">
+    <div class="err" id="pw-err" role="alert"></div>
+    <div class="row"><button class="bk-btn bk-btn--ghost" type="button" data-close>닫기</button><button class="bk-btn bk-btn--primary" type="submit">확인</button></div>
+  </form>
+</div>
+
+<!-- 조교 준비 -->
+<div class="ta-ov" id="ov-host" role="dialog" aria-modal="true" aria-labelledby="host-title">
+  <form class="ta-box" id="host-form" autocomplete="off">
+    <h2 id="host-title">🎓 조교 방 열기</h2>
+    <p>내 조교 번호를 고르고 이름을 적어 주세요.</p>
+    <div class="ta-seg" id="host-seg">
+      <button type="button" data-n="1">조교 1<small>1111</small></button>
+      <button type="button" data-n="2">조교 2<small>2222</small></button>
+      <button type="button" data-n="3">조교 3<small>3333</small></button>
+      <button type="button" data-n="4">조교 4<small>4444</small></button>
+    </div>
+    <label class="lab" for="host-name">조교 이름 (화면에 보여요)</label>
+    <input type="text" id="host-name" maxlength="6" placeholder="이름 (6자까지)" enterkeyhint="go">
+    <div class="err" id="host-err" role="alert"></div>
+    <div class="row"><button class="bk-btn bk-btn--ghost" type="button" data-close>닫기</button><button class="bk-btn bk-btn--primary" type="submit">방 열기 →</button></div>
+    <a class="sub-link" href="promo.html">📢 홍보 화면 열기 (부스 모니터용)</a>
+  </form>
+</div>
+
+<script>
+(function () {
+  const ARCADE = '../games/arcade/index.html';
+  const CODES = ['1111', '2222', '3333', '4444'];
+  const $ = id => document.getElementById(id);
+  const ls = { get: k => { try { return localStorage.getItem(k) || ''; } catch (e) { return ''; } }, set: (k, v) => { try { localStorage.setItem(k, v); } catch (e) {} } };
+  const myName = () => ls.get('onchun_name').trim();
+  const ADJ = ['용감한', '씩씩한', '날쌘', '똑똑한', '엉뚱한', '느긋한', '반짝이는', '꼬마', '거대한', '수상한', '명랑한', '졸린'];
+  const ANI = ['수달', '펭귄', '두더지', '고양이', '여우', '판다', '거북이', '다람쥐', '돌고래', '올빼미', '카피바라', '햄스터'];
+  const randName = () => ADJ[Math.floor(Math.random() * ADJ.length)] + ' ' + ANI[Math.floor(Math.random() * ANI.length)];
+  const fine = () => window.matchMedia && matchMedia('(hover:hover) and (pointer:fine)').matches;
+
+  /* ---------- 창 열고 닫기 ---------- */
+  function open(id, focusId) { $(id).classList.add('on'); if (focusId && fine()) setTimeout(() => { const f = $(focusId); f.focus(); if (f.select) f.select(); }, 60); }
+  function close(id) { $(id).classList.remove('on'); }
+  document.querySelectorAll('.ta-ov [data-close]').forEach(b => b.addEventListener('click', () => close(b.closest('.ta-ov').id)));
+  document.querySelectorAll('.ta-ov').forEach(o => o.addEventListener('click', e => { if (e.target === o && o.id !== 'ov-name') close(o.id); }));
+  document.addEventListener('keydown', e => { if (e.key === 'Escape') ['ov-pw', 'ov-host'].forEach(close); });
+
+  /* ---------- 닉네임 (없으면 먼저 물어봄) ---------- */
+  let afterName = null;
+  function showName() { const n = myName(); $('name-row').hidden = !n; $('name-text').textContent = n; }
+  function askName(then) { afterName = then || null; $('nm-input').value = myName(); open('ov-name', 'nm-input'); }
+  $('nm-rand').addEventListener('click', () => { $('nm-input').value = randName(); });
+  $('nm-form').addEventListener('submit', e => {
+    e.preventDefault();
+    const n = $('nm-input').value.trim().slice(0, 10) || randName();
+    ls.set('onchun_name', n); showName(); $('nm-input').blur(); close('ov-name');
+    const f = afterName; afterName = null; if (f) f();
+  });
+  $('name-edit').addEventListener('click', () => askName());
+
+  /* ---------- 메인 게임으로 넘어가기 ----------
+     전에 접속해서 예전 파일이 저장돼 있는 기기(서비스 워커 캐시)는 예전 메인 게임이 열려 조교 방을 모를 수 있음
+     → 새 파일이 준비될 때까지 잠깐(최대 6초) 기다리고, 그래도 예전 것이면 이번만 저장분 없이 새로 받음 */
+  let going = false;
+  async function arcadeReady() {
+    if (!('serviceWorker' in navigator) || !navigator.serviceWorker.controller) return;
+    for (let i = 0; i < 12; i++) {
+      try { const t = await (await fetch(ARCADE, { cache: 'no-store' })).text(); if (t.includes('TA_ENTRY')) return; } catch (e) { return; }
+      if (i === 0) { try { const r = await navigator.serviceWorker.getRegistration(); if (r) r.update().catch(() => {}); } catch (e) {} }
+      await new Promise(r => setTimeout(r, 500));
+    }
+    try { const r = await navigator.serviceWorker.getRegistration(); if (r) await r.unregister(); } catch (e) {}
+  }
+  function goArcade(query, replace) {
+    if (going) return; going = true;
+    document.body.classList.add('ta-going');
+    const url = ARCADE + query;
+    arcadeReady().catch(() => {}).then(() => { if (replace) location.replace(url); else location.href = url; setTimeout(() => { going = false; document.body.classList.remove('ta-going'); }, 3000); });
+  }
+
+  /* ---------- 도전자: 조교 방으로 ---------- */
+  function join(c, replace) {
+    if (!myName()) { askName(() => join(c, replace)); return; }
+    goArcade('?ta=join&c=' + c, replace);
+  }
+  $('grid').addEventListener('click', e => { const b = e.target.closest('.ta-go'); if (b) join(b.dataset.c); });
+  const code = $('code');
+  code.addEventListener('input', () => { code.value = code.value.replace(/\D/g, '').slice(0, 4); $('code-msg').textContent = ''; });
+  $('code-form').addEventListener('submit', e => {
+    e.preventDefault();
+    const c = code.value.trim();
+    if (!/^\d{4}$/.test(c)) { $('code-msg').textContent = '4자리 번호를 넣어 주세요.'; return; }
+    if (!CODES.includes(c)) { $('code-msg').textContent = '조교 번호는 1111 · 2222 · 3333 · 4444 예요.'; return; }
+    join(c);
+  });
+
+  /* ---------- 조교용: 비밀번호 (이 기기에 한 번만) → 번호·이름 → 방 열기 ---------- */
+  // 비밀번호는 글자 그대로 두지 않고 간단한 해시값만 비교함
+  const PW_HASH = 1315314286;
+  function hash(s) { let h = 2166136261; s = 'onchun-ta:' + s; for (let i = 0; i < s.length; i++) { h ^= s.charCodeAt(i); h = Math.imul(h, 16777619); } return h >>> 0; }
+  let hostNo = parseInt(ls.get('onchun_ta_no')) || 0;
+  function segRender() { document.querySelectorAll('#host-seg button').forEach(b => b.setAttribute('aria-pressed', String(+b.dataset.n === hostNo))); }
+  function openHost() { $('host-name').value = ls.get('onchun_ta_name'); $('host-err').textContent = ''; segRender(); open('ov-host', hostNo ? 'host-name' : null); }
+  $('ta-staff').addEventListener('click', () => {
+    if (ls.get('onchun_ta_ok') === '1') { openHost(); return; }
+    $('pw-input').value = ''; $('pw-err').textContent = ''; open('ov-pw', 'pw-input');
+    if (!fine()) setTimeout(() => $('pw-input').focus(), 60);
+  });
+  $('pw-input').addEventListener('input', () => { const i = $('pw-input'); i.value = i.value.replace(/\D/g, '').slice(0, 4); $('pw-err').textContent = ''; });
+  $('pw-form').addEventListener('submit', e => {
+    e.preventDefault();
+    const box = $('pw-form');
+    if (hash($('pw-input').value) === PW_HASH) { ls.set('onchun_ta_ok', '1'); $('pw-input').blur(); close('ov-pw'); openHost(); return; }
+    $('pw-err').textContent = '비밀번호가 달라요';
+    $('pw-input').value = '';
+    box.classList.remove('shake'); void box.offsetWidth; box.classList.add('shake');
+  });
+  $('host-seg').addEventListener('click', e => { const b = e.target.closest('button'); if (!b) return; hostNo = +b.dataset.n; $('host-err').textContent = ''; segRender(); });
+  $('host-form').addEventListener('submit', e => {
+    e.preventDefault();
+    if (!(hostNo >= 1 && hostNo <= 4)) { $('host-err').textContent = '조교 번호를 골라 주세요'; return; }
+    ls.set('onchun_ta_no', String(hostNo));
+    ls.set('onchun_ta_name', $('host-name').value.trim().slice(0, 6));
+    goArcade('?ta=host&c=' + CODES[hostNo - 1]);
+  });
+
+  /* ---------- 시작 ---------- */
+  showName();
+  const j = (new URLSearchParams(location.search).get('j') || '').trim();
+  if (CODES.includes(j)) join(j, true);          // QR: 이름이 있으면 바로 입장, 없으면 닉네임부터
+  else if (!myName()) askName();
+})();
+</script>
+</body>
+</html>

@@ -36,6 +36,17 @@
   .tile--ch{border-color:var(--bk-red)}
   .tile--ch .tile__t{color:#c93f2e}
 
+  /* 🎓 조교와의 대결: 타일 아래 얇은 한 줄 */
+  .strip{display:flex;align-items:center;justify-content:center;gap:10px;width:100%;max-width:1000px;min-height:52px;box-sizing:border-box;padding:8px 18px;
+    text-decoration:none;color:var(--bk-ink);background:#fff;border:3px solid var(--bk-purple);border-radius:999px;box-shadow:0 5px 0 #7a4fc0,var(--bk-shadow);
+    transition:transform .12s;-webkit-tap-highlight-color:transparent}
+  .strip:active{transform:translateY(4px);box-shadow:0 1px 0 #7a4fc0}
+  .strip__i{font-size:1.5rem;line-height:1;flex:none}
+  .strip__tx{display:flex;align-items:baseline;gap:8px;min-width:0}
+  .strip__t{font-family:var(--f-head);font-size:clamp(1.1rem,3vw,1.45rem);color:#6a3fb0;white-space:nowrap;flex:none}
+  .strip__d{font-size:clamp(.8rem,2.2vw,1rem);color:var(--bk-ink-soft);white-space:nowrap;overflow:hidden;text-overflow:ellipsis;min-width:0}
+  .strip__go{font-family:var(--f-head);font-size:1.2rem;color:#6a3fb0;flex:none}
+
   .home footer{font-size:.78rem;color:var(--bk-ink-soft);text-align:center}
   /* 폰 세로: 위아래로 */
   @media(max-width:560px){
@@ -46,16 +57,27 @@
     .home > p,.tile__d:not(.tile__d--games){display:none}
     .tile{padding:16px 14px;gap:12px}.tile>div{min-width:0}
     .home .tile__d--games{font-size:clamp(.62rem,3.6vw,.85rem);white-space:nowrap;letter-spacing:-.3px}
+    .strip{justify-content:flex-start;padding:7px 14px 7px 18px;gap:12px;min-height:56px;border-radius:28px}
+    .strip__i{font-size:2rem}
+    .strip__tx{flex:1;flex-direction:column;align-items:flex-start;gap:0;line-height:1.25}
+    .strip__dash{display:none}
   }
   /* 낮은 화면(크롬북 가로 등) */
   @media(max-height:560px) and (min-width:561px){
     .home{gap:10px}.home > p{display:none}.tile{min-height:130px;gap:6px;padding:12px 14px}.tile__icon{font-size:2.4rem}
     .home h1{font-size:clamp(1.4rem,4vw,2.2rem)}.home h1 br{display:none}
+    .strip{min-height:44px;padding:4px 16px}
+  }
+  /* 크롬북(1366×700 안팎): 타일 아래 한 줄이 더 들어가도록 조금씩 줄임 */
+  @media(max-height:780px) and (min-height:561px) and (min-width:561px){
+    .home{gap:clamp(10px,2vh,16px)}.home h1{font-size:clamp(1.9rem,5vw,3.1rem)}
+    .tile{padding:14px 16px;gap:6px;min-height:0}.tile__icon{font-size:clamp(3rem,7vw,4rem)}
   }
   /* 낮은 폰 화면(카카오톡·네이버 안에서 열 때 등): 작게 줄이고, 그래도 넘치면 스크롤 */
   @media(max-height:620px) and (max-width:560px){
     .home{gap:8px}.home h1{font-size:1.45rem}.home__eyebrow{padding:4px 12px;font-size:.85rem}
     .tile{padding:10px 14px;gap:10px}.tile__icon{font-size:2.1rem}.tile__t{font-size:1.25rem}
+    .strip{min-height:46px;padding:4px 14px 4px 18px}.strip__i{font-size:1.6rem}.strip__d{font-size:.74rem}
   }
   /* 가운데 정렬하되 넘칠 때 위가 잘리지 않게 */
   .home{justify-content:flex-start}
@@ -94,6 +116,12 @@
       </div>
     </a>
   </div>
+
+  <a class="strip" href="ta/index.html">
+    <span class="strip__i">🎓</span>
+    <span class="strip__tx"><span class="strip__t">조교와의 대결</span><span class="strip__d"><span class="strip__dash">— </span>온라인으로 조교에게 도전!</span></span>
+    <span class="strip__go" aria-hidden="true">›</span>
+  </a>
 
   <footer>부산의 활동수학 × 수학 축전 부스 · <a href="qr.html" style="color:var(--bk-ink-soft)">🖥 부스 대기 화면(QR)</a> · <a href="monty/index.html" style="color:var(--bk-ink-soft)">🚪 몬티홀 상황판</a></footer>
 </main>

@@ -2971,7 +2971,7 @@
 
 
 <script src="../../common.js" data-num="🎮" data-name="메인 게임" data-sub="노탁토 · 돌 가져가기 · 황금비 퀸 · 팝잇" data-home="../../" data-extra="<button class=&quot;bk-btn bk-btn--ghost bk-btn--sm&quot; id=&quot;sound-toggle&quot; onclick=&quot;toggleMute()&quot;><span id=&quot;sound-icon&quot;>🔊</span> <span id=&quot;sound-text&quot;>소리</span></button><button class=&quot;bk-btn bk-btn--sm&quot; id=&quot;top-rules-btn&quot; style=&quot;display:none&quot; onclick=&quot;showRules(true)&quot;>📖 규칙</button>"></script>
-<script src="../online.js?v=7"></script>
+<script src="../online.js?v=8"></script>
 
 <main>
   <!-- ================= 0. 초기 로비 화면 (1번 스타일) ================= -->
@@ -7388,6 +7388,7 @@
     } catch (e) {
       let other = null;
       if (/없어요/.test(e.message || '')) { try { other = await Online.probe(c); } catch (_) { } }
+      if (other === 'ta') { olMsg('🎓 조교 방 번호예요 — 조교와의 대결로 이동해요…'); olRestoreOrig(); location.href = 'index.html?ta=join&c=' + c; return; } // 조교 번호(1111·2222·3333·4444)
       if (other) olOfferSwitch(other, c);
       else olMsg(e.message || String(e));
     }
@@ -7444,7 +7445,8 @@
     tmStop(g.p); rpsLeftMsg(msg); oluReset();
     setTimeout(() => { if (g.mode() === 'online') g.back(); }, 1800);
   }
-  Online.on(ev => {
+  // (🎓 조교와의 대결 레이어 ta/layer.js 가 이 함수를 감싸서 조교 방 이벤트를 먼저 처리함)
+  function olEvent(ev) {
     if (!olGame) return;
     if (ev.type === 'joined') { olStart(olCur || OLG[olGame].settings()); }
     else if (ev.type === 'reset') { olStart(ev.settings); }
@@ -7452,7 +7454,8 @@
     else if (ev.type === 'move') { if (olCtl(ev.move, ev.by)) return; oluOppMoved(); OLG[olGame].remote(ev.move); } // 예약 메시지(__rps·__first·__timer)는 게임 수가 아님
     else if (ev.type === 'left') { if (olStarted) olOppGone('left'); }
     else if (ev.type === 'conn') olConn(ev.connected);
-  });
+  }
+  Online.on(ev => olEvent(ev));
   /* ---------- 🌐→🤖 상대가 나감 / 연결 끊김 → AI가 상대 자리를 이어서 둠 (지금 판 그대로, 남은 내 기기에서 끝까지) ----------
      · 'left'(나가기·창 닫기 onDisconnect·상대 online=false) → 바로 · 내 연결(.info/connected)이 8초 넘게 끊김 → 그때
      · 판이 이미 끝났으면 예전처럼 안내만 하고 메뉴로 · 가위바위보 중이면 내가 선공인 새 AI 판
@@ -7735,12 +7738,14 @@
   const LESSON_ENTRY = new URLSearchParams(location.search).get('lesson') === '1';
   // back=ch:단계 → 그 도전 판으로 · back=ch (단계 없음) → 도장판으로
   const CH_BACK = (v => v === 'ch' ? 'board' : (m => m && /^[0-9]-[0-9]$/.test(m[1]) ? m[1] : '')(/^ch:(.+)$/.exec(v)))(new URLSearchParams(location.search).get('back') || '');
+  // 🎓 조교와의 대결(?ta=host|join&c=번호): 맨 끝에서 ../../ta/layer.js 를 불러 조교 방으로 바로 들어감 (이름·규칙 창, 화면 기록 없음)
+  const TA_ENTRY = new URLSearchParams(location.search).get('ta');
   let lessonAfterName = false;
   function lessonEntryOpen() { const go = () => { if (typeof openLesson === 'function') openLesson(entryGame); else setTimeout(go, 50); }; setTimeout(go, 0); }
   updateNameChip();
-  const validEntry = ['notakto', 'stone', 'popit', 'queen'].includes(entryGame) && !CH_ENTRY;
+  const validEntry = ['notakto', 'stone', 'popit', 'queen'].includes(entryGame) && !CH_ENTRY && !TA_ENTRY;
   if (validEntry) { currentGame = entryGame; }
-  if (!getMyName() && !CH_ENTRY) openNameModal();
+  if (!getMyName() && !CH_ENTRY && !TA_ENTRY) openNameModal();
   if (validEntry && LESSON_ENTRY) {
     skipRulesOnce = true;
     try { const u = new URL(location.href); u.searchParams.delete('lesson'); history.replaceState(history.state, '', u.pathname + u.search + u.hash); } catch (e) {} // 새로 고침하면 다시 안 열리게
@@ -7771,7 +7776,7 @@
   }
   function navUrl(d) { const u = new URL(location.href); if (d >= 1 && currentGame) u.searchParams.set('game', currentGame); else u.searchParams.delete('game'); return u.pathname + u.search + u.hash; }
   function navState(d) { return { onchun: 1, d, g: currentGame }; }
-  function navSync() { if (navFromPop || CH_ENTRY) return; // 도전 모드: 화면 안 기록 없음 (뒤로 가기 = 도장판)
+  function navSync() { if (navFromPop || CH_ENTRY || TA_ENTRY) return; // 도전 모드·조교와의 대결: 화면 안 기록 없음 (뒤로 가기 = 도장판 / 조교와의 대결 처음 화면)
     clearTimeout(navTimer); navTimer = setTimeout(navDoSync, 0); }
   function navDoSync() {
     const ui = navDepthUI();
@@ -7819,7 +7824,7 @@
     const _sw = switchScreen; switchScreen = function (...a) { _sw(...a); navSync(); };
     const _og = openGameSection; openGameSection = function (...a) { _og(...a); navSync(); };
     const _rh = returnToHome; returnToHome = function (...a) { _rh(...a); navSync(); };
-    if (!CH_ENTRY) try { const st = history.state; if (st && st.onchun) navH = st.d; else { navH = 0; history.replaceState(navState(0), '', navUrl(0)); } } catch (e) {}
+    if (!CH_ENTRY && !TA_ENTRY) try { const st = history.state; if (st && st.onchun) navH = st.d; else { navH = 0; history.replaceState(navState(0), '', navUrl(0)); } } catch (e) {}
     navSync();
   }
 </script>
@@ -9373,5 +9378,7 @@
 <!-- 🏆 도전 모드 (?ch= 일 때만 동작) -->
 <script src="../../challenge/stages.js"></script>
 <script src="../../challenge/layer.js"></script>
+<!-- 🎓 조교와의 대결 (?ta= 일 때만 불러옴) -->
+<script>if (TA_ENTRY) { document.querySelector('main').style.visibility = 'hidden'; /* 레이어가 뜰 때까지 게임 목록이 잠깐 보이지 않게 */ const s = document.createElement('script'); s.src = '../../ta/layer.js'; s.onerror = () => { location.href = '../../ta/index.html'; }; document.body.appendChild(s); }</script>
 </body>
 </html>
