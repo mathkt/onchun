@@ -110,7 +110,7 @@
   let mem = null; // localStorage를 못 쓰면 메모리에만
   // stamps[id] 도장 찍은 시각 · loss[id] 연속으로 진 횟수 · att[id] 끝까지 둔 판 수 · winAt[id] 몇 번째 판에 도장 · sec[id] 도장 받은 판의 걸린 초 · perfect[id] 최소 수 승리
   // celebrated 축하창을 띄운 도장 수 · seen 상품창을 본 도장 수 · qn[id] 황금비 퀸 바로 전 판의 시작 칸 · guided 첫 안내 창을 봄
-  function blank() { return { v: 1, name: '', stamps: {}, loss: {}, att: {}, winAt: {}, sec: {}, perfect: {}, celebrated: 0, qn: {}, created: Date.now(), seen: 0, fresh: '', guided: false }; }
+  function blank() { return { v: 1, name: '', stamps: {}, loss: {}, att: {}, winAt: {}, sec: {}, perfect: {}, celebrated: 0, qn: {}, created: Date.now(), seen: 0, fresh: '', guided: false, rules: {} }; }   // rules[게임] = 규칙 창을 다시 안 보기
   function load() {
     let r = null;
     try { r = JSON.parse(localStorage.getItem(KEY) || 'null'); } catch (e) { r = mem; }
